@@ -1,0 +1,28 @@
+{
+    "title": "Rename the \"State\" field label",
+    "description": "Αλλάζει την ετικέτα του πεδίου «Νομός / State» σε χρέωση και αποστολή (π.χ. «Περιοχή»). Ορίστε το κείμενο στη μεταβλητή. Με τον ίδιο τρόπο αλλάζουν και άλλα πεδία διεύθυνσης (city, postcode, company…).",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_default_address_fields', 'perfectpixel_rename_state_label', 9999 );\nadd_filter( 'woocommerce_get_country_locale', 'perfectpixel_rename_state_label_locale', 9999 );\n\nfunction perfectpixel_rename_state_label( $fields ) {\n\tif ( isset( $fields['state'] ) ) {\n\t\t$fields['state']['label'] = '{{state_label}}';\n\t}\n\treturn $fields;\n}\n\n// Some countries define their own state label (e.g. \"County\"); override it too.\nfunction perfectpixel_rename_state_label_locale( $locale ) {\n\tforeach ( $locale as $country => $fields ) {\n\t\tif ( isset( $fields['state']['label'] ) ) {\n\t\t\t$locale[ $country ]['state']['label'] = '{{state_label}}';\n\t\t}\n\t}\n\treturn $locale;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "checkout-fields"
+    ],
+    "variables": [
+        {
+            "name": "state_label",
+            "label": "Νέα ετικέτα πεδίου",
+            "default": "Περιοχή",
+            "description": ""
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-rename-state-label-checkout/"
+    ],
+    "updated": "2026-11-17T21:58:42+00:00"
+}

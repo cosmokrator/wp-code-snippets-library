@@ -1,0 +1,23 @@
+{
+    "title": "Show \"required field\" errors next to each field",
+    "description": "Εκτός από τη λίστα λαθών στην κορυφή, κάθε υποχρεωτικό πεδίο που έμεινε κενό δείχνει ακριβώς από κάτω το μήνυμα «… είναι υποχρεωτικό πεδίο» (από τις μεταφράσεις του WooCommerce). Βοηθά σε μεγάλες φόρμες και στην προσβασιμότητα. Λειτουργεί με το κλασικό checkout (shortcode)· το checkout με blocks δεν χρησιμοποιεί αυτό το φίλτρο.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_form_field', 'perfectpixel_inline_required_error', 10, 4 );\nadd_action( 'wp_head', 'perfectpixel_inline_required_error_css' );\n\nfunction perfectpixel_inline_required_error( $field, $key, $args, $value ) {\n\tif ( empty( $args['required'] ) || empty( $args['label'] ) || ! function_exists( 'is_checkout' ) || ! is_checkout() ) {\n\t\treturn $field;\n\t}\n\t$message = sprintf( __( '%s is a required field.', 'woocommerce' ), wp_strip_all_tags( $args['label'] ) );\n\t$error   = '<span class=\"perfectpixel-inline-error\" role=\"alert\">' . esc_html( $message ) . '</span>';\n\n\t// Insert just before the closing tag of the field row.\n\t$pos = strrpos( $field, '</p>' );\n\treturn false === $pos ? $field . $error : substr_replace( $field, $error . '</p>', $pos, 4 );\n}\n\nfunction perfectpixel_inline_required_error_css() {\n\tif ( ! function_exists( 'is_checkout' ) || ! is_checkout() ) {\n\t\treturn;\n\t}\n\techo '<style>.perfectpixel-inline-error{display:none;color:#b81c23;font-size:.875em;margin-top:.25em}.woocommerce-invalid-required-field .perfectpixel-inline-error{display:block}</style>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "checkout-fields",
+        "validation",
+        "accessibility"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-display-required-field-errors-inline-checkout/"
+    ],
+    "updated": "2026-11-17T21:58:42+00:00"
+}

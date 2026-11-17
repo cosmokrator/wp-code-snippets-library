@@ -1,0 +1,22 @@
+{
+    "title": "Phone input mask at checkout (123-456-7890)",
+    "description": "Το τηλέφωνο χρέωσης παίρνει placeholder, μέγιστο μήκος και «μάσκα» που μορφοποιεί αυτόματα τα ψηφία καθώς πληκτρολογεί ο πελάτης (εδώ 3-3-4 ψηφία με παύλες). Αλλάξτε το $groups / το placeholder για άλλη μορφή. Λειτουργεί με το κλασικό checkout (shortcode)· το checkout με blocks δεν χρησιμοποιεί αυτό το φίλτρο.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_checkout_fields', 'perfectpixel_phone_mask_field', 9999 );\nadd_action( 'woocommerce_after_checkout_form', 'perfectpixel_phone_mask_script' );\n\nfunction perfectpixel_phone_mask_field( $fields ) {\n\tif ( isset( $fields['billing']['billing_phone'] ) ) {\n\t\t$fields['billing']['billing_phone']['placeholder'] = '123-456-7890';\n\t\t$fields['billing']['billing_phone']['maxlength']   = 12;\n\t}\n\treturn $fields;\n}\n\nfunction perfectpixel_phone_mask_script() {\n\t?>\n\t<script>\n\t( function () {\n\t\tvar groups = [ 3, 3, 4 ]; // Digits per group, joined with \"-\".\n\t\tvar input = document.getElementById( 'billing_phone' );\n\t\tif ( ! input ) {\n\t\t\treturn;\n\t\t}\n\t\tinput.addEventListener( 'input', function () {\n\t\t\tvar digits = input.value.replace( /\\D/g, '' );\n\t\t\tvar parts = [];\n\t\t\tvar pos = 0;\n\t\t\tgroups.forEach( function ( size ) {\n\t\t\t\tif ( pos < digits.length ) {\n\t\t\t\t\tparts.push( digits.substr( pos, size ) );\n\t\t\t\t\tpos += size;\n\t\t\t\t}\n\t\t\t} );\n\t\t\tinput.value = parts.join( '-' );\n\t\t} );\n\t} )();\n\t</script>\n\t<?php\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "checkout-fields",
+        "phone"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-phone-input-mask-checkout/"
+    ],
+    "updated": "2026-11-17T21:58:42+00:00"
+}

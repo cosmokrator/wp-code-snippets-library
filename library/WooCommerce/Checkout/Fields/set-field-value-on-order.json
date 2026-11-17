@@ -1,0 +1,22 @@
+{
+    "title": "Set a checkout field value when the order is created",
+    "description": "Ορίζει ή διορθώνει τιμές πεδίων τη στιγμή που δημιουργείται η παραγγελία. Παράδειγμα: αν η χώρα είναι Σιγκαπούρη και η πόλη είναι κενή, η πόλη γίνεται «Singapore». Προσθέστε δικούς σας κανόνες στη συνάρτηση. Λειτουργεί με το κλασικό checkout (shortcode)· το checkout με blocks δεν χρησιμοποιεί αυτό το φίλτρο.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_checkout_create_order', 'perfectpixel_set_field_on_order_create', 10, 2 );\n\nfunction perfectpixel_set_field_on_order_create( $order, $data ) {\n\t// Example rule: city-states have no separate city, fill it in automatically.\n\tif ( 'SG' === $order->get_billing_country() && '' === trim( (string) $order->get_billing_city() ) ) {\n\t\t$order->set_billing_city( 'Singapore' );\n\t}\n\n\t// More examples:\n\t// $order->set_billing_company( strtoupper( $order->get_billing_company() ) );\n\t// $order->update_meta_data( '_order_source', 'web' );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "checkout-fields",
+        "orders"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-set-checkout-field-value-order-creation/"
+    ],
+    "updated": "2026-11-17T21:58:42+00:00"
+}

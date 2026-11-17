@@ -1,0 +1,23 @@
+{
+    "title": "Add shipping phone field at checkout",
+    "description": "Προσθέτει πεδίο «Τηλέφωνο» στη διεύθυνση αποστολής (για τον courier). Αποθηκεύεται στο ενσωματωμένο πεδίο τηλεφώνου αποστολής του WooCommerce, οπότε εμφανίζεται αυτόματα στη σελίδα της παραγγελίας και σε plugins αποστολών. Λειτουργεί με το κλασικό checkout (shortcode)· το checkout με blocks δεν χρησιμοποιεί αυτό το φίλτρο.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_checkout_fields', 'perfectpixel_add_shipping_phone_field', 9999 );\n\nfunction perfectpixel_add_shipping_phone_field( $fields ) {\n\tif ( isset( $fields['shipping'] ) && ! isset( $fields['shipping']['shipping_phone'] ) ) {\n\t\t$fields['shipping']['shipping_phone'] = array(\n\t\t\t'label'        => __( 'Phone', 'woocommerce' ),\n\t\t\t'type'         => 'tel',\n\t\t\t'required'     => false,\n\t\t\t'class'        => array( 'form-row-wide' ),\n\t\t\t'validate'     => array( 'phone' ),\n\t\t\t'autocomplete' => 'tel',\n\t\t\t'priority'     => 95,\n\t\t);\n\t}\n\treturn $fields;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "checkout-fields",
+        "shipping",
+        "phone"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-shipping-phone-checkout/"
+    ],
+    "updated": "2026-11-17T21:58:42+00:00"
+}

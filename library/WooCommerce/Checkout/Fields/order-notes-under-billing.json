@@ -1,0 +1,22 @@
+{
+    "title": "Move order notes under the billing form",
+    "description": "Οι «Σημειώσεις παραγγελίας» μεταφέρονται στο τέλος της φόρμας χρέωσης, αντί για κάτω από την αποστολή. Αποθηκεύονται κανονικά ως σημείωση πελάτη της παραγγελίας (χωρίς νέο πεδίο στη βάση). Λειτουργεί με το κλασικό checkout (shortcode)· το checkout με blocks δεν χρησιμοποιεί αυτό το φίλτρο.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_checkout_fields', 'perfectpixel_order_notes_under_billing', 9999 );\nadd_filter( 'woocommerce_enable_order_notes_field', '__return_false' );\n\nfunction perfectpixel_order_notes_under_billing( $fields ) {\n\tif ( isset( $fields['order']['order_comments'] ) ) {\n\t\t$notes             = $fields['order']['order_comments'];\n\t\t$notes['priority'] = 999;\n\t\t$notes['class']    = array( 'form-row-wide' );\n\n\t\t$fields['billing']['order_comments'] = $notes;\n\t\tunset( $fields['order']['order_comments'] );\n\t}\n\treturn $fields;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "checkout-fields",
+        "order-notes"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-move-order-notes-checkout/"
+    ],
+    "updated": "2026-11-17T21:58:42+00:00"
+}

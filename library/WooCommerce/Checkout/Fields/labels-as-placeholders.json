@@ -1,0 +1,22 @@
+{
+    "title": "Show checkout field labels as placeholders",
+    "description": "Οι ετικέτες των πεδίων του checkout εμφανίζονται μέσα στα πεδία ως placeholder (με * στα υποχρεωτικά) για πιο συμπαγή φόρμα. Οι ετικέτες δεν σβήνονται: κρύβονται οπτικά αλλά μένουν για τους αναγνώστες οθόνης (προσβασιμότητα). Dropdowns και checkboxes δεν αλλάζουν. Λειτουργεί με το κλασικό checkout (shortcode)· το checkout με blocks δεν χρησιμοποιεί αυτό το φίλτρο.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_checkout_fields', 'perfectpixel_labels_as_placeholders', 9999 );\n\nfunction perfectpixel_labels_as_placeholders( $fields ) {\n\t$skip_types = array( 'select', 'country', 'state', 'checkbox', 'radio', 'hidden' );\n\n\tforeach ( $fields as $group => $group_fields ) {\n\t\tforeach ( $group_fields as $key => $field ) {\n\t\t\tif ( empty( $field['label'] ) || in_array( $field['type'] ?? 'text', $skip_types, true ) ) {\n\t\t\t\tcontinue;\n\t\t\t}\n\t\t\t$label = wp_strip_all_tags( $field['label'] );\n\t\t\t$fields[ $group ][ $key ]['placeholder'] = $label . ( ! empty( $field['required'] ) ? ' *' : '' );\n\n\t\t\t// Keep the label for screen readers, hide it visually.\n\t\t\t$classes   = isset( $field['label_class'] ) ? (array) $field['label_class'] : array();\n\t\t\t$classes[] = 'screen-reader-text';\n\t\t\t$fields[ $group ][ $key ]['label_class'] = $classes;\n\t\t}\n\t}\n\n\treturn $fields;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "checkout-fields",
+        "ux"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-move-labels-inside-checkout-fields/"
+    ],
+    "updated": "2026-11-17T21:58:42+00:00"
+}

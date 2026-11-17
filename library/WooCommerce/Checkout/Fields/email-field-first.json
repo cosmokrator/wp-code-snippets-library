@@ -1,0 +1,21 @@
+{
+    "title": "Move billing email to the top of checkout",
+    "description": "Το email χρέωσης εμφανίζεται πρώτο στη φόρμα. Έτσι καταγράφεται νωρίς (π.χ. για υπενθυμίσεις εγκαταλελειμμένου καλαθιού, με τη συγκατάθεση του πελάτη) και ο πελάτης ξεκινά από το πιο σημαντικό πεδίο. Λειτουργεί με το κλασικό checkout (shortcode)· το checkout με blocks δεν χρησιμοποιεί αυτό το φίλτρο.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_billing_fields', 'perfectpixel_email_field_first' );\n\nfunction perfectpixel_email_field_first( $fields ) {\n\tif ( isset( $fields['billing_email'] ) ) {\n\t\t$fields['billing_email']['priority'] = 1;\n\t}\n\treturn $fields;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "checkout-fields"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-move-email-field-to-top-checkout/"
+    ],
+    "updated": "2026-11-17T21:58:42+00:00"
+}
