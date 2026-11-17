@@ -1,0 +1,30 @@
+{
+    "title": "Separate house number field next to the street address",
+    "description": "Προσθέτει υποχρεωτικό πεδίο «Αριθμός» δίπλα στη «Διεύθυνση» (σε χρέωση, αποστολή και στο «Ο λογαριασμός μου»), όπως ζητούν πολλές courier. Ο αριθμός εμφανίζεται μετά την οδό σε παραγγελίες, emails και σελίδα ευχαριστίας. Αν δεν χρειάζεστε ξεχωριστό πεδίο, μπορείτε απλώς να κάνετε υποχρεωτικό το «Διεύθυνση 2» από το Customizer. Λειτουργεί με το κλασικό checkout (shortcode)· το checkout με blocks δεν χρησιμοποιεί αυτό το φίλτρο.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_default_address_fields', 'perfectpixel_house_number_field', 9999 );\nadd_filter( 'woocommerce_order_formatted_billing_address', 'perfectpixel_house_number_billing', 10, 2 );\nadd_filter( 'woocommerce_order_formatted_shipping_address', 'perfectpixel_house_number_shipping', 10, 2 );\n\nfunction perfectpixel_house_number_field( $fields ) {\n\tif ( isset( $fields['address_1'] ) ) {\n\t\t$fields['address_1']['class'] = array( 'form-row-first' );\n\t}\n\t$fields['house_number'] = array(\n\t\t'label'    => '{{house_number_label}}',\n\t\t'required' => true,\n\t\t'class'    => array( 'form-row-last' ),\n\t\t'priority' => 55,\n\t);\n\treturn $fields;\n}\n\nfunction perfectpixel_house_number_append( $address, $number ) {\n\t$number = trim( (string) $number );\n\tif ( is_array( $address ) && '' !== $number && isset( $address['address_1'] ) ) {\n\t\t$address['address_1'] = trim( $address['address_1'] . ' ' . $number );\n\t}\n\treturn $address;\n}\n\nfunction perfectpixel_house_number_billing( $address, $order ) {\n\treturn perfectpixel_house_number_append( $address, $order->get_meta( '_billing_house_number' ) );\n}\n\nfunction perfectpixel_house_number_shipping( $address, $order ) {\n\treturn perfectpixel_house_number_append( $address, $order->get_meta( '_shipping_house_number' ) );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "checkout-fields",
+        "address",
+        "shipping"
+    ],
+    "variables": [
+        {
+            "name": "house_number_label",
+            "label": "Ετικέτα πεδίου",
+            "default": "Αριθμός",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-house-number-field-checkout/"
+    ],
+    "updated": "2026-11-17T22:03:40+00:00"
+}

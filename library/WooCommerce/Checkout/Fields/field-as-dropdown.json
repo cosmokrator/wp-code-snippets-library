@@ -1,0 +1,22 @@
+{
+    "title": "Turn an address field into a dropdown",
+    "description": "Μετατρέπει ένα πεδίο διεύθυνσης (εδώ το «Διεύθυνση 2») σε λίστα επιλογών, ώστε ο πελάτης να διαλέγει αντί να πληκτρολογεί. Ισχύει για χρέωση και αποστολή. Αλλάξτε το $field και τις $options (π.χ. για το «city» με τις πόλεις που εξυπηρετείτε). Λειτουργεί με το κλασικό checkout (shortcode)· το checkout με blocks δεν χρησιμοποιεί αυτό το φίλτρο.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_default_address_fields', 'perfectpixel_address_field_dropdown', 9999 );\n\nfunction perfectpixel_address_field_dropdown( $fields ) {\n\t$field = 'address_2';\n\n\t// Value => label. The first entry is the \"please choose\" option.\n\t$options = array(\n\t\t''        => 'Επιλέξτε…',\n\t\t'ground'  => 'Ισόγειο',\n\t\t'floor-1' => '1ος όροφος',\n\t\t'floor-2' => '2ος όροφος',\n\t\t'floor-3' => '3ος όροφος και πάνω',\n\t);\n\n\tif ( isset( $fields[ $field ] ) ) {\n\t\t$fields[ $field ]['type']        = 'select';\n\t\t$fields[ $field ]['options']     = $options;\n\t\tunset( $fields[ $field ]['placeholder'] );\n\t}\n\n\treturn $fields;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "checkout-fields",
+        "ux"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-turn-address-checkout-field-drop/"
+    ],
+    "updated": "2026-11-17T22:03:49+00:00"
+}

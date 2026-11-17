@@ -1,0 +1,28 @@
+{
+    "title": "Set a default value for a checkout field (billing city)",
+    "description": "Προσυμπληρώνει την πόλη χρέωσης με μια προεπιλεγμένη τιμή, όταν ο πελάτης δεν έχει ήδη αποθηκευμένη. Χρήσιμο για καταστήματα που εξυπηρετούν κυρίως μία πόλη. Με τον ίδιο τρόπο ορίζεται προεπιλογή σε άλλα πεδία (αλλάξτε το $field). Λειτουργεί με το κλασικό checkout (shortcode)· το checkout με blocks δεν χρησιμοποιεί αυτό το φίλτρο.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_checkout_fields', 'perfectpixel_default_billing_city', 9999 );\n\nfunction perfectpixel_default_billing_city( $fields ) {\n\t$field = 'billing_city';\n\tif ( isset( $fields['billing'][ $field ] ) ) {\n\t\t$fields['billing'][ $field ]['default'] = '{{default_city}}';\n\t}\n\treturn $fields;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "checkout-fields"
+    ],
+    "variables": [
+        {
+            "name": "default_city",
+            "label": "Προεπιλεγμένη πόλη",
+            "default": "Αθήνα",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-set-default-city-values-checkout/"
+    ],
+    "updated": "2026-11-17T22:03:40+00:00"
+}

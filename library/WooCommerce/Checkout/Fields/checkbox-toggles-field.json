@@ -1,0 +1,36 @@
+{
+    "title": "Checkbox that shows an extra checkout field",
+    "description": "Προσθέτει ένα checkbox (π.χ. «Είναι δώρο») που όταν τσεκαριστεί εμφανίζει ένα επιπλέον πεδίο (π.χ. «Μήνυμα δώρου»). Η τιμή αποθηκεύεται στην παραγγελία και εμφανίζεται στη σελίδα της παραγγελίας στη διαχείριση. Ορίστε τα κείμενα στις μεταβλητές. Λειτουργεί με το κλασικό checkout (shortcode)· το checkout με blocks δεν χρησιμοποιεί αυτό το φίλτρο.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_checkout_fields', 'perfectpixel_toggle_checkbox_fields', 9999 );\nadd_action( 'woocommerce_after_checkout_form', 'perfectpixel_toggle_checkbox_script' );\nadd_action( 'woocommerce_checkout_create_order', 'perfectpixel_toggle_checkbox_save', 10, 2 );\nadd_action( 'woocommerce_admin_order_data_after_billing_address', 'perfectpixel_toggle_checkbox_admin' );\n\nfunction perfectpixel_toggle_checkbox_fields( $fields ) {\n\t$fields['order']['perfectpixel_toggle'] = array(\n\t\t'type'     => 'checkbox',\n\t\t'label'    => '{{toggle_label}}',\n\t\t'class'    => array( 'form-row-wide' ),\n\t\t'priority' => 5,\n\t);\n\t$fields['order']['perfectpixel_extra'] = array(\n\t\t'type'     => 'textarea',\n\t\t'label'    => '{{extra_label}}',\n\t\t'class'    => array( 'form-row-wide' ),\n\t\t'priority' => 6,\n\t);\n\treturn $fields;\n}\n\nfunction perfectpixel_toggle_checkbox_script() {\n\t?>\n\t<script>\n\t( function () {\n\t\tvar box = document.getElementById( 'perfectpixel_toggle' );\n\t\tvar row = document.getElementById( 'perfectpixel_extra_field' );\n\t\tif ( ! box || ! row ) {\n\t\t\treturn;\n\t\t}\n\t\tvar update = function () {\n\t\t\trow.style.display = box.checked ? '' : 'none';\n\t\t};\n\t\tbox.addEventListener( 'change', update );\n\t\tupdate();\n\t} )();\n\t</script>\n\t<?php\n}\n\nfunction perfectpixel_toggle_checkbox_save( $order, $data ) {\n\tif ( ! empty( $_POST['perfectpixel_toggle'] ) && ! empty( $_POST['perfectpixel_extra'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification\n\t\t$order->update_meta_data( '_perfectpixel_extra', sanitize_textarea_field( wp_unslash( $_POST['perfectpixel_extra'] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification\n\t}\n}\n\nfunction perfectpixel_toggle_checkbox_admin( $order ) {\n\t$value = $order->get_meta( '_perfectpixel_extra' );\n\tif ( '' !== (string) $value ) {\n\t\tprintf( '<p><strong>%s:</strong><br>%s</p>', esc_html( '{{extra_label}}' ), nl2br( esc_html( $value ) ) );\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "checkout-fields",
+        "conditional",
+        "custom-field"
+    ],
+    "variables": [
+        {
+            "name": "toggle_label",
+            "label": "Ετικέτα checkbox",
+            "default": "Είναι δώρο",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "extra_label",
+            "label": "Ετικέτα επιπλέον πεδίου",
+            "default": "Μήνυμα δώρου",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-checkbox-hideshow-checkout-field/"
+    ],
+    "updated": "2026-11-17T22:03:40+00:00"
+}

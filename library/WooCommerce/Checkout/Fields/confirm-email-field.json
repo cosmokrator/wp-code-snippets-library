@@ -1,0 +1,36 @@
+{
+    "title": "Add \"Confirm email address\" field at checkout",
+    "description": "Προσθέτει πεδίο επιβεβαίωσης email ακριβώς κάτω από το email χρέωσης. Αν οι δύο διευθύνσεις δεν ταιριάζουν (χωρίς διάκριση πεζών/κεφαλαίων), η παραγγελία σταματά με μήνυμα. Το πεδίο επιβεβαίωσης δεν αποθηκεύεται στην παραγγελία. Ορίστε τα κείμενα στις μεταβλητές. Λειτουργεί με το κλασικό checkout (shortcode)· το checkout με blocks δεν χρησιμοποιεί αυτό το φίλτρο.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_checkout_fields', 'perfectpixel_confirm_email_field', 9999 );\nadd_action( 'woocommerce_checkout_process', 'perfectpixel_confirm_email_validate' );\n\nfunction perfectpixel_confirm_email_field( $fields ) {\n\tif ( ! isset( $fields['billing']['billing_email'] ) || is_user_logged_in() ) {\n\t\treturn $fields;\n\t}\n\t// The key has no \"billing_\" prefix, so WooCommerce does not save it to the order.\n\t$fields['billing']['perfectpixel_confirm_email'] = array(\n\t\t'label'        => '{{confirm_email_label}}',\n\t\t'type'         => 'email',\n\t\t'required'     => true,\n\t\t'class'        => array( 'form-row-wide' ),\n\t\t'autocomplete' => 'off',\n\t\t'priority'     => (int) ( $fields['billing']['billing_email']['priority'] ?? 110 ) + 1,\n\t);\n\treturn $fields;\n}\n\nfunction perfectpixel_confirm_email_validate() {\n\tif ( is_user_logged_in() || ! isset( $_POST['perfectpixel_confirm_email'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification\n\t\treturn;\n\t}\n\t$email   = strtolower( trim( sanitize_email( wp_unslash( $_POST['billing_email'] ?? '' ) ) ) ); // phpcs:ignore WordPress.Security.NonceVerification\n\t$confirm = strtolower( trim( sanitize_email( wp_unslash( $_POST['perfectpixel_confirm_email'] ) ) ) ); // phpcs:ignore WordPress.Security.NonceVerification\n\tif ( '' !== $confirm && $email !== $confirm ) {\n\t\twc_add_notice( esc_html( '{{confirm_email_error}}' ), 'error' );\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "checkout-fields",
+        "email",
+        "validation"
+    ],
+    "variables": [
+        {
+            "name": "confirm_email_label",
+            "label": "Ετικέτα πεδίου",
+            "default": "Επιβεβαίωση email",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "confirm_email_error",
+            "label": "Μήνυμα όταν δεν ταιριάζουν",
+            "default": "Τα δύο email δεν ταιριάζουν. Ελέγξτε τα και δοκιμάστε ξανά.",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-confirm-email-address-field-checkout/"
+    ],
+    "updated": "2026-11-17T22:03:40+00:00"
+}

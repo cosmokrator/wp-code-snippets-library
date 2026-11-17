@@ -1,0 +1,23 @@
+{
+    "title": "Simplify checkout when the cart has only virtual products",
+    "description": "Όταν όλα τα προϊόντα του καλαθιού είναι εικονικά/ψηφιακά (δεν χρειάζονται αποστολή), η φόρμα χρέωσης κρατά μόνο όνομα, επώνυμο και email και κρύβονται οι σημειώσεις παραγγελίας. Αλλάξτε το $keep για άλλα πεδία. Λειτουργεί με το κλασικό checkout (shortcode)· το checkout με blocks δεν χρησιμοποιεί αυτό το φίλτρο.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_checkout_fields', 'perfectpixel_virtual_cart_minimal_fields', 9999 );\nadd_filter( 'woocommerce_enable_order_notes_field', 'perfectpixel_virtual_cart_hide_notes', 9999 );\n\nfunction perfectpixel_cart_is_virtual_only() {\n\tif ( ! function_exists( 'WC' ) || ! WC()->cart || WC()->cart->is_empty() ) {\n\t\treturn false;\n\t}\n\tforeach ( WC()->cart->get_cart() as $item ) {\n\t\tif ( empty( $item['data'] ) || ! $item['data']->is_virtual() ) {\n\t\t\treturn false;\n\t\t}\n\t}\n\treturn true;\n}\n\nfunction perfectpixel_virtual_cart_minimal_fields( $fields ) {\n\tif ( ! perfectpixel_cart_is_virtual_only() ) {\n\t\treturn $fields;\n\t}\n\t$keep              = array( 'billing_first_name', 'billing_last_name', 'billing_email' );\n\t$fields['billing'] = array_intersect_key( $fields['billing'], array_flip( $keep ) );\n\treturn $fields;\n}\n\nfunction perfectpixel_virtual_cart_hide_notes( $enabled ) {\n\treturn perfectpixel_cart_is_virtual_only() ? false : $enabled;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "checkout-fields",
+        "virtual",
+        "downloads"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-hide-checkout-billing-fields-if-virtual-product-cart/"
+    ],
+    "updated": "2026-11-17T22:03:40+00:00"
+}

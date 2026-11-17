@@ -1,0 +1,22 @@
+{
+    "title": "Make postcode optional at checkout",
+    "description": "Ο ταχυδρομικός κώδικας γίνεται προαιρετικός σε όλες τις χώρες (χρέωση και αποστολή), χωρίς να αφαιρεθεί το πεδίο. Αν ο πελάτης τον συμπληρώσει, ο έλεγχος μορφής του WooCommerce εξακολουθεί να ισχύει. Λειτουργεί με το κλασικό checkout (shortcode)· το checkout με blocks δεν χρησιμοποιεί αυτό το φίλτρο.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_default_address_fields', 'perfectpixel_optional_postcode', 9999 );\nadd_filter( 'woocommerce_get_country_locale', 'perfectpixel_optional_postcode_locale', 9999 );\n\nfunction perfectpixel_optional_postcode( $fields ) {\n\tif ( isset( $fields['postcode'] ) ) {\n\t\t$fields['postcode']['required'] = false;\n\t}\n\treturn $fields;\n}\n\n// Some countries mark the postcode as required in their own locale settings.\nfunction perfectpixel_optional_postcode_locale( $locale ) {\n\tforeach ( $locale as $country => $fields ) {\n\t\tif ( isset( $fields['postcode'] ) ) {\n\t\t\t$locale[ $country ]['postcode']['required'] = false;\n\t\t}\n\t}\n\treturn $locale;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "checkout-fields",
+        "address"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-disable-postcodezip-validation-checkout/"
+    ],
+    "updated": "2026-11-17T22:03:40+00:00"
+}

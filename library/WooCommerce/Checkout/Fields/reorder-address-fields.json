@@ -1,0 +1,22 @@
+{
+    "title": "Reorder checkout address fields",
+    "description": "Αλλάζει τη σειρά των πεδίων διεύθυνσης (χρέωση, αποστολή, «Ο λογαριασμός μου») μέσω προτεραιότητας. Το παράδειγμα βάζει τον ΤΚ πριν από την πόλη και τη χώρα στο τέλος, όπως γράφονται οι ελληνικές διευθύνσεις. Μικρότερος αριθμός = πιο ψηλά. Λειτουργεί με το κλασικό checkout (shortcode)· το checkout με blocks δεν χρησιμοποιεί αυτό το φίλτρο.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_default_address_fields', 'perfectpixel_reorder_address_fields', 9999 );\n\nfunction perfectpixel_reorder_address_fields( $fields ) {\n\t// WooCommerce defaults: first_name 10, last_name 20, company 30, country 40,\n\t// address_1 50, address_2 60, city 70, state 80, postcode 90.\n\t$priorities = array(\n\t\t'address_1' => 40,\n\t\t'address_2' => 50,\n\t\t'postcode'  => 60,\n\t\t'city'      => 70,\n\t\t'state'     => 80,\n\t\t'country'   => 90,\n\t);\n\n\tforeach ( $priorities as $key => $priority ) {\n\t\tif ( isset( $fields[ $key ] ) ) {\n\t\t\t$fields[ $key ]['priority'] = $priority;\n\t\t}\n\t}\n\treturn $fields;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "checkout-fields",
+        "address"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-move-reorder-fields-checkout-page/"
+    ],
+    "updated": "2026-11-17T22:03:40+00:00"
+}

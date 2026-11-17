@@ -1,0 +1,35 @@
+{
+    "title": "Add a custom checkout field (saved to the order)",
+    "description": "Πρότυπο για νέο πεδίο στο checkout, έξω από χρέωση/αποστολή (π.χ. «Αριθμός άδειας»), πάνω από τις σημειώσεις παραγγελίας. Ελέγχεται αν είναι υποχρεωτικό, αποθηκεύεται στην παραγγελία και εμφανίζεται στη διαχείριση, στη σελίδα ευχαριστίας και στα emails. Ορίστε ετικέτα και μήνυμα στις μεταβλητές· για προαιρετικό πεδίο αλλάξτε το $required. Λειτουργεί με το κλασικό checkout (shortcode)· το checkout με blocks δεν χρησιμοποιεί αυτό το φίλτρο.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_before_order_notes', 'perfectpixel_custom_field_render' );\nadd_action( 'woocommerce_checkout_process', 'perfectpixel_custom_field_validate' );\nadd_action( 'woocommerce_checkout_create_order', 'perfectpixel_custom_field_save', 10, 2 );\nadd_action( 'woocommerce_admin_order_data_after_billing_address', 'perfectpixel_custom_field_show' );\nadd_action( 'woocommerce_order_details_after_order_table', 'perfectpixel_custom_field_show' );\nadd_action( 'woocommerce_email_after_order_table', 'perfectpixel_custom_field_show' );\n\nfunction perfectpixel_custom_field_required() {\n\treturn true;\n}\n\nfunction perfectpixel_custom_field_render( $checkout ) {\n\twoocommerce_form_field(\n\t\t'perfectpixel_custom_field',\n\t\tarray(\n\t\t\t'type'     => 'text',\n\t\t\t'label'    => '{{custom_field_label}}',\n\t\t\t'required' => perfectpixel_custom_field_required(),\n\t\t\t'class'    => array( 'form-row-wide' ),\n\t\t),\n\t\t$checkout->get_value( 'perfectpixel_custom_field' )\n\t);\n}\n\nfunction perfectpixel_custom_field_validate() {\n\t$value = isset( $_POST['perfectpixel_custom_field'] ) ? trim( wp_unslash( $_POST['perfectpixel_custom_field'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification, WordPress.Security.ValidatedSanitizedInput\n\tif ( perfectpixel_custom_field_required() && '' === $value ) {\n\t\twc_add_notice( esc_html( '{{custom_field_error}}' ), 'error' );\n\t}\n}\n\nfunction perfectpixel_custom_field_save( $order, $data ) {\n\tif ( ! empty( $_POST['perfectpixel_custom_field'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification\n\t\t$order->update_meta_data( '_perfectpixel_custom_field', sanitize_text_field( wp_unslash( $_POST['perfectpixel_custom_field'] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification\n\t}\n}\n\nfunction perfectpixel_custom_field_show( $order ) {\n\tif ( ! $order instanceof WC_Order ) {\n\t\treturn;\n\t}\n\t$value = $order->get_meta( '_perfectpixel_custom_field' );\n\tif ( '' !== (string) $value ) {\n\t\tprintf( '<p><strong>%s:</strong> %s</p>', esc_html( '{{custom_field_label}}' ), esc_html( $value ) );\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "checkout-fields",
+        "custom-field"
+    ],
+    "variables": [
+        {
+            "name": "custom_field_label",
+            "label": "Ετικέτα πεδίου",
+            "default": "Αριθμός άδειας",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "custom_field_error",
+            "label": "Μήνυμα όταν λείπει",
+            "default": "Συμπληρώστε το πεδίο «Αριθμός άδειας».",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-custom-checkout-field-php/"
+    ],
+    "updated": "2026-11-17T22:03:40+00:00"
+}

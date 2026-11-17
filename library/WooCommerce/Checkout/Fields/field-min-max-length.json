@@ -2,7 +2,7 @@
     "title": "Minimum and maximum length for checkout fields",
     "description": "Ορίζει ελάχιστο και μέγιστο αριθμό χαρακτήρων ανά πεδίο. Το μέγιστο εφαρμόζεται ήδη στο πεδίο (δεν πληκτρολογούνται περισσότεροι χαρακτήρες) και και τα δύο ελέγχονται με το «Ολοκλήρωση παραγγελίας», με μήνυμα λάθους. Ρυθμίστε τα όρια στο $limits. Λειτουργεί με το κλασικό checkout (shortcode)· το checkout με blocks δεν χρησιμοποιεί αυτό το φίλτρο.",
     "type": "php",
-    "code": "add_filter( 'woocommerce_checkout_fields', 'perfectpixel_length_limits_attributes', 9999 );\nadd_action( 'woocommerce_checkout_process', 'perfectpixel_length_limits_validate' );\n\n/**\n * Field key => [ min, max ] (0 = no limit).\n */\nfunction perfectpixel_length_limits() {\n\treturn array(\n\t\t'billing_company'  => array( 0, 15 ),\n\t\t'billing_postcode' => array( 5, 5 ),\n\t\t'billing_phone'    => array( 10, 15 ),\n\t);\n}\n\nfunction perfectpixel_length_limits_attributes( $fields ) {\n\tforeach ( perfectpixel_length_limits() as $key => $limit ) {\n\t\tforeach ( $fields as $group => $group_fields ) {\n\t\t\tif ( isset( $group_fields[ $key ] ) && $limit[1] > 0 ) {\n\t\t\t\t$fields[ $group ][ $key ]['maxlength'] = $limit[1];\n\t\t\t}\n\t\t}\n\t}\n\treturn $fields;\n}\n\nfunction perfectpixel_length_limits_validate() {\n\t$checkout_fields = WC()->checkout()->get_checkout_fields();\n\n\tforeach ( perfectpixel_length_limits() as $key => $limit ) {\n\t\t$value = isset( $_POST[ $key ] ) ? trim( wp_unslash( $_POST[ $key ] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification, WordPress.Security.ValidatedSanitizedInput\n\t\tif ( '' === $value ) {\n\t\t\tcontinue; // Required/empty checks are handled by WooCommerce.\n\t\t}\n\n\t\t$label = $key;\n\t\tforeach ( $checkout_fields as $group_fields ) {\n\t\t\tif ( ! empty( $group_fields[ $key ]['label'] ) ) {\n\t\t\t\t$label = wp_strip_all_tags( $group_fields[ $key ]['label'] );\n\t\t\t}\n\t\t}\n\n\t\t$length = mb_strlen( $value );\n\t\tif ( $limit[0] > 0 && $length < $limit[0] ) {\n\t\t\t/* translators: 1: field label, 2: number of characters */\n\t\t\twc_add_notice( sprintf( __( '%1$s must be at least %2$d characters long.', 'woocommerce' ), '<strong>' . esc_html( $label ) . '</strong>', $limit[0] ), 'error' );\n\t\t} elseif ( $limit[1] > 0 && $length > $limit[1] ) {\n\t\t\t/* translators: 1: field label, 2: number of characters */\n\t\t\twc_add_notice( sprintf( __( '%1$s must be at most %2$d characters long.', 'woocommerce' ), '<strong>' . esc_html( $label ) . '</strong>', $limit[1] ), 'error' );\n\t\t}\n\t}\n}",
+    "code": "add_filter( 'woocommerce_checkout_fields', 'perfectpixel_length_limits_attributes', 9999 );\nadd_action( 'woocommerce_checkout_process', 'perfectpixel_length_limits_validate' );\n\n/**\n * Field key => [ min, max ] (0 = no limit).\n */\nfunction perfectpixel_length_limits() {\n\treturn array(\n\t\t'billing_company'  => array( 0, 15 ),\n\t\t'billing_postcode' => array( 5, 5 ),\n\t\t'billing_phone'    => array( 10, 15 ),\n\t);\n}\n\nfunction perfectpixel_length_limits_attributes( $fields ) {\n\tforeach ( perfectpixel_length_limits() as $key => $limit ) {\n\t\tforeach ( $fields as $group => $group_fields ) {\n\t\t\tif ( isset( $group_fields[ $key ] ) && $limit[1] > 0 ) {\n\t\t\t\t$fields[ $group ][ $key ]['maxlength'] = $limit[1];\n\t\t\t}\n\t\t}\n\t}\n\treturn $fields;\n}\n\nfunction perfectpixel_length_limits_validate() {\n\t$checkout_fields = WC()->checkout()->get_checkout_fields();\n\n\tforeach ( perfectpixel_length_limits() as $key => $limit ) {\n\t\t$value = isset( $_POST[ $key ] ) ? trim( wp_unslash( $_POST[ $key ] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification, WordPress.Security.ValidatedSanitizedInput\n\t\tif ( '' === $value ) {\n\t\t\tcontinue; // Required/empty checks are handled by WooCommerce.\n\t\t}\n\n\t\t$label = $key;\n\t\tforeach ( $checkout_fields as $group_fields ) {\n\t\t\tif ( ! empty( $group_fields[ $key ]['label'] ) ) {\n\t\t\t\t$label = wp_strip_all_tags( $group_fields[ $key ]['label'] );\n\t\t\t}\n\t\t}\n\n\t\t$length = mb_strlen( $value );\n\t\tif ( $limit[0] > 0 && $length < $limit[0] ) {\n\t\t\twc_add_notice( sprintf( esc_html( '{{min_length_error}}' ), '<strong>' . esc_html( $label ) . '</strong>', $limit[0] ), 'error' );\n\t\t} elseif ( $limit[1] > 0 && $length > $limit[1] ) {\n\t\t\twc_add_notice( sprintf( esc_html( '{{max_length_error}}' ), '<strong>' . esc_html( $label ) . '</strong>', $limit[1] ), 'error' );\n\t\t}\n\t}\n}",
     "location": "everywhere",
     "paragraph": 1,
     "priority": 10,
@@ -14,9 +14,22 @@
         "checkout-fields",
         "validation"
     ],
-    "variables": [],
+    "variables": [
+        {
+            "name": "min_length_error",
+            "label": "Μήνυμα για ελάχιστο μήκος",
+            "default": "Το πεδίο %1$s πρέπει να έχει τουλάχιστον %2$d χαρακτήρες.",
+            "description": "%1$s = όνομα πεδίου, %2$d = αριθμός χαρακτήρων. Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "max_length_error",
+            "label": "Μήνυμα για μέγιστο μήκος",
+            "default": "Το πεδίο %1$s πρέπει να έχει το πολύ %2$d χαρακτήρες.",
+            "description": "%1$s = όνομα πεδίου, %2$d = αριθμός χαρακτήρων. Χωρίς απόστροφο (')"
+        }
+    ],
     "source": [
         "https://www.businessbloomer.com/woocommerce-maxlength-minlength-checkout-fields/"
     ],
-    "updated": "2026-11-17T21:58:42+00:00"
+    "updated": "2026-11-17T22:02:08+00:00"
 }
