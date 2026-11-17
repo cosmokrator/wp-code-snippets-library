@@ -1,0 +1,22 @@
+{
+    "title": "Read-only billing & shipping fields for logged-in customers",
+    "description": "Logged-in customers see their saved billing and shipping details but cannot edit them at checkout (useful for B2B stores where addresses are managed by the shop). Country and state dropdowns become plain read-only text inputs. Works with the classic (shortcode) checkout; the block checkout does not use this filter.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_checkout_fields', 'perfectpixel_readonly_checkout_address_fields', 9999 );\n\nfunction perfectpixel_readonly_checkout_address_fields( $fields ) {\n\tif ( ! is_user_logged_in() ) {\n\t\treturn $fields;\n\t}\n\n\tforeach ( array( 'billing', 'shipping' ) as $group ) {\n\t\tif ( empty( $fields[ $group ] ) ) {\n\t\t\tcontinue;\n\t\t}\n\t\tforeach ( $fields[ $group ] as $key => $field ) {\n\t\t\t// A <select> ignores \"readonly\", so render country/state as text inputs.\n\t\t\tif ( in_array( $field['type'] ?? 'text', array( 'country', 'state' ), true ) ) {\n\t\t\t\t$fields[ $group ][ $key ]['type'] = 'text';\n\t\t\t}\n\t\t\t$fields[ $group ][ $key ]['custom_attributes']['readonly'] = 'readonly';\n\t\t}\n\t}\n\n\treturn $fields;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "checkout-fields",
+        "b2b"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-read-only-checkout-fields/"
+    ],
+    "updated": "2026-11-17T21:35:44+00:00"
+}

@@ -1,0 +1,21 @@
+{
+    "title": "Free orders: ask only name and email at checkout",
+    "description": "When the cart needs no payment (total is zero), the billing form is reduced to first name and email. Edit $keep to choose other fields. Works with the classic (shortcode) checkout; the block checkout does not use this filter.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_checkout_fields', 'perfectpixel_free_checkout_minimal_fields', 9999 );\n\nfunction perfectpixel_free_checkout_minimal_fields( $fields ) {\n\tif ( ! function_exists( 'WC' ) || ! WC()->cart || WC()->cart->needs_payment() ) {\n\t\treturn $fields;\n\t}\n\n\t// Billing fields to keep when nothing has to be paid.\n\t$keep = array( 'billing_first_name', 'billing_email' );\n\n\t$fields['billing'] = array_intersect_key( $fields['billing'], array_flip( $keep ) );\n\n\tforeach ( $fields['billing'] as $key => $field ) {\n\t\t$fields['billing'][ $key ]['class'] = array( 'form-row-wide' );\n\t}\n\n\treturn $fields;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "checkout-fields"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-simplify-free-checkout/"
+    ],
+    "updated": "2026-11-17T21:35:44+00:00"
+}

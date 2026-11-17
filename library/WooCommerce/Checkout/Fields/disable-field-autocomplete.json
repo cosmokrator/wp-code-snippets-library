@@ -1,0 +1,21 @@
+{
+    "title": "Disable browser autocomplete on checkout fields",
+    "description": "Stops the browser from auto-filling selected checkout fields (billing phone by default), e.g. to force a specific format. Add field keys to $fields_without_autocomplete. Works with the classic (shortcode) checkout; the block checkout does not use this filter.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_checkout_fields', 'perfectpixel_disable_checkout_autocomplete', 9999 );\n\nfunction perfectpixel_disable_checkout_autocomplete( $fields ) {\n\t// Field keys, e.g. billing_phone, billing_email, shipping_postcode.\n\t$fields_without_autocomplete = array( 'billing_phone' );\n\n\tforeach ( $fields as $group => $group_fields ) {\n\t\tforeach ( $group_fields as $key => $field ) {\n\t\t\tif ( in_array( $key, $fields_without_autocomplete, true ) ) {\n\t\t\t\t$fields[ $group ][ $key ]['autocomplete'] = 'off';\n\t\t\t}\n\t\t}\n\t}\n\n\treturn $fields;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "checkout-fields"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-disable-checkout-field-autocomplete/"
+    ],
+    "updated": "2026-11-17T21:35:44+00:00"
+}

@@ -1,0 +1,21 @@
+{
+    "title": "Refresh checkout totals when any field changes",
+    "description": "Makes every checkout field (billing, shipping, account, order and custom fields) trigger a refresh of the order review, so custom pricing logic based on those fields updates immediately. Works with the classic (shortcode) checkout; the block checkout does not use this filter.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_checkout_fields', 'perfectpixel_refresh_totals_on_any_field', 9999 );\n\nfunction perfectpixel_refresh_totals_on_any_field( $fields ) {\n\tforeach ( $fields as $group => $group_fields ) {\n\t\tforeach ( $group_fields as $key => $field ) {\n\t\t\t$classes = isset( $field['class'] ) ? (array) $field['class'] : array();\n\t\t\tif ( ! in_array( 'update_totals_on_change', $classes, true ) ) {\n\t\t\t\t$classes[] = 'update_totals_on_change';\n\t\t\t}\n\t\t\t$fields[ $group ][ $key ]['class'] = $classes;\n\t\t}\n\t}\n\treturn $fields;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "checkout-fields"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-refresh-checkout-upon-any-input-field-change/"
+    ],
+    "updated": "2026-11-17T21:35:44+00:00"
+}

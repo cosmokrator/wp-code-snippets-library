@@ -1,0 +1,29 @@
+{
+    "title": "Validate EU VAT number with VIES at checkout",
+    "description": "On \"Place order\", the VAT number field is checked against the EU VIES service (no API key needed). An invalid number blocks the order with an error; if VIES is unreachable the order goes through. Set the checkout field name in the variable (the field itself must already exist).",
+    "type": "php",
+    "code": "add_action( 'woocommerce_checkout_process', 'perfectpixel_validate_vat_with_vies' );\n\nfunction perfectpixel_validate_vat_with_vies() {\n\t$field   = '{{vat_field}}';\n\t$number  = isset( $_POST[ $field ] ) ? strtoupper( preg_replace( '/[^A-Za-z0-9]/', '', wp_unslash( $_POST[ $field ] ) ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification\n\t$country = isset( $_POST['billing_country'] ) ? strtoupper( sanitize_text_field( wp_unslash( $_POST['billing_country'] ) ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification\n\n\tif ( '' === $number || '' === $country ) {\n\t\treturn;\n\t}\n\n\t// VIES uses EL for Greece; strip the country prefix if the customer typed it.\n\t$vies_country = 'GR' === $country ? 'EL' : $country;\n\tif ( 0 === strpos( $number, $vies_country ) || 0 === strpos( $number, $country ) ) {\n\t\t$number = substr( $number, 2 );\n\t}\n\n\t$url      = sprintf( 'https://ec.europa.eu/taxation_customs/vies/rest-api/ms/%s/vat/%s', rawurlencode( $vies_country ), rawurlencode( $number ) );\n\t$response = wp_remote_get( $url, array( 'timeout' => 10 ) );\n\n\tif ( is_wp_error( $response ) || 200 !== (int) wp_remote_retrieve_response_code( $response ) ) {\n\t\treturn; // Service unavailable: do not block the order.\n\t}\n\n\t$data = json_decode( wp_remote_retrieve_body( $response ), true );\n\tif ( ! is_array( $data ) ) {\n\t\treturn;\n\t}\n\n\t$valid = isset( $data['isValid'] ) ? (bool) $data['isValid'] : ( 'VALID' === ( $data['userError'] ?? '' ) );\n\tif ( ! $valid ) {\n\t\twc_add_notice( __( 'The VAT number is not valid according to the EU VIES service. Please check it and try again.', 'woocommerce' ), 'error' );\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "vat",
+        "eu"
+    ],
+    "variables": [
+        {
+            "name": "vat_field",
+            "label": "VAT number field name",
+            "default": "billing_vat",
+            "description": "Checkout field that holds the VAT number, e.g. billing_vat"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-simple-eu-vat-number-validation-vies/"
+    ],
+    "updated": "2026-11-17T21:35:44+00:00"
+}

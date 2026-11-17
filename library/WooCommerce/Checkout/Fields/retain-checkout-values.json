@@ -1,0 +1,22 @@
+{
+    "title": "Keep checkout field values after reload",
+    "description": "Remembers what the customer typed in the checkout fields (name, email, phone, custom fields…) in the WooCommerce session, so the values are still there after a reload or a trip back to the cart. Cleared once the order is placed. Works with the classic (shortcode) checkout; the block checkout does not use this filter.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_checkout_update_order_review', 'perfectpixel_retain_checkout_store' );\nadd_filter( 'woocommerce_checkout_get_value', 'perfectpixel_retain_checkout_value', 20, 2 );\nadd_filter( 'woocommerce_ship_to_different_address_checked', 'perfectpixel_retain_ship_to_different' );\nadd_action( 'woocommerce_checkout_order_processed', 'perfectpixel_retain_checkout_clear' );\n\nfunction perfectpixel_retain_checkout_store( $posted ) {\n\tif ( ! WC()->session ) {\n\t\treturn;\n\t}\n\tparse_str( (string) $posted, $data );\n\n\t$keep = array();\n\tforeach ( $data as $key => $value ) {\n\t\tif ( is_string( $value ) && preg_match( '/^(billing_|shipping_|order_|account_username$)/', $key ) ) {\n\t\t\t$keep[ $key ] = sanitize_text_field( wp_unslash( $value ) );\n\t\t}\n\t}\n\t$keep['ship_to_different_address'] = ! empty( $data['ship_to_different_address'] ) ? 1 : 0;\n\n\tWC()->session->set( 'perfectpixel_checkout_values', $keep );\n}\n\nfunction perfectpixel_retain_checkout_value( $value, $input ) {\n\tif ( null !== $value || ! function_exists( 'WC' ) || ! WC()->session ) {\n\t\treturn $value;\n\t}\n\t$saved = (array) WC()->session->get( 'perfectpixel_checkout_values', array() );\n\treturn isset( $saved[ $input ] ) && '' !== $saved[ $input ] ? $saved[ $input ] : $value;\n}\n\nfunction perfectpixel_retain_ship_to_different( $checked ) {\n\tif ( function_exists( 'WC' ) && WC()->session ) {\n\t\t$saved = (array) WC()->session->get( 'perfectpixel_checkout_values', array() );\n\t\tif ( isset( $saved['ship_to_different_address'] ) ) {\n\t\t\treturn (bool) $saved['ship_to_different_address'];\n\t\t}\n\t}\n\treturn $checked;\n}\n\nfunction perfectpixel_retain_checkout_clear() {\n\tif ( WC()->session ) {\n\t\tWC()->session->set( 'perfectpixel_checkout_values', null );\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "checkout-fields",
+        "ux"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-retain-checkout-data-reload/"
+    ],
+    "updated": "2026-11-17T21:35:44+00:00"
+}
