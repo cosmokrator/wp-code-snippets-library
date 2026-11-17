@@ -1,0 +1,35 @@
+{
+    "title": "Prevent duplicate orders submitted within minutes",
+    "description": "Μπλοκάρει δεύτερη ίδια παραγγελία (ίδιο email, ίδιο καλάθι) μέσα σε λίγα λεπτά από μια πληρωμένη ή σε αναμονή παραγγελία, π.χ. από διπλό κλικ ή πρόβλημα του τρόπου πληρωμής. Ο πελάτης βλέπει μήνυμα. Ορίστε τα λεπτά και το μήνυμα στις μεταβλητές. Λειτουργεί με το κλασικό checkout (shortcode)· το checkout με blocks δεν χρησιμοποιεί αυτό το φίλτρο.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_checkout_process', 'perfectpixel_prevent_duplicate_order' );\n\nfunction perfectpixel_prevent_duplicate_order() {\n\t$email = isset( $_POST['billing_email'] ) ? sanitize_email( wp_unslash( $_POST['billing_email'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification\n\tif ( '' === $email || ! WC()->cart ) {\n\t\treturn;\n\t}\n\t$minutes = max( 1, (int) '{{duplicate_minutes}}' );\n\n\t$orders = wc_get_orders(\n\t\tarray(\n\t\t\t'billing_email' => $email,\n\t\t\t'status'        => array( 'wc-processing', 'wc-completed', 'wc-on-hold' ),\n\t\t\t'date_created'  => '>' . ( time() - $minutes * MINUTE_IN_SECONDS ),\n\t\t\t'limit'         => 5,\n\t\t)\n\t);\n\n\t$cart_hash = WC()->cart->get_cart_hash();\n\tforeach ( $orders as $order ) {\n\t\tif ( $order->get_cart_hash() === $cart_hash ) {\n\t\t\twc_add_notice( esc_html( '{{duplicate_message}}' ), 'error' );\n\t\t\treturn;\n\t\t}\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "orders",
+        "validation"
+    ],
+    "variables": [
+        {
+            "name": "duplicate_minutes",
+            "label": "Χρονικό διάστημα (λεπτά)",
+            "default": "2",
+            "description": "Μόνο αριθμός"
+        },
+        {
+            "name": "duplicate_message",
+            "label": "Μήνυμα",
+            "default": "Μόλις ολοκληρώσατε την ίδια παραγγελία. Ελέγξτε το email σας πριν δοκιμάσετε ξανά.",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-prevent-duplicate-orders/"
+    ],
+    "updated": "2026-11-17T22:12:13+00:00"
+}

@@ -1,0 +1,22 @@
+{
+    "title": "Remove the postcode field from checkout",
+    "description": "Αφαιρεί εντελώς τον ταχυδρομικό κώδικα από χρέωση και αποστολή, για καταστήματα σε χώρες χωρίς ΤΚ ή που δεν τον χρειάζονται. Προσοχή: αν οι ζώνες αποστολής σας βασίζονται σε ΤΚ, προτιμήστε να τον κάνετε απλώς προαιρετικό (δείτε το snippet «Make postcode optional»). Λειτουργεί με το κλασικό checkout (shortcode)· το checkout με blocks δεν χρησιμοποιεί αυτό το φίλτρο.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_checkout_fields', 'perfectpixel_remove_postcode_field', 9999 );\n\nfunction perfectpixel_remove_postcode_field( $fields ) {\n\tunset( $fields['billing']['billing_postcode'], $fields['shipping']['shipping_postcode'] );\n\treturn $fields;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "checkout-fields",
+        "address"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-disable-postcodezip-field-checkout-page/"
+    ],
+    "updated": "2026-11-17T22:12:13+00:00"
+}

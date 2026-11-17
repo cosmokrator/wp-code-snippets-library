@@ -1,0 +1,29 @@
+{
+    "title": "\"Buy now\" button on the product page",
+    "description": "Προσθέτει κουμπί «Αγορά τώρα» δίπλα στο «Προσθήκη στο καλάθι». Προσθέτει το προϊόν (ή την επιλεγμένη παραλλαγή, με την ποσότητα) και πηγαίνει κατευθείαν στο checkout. Δεν χρειάζεται JavaScript. Ορίστε το κείμενο του κουμπιού στη μεταβλητή.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_after_add_to_cart_button', 'perfectpixel_buy_now_button' );\nadd_filter( 'woocommerce_add_to_cart_redirect', 'perfectpixel_buy_now_redirect' );\n\nfunction perfectpixel_buy_now_button() {\n\tglobal $product;\n\tif ( ! $product instanceof WC_Product || ! $product->is_purchasable() || ! $product->is_in_stock() ) {\n\t\treturn;\n\t}\n\t$action = add_query_arg( 'perfectpixel_buy_now', '1', get_permalink( $product->get_id() ) );\n\n\t// Simple products send their ID with the clicked button; variable products already have a hidden \"add-to-cart\" input.\n\t$name = $product->is_type( 'variable' ) ? '' : sprintf( ' name=\"add-to-cart\" value=\"%d\"', $product->get_id() );\n\n\tprintf(\n\t\t'<button type=\"submit\" class=\"button alt perfectpixel-buy-now\" formaction=\"%1$s\"%2$s>%3$s</button>',\n\t\tesc_url( $action ),\n\t\t$name, // phpcs:ignore WordPress.Security.EscapeOutput -- Built from an integer.\n\t\tesc_html( '{{buy_now_label}}' )\n\t);\n}\n\nfunction perfectpixel_buy_now_redirect( $url ) {\n\tif ( ! empty( $_GET['perfectpixel_buy_now'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification\n\t\treturn wc_get_checkout_url();\n\t}\n\treturn $url;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "product",
+        "add-to-cart",
+        "checkout"
+    ],
+    "variables": [
+        {
+            "name": "buy_now_label",
+            "label": "Κείμενο κουμπιού",
+            "default": "Αγορά τώρα",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-buy-now-button-single-product-page/"
+    ],
+    "updated": "2026-11-17T22:12:13+00:00"
+}

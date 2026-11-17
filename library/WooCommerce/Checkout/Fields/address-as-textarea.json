@@ -1,0 +1,22 @@
+{
+    "title": "Turn the street address field into a textarea",
+    "description": "Το πεδίο «Διεύθυνση» (χρέωση και αποστολή) γίνεται πολλαπλών γραμμών (textarea), για μεγάλες ή σύνθετες διευθύνσεις. Λειτουργεί με το κλασικό checkout (shortcode)· το checkout με blocks δεν χρησιμοποιεί αυτό το φίλτρο.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_checkout_fields', 'perfectpixel_address_as_textarea', 9999 );\n\nfunction perfectpixel_address_as_textarea( $fields ) {\n\tforeach ( array( 'billing', 'shipping' ) as $group ) {\n\t\t$key = $group . '_address_1';\n\t\tif ( isset( $fields[ $group ][ $key ] ) ) {\n\t\t\t$fields[ $group ][ $key ]['type']              = 'textarea';\n\t\t\t$fields[ $group ][ $key ]['custom_attributes']['rows'] = 2;\n\t\t}\n\t}\n\treturn $fields;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "checkout-fields",
+        "address"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-change-input-field-to-textarea-checkout/"
+    ],
+    "updated": "2026-11-17T22:12:13+00:00"
+}

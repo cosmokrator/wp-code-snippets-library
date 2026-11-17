@@ -1,0 +1,22 @@
+{
+    "title": "Numbers-only postcode field",
+    "description": "Ο ταχυδρομικός κώδικας δέχεται μόνο ψηφία: ανοίγει αριθμητικό πληκτρολόγιο στα κινητά και τα γράμματα/κενά αφαιρούνται καθώς πληκτρολογεί ο πελάτης (χρέωση και αποστολή). Δεν χρησιμοποιεί type=\"number\", ώστε να μη χάνονται μηδενικά στην αρχή. Λειτουργεί με το κλασικό checkout (shortcode)· το checkout με blocks δεν χρησιμοποιεί αυτό το φίλτρο.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_checkout_fields', 'perfectpixel_numeric_postcode', 9999 );\nadd_action( 'woocommerce_after_checkout_form', 'perfectpixel_numeric_postcode_script' );\n\nfunction perfectpixel_numeric_postcode( $fields ) {\n\tforeach ( array( 'billing', 'shipping' ) as $group ) {\n\t\t$key = $group . '_postcode';\n\t\tif ( isset( $fields[ $group ][ $key ] ) ) {\n\t\t\t$fields[ $group ][ $key ]['custom_attributes']['inputmode'] = 'numeric';\n\t\t\t$fields[ $group ][ $key ]['custom_attributes']['pattern']   = '[0-9]*';\n\t\t}\n\t}\n\treturn $fields;\n}\n\nfunction perfectpixel_numeric_postcode_script() {\n\t?>\n\t<script>\n\tdocument.addEventListener( 'input', function ( e ) {\n\t\tif ( e.target && ( e.target.id === 'billing_postcode' || e.target.id === 'shipping_postcode' ) ) {\n\t\t\tvar clean = e.target.value.replace( /\\D/g, '' );\n\t\t\tif ( clean !== e.target.value ) {\n\t\t\t\te.target.value = clean;\n\t\t\t}\n\t\t}\n\t} );\n\t</script>\n\t<?php\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "checkout-fields",
+        "address"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-change-input-type-checkout-fields/"
+    ],
+    "updated": "2026-11-17T22:12:13+00:00"
+}

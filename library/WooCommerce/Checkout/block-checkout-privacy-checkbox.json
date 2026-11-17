@@ -1,0 +1,29 @@
+{
+    "title": "Privacy policy checkbox on the block checkout",
+    "description": "Προσθέτει υποχρεωτικό checkbox αποδοχής πολιτικής απορρήτου στο checkout με blocks (το προεπιλεγμένο από το WooCommerce 8.3), μέσω του επίσημου Additional Checkout Fields API. Χωρίς τσεκάρισμα η παραγγελία δεν ολοκληρώνεται. Χρειάζεται WooCommerce 8.9 ή νεότερο. Ορίστε το κείμενο στη μεταβλητή.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_init', 'perfectpixel_block_checkout_privacy_checkbox' );\n\nfunction perfectpixel_block_checkout_privacy_checkbox() {\n\tif ( ! function_exists( 'woocommerce_register_additional_checkout_field' ) ) {\n\t\treturn; // WooCommerce older than 8.9.\n\t}\n\twoocommerce_register_additional_checkout_field(\n\t\tarray(\n\t\t\t'id'       => 'perfectpixel/privacy-policy',\n\t\t\t'label'    => '{{privacy_label}}',\n\t\t\t'location' => 'order',\n\t\t\t'type'     => 'checkbox',\n\t\t\t'required' => true,\n\t\t)\n\t);\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "block-checkout",
+        "gdpr"
+    ],
+    "variables": [
+        {
+            "name": "privacy_label",
+            "label": "Κείμενο checkbox",
+            "default": "Έχω διαβάσει και αποδέχομαι την πολιτική απορρήτου",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-privacy-policy-checkbox-block-checkout/"
+    ],
+    "updated": "2026-11-17T22:12:13+00:00"
+}

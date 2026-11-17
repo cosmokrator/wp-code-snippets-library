@@ -1,0 +1,22 @@
+{
+    "title": "Log customers out after checkout",
+    "description": "Αποσυνδέει αυτόματα τον πελάτη μετά την αγορά, αλλά όχι αμέσως: βλέπει κανονικά τη σελίδα ευχαριστίας και αποσυνδέεται στην επόμενη σελίδα που θα ανοίξει. Ισχύει μόνο για χρήστες με ρόλο «Πελάτης», ποτέ για διαχειριστές ή συντάκτες.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_thankyou', 'perfectpixel_logout_after_checkout_flag' );\nadd_action( 'template_redirect', 'perfectpixel_logout_after_checkout_run' );\n\nfunction perfectpixel_logout_after_checkout_should_apply() {\n\t$user = wp_get_current_user();\n\treturn $user->exists() && in_array( 'customer', (array) $user->roles, true ) && ! current_user_can( 'edit_posts' );\n}\n\nfunction perfectpixel_logout_after_checkout_flag() {\n\tif ( perfectpixel_logout_after_checkout_should_apply() ) {\n\t\tupdate_user_meta( get_current_user_id(), '_perfectpixel_logout_next', 1 );\n\t}\n}\n\nfunction perfectpixel_logout_after_checkout_run() {\n\tif ( ! is_user_logged_in() || is_wc_endpoint_url( 'order-received' ) ) {\n\t\treturn;\n\t}\n\t$user_id = get_current_user_id();\n\tif ( get_user_meta( $user_id, '_perfectpixel_logout_next', true ) ) {\n\t\tdelete_user_meta( $user_id, '_perfectpixel_logout_next' );\n\t\twp_logout();\n\t\t// Reload the same page, now logged out.\n\t\twp_safe_redirect( esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ?? '/' ) ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput\n\t\texit;\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "account",
+        "security"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-automatically-log-out-customers-after-checkout/"
+    ],
+    "updated": "2026-11-17T22:12:24+00:00"
+}

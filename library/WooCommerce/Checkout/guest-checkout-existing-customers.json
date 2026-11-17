@@ -1,0 +1,22 @@
+{
+    "title": "Allow guest checkout with an existing customer email",
+    "description": "Όταν οι αγορές ως επισκέπτης είναι απενεργοποιημένες, ένας παλιός πελάτης που δεν έχει συνδεθεί μπορεί να ολοκληρώσει την παραγγελία με το email του (αντί για το λάθος «υπάρχει ήδη λογαριασμός με αυτό το email»). Η παραγγελία συνδέεται με τον λογαριασμό του. Για ασφάλεια, τα αποθηκευμένα στοιχεία του λογαριασμού δεν αλλάζουν από τέτοια παραγγελία. Λειτουργεί με το κλασικό checkout (shortcode)· το checkout με blocks δεν χρησιμοποιεί αυτό το φίλτρο.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_checkout_registration_required', 'perfectpixel_guest_existing_registration_required' );\nadd_action( 'woocommerce_checkout_create_order', 'perfectpixel_guest_existing_assign', 10, 2 );\nadd_filter( 'woocommerce_checkout_update_customer_data', 'perfectpixel_guest_existing_no_profile_update', 10, 2 );\n\nfunction perfectpixel_guest_existing_user_id() {\n\tif ( is_user_logged_in() || empty( $_POST['billing_email'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification\n\t\treturn 0;\n\t}\n\treturn (int) email_exists( sanitize_email( wp_unslash( $_POST['billing_email'] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification\n}\n\nfunction perfectpixel_guest_existing_registration_required( $required ) {\n\tif ( perfectpixel_guest_existing_user_id() ) {\n\t\tunset( $_POST['createaccount'] );\n\t\treturn false;\n\t}\n\treturn $required;\n}\n\nfunction perfectpixel_guest_existing_assign( $order, $data ) {\n\t$user_id = perfectpixel_guest_existing_user_id();\n\tif ( $user_id ) {\n\t\t$order->set_customer_id( $user_id );\n\t}\n}\n\nfunction perfectpixel_guest_existing_no_profile_update( $update, $checkout ) {\n\treturn perfectpixel_guest_existing_user_id() ? false : $update;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "guest-checkout",
+        "account"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-allow-guest-checkout-for-existing-customers/"
+    ],
+    "updated": "2026-11-17T22:12:13+00:00"
+}
