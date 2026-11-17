@@ -1,6 +1,6 @@
 {
     "title": "Remove \"(optional)\" from checkout field labels",
-    "description": "Strips the \"(optional)\" suffix that WooCommerce adds to non-required checkout field labels, server side (no CSS hiding). Works with the classic (shortcode) checkout; the block checkout does not use this filter.",
+    "description": "Αφαιρεί την ένδειξη «(optional)» / «(προαιρετικό)» που προσθέτει το WooCommerce στις ετικέτες των μη υποχρεωτικών πεδίων, από τον server (όχι απόκρυψη με CSS). Λειτουργεί με το κλασικό checkout (shortcode)· το checkout με blocks δεν χρησιμοποιεί αυτό το φίλτρο.",
     "type": "php",
     "code": "add_filter( 'woocommerce_form_field', 'perfectpixel_remove_optional_label', 10, 4 );\n\nfunction perfectpixel_remove_optional_label( $field, $key, $args, $value ) {\n\tif ( function_exists( 'is_checkout' ) && is_checkout() && ! is_wc_endpoint_url() ) {\n\t\t$field = preg_replace( '#\\s*<span class=\"optional\">.*?</span>#s', '', $field );\n\t}\n\treturn $field;\n}",
     "location": "everywhere",
@@ -17,5 +17,5 @@
     "source": [
         "https://www.businessbloomer.com/woocommerce-remove-optional-from-checkout-field-labels/"
     ],
-    "updated": "2026-11-17T21:35:44+00:00"
+    "updated": "2026-11-17T21:42:22+00:00"
 }

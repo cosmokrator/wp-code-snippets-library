@@ -1,6 +1,6 @@
 {
     "title": "Add a custom country (Northern Ireland) with states",
-    "description": "Adds \"Northern Ireland\" (code XI) to the WooCommerce country list, to the Europe continent (so it can be used in shipping zones) and gives it its six counties as states. Change the code, name and states for any other custom country.",
+    "description": "Προσθέτει τη «Βόρεια Ιρλανδία» (κωδικός XI) στη λίστα χωρών του WooCommerce και στην ήπειρο Ευρώπη (ώστε να χρησιμοποιείται σε ζώνες αποστολής), με τις έξι κομητείες της ως νομούς. Αλλάξτε κωδικό, όνομα και νομούς για οποιαδήποτε άλλη χώρα.",
     "type": "php",
     "code": "add_filter( 'woocommerce_countries', 'perfectpixel_add_custom_country' );\nadd_filter( 'woocommerce_continents', 'perfectpixel_add_custom_country_to_continent' );\nadd_filter( 'woocommerce_states', 'perfectpixel_add_custom_country_states' );\n\nfunction perfectpixel_add_custom_country( $countries ) {\n\t$countries['XI'] = __( 'Northern Ireland', 'woocommerce' );\n\tasort( $countries );\n\treturn $countries;\n}\n\nfunction perfectpixel_add_custom_country_to_continent( $continents ) {\n\tif ( isset( $continents['EU']['countries'] ) && ! in_array( 'XI', $continents['EU']['countries'], true ) ) {\n\t\t$continents['EU']['countries'][] = 'XI';\n\t}\n\treturn $continents;\n}\n\nfunction perfectpixel_add_custom_country_states( $states ) {\n\t$states['XI'] = array(\n\t\t'ANT' => 'Antrim',\n\t\t'ARM' => 'Armagh',\n\t\t'DOW' => 'Down',\n\t\t'FER' => 'Fermanagh',\n\t\t'LDY' => 'Londonderry',\n\t\t'TYR' => 'Tyrone',\n\t);\n\treturn $states;\n}",
     "location": "everywhere",
@@ -18,5 +18,5 @@
     "source": [
         "https://www.businessbloomer.com/woocommerce-add-new-country/"
     ],
-    "updated": "2026-11-17T21:35:44+00:00"
+    "updated": "2026-11-17T21:42:22+00:00"
 }
