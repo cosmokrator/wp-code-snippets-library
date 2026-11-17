@@ -1,0 +1,16 @@
+{
+    "title": "Hide WordPress version",
+    "description": "Αφαιρεί την έκδοση του WordPress από το <head> και τα RSS feeds.",
+    "type": "php",
+    "code": "remove_action( 'wp_head', 'wp_generator' );\nadd_filter( 'the_generator', '__return_empty_string' );",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "security"
+    ],
+    "variables": [],
+    "updated": "2026-11-17T21:02:54+00:00"
+}

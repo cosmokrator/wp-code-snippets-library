@@ -1,0 +1,24 @@
+{
+    "title": "Google Analytics 4",
+    "description": "Ο βασικός κώδικας του Google Analytics 4 (gtag.js). Συμπληρώστε το Measurement ID ανά site.",
+    "type": "html",
+    "code": "<script async src=\"https://www.googletagmanager.com/gtag/js?id={{ga4_id}}\"></script>\n<script>\n  window.dataLayer = window.dataLayer || [];\n  function gtag(){dataLayer.push(arguments);}\n  gtag('js', new Date());\n  gtag('config', '{{ga4_id}}');\n</script>",
+    "location": "site_header",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "tracking",
+        "google"
+    ],
+    "variables": [
+        {
+            "name": "ga4_id",
+            "label": "Measurement ID",
+            "default": "",
+            "description": "π.χ. G-XXXXXXXXXX"
+        }
+    ],
+    "updated": "2026-11-17T21:02:54+00:00"
+}

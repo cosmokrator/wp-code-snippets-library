@@ -1,0 +1,17 @@
+{
+    "title": "Disable XML-RPC",
+    "description": "Απενεργοποιεί το XML-RPC για να περιοριστούν οι επιθέσεις brute-force. Μην το χρησιμοποιείτε αν το site χρειάζεται Jetpack ή την εφαρμογή WordPress για κινητά.",
+    "type": "php",
+    "code": "add_filter( 'xmlrpc_enabled', '__return_false' );",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "security",
+        "xmlrpc"
+    ],
+    "variables": [],
+    "updated": "2026-11-17T21:02:54+00:00"
+}

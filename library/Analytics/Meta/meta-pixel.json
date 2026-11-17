@@ -1,0 +1,25 @@
+{
+    "title": "Meta Pixel",
+    "description": "Ο βασικός κώδικας του Meta (Facebook) Pixel με PageView. Συμπληρώστε το Pixel ID ανά site.",
+    "type": "html",
+    "code": "<script>\n!function(f,b,e,v,n,t,s)\n{if(f.fbq)return;n=f.fbq=function(){n.callMethod?\nn.callMethod.apply(n,arguments):n.queue.push(arguments)};\nif(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';\nn.queue=[];t=b.createElement(e);t.async=!0;\nt.src=v;s=b.getElementsByTagName(e)[0];\ns.parentNode.insertBefore(t,s)}(window, document,'script',\n'https://connect.facebook.net/en_US/fbevents.js');\nfbq('init', '{{pixel_id}}');\nfbq('track', 'PageView');\n</script>",
+    "location": "site_header",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "tracking",
+        "meta",
+        "facebook"
+    ],
+    "variables": [
+        {
+            "name": "pixel_id",
+            "label": "Pixel ID",
+            "default": "",
+            "description": ""
+        }
+    ],
+    "updated": "2026-11-17T21:02:54+00:00"
+}

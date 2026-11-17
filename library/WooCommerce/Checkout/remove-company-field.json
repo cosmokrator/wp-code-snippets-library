@@ -1,0 +1,17 @@
+{
+    "title": "Remove checkout company field",
+    "description": "Αφαιρεί το πεδίο «Εταιρεία» από το checkout του WooCommerce.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_checkout_fields', function ( $fields ) {\n    unset( $fields['billing']['billing_company'] );\n    return $fields;\n} );",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout"
+    ],
+    "variables": [],
+    "updated": "2026-11-17T21:02:54+00:00"
+}

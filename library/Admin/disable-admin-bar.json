@@ -1,0 +1,16 @@
+{
+    "title": "Hide admin bar for non-admins",
+    "description": "Κρύβει τη γραμμή διαχείρισης στο frontend για όλους εκτός από τους διαχειριστές.",
+    "type": "php",
+    "code": "add_filter( 'show_admin_bar', function ( $show ) {\n    return current_user_can( 'manage_options' ) ? $show : false;\n} );",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "admin"
+    ],
+    "variables": [],
+    "updated": "2026-11-17T21:02:54+00:00"
+}
