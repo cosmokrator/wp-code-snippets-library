@@ -1,0 +1,21 @@
+{
+    "title": "Shortcode for a product attributes table",
+    "description": "Shortcode [product_attributes_table id=\"123\"] που εμφανίζει τον πίνακα χαρακτηριστικών ενός προϊόντος (βάρος, διαστάσεις, χρώμα, υλικό κ.λπ., όπως στην καρτέλα «Επιπρόσθετες πληροφορίες») σε οποιαδήποτε σελίδα, π.χ. σε άρθρο σύγκρισης ή πίνακα τιμών. Χωρίς id δείχνει το τρέχον προϊόν.",
+    "type": "php",
+    "code": "add_shortcode( 'product_attributes_table', 'perfectpixel_product_attributes_shortcode' );\n\nfunction perfectpixel_product_attributes_shortcode( $atts ) {\n\t$atts    = shortcode_atts( array( 'id' => 0 ), $atts );\n\t$product = wc_get_product( absint( $atts['id'] ) ? absint( $atts['id'] ) : get_the_ID() );\n\tif ( ! $product || ! function_exists( 'wc_display_product_attributes' ) ) {\n\t\treturn '';\n\t}\n\tob_start();\n\twc_display_product_attributes( $product );\n\treturn '<div class=\"woocommerce perfectpixel-attributes-table\">' . ob_get_clean() . '</div>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shortcodes",
+        "attributes"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-products-attributes-table-shortcode/"
+    ],
+    "updated": "2026-11-18T18:07:11+00:00"
+}

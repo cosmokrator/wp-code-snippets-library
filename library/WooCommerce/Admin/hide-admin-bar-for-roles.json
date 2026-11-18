@@ -1,0 +1,29 @@
+{
+    "title": "Hide the WordPress admin bar for customers",
+    "description": "Η μαύρη μπάρα του WordPress στην κορυφή του site δεν εμφανίζεται στους χρήστες με τους ρόλους που ορίζετε (π.χ. πελάτες, συνδρομητές), ώστε το κατάστημα να φαίνεται όπως στους επισκέπτες. Οι διαχειριστές και οι διαχειριστές καταστήματος συνεχίζουν να τη βλέπουν.",
+    "type": "php",
+    "code": "add_filter( 'show_admin_bar', 'perfectpixel_hide_admin_bar_for_roles', 20 );\n\nfunction perfectpixel_hide_admin_bar_for_roles( $show ) {\n\t$user = wp_get_current_user();\n\tif ( ! $user->exists() ) {\n\t\treturn $show;\n\t}\n\t$roles = array_filter( array_map( 'trim', explode( ',', '{{hide_admin_bar_roles}}' ) ) );\n\treturn array_intersect( $roles, (array) $user->roles ) && ! current_user_can( 'manage_woocommerce' ) ? false : $show;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "admin",
+        "admin-bar",
+        "user-roles"
+    ],
+    "variables": [
+        {
+            "name": "hide_admin_bar_roles",
+            "label": "Ρόλοι (με κόμμα)",
+            "default": "customer,subscriber",
+            "description": "Slugs ρόλων, π.χ. customer,subscriber"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-hide-wp-admin-bar-non-admins/"
+    ],
+    "updated": "2026-11-18T18:07:11+00:00"
+}

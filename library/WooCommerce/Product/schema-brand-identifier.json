@@ -1,0 +1,35 @@
+{
+    "title": "Add brand and MPN to product structured data",
+    "description": "Συμπληρώνει τα δομημένα δεδομένα (schema) των προϊόντων με μάρκα και αναγνωριστικό, ώστε να μειωθεί η προειδοποίηση «No global identifier provided» του Google Search Console: η μάρκα παίρνεται από τις Μάρκες του WooCommerce (ή από την προεπιλεγμένη που ορίζετε) και, αν το προϊόν δεν έχει GTIN, το SKU δίνεται ως MPN.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_structured_data_product', 'perfectpixel_schema_brand_identifier', 20, 2 );\n\nfunction perfectpixel_schema_brand_identifier( $markup, $product ) {\n\tif ( empty( $markup['brand'] ) ) {\n\t\t$brand = '';\n\t\tif ( taxonomy_exists( 'product_brand' ) ) {\n\t\t\t$terms = get_the_terms( $product->get_id(), 'product_brand' );\n\t\t\t$brand = ( $terms && ! is_wp_error( $terms ) ) ? $terms[0]->name : '';\n\t\t}\n\t\t$brand = $brand ? $brand : trim( '{{schema_default_brand}}' );\n\t\tif ( $brand ) {\n\t\t\t$markup['brand'] = array( '@type' => 'Brand', 'name' => $brand );\n\t\t}\n\t}\n\t$has_gtin = ! empty( $markup['gtin'] ) || ! empty( $markup['gtin8'] ) || ! empty( $markup['gtin12'] ) || ! empty( $markup['gtin13'] ) || ! empty( $markup['gtin14'] );\n\tif ( ! $has_gtin && empty( $markup['mpn'] ) && 'yes' === '{{schema_sku_as_mpn}}' && $product->get_sku() ) {\n\t\t$markup['mpn'] = $product->get_sku();\n\t}\n\treturn $markup;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "seo",
+        "schema",
+        "google"
+    ],
+    "variables": [
+        {
+            "name": "schema_default_brand",
+            "label": "Προεπιλεγμένη μάρκα",
+            "default": "",
+            "description": "Για προϊόντα χωρίς μάρκα (π.χ. το όνομα του καταστήματος για δικά σας προϊόντα). Κενό = καμία"
+        },
+        {
+            "name": "schema_sku_as_mpn",
+            "label": "SKU ως MPN (yes/no)",
+            "default": "yes",
+            "description": "yes ή no"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-fix-google-search-console-no-global-identifier-provided/"
+    ],
+    "updated": "2026-11-18T18:07:11+00:00"
+}

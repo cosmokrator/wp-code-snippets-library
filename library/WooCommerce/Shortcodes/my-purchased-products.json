@@ -1,0 +1,29 @@
+{
+    "title": "Shortcode for the products the customer has bought",
+    "description": "Shortcode [my_purchased_products] που εμφανίζει στον συνδεδεμένο πελάτη όλα τα προϊόντα που έχει αγοράσει, με την εμφάνιση του καταστήματος και κουμπί αγοράς, ώστε να ξαναπαραγγέλνει εύκολα (π.χ. σε σελίδα «Αγοράστε ξανά» ή σε καρτέλα του λογαριασμού). Παράμετροι: limit, columns. Η λίστα αποθηκεύεται ανά πελάτη και ανανεώνεται όταν αλλάζει μια παραγγελία του.",
+    "type": "php",
+    "code": "add_shortcode( 'my_purchased_products', 'perfectpixel_my_purchased_products_shortcode' );\nadd_action( 'woocommerce_order_status_changed', 'perfectpixel_my_purchased_products_flush', 10, 4 );\n\nfunction perfectpixel_my_purchased_products_shortcode( $atts ) {\n\tif ( ! is_user_logged_in() ) {\n\t\treturn '';\n\t}\n\t$atts    = shortcode_atts( array( 'limit' => 12, 'columns' => 4 ), $atts );\n\t$user_id = get_current_user_id();\n\t$key     = 'perfectpixel_my_products_' . $user_id;\n\t$ids     = get_transient( $key );\n\tif ( false === $ids ) {\n\t\t$ids = array();\n\t\tforeach ( wc_get_orders( array( 'customer_id' => $user_id, 'status' => wc_get_is_paid_statuses(), 'limit' => 100, 'orderby' => 'date', 'order' => 'DESC' ) ) as $order ) {\n\t\t\tforeach ( $order->get_items() as $item ) {\n\t\t\t\t$ids[] = (int) $item->get_product_id();\n\t\t\t}\n\t\t}\n\t\t$ids = array_values( array_unique( array_filter( $ids ) ) );\n\t\tset_transient( $key, $ids, DAY_IN_SECONDS );\n\t}\n\t$ids = array_slice( (array) $ids, 0, min( 50, max( 1, absint( $atts['limit'] ) ) ) );\n\tif ( ! $ids ) {\n\t\t$message = trim( '{{my_products_empty}}' );\n\t\treturn '' !== $message ? '<p class=\"perfectpixel-no-purchases\">' . esc_html( $message ) . '</p>' : '';\n\t}\n\treturn do_shortcode( sprintf( '[products ids=\"%s\" columns=\"%d\" orderby=\"post__in\"]', esc_attr( implode( ',', $ids ) ), min( 6, max( 1, absint( $atts['columns'] ) ) ) ) );\n}\n\nfunction perfectpixel_my_purchased_products_flush( $order_id, $from, $to, $order ) {\n\tif ( $order && $order->get_customer_id() ) {\n\t\tdelete_transient( 'perfectpixel_my_products_' . $order->get_customer_id() );\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shortcodes",
+        "customers",
+        "reorder"
+    ],
+    "variables": [
+        {
+            "name": "my_products_empty",
+            "label": "Μήνυμα αν δεν υπάρχουν αγορές",
+            "default": "Δεν έχετε αγοράσει ακόμη προϊόντα.",
+            "description": "Χωρίς απόστροφο ('). Κενό = τίποτα"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-display-products-purchased-user/"
+    ],
+    "updated": "2026-11-18T18:07:11+00:00"
+}

@@ -1,0 +1,22 @@
+{
+    "title": "Shortcode to list single variations as products",
+    "description": "Shortcode [single_variations] που εμφανίζει τις παραλλαγές των μεταβλητών προϊόντων ως ξεχωριστά προϊόντα σε πλέγμα (εικόνα, όνομα με επιλογές, τιμή, κουμπί αγοράς), π.χ. «Μπλουζάκι – Κόκκινο, L». Παράμετροι: limit (πλήθος), columns (στήλες), category (slug κατηγορίας του γονικού προϊόντος). Εμφανίζονται μόνο διαθέσιμες παραλλαγές.",
+    "type": "php",
+    "code": "add_shortcode( 'single_variations', 'perfectpixel_single_variations_shortcode' );\n\nfunction perfectpixel_single_variations_shortcode( $atts ) {\n\t$atts = shortcode_atts( array( 'limit' => 12, 'columns' => 4, 'category' => '' ), $atts );\n\t$args = array(\n\t\t'type'         => 'variation',\n\t\t'status'       => 'publish',\n\t\t'stock_status' => 'instock',\n\t\t'limit'        => min( 100, max( 1, absint( $atts['limit'] ) ) ),\n\t);\n\tif ( $atts['category'] ) {\n\t\t$parents        = wc_get_products( array( 'type' => 'variable', 'category' => array( sanitize_title( $atts['category'] ) ), 'limit' => -1, 'return' => 'ids' ) );\n\t\t$args['parent'] = $parents ? $parents : array( 0 );\n\t}\n\t$variations = array_filter( wc_get_products( $args ), function ( $v ) {\n\t\treturn $v->is_purchasable() && $v->variation_is_visible();\n\t} );\n\tif ( ! $variations ) {\n\t\treturn '';\n\t}\n\t$columns = min( 6, max( 1, absint( $atts['columns'] ) ) );\n\t$html    = '<div class=\"woocommerce columns-' . $columns . '\"><ul class=\"products columns-' . $columns . '\">';\n\tforeach ( $variations as $variation ) {\n\t\t$html .= sprintf(\n\t\t\t'<li class=\"product\"><a href=\"%1$s\">%2$s<h2 class=\"woocommerce-loop-product__title\">%3$s</h2></a><span class=\"price\">%4$s</span><a href=\"%5$s\" class=\"button add_to_cart_button\" rel=\"nofollow\">%6$s</a></li>',\n\t\t\tesc_url( $variation->get_permalink() ),\n\t\t\t$variation->get_image( 'woocommerce_thumbnail' ),\n\t\t\tesc_html( $variation->get_name() ),\n\t\t\twp_kses_post( $variation->get_price_html() ),\n\t\t\tesc_url( $variation->add_to_cart_url() ),\n\t\t\tesc_html( $variation->add_to_cart_text() )\n\t\t);\n\t}\n\treturn $html . '</ul></div>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shortcodes",
+        "variations",
+        "shop"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-get-single-variations/"
+    ],
+    "updated": "2026-11-18T18:07:11+00:00"
+}

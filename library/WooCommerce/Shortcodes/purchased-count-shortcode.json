@@ -1,0 +1,22 @@
+{
+    "title": "Shortcode: how many times the customer bought a product",
+    "description": "Shortcode [purchased_count id=\"123\"] που εμφανίζει πόσα τεμάχια ενός προϊόντος έχει αγοράσει συνολικά ο συνδεδεμένος πελάτης (από πληρωμένες παραγγελίες), π.χ. «Έχετε αγοράσει [purchased_count id=\"123\"] πακέτα». Για επισκέπτες εμφανίζει 0. Ο αριθμός αποθηκεύεται ανά πελάτη και ανανεώνεται όταν αλλάζει μια παραγγελία του.",
+    "type": "php",
+    "code": "add_shortcode( 'purchased_count', 'perfectpixel_purchased_count_shortcode' );\nadd_action( 'woocommerce_order_status_changed', 'perfectpixel_purchased_count_flush', 10, 4 );\n\nfunction perfectpixel_purchased_quantities( $user_id ) {\n\t$key  = 'perfectpixel_purchased_qty_' . $user_id;\n\t$data = get_transient( $key );\n\tif ( false === $data ) {\n\t\t$data = array();\n\t\tforeach ( wc_get_orders( array( 'customer_id' => $user_id, 'status' => wc_get_is_paid_statuses(), 'limit' => -1 ) ) as $order ) {\n\t\t\tforeach ( $order->get_items() as $item ) {\n\t\t\t\tforeach ( array_filter( array( $item->get_product_id(), $item->get_variation_id() ) ) as $id ) {\n\t\t\t\t\t$data[ $id ] = ( $data[ $id ] ?? 0 ) + (int) $item->get_quantity();\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\tset_transient( $key, $data, DAY_IN_SECONDS );\n\t}\n\treturn (array) $data;\n}\n\nfunction perfectpixel_purchased_count_shortcode( $atts ) {\n\t$atts = shortcode_atts( array( 'id' => 0 ), $atts );\n\t$id   = absint( $atts['id'] );\n\tif ( ! $id || ! is_user_logged_in() ) {\n\t\treturn '0';\n\t}\n\t$data = perfectpixel_purchased_quantities( get_current_user_id() );\n\treturn esc_html( number_format_i18n( $data[ $id ] ?? 0 ) );\n}\n\nfunction perfectpixel_purchased_count_flush( $order_id, $from, $to, $order ) {\n\tif ( $order && $order->get_customer_id() ) {\n\t\tdelete_transient( 'perfectpixel_purchased_qty_' . $order->get_customer_id() );\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shortcodes",
+        "customers",
+        "orders"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-count-purchases-by-product-id-shortcode/"
+    ],
+    "updated": "2026-11-18T18:07:11+00:00"
+}

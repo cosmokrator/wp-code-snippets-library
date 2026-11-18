@@ -1,0 +1,29 @@
+{
+    "title": "Let customers sort the My Account downloads table",
+    "description": "Πάνω από τον πίνακα «Λήψεις» του λογαριασμού πελάτη εμφανίζεται λίστα ταξινόμησης (Νεότερα πρώτα, Όνομα Α–Ω, Όνομα Ω–Α, Λήξη), ώστε ο πελάτης με πολλά αρχεία να βρίσκει γρήγορα αυτό που θέλει. Κανονικά το WooCommerce τα ταξινομεί μόνο με τη σειρά των παραγγελιών.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_before_available_downloads', 'perfectpixel_downloads_sort_select' );\nadd_filter( 'woocommerce_customer_get_downloadable_products', 'perfectpixel_downloads_sort', 20 );\n\nfunction perfectpixel_downloads_sort_options() {\n\treturn array(\n\t\t''          => 'Νεότερα πρώτα',\n\t\t'name_asc'  => 'Όνομα Α–Ω',\n\t\t'name_desc' => 'Όνομα Ω–Α',\n\t\t'expires'   => 'Λήξη',\n\t);\n}\n\nfunction perfectpixel_downloads_current_sort() {\n\t$sort = isset( $_GET['dl_sort'] ) ? sanitize_key( $_GET['dl_sort'] ) : '';\n\treturn array_key_exists( $sort, perfectpixel_downloads_sort_options() ) ? $sort : '';\n}\n\nfunction perfectpixel_downloads_sort_select() {\n\techo '<form method=\"get\" class=\"perfectpixel-downloads-sort\" style=\"margin-bottom:1em\"><label>' . esc_html( '{{downloads_sort_label}}' ) . ' <select name=\"dl_sort\" onchange=\"this.form.submit()\">';\n\tforeach ( perfectpixel_downloads_sort_options() as $key => $label ) {\n\t\tprintf( '<option value=\"%s\"%s>%s</option>', esc_attr( $key ), selected( perfectpixel_downloads_current_sort(), $key, false ), esc_html( $label ) );\n\t}\n\techo '</select></label></form>';\n}\n\nfunction perfectpixel_downloads_sort( $downloads ) {\n\t$sort = perfectpixel_downloads_current_sort();\n\tif ( ! $sort || ! is_account_page() ) {\n\t\treturn $downloads;\n\t}\n\tusort(\n\t\t$downloads,\n\t\tfunction ( $a, $b ) use ( $sort ) {\n\t\t\tif ( 'expires' === $sort ) {\n\t\t\t\t$ea = $a['access_expires'] ? strtotime( (string) $a['access_expires'] ) : PHP_INT_MAX;\n\t\t\t\t$eb = $b['access_expires'] ? strtotime( (string) $b['access_expires'] ) : PHP_INT_MAX;\n\t\t\t\treturn $ea <=> $eb;\n\t\t\t}\n\t\t\t$cmp = strnatcasecmp( (string) $a['product_name'], (string) $b['product_name'] );\n\t\t\treturn 'name_desc' === $sort ? -$cmp : $cmp;\n\t\t}\n\t);\n\treturn $downloads;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "my-account",
+        "downloads",
+        "sorting"
+    ],
+    "variables": [
+        {
+            "name": "downloads_sort_label",
+            "label": "Ετικέτα",
+            "default": "Ταξινόμηση:",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-sort-downloads-table-my-account/"
+    ],
+    "updated": "2026-11-18T18:07:11+00:00"
+}

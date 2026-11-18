@@ -1,0 +1,21 @@
+{
+    "title": "Show the results page even for a single search result",
+    "description": "Όταν η αναζήτηση προϊόντων βρίσκει μόνο ένα προϊόν, το WooCommerce μεταφέρει τον πελάτη κατευθείαν στη σελίδα του. Με το snippet εμφανίζεται κανονικά η σελίδα αποτελεσμάτων με το ένα προϊόν, ώστε ο πελάτης να καταλαβαίνει ότι είδε αποτελέσματα αναζήτησης.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_redirect_single_search_result', 'perfectpixel_no_single_search_redirect' );\n\nfunction perfectpixel_no_single_search_redirect() {\n\treturn false;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "search",
+        "redirect"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-disable-single-search-result-redirect/"
+    ],
+    "updated": "2026-11-18T18:07:11+00:00"
+}

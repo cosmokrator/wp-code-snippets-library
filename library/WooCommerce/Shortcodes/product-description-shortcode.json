@@ -1,0 +1,22 @@
+{
+    "title": "Shortcode for a product description",
+    "description": "Shortcode [product_description id=\"123\"] που εμφανίζει την κύρια περιγραφή ενός προϊόντος σε οποιαδήποτε σελίδα ή άρθρο, με τη μορφοποίησή της, π.χ. σε σελίδα πωλήσεων ή σύγκρισης χωρίς να την ξαναγράφετε. Με short=\"yes\" εμφανίζει τη σύντομη περιγραφή. Αν αλλάξει η περιγραφή του προϊόντος, αλλάζει παντού.",
+    "type": "php",
+    "code": "add_shortcode( 'product_description', 'perfectpixel_product_description_shortcode' );\n\nfunction perfectpixel_product_description_shortcode( $atts ) {\n\t$atts    = shortcode_atts( array( 'id' => 0, 'short' => 'no' ), $atts );\n\t$product = wc_get_product( absint( $atts['id'] ) ? absint( $atts['id'] ) : get_the_ID() );\n\tif ( ! $product || 'publish' !== $product->get_status() ) {\n\t\treturn '';\n\t}\n\t$text = 'yes' === $atts['short'] ? $product->get_short_description() : $product->get_description();\n\t// Avoid infinite loops if the description itself contains this shortcode.\n\t$text = str_replace( '[product_description', '[ product_description', $text );\n\treturn '<div class=\"perfectpixel-product-description\">' . wp_kses_post( wpautop( do_shortcode( $text ) ) ) . '</div>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shortcodes",
+        "description",
+        "content"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-product-description-in-shortcode/"
+    ],
+    "updated": "2026-11-18T18:07:11+00:00"
+}

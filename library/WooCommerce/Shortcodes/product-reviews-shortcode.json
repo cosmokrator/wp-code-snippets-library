@@ -1,0 +1,22 @@
+{
+    "title": "Shortcode to display product reviews on any page",
+    "description": "Shortcode [product_reviews_list] που εμφανίζει εγκεκριμένες αξιολογήσεις προϊόντων με αστέρια, όνομα και κείμενο σε οποιαδήποτε σελίδα (π.χ. σελίδα πωλήσεων, αρχική, επικοινωνία). Παράμετροι: id (ID προϊόντος ή IDs με κόμμα· κενό = όλα τα προϊόντα), limit (πλήθος), min_rating (ελάχιστα αστέρια, π.χ. 4).",
+    "type": "php",
+    "code": "add_shortcode( 'product_reviews_list', 'perfectpixel_product_reviews_shortcode' );\n\nfunction perfectpixel_product_reviews_shortcode( $atts ) {\n\t$atts = shortcode_atts( array( 'id' => '', 'limit' => 5, 'min_rating' => 0 ), $atts );\n\t$args = array(\n\t\t'post_type' => 'product',\n\t\t'status'    => 'approve',\n\t\t'type'      => 'review',\n\t\t'number'    => min( 50, max( 1, absint( $atts['limit'] ) ) ),\n\t);\n\t$ids = wp_parse_id_list( $atts['id'] );\n\tif ( $ids ) {\n\t\t$args['post__in'] = $ids;\n\t}\n\tif ( absint( $atts['min_rating'] ) ) {\n\t\t$args['meta_query'] = array( array( 'key' => 'rating', 'value' => absint( $atts['min_rating'] ), 'compare' => '>=', 'type' => 'NUMERIC' ) );\n\t}\n\t$reviews = get_comments( $args );\n\tif ( ! $reviews ) {\n\t\treturn '';\n\t}\n\t$html = '<ul class=\"perfectpixel-reviews\" style=\"list-style:none;margin:0;padding:0\">';\n\tforeach ( $reviews as $review ) {\n\t\t$rating = (int) get_comment_meta( $review->comment_ID, 'rating', true );\n\t\t$html  .= '<li style=\"margin-bottom:1.5em\">' . ( $rating ? wc_get_rating_html( $rating ) : '' )\n\t\t\t. '<p>' . esc_html( wp_trim_words( $review->comment_content, 60 ) ) . '</p>'\n\t\t\t. '<p><strong>' . esc_html( $review->comment_author ) . '</strong> · <a href=\"' . esc_url( get_permalink( $review->comment_post_ID ) ) . '\">' . esc_html( get_the_title( $review->comment_post_ID ) ) . '</a></p></li>';\n\t}\n\treturn '<div class=\"woocommerce\">' . $html . '</ul></div>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shortcodes",
+        "reviews",
+        "social-proof"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-display-product-reviews-custom-page-shortcode/"
+    ],
+    "updated": "2026-11-18T18:07:11+00:00"
+}

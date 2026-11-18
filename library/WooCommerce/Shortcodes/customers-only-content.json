@@ -1,0 +1,29 @@
+{
+    "title": "Shortcode to show content to customers only",
+    "description": "Shortcode [customers_only]…[/customers_only] που εμφανίζει το περιεχόμενό του μόνο σε συνδεδεμένους πελάτες που έχουν αγοράσει (οποιοδήποτε προϊόν ή, με product=\"12,34\", συγκεκριμένα προϊόντα). Οι υπόλοιποι βλέπουν μήνυμα της επιλογής σας. Ιδανικό για βίντεο μαθημάτων, οδηγούς ή περιεχόμενο μελών.",
+    "type": "php",
+    "code": "add_shortcode( 'customers_only', 'perfectpixel_customers_only_shortcode' );\n\nfunction perfectpixel_customers_only_shortcode( $atts, $content = '' ) {\n\t$atts    = shortcode_atts( array( 'product' => '' ), $atts );\n\t$allowed = false;\n\tif ( is_user_logged_in() ) {\n\t\t$user = wp_get_current_user();\n\t\t$ids  = wp_parse_id_list( $atts['product'] );\n\t\tif ( $ids ) {\n\t\t\tforeach ( $ids as $id ) {\n\t\t\t\tif ( wc_customer_bought_product( $user->user_email, $user->ID, $id ) ) {\n\t\t\t\t\t$allowed = true;\n\t\t\t\t\tbreak;\n\t\t\t\t}\n\t\t\t}\n\t\t} else {\n\t\t\t// Any paid order counts.\n\t\t\t$allowed = (bool) wc_get_orders( array( 'customer_id' => $user->ID, 'status' => wc_get_is_paid_statuses(), 'limit' => 1, 'return' => 'ids' ) );\n\t\t}\n\t}\n\tif ( $allowed ) {\n\t\treturn do_shortcode( $content );\n\t}\n\t$message = trim( '{{customers_only_message}}' );\n\treturn '' !== $message ? '<div class=\"woocommerce-info perfectpixel-customers-only\">' . esc_html( $message ) . '</div>' : '';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shortcodes",
+        "membership",
+        "conditional"
+    ],
+    "variables": [
+        {
+            "name": "customers_only_message",
+            "label": "Μήνυμα για τους υπόλοιπους",
+            "default": "Το περιεχόμενο αυτό είναι διαθέσιμο μόνο σε πελάτες.",
+            "description": "Χωρίς απόστροφο ('). Κενό = τίποτα"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-conditional-content-customers/"
+    ],
+    "updated": "2026-11-18T18:07:11+00:00"
+}

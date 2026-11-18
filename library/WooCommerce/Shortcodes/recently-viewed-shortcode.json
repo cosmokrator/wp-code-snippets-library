@@ -1,0 +1,22 @@
+{
+    "title": "Shortcode for recently viewed products",
+    "description": "Shortcode [recently_viewed_products] που εμφανίζει τα προϊόντα που είδε πρόσφατα ο επισκέπτης (τα πιο πρόσφατα πρώτα), με την εμφάνιση του καταστήματος. Οι προβολές αποθηκεύονται σε cookie του browser για 30 ημέρες. Παράμετροι: limit (πλήθος) και columns (στήλες). Το τρέχον προϊόν δεν εμφανίζεται στη λίστα.",
+    "type": "php",
+    "code": "add_action( 'template_redirect', 'perfectpixel_track_recently_viewed', 30 );\nadd_shortcode( 'recently_viewed_products', 'perfectpixel_recently_viewed_shortcode' );\n\nfunction perfectpixel_recently_viewed_ids() {\n\treturn isset( $_COOKIE['perfectpixel_recently_viewed'] ) ? wp_parse_id_list( wp_unslash( $_COOKIE['perfectpixel_recently_viewed'] ) ) : array();\n}\n\nfunction perfectpixel_track_recently_viewed() {\n\tif ( ! is_singular( 'product' ) || headers_sent() ) {\n\t\treturn;\n\t}\n\t$ids   = array_diff( perfectpixel_recently_viewed_ids(), array( get_queried_object_id() ) );\n\t$ids   = array_slice( array_merge( array( get_queried_object_id() ), $ids ), 0, 20 );\n\twc_setcookie( 'perfectpixel_recently_viewed', implode( ',', $ids ), time() + 30 * DAY_IN_SECONDS );\n}\n\nfunction perfectpixel_recently_viewed_shortcode( $atts ) {\n\t$atts = shortcode_atts( array( 'limit' => 4, 'columns' => 4 ), $atts );\n\t$ids  = array_diff( perfectpixel_recently_viewed_ids(), array( is_singular( 'product' ) ? get_queried_object_id() : 0 ) );\n\t$ids  = array_slice( $ids, 0, min( 20, max( 1, absint( $atts['limit'] ) ) ) );\n\tif ( ! $ids ) {\n\t\treturn '';\n\t}\n\treturn do_shortcode( sprintf( '[products ids=\"%s\" columns=\"%d\" orderby=\"post__in\"]', esc_attr( implode( ',', $ids ) ), min( 6, max( 1, absint( $atts['columns'] ) ) ) ) );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shortcodes",
+        "recently-viewed",
+        "cookies"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-recently-viewed-products-shortcode/"
+    ],
+    "updated": "2026-11-18T18:07:11+00:00"
+}

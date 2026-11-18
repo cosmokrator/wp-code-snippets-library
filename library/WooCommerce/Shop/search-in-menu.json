@@ -1,0 +1,35 @@
+{
+    "title": "Add a product search box to a menu",
+    "description": "Προσθέτει φόρμα αναζήτησης προϊόντων στο τέλος ενός μενού του site (π.χ. του κεντρικού μενού ή του footer). Ορίστε τη θέση μενού του theme (Εμφάνιση → Μενού → Διαχείριση θέσεων, π.χ. primary). Η φόρμα αναζητά μόνο σε προϊόντα.",
+    "type": "php",
+    "code": "add_filter( 'wp_nav_menu_items', 'perfectpixel_search_in_menu', 20, 2 );\n\nfunction perfectpixel_search_in_menu( $items, $args ) {\n\tif ( empty( $args->theme_location ) || trim( '{{search_menu_location}}' ) !== $args->theme_location ) {\n\t\treturn $items;\n\t}\n\t$form = sprintf(\n\t\t'<form role=\"search\" method=\"get\" action=\"%s\" class=\"perfectpixel-menu-search\"><input type=\"search\" name=\"s\" placeholder=\"%s\" aria-label=\"%s\" style=\"max-width:12em\"><input type=\"hidden\" name=\"post_type\" value=\"product\"></form>',\n\t\tesc_url( home_url( '/' ) ),\n\t\tesc_attr( '{{search_menu_placeholder}}' ),\n\t\tesc_attr( '{{search_menu_placeholder}}' )\n\t);\n\treturn $items . '<li class=\"menu-item perfectpixel-menu-search-item\">' . $form . '</li>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "search",
+        "menu",
+        "navigation"
+    ],
+    "variables": [
+        {
+            "name": "search_menu_location",
+            "label": "Θέση μενού",
+            "default": "primary",
+            "description": "Το slug της θέσης μενού του theme, π.χ. primary ή footer"
+        },
+        {
+            "name": "search_menu_placeholder",
+            "label": "Placeholder",
+            "default": "Αναζήτηση…",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-custom-search-bar-headerfooter/"
+    ],
+    "updated": "2026-11-18T18:07:11+00:00"
+}

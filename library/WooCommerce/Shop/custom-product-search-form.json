@@ -1,0 +1,34 @@
+{
+    "title": "Customize the product search form",
+    "description": "Αντικαθιστά τη φόρμα αναζήτησης προϊόντων του WooCommerce (widget/θέση του theme) με απλή φόρμα με δικό σας placeholder και ορατό κουμπί αναζήτησης, και πρόσθετα attributes που χρειάζονται συχνά τα plugins ajax αναζήτησης. Αναζητά μόνο σε προϊόντα.",
+    "type": "php",
+    "code": "add_filter( 'get_product_search_form', 'perfectpixel_custom_product_search_form' );\n\nfunction perfectpixel_custom_product_search_form() {\n\tstatic $index = 0;\n\t$index++;\n\t$id = 'perfectpixel-product-search-' . $index;\n\treturn sprintf(\n\t\t'<form role=\"search\" method=\"get\" class=\"woocommerce-product-search perfectpixel-product-search\" action=\"%1$s\" style=\"display:flex;gap:.5em\">\n\t\t\t<label class=\"screen-reader-text\" for=\"%2$s\">%3$s</label>\n\t\t\t<input type=\"search\" id=\"%2$s\" class=\"search-field\" placeholder=\"%3$s\" value=\"%4$s\" name=\"s\" autocomplete=\"off\" style=\"flex:1\">\n\t\t\t<button type=\"submit\" class=\"button\">%5$s</button>\n\t\t\t<input type=\"hidden\" name=\"post_type\" value=\"product\">\n\t\t</form>',\n\t\tesc_url( home_url( '/' ) ),\n\t\tesc_attr( $id ),\n\t\tesc_attr( '{{search_form_placeholder}}' ),\n\t\tesc_attr( get_search_query() ),\n\t\tesc_html( '{{search_form_button}}' )\n\t);\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "search",
+        "forms"
+    ],
+    "variables": [
+        {
+            "name": "search_form_placeholder",
+            "label": "Placeholder",
+            "default": "Αναζήτηση προϊόντων…",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "search_form_button",
+            "label": "Κείμενο κουμπιού",
+            "default": "Αναζήτηση",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-customize-product-search-form-html/"
+    ],
+    "updated": "2026-11-18T18:07:11+00:00"
+}
