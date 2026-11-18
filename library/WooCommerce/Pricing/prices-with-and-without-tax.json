@@ -1,0 +1,35 @@
+{
+    "title": "Show prices both with and without tax",
+    "description": "Δίπλα σε κάθε τιμή εμφανίζεται και η τιμή με την άλλη μορφή φόρου, π.χ. «24,80 € με ΦΠΑ – 20,00 € χωρίς ΦΠΑ», σύμφωνα με τη ρύθμιση εμφάνισης τιμών του WooCommerce. Για B2B καταστήματα με πελάτες ιδιώτες και επαγγελματίες. Τα μεταβλητά προϊόντα με εύρος τιμών δεν αλλάζουν. Αν έχετε ορίσει ήδη επίθημα τιμής στις ρυθμίσεις, αφαιρέστε το.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_get_price_suffix', 'perfectpixel_price_both_taxes', 99, 4 );\n\nfunction perfectpixel_price_both_taxes( $suffix, $product, $price, $qty ) {\n\tif ( ! wc_tax_enabled() || ! $product || $product->is_type( 'variable' ) || ! $product->is_taxable() ) {\n\t\treturn $suffix;\n\t}\n\t$args = array( 'qty' => $qty ? $qty : 1, 'price' => '' === $price ? $product->get_price() : $price );\n\tif ( '' === $args['price'] ) {\n\t\treturn $suffix;\n\t}\n\tif ( 'incl' === get_option( 'woocommerce_tax_display_shop' ) ) {\n\t\t$shown = esc_html( '{{price_incl_tax_label}}' );\n\t\t$other = wc_price( wc_get_price_excluding_tax( $product, $args ) ) . ' ' . esc_html( '{{price_excl_tax_label}}' );\n\t} else {\n\t\t$shown = esc_html( '{{price_excl_tax_label}}' );\n\t\t$other = wc_price( wc_get_price_including_tax( $product, $args ) ) . ' ' . esc_html( '{{price_incl_tax_label}}' );\n\t}\n\treturn ' <span class=\"perfectpixel-tax-label\">' . $shown . '</span> <span class=\"perfectpixel-other-price\">&ndash; ' . $other . '</span>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "prices",
+        "tax",
+        "b2b"
+    ],
+    "variables": [
+        {
+            "name": "price_incl_tax_label",
+            "label": "Ετικέτα «με φόρο»",
+            "default": "με ΦΠΑ",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "price_excl_tax_label",
+            "label": "Ετικέτα «χωρίς φόρο»",
+            "default": "χωρίς ΦΠΑ",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-prices-inc-and-ex-tax/"
+    ],
+    "updated": "2026-11-18T14:50:27+00:00"
+}

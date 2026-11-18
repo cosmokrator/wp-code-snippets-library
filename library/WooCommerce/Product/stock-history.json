@@ -1,0 +1,29 @@
+{
+    "title": "Keep a stock history for each product",
+    "description": "Καταγράφει κάθε αλλαγή αποθέματος (από παραγγελία, χειροκίνητη αλλαγή ή εισαγωγή) με ημερομηνία, νέα ποσότητα και χρήστη, και την εμφανίζει σε πλαίσιο «Ιστορικό αποθέματος» στη σελίδα επεξεργασίας προϊόντος, και για κάθε παραλλαγή. Κρατά μόνο τις τελευταίες κινήσεις (ορίστε πόσες) ώστε να μη βαραίνει η βάση.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_product_set_stock', 'perfectpixel_stock_history_record' );\nadd_action( 'woocommerce_variation_set_stock', 'perfectpixel_stock_history_record' );\nadd_action( 'add_meta_boxes', 'perfectpixel_stock_history_box' );\n\nfunction perfectpixel_stock_history_record( $product ) {\n\t$history   = (array) get_post_meta( $product->get_id(), '_perfectpixel_stock_history', true );\n\t$user      = wp_get_current_user();\n\t$history[] = array(\n\t\t'time' => time(),\n\t\t'qty'  => $product->get_stock_quantity(),\n\t\t'by'   => $user->exists() ? $user->display_name : '',\n\t);\n\t$history = array_slice( array_filter( $history ), -max( 1, (int) '{{stock_history_limit}}' ) );\n\tupdate_post_meta( $product->get_id(), '_perfectpixel_stock_history', $history );\n}\n\nfunction perfectpixel_stock_history_box() {\n\tadd_meta_box( 'perfectpixel_stock_history', 'Ιστορικό αποθέματος', 'perfectpixel_stock_history_render', 'product', 'normal', 'low' );\n}\n\nfunction perfectpixel_stock_history_render( $post ) {\n\t$product = wc_get_product( $post->ID );\n\tif ( ! $product ) {\n\t\treturn;\n\t}\n\t$ids = $product->is_type( 'variable' ) ? $product->get_children() : array( $product->get_id() );\n\tforeach ( $ids as $id ) {\n\t\t$history = array_reverse( array_filter( (array) get_post_meta( $id, '_perfectpixel_stock_history', true ) ) );\n\t\tif ( count( $ids ) > 1 ) {\n\t\t\techo '<h4>' . esc_html( wc_get_product( $id ) ? wc_get_product( $id )->get_name() : '#' . $id ) . '</h4>';\n\t\t}\n\t\tif ( ! $history ) {\n\t\t\techo '<p>Δεν υπάρχουν καταγεγραμμένες κινήσεις.</p>';\n\t\t\tcontinue;\n\t\t}\n\t\techo '<table class=\"widefat striped\"><thead><tr><th>Ημερομηνία</th><th>Απόθεμα</th><th>Χρήστης</th></tr></thead><tbody>';\n\t\tforeach ( $history as $row ) {\n\t\t\tprintf(\n\t\t\t\t'<tr><td>%s</td><td>%s</td><td>%s</td></tr>',\n\t\t\t\tesc_html( wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $row['time'] ) ),\n\t\t\t\tesc_html( (string) $row['qty'] ),\n\t\t\t\tesc_html( $row['by'] ? $row['by'] : 'Σύστημα / παραγγελία' )\n\t\t\t);\n\t\t}\n\t\techo '</tbody></table>';\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "stock",
+        "admin",
+        "inventory"
+    ],
+    "variables": [
+        {
+            "name": "stock_history_limit",
+            "label": "Κινήσεις που κρατούνται ανά προϊόν",
+            "default": "30",
+            "description": "Μόνο αριθμός"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-stock-history-product/"
+    ],
+    "updated": "2026-11-18T14:50:27+00:00"
+}

@@ -1,0 +1,30 @@
+{
+    "title": "Add a third description to the product page",
+    "description": "Προσθέτει στη σελίδα επεξεργασίας προϊόντος έναν τρίτο επεξεργαστή κειμένου («Επιπλέον περιγραφή»), πέρα από τη σύντομη και την κύρια περιγραφή. Το περιεχόμενό του εμφανίζεται στο κάτω μέρος της σελίδας προϊόντος, μετά τις καρτέλες και τα σχετικά προϊόντα. Ισχύει για το κλασικό template σελίδας προϊόντος· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'add_meta_boxes', 'perfectpixel_extra_description_box' );\nadd_action( 'save_post_product', 'perfectpixel_extra_description_save' );\nadd_action( 'woocommerce_after_single_product_summary', 'perfectpixel_extra_description_output', 30 );\n\nfunction perfectpixel_extra_description_box() {\n\tadd_meta_box( 'perfectpixel_extra_description', '{{extra_description_title}}', 'perfectpixel_extra_description_editor', 'product', 'normal', 'low' );\n}\n\nfunction perfectpixel_extra_description_editor( $post ) {\n\twp_nonce_field( 'perfectpixel_extra_description', 'perfectpixel_extra_description_nonce' );\n\twp_editor( get_post_meta( $post->ID, '_perfectpixel_extra_description', true ), 'perfectpixel_extra_description', array( 'textarea_rows' => 8 ) );\n}\n\nfunction perfectpixel_extra_description_save( $post_id ) {\n\tif ( ! isset( $_POST['perfectpixel_extra_description_nonce'] ) || ! wp_verify_nonce( sanitize_key( $_POST['perfectpixel_extra_description_nonce'] ), 'perfectpixel_extra_description' ) ) {\n\t\treturn;\n\t}\n\tif ( ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || ! current_user_can( 'edit_post', $post_id ) ) {\n\t\treturn;\n\t}\n\t$content = isset( $_POST['perfectpixel_extra_description'] ) ? wp_kses_post( wp_unslash( $_POST['perfectpixel_extra_description'] ) ) : '';\n\tupdate_post_meta( $post_id, '_perfectpixel_extra_description', $content );\n}\n\nfunction perfectpixel_extra_description_output() {\n\t$content = get_post_meta( get_the_ID(), '_perfectpixel_extra_description', true );\n\tif ( $content ) {\n\t\techo '<div class=\"perfectpixel-extra-description\" style=\"clear:both\">' . wp_kses_post( wpautop( do_shortcode( $content ) ) ) . '</div>';\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "admin",
+        "meta-box",
+        "content"
+    ],
+    "variables": [
+        {
+            "name": "extra_description_title",
+            "label": "Τίτλος πλαισίου στον διαχειριστή",
+            "default": "Επιπλέον περιγραφή (κάτω μέρος σελίδας)",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-third-description-single-product-page/"
+    ],
+    "updated": "2026-11-18T14:50:27+00:00"
+}

@@ -1,0 +1,35 @@
+{
+    "title": "Add a unit to the stock quantity",
+    "description": "Προσθέτει μονάδα στο μήνυμα αποθέματος, π.χ. «11 κιλά σε απόθεμα» ή «11 κουτιά σε απόθεμα» αντί για «11 σε απόθεμα». Ορίστε τη μονάδα και, προαιρετικά, τις κατηγορίες στις οποίες ισχύει. Χρειάζεται να εμφανίζεται ο αριθμός αποθέματος (Ρυθμίσεις → Προϊόντα → Απόθεμα).",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_format_stock_quantity', 'perfectpixel_stock_quantity_unit', 10, 2 );\n\nfunction perfectpixel_stock_quantity_unit( $quantity, $product ) {\n\t$categories = wp_parse_id_list( '{{stock_unit_category_ids}}' );\n\t$id         = $product->get_parent_id() ? $product->get_parent_id() : $product->get_id();\n\tif ( $categories && ! has_term( $categories, 'product_cat', $id ) ) {\n\t\treturn $quantity;\n\t}\n\treturn $quantity . ' ' . esc_html( '{{stock_unit_text}}' );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "stock",
+        "units"
+    ],
+    "variables": [
+        {
+            "name": "stock_unit_text",
+            "label": "Μονάδα",
+            "default": "τεμάχια",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "stock_unit_category_ids",
+            "label": "IDs κατηγοριών (με κόμμα)",
+            "default": "",
+            "description": "Κενό = όλα τα προϊόντα"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-stock-quantity-suffix-e-g-sq-in-kg-boxes-etc/"
+    ],
+    "updated": "2026-11-18T14:50:27+00:00"
+}

@@ -1,0 +1,22 @@
+{
+    "title": "Hide weight and dimensions from the product page",
+    "description": "Κρύβει το βάρος και τις διαστάσεις από την καρτέλα «Επιπρόσθετες πληροφορίες» της σελίδας προϊόντος· τα χαρακτηριστικά (π.χ. χρώμα, μέγεθος) παραμένουν. Τα στοιχεία μένουν αποθηκευμένα και χρησιμοποιούνται κανονικά για τα μεταφορικά. Αν ένα προϊόν δεν έχει χαρακτηριστικά, η καρτέλα εξαφανίζεται.",
+    "type": "php",
+    "code": "add_filter( 'wc_product_enable_dimensions_display', 'perfectpixel_hide_weight_dimensions' );\n\nfunction perfectpixel_hide_weight_dimensions() {\n\treturn false;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "tabs",
+        "dimensions"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-hide-weight-dimensions-additional-information-tab/"
+    ],
+    "updated": "2026-11-18T14:50:27+00:00"
+}

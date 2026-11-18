@@ -1,0 +1,29 @@
+{
+    "title": "Add lightweight share links to the product page",
+    "description": "Στη σελίδα προϊόντος προσθέτει απλούς συνδέσμους κοινοποίησης σε X, Facebook και WhatsApp, χωρίς plugin και χωρίς εξωτερικά scripts (δεν φορτώνονται trackers των δικτύων). Ανοίγουν σε νέα καρτέλα με έτοιμο τον τίτλο και τον σύνδεσμο του προϊόντος. Ισχύει για το κλασικό template σελίδας προϊόντος· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_share', 'perfectpixel_product_share_links' );\n\nfunction perfectpixel_product_share_links() {\n\t$url   = rawurlencode( get_permalink() );\n\t$title = rawurlencode( wp_strip_all_tags( get_the_title() ) );\n\t$links = array(\n\t\t'X'        => 'https://twitter.com/intent/tweet?url=' . $url . '&text=' . $title,\n\t\t'Facebook' => 'https://www.facebook.com/sharer/sharer.php?u=' . $url,\n\t\t'WhatsApp' => 'https://wa.me/?text=' . $title . '%20' . $url,\n\t);\n\techo '<div class=\"perfectpixel-share\" style=\"margin-top:1em\">' . esc_html( '{{share_links_label}}' );\n\tforeach ( $links as $name => $href ) {\n\t\tprintf( ' <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer nofollow\">%s</a>', esc_url( $href ), esc_html( $name ) );\n\t}\n\techo '</div>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "social",
+        "sharing"
+    ],
+    "variables": [
+        {
+            "name": "share_links_label",
+            "label": "Ετικέτα",
+            "default": "Κοινοποίηση:",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-twitter-share-facebook-like-single-product-page-without-a-plugin/"
+    ],
+    "updated": "2026-11-18T14:50:27+00:00"
+}

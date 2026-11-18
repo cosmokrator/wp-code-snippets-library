@@ -1,0 +1,35 @@
+{
+    "title": "Shorten the tag list on the product page",
+    "description": "Όταν ένα προϊόν έχει πολλές ετικέτες, στη σελίδα προϊόντος εμφανίζονται μόνο οι πρώτες (ορίστε πόσες) και ένας σύνδεσμος «+ X ακόμη» που αποκαλύπτει τις υπόλοιπες με ένα κλικ. Ισχύει για το κλασικό template σελίδας προϊόντος· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_after_single_product', 'perfectpixel_truncate_tag_list' );\n\nfunction perfectpixel_truncate_tag_list() {\n\t$data = array(\n\t\t'visible' => max( 1, (int) '{{visible_tags_count}}' ),\n\t\t'more'    => '{{more_tags_text}}',\n\t);\n\t?>\n\t<script>\n\t( function ( cfg ) {\n\t\tdocument.querySelectorAll( '.product_meta .tagged_as' ).forEach( function ( box ) {\n\t\t\tvar links = box.querySelectorAll( 'a[rel~=\"tag\"]' );\n\t\t\tif ( links.length <= cfg.visible ) {\n\t\t\t\treturn;\n\t\t\t}\n\t\t\tvar hidden = [];\n\t\t\tlinks.forEach( function ( link, i ) {\n\t\t\t\tif ( i >= cfg.visible ) {\n\t\t\t\t\t// Wrap each extra link (with its leading comma) so it can be hidden.\n\t\t\t\t\tvar wrap = document.createElement( 'span' );\n\t\t\t\t\twrap.hidden = true;\n\t\t\t\t\tvar prev = link.previousSibling;\n\t\t\t\t\tlink.parentNode.insertBefore( wrap, link );\n\t\t\t\t\tif ( prev && 3 === prev.nodeType ) {\n\t\t\t\t\t\twrap.appendChild( prev );\n\t\t\t\t\t}\n\t\t\t\t\twrap.appendChild( link );\n\t\t\t\t\thidden.push( wrap );\n\t\t\t\t}\n\t\t\t} );\n\t\t\tvar more = document.createElement( 'a' );\n\t\t\tmore.href = '#';\n\t\t\tmore.textContent = ' ' + cfg.more.replace( '%d', hidden.length );\n\t\t\tmore.addEventListener( 'click', function ( e ) {\n\t\t\t\te.preventDefault();\n\t\t\t\thidden.forEach( function ( el ) { el.hidden = false; } );\n\t\t\t\tmore.remove();\n\t\t\t} );\n\t\t\tbox.appendChild( more );\n\t\t} );\n\t} )( <?php echo wp_json_encode( $data ); ?> );\n\t</script>\n\t<?php\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "tags",
+        "product-meta"
+    ],
+    "variables": [
+        {
+            "name": "visible_tags_count",
+            "label": "Ετικέτες που φαίνονται",
+            "default": "3",
+            "description": "Μόνο αριθμός"
+        },
+        {
+            "name": "more_tags_text",
+            "label": "Κείμενο συνδέσμου",
+            "default": "+ %d ακόμη",
+            "description": "Χωρίς απόστροφο ('). Το %d είναι το πλήθος"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-truncate-tag-list-single-product/"
+    ],
+    "updated": "2026-11-18T14:50:27+00:00"
+}

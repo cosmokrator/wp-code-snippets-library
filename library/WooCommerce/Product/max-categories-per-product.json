@@ -1,0 +1,34 @@
+{
+    "title": "Limit the number of categories per product",
+    "description": "Στη σελίδα επεξεργασίας προϊόντος, δεν επιτρέπει να επιλεγούν περισσότερες κατηγορίες από όσες ορίσετε (π.χ. 1): αν κάποιος τσεκάρει παραπάνω, εμφανίζεται μήνυμα και η επιλογή αναιρείται. Χρήσιμο σε marketplaces ή για ξεκάθαρη δομή καταλόγου. Ο έλεγχος γίνεται στον browser (κλασικός επεξεργαστής προϊόντων), όχι στις εισαγωγές ή στη μαζική επεξεργασία.",
+    "type": "php",
+    "code": "add_action( 'admin_footer-post.php', 'perfectpixel_max_product_categories' );\nadd_action( 'admin_footer-post-new.php', 'perfectpixel_max_product_categories' );\n\nfunction perfectpixel_max_product_categories() {\n\tif ( 'product' !== get_current_screen()->post_type ) {\n\t\treturn;\n\t}\n\t$max = max( 1, (int) '{{max_product_categories}}' );\n\t$cfg = array(\n\t\t'max'     => $max,\n\t\t'message' => str_replace( '%d', $max, '{{max_categories_message}}' ),\n\t);\n\t?>\n\t<script>\n\t( function ( cfg ) {\n\t\tvar list = document.getElementById( 'product_catchecklist' );\n\t\tif ( ! list ) {\n\t\t\treturn;\n\t\t}\n\t\tlist.addEventListener( 'change', function ( e ) {\n\t\t\tif ( e.target.checked && list.querySelectorAll( 'input[type=checkbox]:checked' ).length > cfg.max ) {\n\t\t\t\te.target.checked = false;\n\t\t\t\twindow.alert( cfg.message );\n\t\t\t}\n\t\t} );\n\t} )( <?php echo wp_json_encode( $cfg ); ?> );\n\t</script>\n\t<?php\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "admin",
+        "categories"
+    ],
+    "variables": [
+        {
+            "name": "max_product_categories",
+            "label": "Μέγιστος αριθμός κατηγοριών",
+            "default": "1",
+            "description": "Μόνο αριθμός"
+        },
+        {
+            "name": "max_categories_message",
+            "label": "Μήνυμα",
+            "default": "Μπορείτε να επιλέξετε έως %d κατηγορία/ες για κάθε προϊόν.",
+            "description": "Χωρίς απόστροφο ('). Το %d είναι το όριο"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-force-max-1-category-per-product/"
+    ],
+    "updated": "2026-11-18T14:50:27+00:00"
+}

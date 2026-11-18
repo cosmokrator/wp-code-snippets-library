@@ -1,0 +1,22 @@
+{
+    "title": "Show the full URL of draft products in the editor",
+    "description": "Στη σελίδα επεξεργασίας προϊόντος που είναι ακόμη πρόχειρο ή προγραμματισμένο, εμφανίζει στο πλαίσιο «Δημοσίευση» ολόκληρο το μελλοντικό URL του, σε πεδίο που επιλέγεται με ένα κλικ. Χρήσιμο για newsletter ή άρθρα που ετοιμάζετε πριν δημοσιευτεί το προϊόν. Λειτουργεί στον κλασικό επεξεργαστή προϊόντων.",
+    "type": "php",
+    "code": "add_action( 'post_submitbox_misc_actions', 'perfectpixel_draft_product_url' );\n\nfunction perfectpixel_draft_product_url( $post ) {\n\tif ( 'product' !== $post->post_type || 'publish' === $post->post_status || ! function_exists( 'get_sample_permalink' ) ) {\n\t\treturn;\n\t}\n\tlist( $template, $name ) = get_sample_permalink( $post->ID );\n\tif ( ! $name ) {\n\t\treturn; // No slug yet: save the draft first.\n\t}\n\t$url = str_replace( array( '%pagename%', '%postname%' ), $name, $template );\n\techo '<div class=\"misc-pub-section\"><label for=\"perfectpixel-draft-url\">URL:</label> ';\n\techo '<input id=\"perfectpixel-draft-url\" type=\"text\" readonly class=\"widefat\" onclick=\"this.select()\" value=\"' . esc_attr( $url ) . '\"></div>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "admin",
+        "products",
+        "permalinks"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-get-draft-product-permalink/"
+    ],
+    "updated": "2026-11-18T14:50:27+00:00"
+}

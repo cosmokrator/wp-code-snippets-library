@@ -1,0 +1,23 @@
+{
+    "title": "Move the sale badge next to the price on the product page",
+    "description": "Στη σελίδα προϊόντος, η ετικέτα «Προσφορά!» μετακινείται από την εικόνα και μπαίνει δίπλα στην τιμή, ώστε να τραβά την προσοχή στην τιμή και να κερδίζεται χώρος. Οι λίστες προϊόντων δεν επηρεάζονται. Ισχύει για το κλασικό template σελίδας προϊόντος· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'init', 'perfectpixel_sale_badge_beside_price_setup' );\nadd_filter( 'woocommerce_get_price_html', 'perfectpixel_sale_badge_beside_price', 20, 2 );\nadd_action( 'wp_head', 'perfectpixel_sale_badge_beside_price_css' );\n\nfunction perfectpixel_sale_badge_beside_price_setup() {\n\tremove_action( 'woocommerce_before_single_product_summary', 'woocommerce_show_product_sale_flash', 10 );\n}\n\nfunction perfectpixel_sale_badge_beside_price( $html, $product ) {\n\tif ( is_admin() || wp_doing_ajax() || ! is_product() || get_queried_object_id() !== $product->get_id() || ! $product->is_on_sale() || did_action( 'woocommerce_after_single_product_summary' ) ) {\n\t\treturn $html;\n\t}\n\t$badge = '<span class=\"onsale\">' . esc_html__( 'Sale!', 'woocommerce' ) . '</span>';\n\treturn $html . ' ' . apply_filters( 'woocommerce_sale_flash', $badge, get_post( $product->get_id() ), $product );\n}\n\nfunction perfectpixel_sale_badge_beside_price_css() {\n\tif ( function_exists( 'is_product' ) && is_product() ) {\n\t\techo '<style>.summary .price .onsale{position:static;display:inline-block;min-width:0;min-height:0;margin:0 0 0 .5em;padding:.1em .6em;line-height:1.5;font-size:.6em;vertical-align:middle;border-radius:3px}</style>';\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "sale",
+        "badges",
+        "prices"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-move-sale-badge-beside-price-single-product-page/"
+    ],
+    "updated": "2026-11-18T14:50:27+00:00"
+}

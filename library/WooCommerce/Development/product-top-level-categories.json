@@ -1,0 +1,22 @@
+{
+    "title": "Helper: get the top-level categories of a product",
+    "description": "Βοηθητική συνάρτηση για developers: perfectpixel_get_product_top_categories( $product_id ) επιστρέφει τα IDs των κορυφαίων (γονικών) κατηγοριών στις οποίες ανήκει ένα προϊόν, είτε είναι αντιστοιχισμένο σε αυτές είτε σε υποκατηγορίες τους. Δεν εμφανίζει τίποτα μόνο του· χρησιμοποιείται από άλλα snippets.",
+    "type": "php",
+    "code": "/**\n * IDs of the top-level product categories a product belongs to (directly or via subcategories).\n */\nfunction perfectpixel_get_product_top_categories( $product_id ) {\n\t$top = array();\n\tforeach ( wp_get_post_terms( $product_id, 'product_cat', array( 'fields' => 'ids' ) ) as $term_id ) {\n\t\t$ancestors = get_ancestors( $term_id, 'product_cat', 'taxonomy' );\n\t\t$top[]     = $ancestors ? end( $ancestors ) : $term_id;\n\t}\n\treturn array_values( array_unique( array_map( 'intval', $top ) ) );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "development",
+        "categories",
+        "helpers"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-get-product-parent-categories/"
+    ],
+    "updated": "2026-11-18T14:50:27+00:00"
+}

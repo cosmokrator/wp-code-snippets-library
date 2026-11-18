@@ -1,0 +1,21 @@
+{
+    "title": "Enable reviews on all products",
+    "description": "Ενεργοποιεί τις αξιολογήσεις σε όλα τα προϊόντα, ανεξάρτητα από τη ρύθμιση «Ενεργοποίηση αξιολογήσεων» του καθενός. Χρήσιμο όταν έχετε εισαγάγει πολλά προϊόντα με τις αξιολογήσεις κλειστές. Πρέπει να είναι ενεργές οι αξιολογήσεις στις γενικές ρυθμίσεις (Ρυθμίσεις → Προϊόντα).",
+    "type": "php",
+    "code": "add_filter( 'comments_open', 'perfectpixel_force_product_reviews_open', 20, 2 );\nadd_filter( 'woocommerce_product_get_reviews_allowed', 'perfectpixel_force_product_reviews_allowed' );\n\nfunction perfectpixel_force_product_reviews_open( $open, $post_id ) {\n\treturn 'product' === get_post_type( $post_id ) && wc_reviews_enabled() ? true : $open;\n}\n\nfunction perfectpixel_force_product_reviews_allowed( $allowed ) {\n\treturn wc_reviews_enabled() ? true : $allowed;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "reviews",
+        "products"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-override-single-product-settings/"
+    ],
+    "updated": "2026-11-18T14:50:27+00:00"
+}

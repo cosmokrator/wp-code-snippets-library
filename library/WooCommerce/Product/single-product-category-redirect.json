@@ -1,0 +1,28 @@
+{
+    "title": "Redirect categories with a single product to that product",
+    "description": "Όταν μια κατηγορία προϊόντων περιέχει μόνο ένα προϊόν, ο πελάτης μεταφέρεται κατευθείαν στη σελίδα του προϊόντος αντί να βλέπει μια σχεδόν άδεια σελίδα κατηγορίας. Μπορείτε να το περιορίσετε σε συγκεκριμένες κατηγορίες. Δεν ενεργοποιείται όταν υπάρχουν φίλτρα ή ταξινόμηση στο URL.",
+    "type": "php",
+    "code": "add_action( 'template_redirect', 'perfectpixel_single_product_category_redirect' );\n\nfunction perfectpixel_single_product_category_redirect() {\n\tglobal $wp_query;\n\tif ( ! function_exists( 'is_product_category' ) || ! is_product_category() || is_paged() || ! empty( $_GET ) ) {\n\t\treturn;\n\t}\n\t$only = wp_parse_id_list( '{{single_cat_redirect_ids}}' );\n\tif ( $only && ! in_array( get_queried_object_id(), $only, true ) ) {\n\t\treturn;\n\t}\n\tif ( 1 === (int) $wp_query->found_posts && ! empty( $wp_query->posts[0] ) ) {\n\t\twp_safe_redirect( get_permalink( $wp_query->posts[0] ) );\n\t\texit;\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "categories",
+        "redirect"
+    ],
+    "variables": [
+        {
+            "name": "single_cat_redirect_ids",
+            "label": "IDs κατηγοριών (με κόμμα)",
+            "default": "",
+            "description": "Κενό = όλες οι κατηγορίες"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-redirect-category-to-product/"
+    ],
+    "updated": "2026-11-18T14:50:27+00:00"
+}

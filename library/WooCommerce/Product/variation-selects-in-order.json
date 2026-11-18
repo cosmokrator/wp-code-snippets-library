@@ -1,0 +1,22 @@
+{
+    "title": "Enable variation dropdowns one at a time",
+    "description": "Σε μεταβλητά προϊόντα με πολλά χαρακτηριστικά, κάθε λίστα επιλογής ενεργοποιείται μόνο αφού επιλεγεί η προηγούμενη (π.χ. πρώτα χρώμα, μετά μέγεθος). Αν ο πελάτης καθαρίσει μια επιλογή, οι επόμενες απενεργοποιούνται ξανά. Ισχύει για το κλασικό template σελίδας προϊόντος· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_after_add_to_cart_form', 'perfectpixel_variation_selects_in_order' );\n\nfunction perfectpixel_variation_selects_in_order() {\n\tglobal $product;\n\tif ( ! $product || ! $product->is_type( 'variable' ) ) {\n\t\treturn;\n\t}\n\t?>\n\t<script>\n\tjQuery( function ( $ ) {\n\t\t$( 'form.variations_form' ).each( function () {\n\t\t\tvar form    = $( this );\n\t\t\tvar refresh = function () {\n\t\t\t\tvar open = true;\n\t\t\t\tform.find( 'table.variations select' ).each( function () {\n\t\t\t\t\tvar select = $( this );\n\t\t\t\t\tif ( ! open ) {\n\t\t\t\t\t\tselect.val( '' );\n\t\t\t\t\t}\n\t\t\t\t\tselect.prop( 'disabled', ! open );\n\t\t\t\t\topen = open && '' !== select.val();\n\t\t\t\t} );\n\t\t\t};\n\t\t\tform.on( 'change', 'table.variations select', refresh ).on( 'reset_data', function () {\n\t\t\t\tsetTimeout( refresh );\n\t\t\t} );\n\t\t\trefresh();\n\t\t} );\n\t} );\n\t</script>\n\t<?php\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "variations",
+        "ux"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-disable-select-unless-previous-selected-variable/"
+    ],
+    "updated": "2026-11-18T14:50:27+00:00"
+}

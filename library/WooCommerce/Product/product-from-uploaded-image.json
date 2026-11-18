@@ -1,0 +1,41 @@
+{
+    "title": "Create a draft product when an image is uploaded",
+    "description": "Όταν ανεβάζετε στη Βιβλιοθήκη πολυμέσων μια εικόνα της οποίας το όνομα αρχείου ξεκινά με ένα πρόθεμα (π.χ. product-…), δημιουργείται αυτόματα πρόχειρο προϊόν με αυτή την εικόνα, τίτλο από το όνομα του αρχείου, την τιμή και την κατηγορία που ορίζετε. Μετά ελέγχετε και δημοσιεύετε το προϊόν. Για φωτογράφους ή μαζική δημιουργία καταλόγου.",
+    "type": "php",
+    "code": "add_action( 'add_attachment', 'perfectpixel_product_from_uploaded_image' );\n\nfunction perfectpixel_product_from_uploaded_image( $attachment_id ) {\n\t$prefix = '{{upload_product_prefix}}';\n\t$file   = basename( (string) get_attached_file( $attachment_id ) );\n\tif ( '' === $prefix || 0 !== strpos( $file, $prefix ) || ! wp_attachment_is_image( $attachment_id ) || ! class_exists( 'WC_Product_Simple' ) ) {\n\t\treturn;\n\t}\n\t$name = trim( preg_replace( '/[-_]+/', ' ', substr( pathinfo( $file, PATHINFO_FILENAME ), strlen( $prefix ) ) ) );\n\n\t$product = new WC_Product_Simple();\n\t$product->set_name( $name ? mb_convert_case( $name, MB_CASE_TITLE, 'UTF-8' ) : 'Νέο προϊόν' );\n\t$product->set_status( 'draft' );\n\t$product->set_regular_price( wc_format_decimal( '{{upload_product_price}}' ) );\n\t$product->set_image_id( $attachment_id );\n\t$category = (int) '{{upload_product_category_id}}';\n\tif ( $category ) {\n\t\t$product->set_category_ids( array( $category ) );\n\t}\n\t$product_id = $product->save();\n\n\tif ( $product_id ) {\n\t\twp_update_post( array( 'ID' => $attachment_id, 'post_parent' => $product_id ) );\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "products",
+        "media",
+        "automation"
+    ],
+    "variables": [
+        {
+            "name": "upload_product_prefix",
+            "label": "Πρόθεμα ονόματος αρχείου",
+            "default": "product-",
+            "description": "Μόνο λατινικά, αριθμοί, - και _"
+        },
+        {
+            "name": "upload_product_price",
+            "label": "Τιμή",
+            "default": "10",
+            "description": "Μόνο αριθμός"
+        },
+        {
+            "name": "upload_product_category_id",
+            "label": "ID κατηγορίας",
+            "default": "0",
+            "description": "0 = χωρίς κατηγορία"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-programmatically-create-product/"
+    ],
+    "updated": "2026-11-18T14:50:27+00:00"
+}

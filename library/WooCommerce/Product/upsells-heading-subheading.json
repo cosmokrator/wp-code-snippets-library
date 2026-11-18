@@ -1,0 +1,35 @@
+{
+    "title": "Change the upsells heading and add a subheading",
+    "description": "Αλλάζει τον τίτλο «Μπορεί επίσης να σας αρέσουν…» της ενότητας upsells στη σελίδα προϊόντος και προσθέτει ένα σύντομο κείμενο κάτω από αυτόν. Αφήστε κενό όποιο από τα δύο δεν θέλετε να αλλάξει.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_product_upsells_products_heading', 'perfectpixel_upsells_heading' );\nadd_filter( 'woocommerce_product_loop_start', 'perfectpixel_upsells_subheading' );\n\nfunction perfectpixel_upsells_heading( $heading ) {\n\t$custom = trim( '{{upsells_heading}}' );\n\treturn '' !== $custom ? $custom : $heading;\n}\n\nfunction perfectpixel_upsells_subheading( $html ) {\n\t$text = trim( '{{upsells_subheading}}' );\n\tif ( '' !== $text && 'up-sells' === wc_get_loop_prop( 'name' ) ) {\n\t\t$html = '<p class=\"perfectpixel-upsells-subheading\">' . esc_html( $text ) . '</p>' . $html;\n\t}\n\treturn $html;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "upsells",
+        "labels"
+    ],
+    "variables": [
+        {
+            "name": "upsells_heading",
+            "label": "Τίτλος",
+            "default": "Ολοκληρώστε την επιλογή σας",
+            "description": "Χωρίς απόστροφο ('). Κενό = χωρίς αλλαγή"
+        },
+        {
+            "name": "upsells_subheading",
+            "label": "Υπότιτλος",
+            "default": "Προϊόντα που ταιριάζουν τέλεια με αυτό που βλέπετε.",
+            "description": "Χωρίς απόστροφο ('). Κενό = χωρίς υπότιτλο"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-upsells-heading-subheading/"
+    ],
+    "updated": "2026-11-18T14:50:27+00:00"
+}

@@ -1,0 +1,42 @@
+{
+    "title": "Show details of the selected variation",
+    "description": "Σε μεταβλητά προϊόντα, μόλις ο πελάτης επιλέξει παραλλαγή, εμφανίζονται κάτω από το κουμπί αγοράς ο κωδικός (SKU), το βάρος και οι διαστάσεις της. Κρύβονται όταν η επιλογή καθαρίσει. Τα στοιχεία χωρίς τιμή δεν εμφανίζονται. Ισχύει για το κλασικό template σελίδας προϊόντος· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_after_add_to_cart_form', 'perfectpixel_selected_variation_details' );\n\nfunction perfectpixel_selected_variation_details() {\n\tglobal $product;\n\tif ( ! $product || ! $product->is_type( 'variable' ) ) {\n\t\treturn;\n\t}\n\t$labels = array(\n\t\t'sku'             => '{{variation_sku_label}}',\n\t\t'weight_html'     => '{{variation_weight_label}}',\n\t\t'dimensions_html' => '{{variation_dimensions_label}}',\n\t);\n\t?>\n\t<div class=\"perfectpixel-variation-details\" hidden style=\"margin-bottom:1.5em\"></div>\n\t<script>\n\tjQuery( function ( $ ) {\n\t\tvar labels = <?php echo wp_json_encode( $labels ); ?>;\n\t\tvar box    = $( '.perfectpixel-variation-details' );\n\t\tvar empty  = [ '', 'N/A', '<?php echo esc_js( __( 'N/A', 'woocommerce' ) ); ?>' ];\n\t\t$( 'form.variations_form' )\n\t\t\t.on( 'found_variation', function ( e, v ) {\n\t\t\t\tbox.empty();\n\t\t\t\t$.each( labels, function ( key, label ) {\n\t\t\t\t\tif ( v[ key ] && -1 === empty.indexOf( $( '<div>' ).html( v[ key ] ).text().trim() ) ) {\n\t\t\t\t\t\tbox.append( $( '<div>' ).append( $( '<strong>' ).text( label + ' ' ), $( '<span>' ).text( $( '<div>' ).html( v[ key ] ).text() ) ) );\n\t\t\t\t\t}\n\t\t\t\t} );\n\t\t\t\tbox.prop( 'hidden', ! box.children().length );\n\t\t\t} )\n\t\t\t.on( 'reset_data hide_variation', function () {\n\t\t\t\tbox.empty().prop( 'hidden', true );\n\t\t\t} );\n\t} );\n\t</script>\n\t<?php\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "variations",
+        "sku",
+        "dimensions"
+    ],
+    "variables": [
+        {
+            "name": "variation_sku_label",
+            "label": "Ετικέτα SKU",
+            "default": "Κωδικός:",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "variation_weight_label",
+            "label": "Ετικέτα βάρους",
+            "default": "Βάρος:",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "variation_dimensions_label",
+            "label": "Ετικέτα διαστάσεων",
+            "default": "Διαστάσεις:",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-display-selected-variation-info-price-weight-etc-single-product-page/"
+    ],
+    "updated": "2026-11-18T14:50:27+00:00"
+}

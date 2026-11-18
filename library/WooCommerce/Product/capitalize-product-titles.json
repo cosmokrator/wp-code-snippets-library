@@ -1,0 +1,28 @@
+{
+    "title": "Capitalize product titles automatically",
+    "description": "Ενιαία εμφάνιση στους τίτλους προϊόντων χωρίς να τους διορθώνετε ένα-ένα: είτε κεφαλαίο το πρώτο γράμμα κάθε λέξης («Κόκκινο Τετράγωνο Τραπέζι»), είτε μόνο το πρώτο γράμμα του τίτλου. Αλλάζει μόνο την εμφάνιση στο κατάστημα· οι αποθηκευμένοι τίτλοι μένουν ίδιοι. Προσοχή: στη λειτουργία words οι λέξεις με ΚΕΦΑΛΑΙΑ (π.χ. USB) γίνονται Usb.",
+    "type": "php",
+    "code": "add_filter( 'the_title', 'perfectpixel_capitalize_product_title', 10, 2 );\n\nfunction perfectpixel_capitalize_product_title( $title, $post_id = 0 ) {\n\tif ( is_admin() || ! $post_id || 'product' !== get_post_type( $post_id ) ) {\n\t\treturn $title;\n\t}\n\tif ( 'words' === '{{title_case_mode}}' ) {\n\t\treturn mb_convert_case( $title, MB_CASE_TITLE, 'UTF-8' );\n\t}\n\treturn mb_strtoupper( mb_substr( $title, 0, 1, 'UTF-8' ), 'UTF-8' ) . mb_substr( $title, 1, null, 'UTF-8' );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "products",
+        "titles"
+    ],
+    "variables": [
+        {
+            "name": "title_case_mode",
+            "label": "Λειτουργία (words/first)",
+            "default": "first",
+            "description": "words = κάθε λέξη, first = μόνο το πρώτο γράμμα"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-capitalize-product-names/"
+    ],
+    "updated": "2026-11-18T14:50:27+00:00"
+}
