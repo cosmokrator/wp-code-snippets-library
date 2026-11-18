@@ -1,0 +1,42 @@
+{
+    "title": "Require privacy policy consent on the registration form",
+    "description": "Προσθέτει στη φόρμα εγγραφής του «Ο λογαριασμός μου» υποχρεωτικό κουτάκι «Έχω διαβάσει και αποδέχομαι την Πολιτική απορρήτου» (με σύνδεσμο προς τη σελίδα πολιτικής του WordPress). Χωρίς αυτό η εγγραφή δεν ολοκληρώνεται, και η ημερομηνία συγκατάθεσης αποθηκεύεται στον χρήστη (GDPR).",
+    "type": "php",
+    "code": "add_action( 'woocommerce_register_form', 'perfectpixel_registration_privacy_checkbox', 30 );\nadd_filter( 'woocommerce_registration_errors', 'perfectpixel_registration_privacy_validate', 10, 3 );\nadd_action( 'woocommerce_created_customer', 'perfectpixel_registration_privacy_save' );\n\nfunction perfectpixel_registration_privacy_checkbox() {\n\t$url  = get_privacy_policy_url();\n\t$link = $url ? '<a href=\"' . esc_url( $url ) . '\" target=\"_blank\">' . esc_html( '{{privacy_consent_link}}' ) . '</a>' : esc_html( '{{privacy_consent_link}}' );\n\techo '<p class=\"form-row validate-required\"><label class=\"woocommerce-form__label woocommerce-form__label-for-checkbox checkbox\"><input type=\"checkbox\" class=\"woocommerce-form__input woocommerce-form__input-checkbox\" name=\"perfectpixel_privacy_consent\" value=\"1\" required> <span>' . str_replace( '{privacy_policy}', $link, esc_html( '{{privacy_consent_text}}' ) ) . '</span> <span class=\"required\">*</span></label></p>';\n}\n\nfunction perfectpixel_registration_privacy_validate( $errors, $username, $email ) {\n\tif ( empty( $_POST['perfectpixel_privacy_consent'] ) && ! is_checkout() ) {\n\t\t$errors->add( 'perfectpixel_privacy_consent', '{{privacy_consent_error}}' );\n\t}\n\treturn $errors;\n}\n\nfunction perfectpixel_registration_privacy_save( $customer_id ) {\n\tif ( ! empty( $_POST['perfectpixel_privacy_consent'] ) ) {\n\t\tupdate_user_meta( $customer_id, 'perfectpixel_privacy_consent', current_time( 'mysql' ) );\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "my-account",
+        "registration",
+        "gdpr",
+        "privacy"
+    ],
+    "variables": [
+        {
+            "name": "privacy_consent_text",
+            "label": "Κείμενο κουτιού",
+            "default": "Έχω διαβάσει και αποδέχομαι την {privacy_policy}",
+            "description": "Χωρίς απόστροφο ('). Το {privacy_policy} γίνεται σύνδεσμος"
+        },
+        {
+            "name": "privacy_consent_link",
+            "label": "Κείμενο συνδέσμου",
+            "default": "Πολιτική απορρήτου",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "privacy_consent_error",
+            "label": "Μήνυμα λάθους",
+            "default": "Πρέπει να αποδεχτείτε την Πολιτική απορρήτου.",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-privacy-policy-consent-my-account-registration/"
+    ],
+    "updated": "2026-11-18T17:55:06+00:00"
+}

@@ -1,0 +1,30 @@
+{
+    "title": "Do not log customers in automatically after registration",
+    "description": "Μετά την εγγραφή από τη σελίδα «Ο λογαριασμός μου», ο νέος πελάτης δεν συνδέεται αυτόματα· βλέπει μήνυμα και πρέπει να συνδεθεί με τα στοιχεία του. Χρήσιμο όταν εγκρίνετε χειροκίνητα τους λογαριασμούς (π.χ. χονδρική) ή στέλνετε τον κωδικό με email. Ορίστε το μήνυμα που θα δει.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_registration_auth_new_customer', 'perfectpixel_no_auto_login_after_registration' );\nadd_action( 'woocommerce_created_customer', 'perfectpixel_no_auto_login_notice' );\n\nfunction perfectpixel_no_auto_login_after_registration() {\n\treturn false;\n}\n\nfunction perfectpixel_no_auto_login_notice() {\n\tif ( ! is_admin() && function_exists( 'wc_add_notice' ) ) {\n\t\twc_add_notice( '{{no_autologin_notice}}' );\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "my-account",
+        "registration",
+        "login",
+        "b2b"
+    ],
+    "variables": [
+        {
+            "name": "no_autologin_notice",
+            "label": "Μήνυμα μετά την εγγραφή",
+            "default": "Ο λογαριασμός σας δημιουργήθηκε. Συνδεθείτε για να συνεχίσετε.",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-deny-automatic-login-upon-registration-my-account/"
+    ],
+    "updated": "2026-11-18T17:55:06+00:00"
+}

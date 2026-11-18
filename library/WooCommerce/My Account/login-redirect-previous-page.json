@@ -1,0 +1,22 @@
+{
+    "title": "Redirect customers back to the previous page after login",
+    "description": "Όταν ο πελάτης πηγαίνει στη σελίδα «Ο λογαριασμός μου» για να συνδεθεί από κάποια σελίδα του site (π.χ. από ένα προϊόν ή άρθρο), μετά τη σύνδεση επιστρέφει σε αυτή τη σελίδα αντί για τον πίνακα ελέγχου του λογαριασμού. Αν ήρθε από αλλού (π.χ. από email ή εξωτερικό site), ισχύει η κανονική συμπεριφορά.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_login_form_end', 'perfectpixel_login_redirect_previous_field' );\n\nfunction perfectpixel_login_redirect_previous_field() {\n\tif ( ! empty( $_REQUEST['redirect_to'] ) ) {\n\t\treturn; // An explicit redirect already exists.\n\t}\n\t$referer = wp_get_raw_referer();\n\tif ( ! $referer || ! wp_validate_redirect( $referer, false ) ) {\n\t\treturn; // Only pages of this site.\n\t}\n\t$account = wc_get_page_permalink( 'myaccount' );\n\tif ( 0 === strpos( $referer, $account ) || false !== strpos( $referer, 'wp-login.php' ) ) {\n\t\treturn;\n\t}\n\techo '<input type=\"hidden\" name=\"redirect\" value=\"' . esc_url( $referer ) . '\">';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "my-account",
+        "redirect",
+        "login"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-login-redirect-previous-url/"
+    ],
+    "updated": "2026-11-18T17:55:06+00:00"
+}

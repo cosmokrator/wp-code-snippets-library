@@ -1,0 +1,41 @@
+{
+    "title": "Add a My Account tab that links to any URL",
+    "description": "Προσθέτει καρτέλα στο μενού του λογαριασμού πελάτη που οδηγεί κατευθείαν σε μια σελίδα ή εξωτερικό URL (π.χ. «Τα μαθήματά μου», «Υποστήριξη», «Πρόγραμμα επιβράβευσης»), χωρίς δική της σελίδα μέσα στον λογαριασμό.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_account_menu_items', 'perfectpixel_account_tab_to_url_menu', 45 );\nadd_filter( 'woocommerce_get_endpoint_url', 'perfectpixel_account_tab_to_url_link', 10, 2 );\n\nfunction perfectpixel_account_tab_to_url_menu( $items ) {\n\t$after = trim( '{{account_link_after}}' );\n\t$new   = array();\n\tforeach ( $items as $key => $label ) {\n\t\t$new[ $key ] = $label;\n\t\tif ( $key === $after ) {\n\t\t\t$new['perfectpixel-link'] = '{{account_link_label}}';\n\t\t}\n\t}\n\tif ( ! isset( $new['perfectpixel-link'] ) ) {\n\t\t$new = array_slice( $new, 0, -1, true ) + array( 'perfectpixel-link' => '{{account_link_label}}' ) + array_slice( $new, -1, null, true );\n\t}\n\treturn $new;\n}\n\nfunction perfectpixel_account_tab_to_url_link( $url, $endpoint ) {\n\tif ( 'perfectpixel-link' !== $endpoint ) {\n\t\treturn $url;\n\t}\n\t$target = trim( '{{account_link_url}}' );\n\treturn 0 === strpos( $target, '/' ) ? home_url( $target ) : esc_url_raw( $target );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "my-account",
+        "tabs",
+        "links"
+    ],
+    "variables": [
+        {
+            "name": "account_link_label",
+            "label": "Όνομα καρτέλας",
+            "default": "Υποστήριξη",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "account_link_url",
+            "label": "URL",
+            "default": "/contact/",
+            "description": "Σχετικό (π.χ. /shop/) ή πλήρες URL του site σας ή εξωτερικό URL"
+        },
+        {
+            "name": "account_link_after",
+            "label": "Μετά από την καρτέλα",
+            "default": "orders",
+            "description": "Κλειδί καρτέλας, π.χ. orders"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-redirect-my-account-tab-to-url/"
+    ],
+    "updated": "2026-11-18T17:55:06+00:00"
+}

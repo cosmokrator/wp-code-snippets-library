@@ -1,0 +1,29 @@
+{
+    "title": "Redirect new customers to a custom page after registration",
+    "description": "Μετά την εγγραφή από τη σελίδα «Ο λογαριασμός μου», ο νέος πελάτης μεταφέρεται σε σελίδα που ορίζετε (π.χ. σελίδα καλωσορίσματος, κατάστημα ή συγκεκριμένη ενότητα του λογαριασμού) αντί να μένει στον πίνακα ελέγχου.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_registration_redirect', 'perfectpixel_registration_redirect', 20 );\n\nfunction perfectpixel_registration_redirect( $url ) {\n\t$target = trim( '{{registration_redirect_url}}' );\n\tif ( '' === $target ) {\n\t\treturn $url;\n\t}\n\treturn wp_validate_redirect( 0 === strpos( $target, '/' ) ? home_url( $target ) : $target, $url );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "my-account",
+        "redirect",
+        "registration"
+    ],
+    "variables": [
+        {
+            "name": "registration_redirect_url",
+            "label": "URL μετά την εγγραφή",
+            "default": "/shop/",
+            "description": "Σχετικό (π.χ. /shop/) ή πλήρες URL του site σας"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-custom-registration-redirect-my-account/"
+    ],
+    "updated": "2026-11-18T17:55:06+00:00"
+}

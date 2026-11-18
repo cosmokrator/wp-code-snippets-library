@@ -1,0 +1,29 @@
+{
+    "title": "Open a different tab instead of the account dashboard",
+    "description": "Όταν ο συνδεδεμένος πελάτης ανοίγει «Ο λογαριασμός μου», μεταφέρεται κατευθείαν σε άλλη καρτέλα (π.χ. «Παραγγελίες» ή «Λήψεις» για ψηφιακά καταστήματα) αντί για τον πίνακα ελέγχου, και η καρτέλα «Πίνακας ελέγχου» αφαιρείται από το μενού. Κλειδιά καρτελών: dashboard, orders, downloads, edit-address, payment-methods, edit-account, customer-logout (και καρτέλες από plugins).",
+    "type": "php",
+    "code": "add_action( 'template_redirect', 'perfectpixel_default_account_tab_redirect' );\nadd_filter( 'woocommerce_account_menu_items', 'perfectpixel_default_account_tab_menu', 40 );\n\nfunction perfectpixel_default_account_tab_redirect() {\n\t$tab = sanitize_key( '{{default_account_tab}}' );\n\tif ( ! $tab || 'dashboard' === $tab || ! is_user_logged_in() || ! is_account_page() || is_wc_endpoint_url() ) {\n\t\treturn;\n\t}\n\t// Only the bare My Account page (the dashboard).\n\tglobal $wp;\n\tif ( ! empty( $wp->query_vars ) && array_intersect( array_keys( $wp->query_vars ), array_keys( WC()->query->get_query_vars() ) ) ) {\n\t\treturn;\n\t}\n\twp_safe_redirect( wc_get_account_endpoint_url( $tab ) );\n\texit;\n}\n\nfunction perfectpixel_default_account_tab_menu( $items ) {\n\tif ( sanitize_key( '{{default_account_tab}}' ) && 'dashboard' !== sanitize_key( '{{default_account_tab}}' ) ) {\n\t\tunset( $items['dashboard'] );\n\t}\n\treturn $items;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "my-account",
+        "redirect",
+        "tabs"
+    ],
+    "variables": [
+        {
+            "name": "default_account_tab",
+            "label": "Καρτέλα",
+            "default": "orders",
+            "description": "Π.χ. orders ή downloads"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-change-default-my-account-tab/"
+    ],
+    "updated": "2026-11-18T17:55:06+00:00"
+}

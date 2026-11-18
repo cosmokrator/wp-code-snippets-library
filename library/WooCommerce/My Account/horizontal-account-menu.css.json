@@ -1,0 +1,23 @@
+{
+    "title": "Horizontal My Account navigation menu",
+    "description": "CSS που εμφανίζει το μενού του λογαριασμού πελάτη (Πίνακας ελέγχου, Παραγγελίες, Λήψεις κ.λπ.) οριζόντια στην κορυφή, σαν καρτέλες, με το περιεχόμενο σε όλο το πλάτος από κάτω, αντί για στήλη αριστερά. Σε μικρές οθόνες οι καρτέλες κυλούν οριζόντια. Ανάλογα με το theme ίσως χρειαστούν προσαρμογές.",
+    "type": "css",
+    "code": ".woocommerce-account .woocommerce-MyAccount-navigation,\n.woocommerce-account .woocommerce-MyAccount-content {\n\tfloat: none !important;\n\twidth: 100% !important;\n}\n.woocommerce-account .woocommerce-MyAccount-navigation ul {\n\tdisplay: flex;\n\tgap: .25em;\n\tmargin: 0 0 2em;\n\tpadding: 0;\n\tlist-style: none;\n\toverflow-x: auto;\n\tborder-bottom: 1px solid rgba(0, 0, 0, .1);\n}\n.woocommerce-account .woocommerce-MyAccount-navigation li {\n\tmargin: 0;\n\tborder: 0 !important;\n\twhite-space: nowrap;\n}\n.woocommerce-account .woocommerce-MyAccount-navigation li a {\n\tdisplay: block;\n\tpadding: .75em 1em;\n\tborder-bottom: 2px solid transparent;\n\ttext-decoration: none;\n}\n.woocommerce-account .woocommerce-MyAccount-navigation li.is-active a {\n\tborder-bottom-color: currentColor;\n\tfont-weight: 600;\n}",
+    "location": "site_header",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "my-account",
+        "css",
+        "menu",
+        "layout"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-horizontal-my-account-navigation-menu/"
+    ],
+    "updated": "2026-11-18T17:55:06+00:00"
+}

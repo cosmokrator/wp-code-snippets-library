@@ -1,0 +1,29 @@
+{
+    "title": "Show \"Login\" instead of \"My account\" in the menu for visitors",
+    "description": "Αν έχετε τη σελίδα «Ο λογαριασμός μου» στο μενού του site, οι επισκέπτες που δεν έχουν συνδεθεί τη βλέπουν ως «Σύνδεση» (ή όποιο κείμενο ορίσετε), ενώ οι συνδεδεμένοι πελάτες τη βλέπουν με το κανονικό όνομα. Χωρίς plugin για μενού σύνδεσης/αποσύνδεσης.",
+    "type": "php",
+    "code": "add_filter( 'wp_nav_menu_objects', 'perfectpixel_account_menu_label_logged_out' );\n\nfunction perfectpixel_account_menu_label_logged_out( $items ) {\n\tif ( is_user_logged_in() || ! function_exists( 'wc_get_page_id' ) ) {\n\t\treturn $items;\n\t}\n\t$account_id = (int) wc_get_page_id( 'myaccount' );\n\tforeach ( $items as $item ) {\n\t\tif ( 'page' === $item->object && (int) $item->object_id === $account_id ) {\n\t\t\t$item->title = '{{account_menu_logged_out_label}}';\n\t\t}\n\t}\n\treturn $items;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "my-account",
+        "menu",
+        "login"
+    ],
+    "variables": [
+        {
+            "name": "account_menu_logged_out_label",
+            "label": "Κείμενο για επισκέπτες",
+            "default": "Σύνδεση",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-rename-my-account-menu-label-if-logged-out/"
+    ],
+    "updated": "2026-11-18T17:55:06+00:00"
+}

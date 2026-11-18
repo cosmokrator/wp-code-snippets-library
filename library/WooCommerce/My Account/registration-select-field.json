@@ -1,0 +1,47 @@
+{
+    "title": "Add a dropdown field to the registration form",
+    "description": "Προσθέτει λίστα επιλογής στη φόρμα εγγραφής (π.χ. «Πώς μάθατε για εμάς;» ή «Τύπος πελάτη: Ιδιώτης / Επαγγελματίας»). Η επιλογή αποθηκεύεται στον χρήστη, ο πελάτης μπορεί να την αλλάξει στα «Στοιχεία λογαριασμού» και ο διαχειριστής τη βλέπει στο προφίλ του χρήστη. Γράψτε τις επιλογές χωρισμένες με |.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_register_form', 'perfectpixel_reg_select_field', 20 );\nadd_filter( 'woocommerce_registration_errors', 'perfectpixel_reg_select_validate', 10, 3 );\nadd_action( 'woocommerce_created_customer', 'perfectpixel_reg_select_save' );\nadd_action( 'woocommerce_edit_account_form', 'perfectpixel_reg_select_account_field' );\nadd_action( 'woocommerce_save_account_details', 'perfectpixel_reg_select_save' );\nadd_action( 'show_user_profile', 'perfectpixel_reg_select_profile' );\nadd_action( 'edit_user_profile', 'perfectpixel_reg_select_profile' );\n\nfunction perfectpixel_reg_select_options() {\n\treturn array_values( array_filter( array_map( 'trim', explode( '|', '{{reg_select_options}}' ) ), 'strlen' ) );\n}\n\nfunction perfectpixel_reg_select_render( $current ) {\n\t$required = 'yes' === '{{reg_select_required}}';\n\techo '<p class=\"woocommerce-form-row form-row form-row-wide\"><label for=\"perfectpixel_reg_select\">' . esc_html( '{{reg_select_label}}' ) . ( $required ? ' <span class=\"required\">*</span>' : '' ) . '</label>';\n\techo '<select name=\"perfectpixel_reg_select\" id=\"perfectpixel_reg_select\"' . ( $required ? ' required' : '' ) . '><option value=\"\">—</option>';\n\tforeach ( perfectpixel_reg_select_options() as $option ) {\n\t\techo '<option value=\"' . esc_attr( $option ) . '\"' . selected( $current, $option, false ) . '>' . esc_html( $option ) . '</option>';\n\t}\n\techo '</select></p>';\n}\n\nfunction perfectpixel_reg_select_field() {\n\tperfectpixel_reg_select_render( isset( $_POST['perfectpixel_reg_select'] ) ? sanitize_text_field( wp_unslash( $_POST['perfectpixel_reg_select'] ) ) : '' );\n}\n\nfunction perfectpixel_reg_select_account_field() {\n\tperfectpixel_reg_select_render( (string) get_user_meta( get_current_user_id(), 'perfectpixel_reg_select', true ) );\n}\n\nfunction perfectpixel_reg_select_value() {\n\t$value = isset( $_POST['perfectpixel_reg_select'] ) ? sanitize_text_field( wp_unslash( $_POST['perfectpixel_reg_select'] ) ) : '';\n\treturn in_array( $value, perfectpixel_reg_select_options(), true ) ? $value : '';\n}\n\nfunction perfectpixel_reg_select_validate( $errors, $username, $email ) {\n\tif ( 'yes' === '{{reg_select_required}}' && '' === perfectpixel_reg_select_value() && ! is_checkout() ) {\n\t\t$errors->add( 'perfectpixel_reg_select', '{{reg_select_error}}' );\n\t}\n\treturn $errors;\n}\n\nfunction perfectpixel_reg_select_save( $user_id ) {\n\tif ( isset( $_POST['perfectpixel_reg_select'] ) ) {\n\t\tupdate_user_meta( $user_id, 'perfectpixel_reg_select', perfectpixel_reg_select_value() );\n\t}\n}\n\nfunction perfectpixel_reg_select_profile( $user ) {\n\tif ( current_user_can( 'edit_users' ) ) {\n\t\techo '<h2>' . esc_html( '{{reg_select_label}}' ) . '</h2><p>' . esc_html( (string) get_user_meta( $user->ID, 'perfectpixel_reg_select', true ) ) . '</p>';\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "my-account",
+        "registration",
+        "custom-fields"
+    ],
+    "variables": [
+        {
+            "name": "reg_select_label",
+            "label": "Ετικέτα πεδίου",
+            "default": "Πώς μάθατε για εμάς;",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "reg_select_options",
+            "label": "Επιλογές (με |)",
+            "default": "Google|Facebook / Instagram|Από φίλο|Άλλο",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "reg_select_required",
+            "label": "Υποχρεωτικό (yes/no)",
+            "default": "no",
+            "description": "yes ή no"
+        },
+        {
+            "name": "reg_select_error",
+            "label": "Μήνυμα λάθους",
+            "default": "Επιλέξτε μια απάντηση.",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-select-field-account-register-form/"
+    ],
+    "updated": "2026-11-18T17:55:06+00:00"
+}

@@ -1,0 +1,29 @@
+{
+    "title": "Redirect customers to a custom page after login",
+    "description": "Μετά τη σύνδεση από τη σελίδα «Ο λογαριασμός μου», ο πελάτης μεταφέρεται σε σελίδα που ορίζετε (π.χ. κατάστημα ή «Οι παραγγελίες μου») αντί για τον πίνακα ελέγχου του λογαριασμού. Αν η σύνδεση έγινε για να συνεχίσει κάπου (π.χ. από το checkout), η ανακατεύθυνση εκείνη έχει προτεραιότητα. Για διαφορετική σελίδα ανά ρόλο δείτε το «Redirect after login by user role».",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_login_redirect', 'perfectpixel_login_redirect', 20 );\n\nfunction perfectpixel_login_redirect( $redirect ) {\n\t$target = trim( '{{login_redirect_url}}' );\n\t// Keep explicit redirects (e.g. ?redirect_to= or from the checkout).\n\tif ( '' === $target || ! empty( $_POST['redirect'] ) ) {\n\t\treturn $redirect;\n\t}\n\treturn wp_validate_redirect( 0 === strpos( $target, '/' ) ? home_url( $target ) : $target, $redirect );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "my-account",
+        "redirect",
+        "login"
+    ],
+    "variables": [
+        {
+            "name": "login_redirect_url",
+            "label": "URL μετά τη σύνδεση",
+            "default": "/my-account/orders/",
+            "description": "Σχετικό (π.χ. /shop/) ή πλήρες URL του site σας"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-custom-login-redirect-my-account/"
+    ],
+    "updated": "2026-11-18T17:55:06+00:00"
+}

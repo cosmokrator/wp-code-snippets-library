@@ -1,0 +1,48 @@
+{
+    "title": "Add a file upload field to the registration form",
+    "description": "Προσθέτει πεδίο ανεβάσματος αρχείου στη φόρμα εγγραφής του «Ο λογαριασμός μου» (π.χ. άδεια επαγγελματία ή βεβαίωση για λογαριασμούς χονδρικής). Δέχεται μόνο JPG, PNG και PDF έως το μέγεθος που ορίζετε. Το αρχείο αποθηκεύεται στα Πολυμέσα και συνδέεται με τον χρήστη· στο προφίλ του χρήστη στον διαχειριστή εμφανίζεται σύνδεσμος προς αυτό.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_register_form_tag', 'perfectpixel_registration_form_enctype' );\nadd_action( 'woocommerce_register_form', 'perfectpixel_registration_file_field' );\nadd_filter( 'woocommerce_registration_errors', 'perfectpixel_registration_file_validate', 10, 3 );\nadd_action( 'woocommerce_created_customer', 'perfectpixel_registration_file_save' );\nadd_action( 'show_user_profile', 'perfectpixel_registration_file_profile' );\nadd_action( 'edit_user_profile', 'perfectpixel_registration_file_profile' );\n\nfunction perfectpixel_registration_form_enctype() {\n\techo 'enctype=\"multipart/form-data\"';\n}\n\nfunction perfectpixel_registration_file_field() {\n\t$required = 'yes' === '{{registration_file_required}}';\n\techo '<p class=\"form-row form-row-wide\"><label for=\"perfectpixel_reg_file\">' . esc_html( '{{registration_file_label}}' ) . ( $required ? ' <span class=\"required\">*</span>' : '' ) . '</label>';\n\techo '<input type=\"file\" id=\"perfectpixel_reg_file\" name=\"perfectpixel_reg_file\" accept=\".jpg,.jpeg,.png,.pdf\"' . ( $required ? ' required' : '' ) . '></p>';\n}\n\nfunction perfectpixel_registration_file_ok() {\n\tif ( empty( $_FILES['perfectpixel_reg_file']['name'] ) ) {\n\t\treturn null; // Nothing uploaded.\n\t}\n\t$file  = $_FILES['perfectpixel_reg_file'];\n\t$check = wp_check_filetype_and_ext( $file['tmp_name'], $file['name'], array( 'jpg|jpeg' => 'image/jpeg', 'png' => 'image/png', 'pdf' => 'application/pdf' ) );\n\t$max   = max( 1, (float) '{{registration_file_max_mb}}' ) * MB_IN_BYTES;\n\treturn UPLOAD_ERR_OK === $file['error'] && $check['ext'] && $file['size'] <= $max;\n}\n\nfunction perfectpixel_registration_file_validate( $errors, $username, $email ) {\n\t$ok = perfectpixel_registration_file_ok();\n\tif ( false === $ok || ( null === $ok && 'yes' === '{{registration_file_required}}' ) ) {\n\t\t$errors->add( 'perfectpixel_reg_file', '{{registration_file_error}}' );\n\t}\n\treturn $errors;\n}\n\nfunction perfectpixel_registration_file_save( $user_id ) {\n\tif ( true !== perfectpixel_registration_file_ok() ) {\n\t\treturn;\n\t}\n\trequire_once ABSPATH . 'wp-admin/includes/file.php';\n\trequire_once ABSPATH . 'wp-admin/includes/media.php';\n\trequire_once ABSPATH . 'wp-admin/includes/image.php';\n\t$attachment_id = media_handle_upload( 'perfectpixel_reg_file', 0, array(), array( 'test_form' => false, 'mimes' => array( 'jpg|jpeg' => 'image/jpeg', 'png' => 'image/png', 'pdf' => 'application/pdf' ) ) );\n\tif ( ! is_wp_error( $attachment_id ) ) {\n\t\tupdate_user_meta( $user_id, 'perfectpixel_registration_file', (int) $attachment_id );\n\t}\n}\n\nfunction perfectpixel_registration_file_profile( $user ) {\n\t$attachment_id = (int) get_user_meta( $user->ID, 'perfectpixel_registration_file', true );\n\tif ( $attachment_id && current_user_can( 'edit_users' ) ) {\n\t\techo '<h2>Αρχείο εγγραφής</h2><p><a href=\"' . esc_url( wp_get_attachment_url( $attachment_id ) ) . '\" target=\"_blank\" rel=\"noopener\">' . esc_html( basename( get_attached_file( $attachment_id ) ) ) . '</a></p>';\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "my-account",
+        "registration",
+        "uploads",
+        "b2b"
+    ],
+    "variables": [
+        {
+            "name": "registration_file_label",
+            "label": "Ετικέτα πεδίου",
+            "default": "Βεβαίωση επαγγελματία (JPG, PNG ή PDF)",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "registration_file_required",
+            "label": "Υποχρεωτικό (yes/no)",
+            "default": "no",
+            "description": "yes ή no"
+        },
+        {
+            "name": "registration_file_max_mb",
+            "label": "Μέγιστο μέγεθος (MB)",
+            "default": "2",
+            "description": "Μόνο αριθμός"
+        },
+        {
+            "name": "registration_file_error",
+            "label": "Μήνυμα λάθους",
+            "default": "Ανεβάστε αρχείο JPG, PNG ή PDF έως το επιτρεπτό μέγεθος.",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-file-upload-my-account-registration-form/"
+    ],
+    "updated": "2026-11-18T17:55:06+00:00"
+}

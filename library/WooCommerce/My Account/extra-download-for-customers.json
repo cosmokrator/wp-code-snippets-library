@@ -1,0 +1,34 @@
+{
+    "title": "Give every customer an extra file in Downloads",
+    "description": "Προσθέτει ένα αρχείο στην καρτέλα «Λήψεις» όλων των συνδεδεμένων πελατών (π.χ. κατάλογο προϊόντων, οδηγό χρήσης, κουπόνι σε PDF), ακόμη κι αν δεν έχουν αγοράσει ψηφιακά προϊόντα. Ανεβάστε το αρχείο στα Πολυμέσα και ορίστε το ID του και τον τίτλο του.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_customer_get_downloadable_products', 'perfectpixel_extra_download_for_customers' );\n\nfunction perfectpixel_extra_download_for_customers( $downloads ) {\n\t$attachment_id = (int) '{{extra_download_attachment_id}}';\n\t$url           = $attachment_id ? wp_get_attachment_url( $attachment_id ) : '';\n\tif ( ! $url ) {\n\t\treturn $downloads;\n\t}\n\t$downloads[] = array(\n\t\t'download_url'        => $url,\n\t\t'download_id'         => 'perfectpixel-extra-' . $attachment_id,\n\t\t'product_id'          => 0,\n\t\t'product_name'        => '{{extra_download_title}}',\n\t\t'product_url'         => '',\n\t\t'download_name'       => basename( get_attached_file( $attachment_id ) ),\n\t\t'order_id'            => 0,\n\t\t'order_key'           => '',\n\t\t'downloads_remaining' => '',\n\t\t'access_expires'      => null,\n\t\t'file'                => array(\n\t\t\t'name' => basename( get_attached_file( $attachment_id ) ),\n\t\t\t'file' => $url,\n\t\t),\n\t);\n\treturn $downloads;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "my-account",
+        "downloads"
+    ],
+    "variables": [
+        {
+            "name": "extra_download_attachment_id",
+            "label": "ID αρχείου πολυμέσων",
+            "default": "0",
+            "description": "Μόνο αριθμός"
+        },
+        {
+            "name": "extra_download_title",
+            "label": "Τίτλος",
+            "default": "Κατάλογος προϊόντων 2026",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-a-custom-download-file-my-account/"
+    ],
+    "updated": "2026-11-18T17:55:06+00:00"
+}

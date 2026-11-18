@@ -1,0 +1,29 @@
+{
+    "title": "Rename the columns of the My Account downloads table",
+    "description": "Αλλάζει τους τίτλους των στηλών του πίνακα «Λήψεις» στον λογαριασμό πελάτη, π.χ. «Υπόλοιπες λήψεις» → «Διαθέσιμες φορές». Γράψτε ζεύγη στήλη=τίτλος χωρισμένα με |. Στήλες: download-product, download-remaining, download-expires, download-file.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_account_downloads_columns', 'perfectpixel_rename_downloads_columns', 30 );\n\nfunction perfectpixel_rename_downloads_columns( $columns ) {\n\tforeach ( explode( '|', '{{download_column_titles}}' ) as $pair ) {\n\t\t$parts = array_map( 'trim', explode( '=', $pair, 2 ) );\n\t\tif ( 2 === count( $parts ) && isset( $columns[ $parts[0] ] ) && '' !== $parts[1] ) {\n\t\t\t$columns[ $parts[0] ] = $parts[1];\n\t\t}\n\t}\n\treturn $columns;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "my-account",
+        "downloads",
+        "labels"
+    ],
+    "variables": [
+        {
+            "name": "download_column_titles",
+            "label": "Στήλη=Τίτλος (με |)",
+            "default": "download-product=Αρχείο|download-file=Λήψη",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-rename-downloads-table-header-my-account/"
+    ],
+    "updated": "2026-11-18T17:55:06+00:00"
+}

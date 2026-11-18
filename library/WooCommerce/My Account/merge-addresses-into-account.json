@@ -1,0 +1,22 @@
+{
+    "title": "Merge the Addresses tab into Account details",
+    "description": "Η καρτέλα «Διευθύνσεις» αφαιρείται από το μενού του λογαριασμού και οι διευθύνσεις χρέωσης/αποστολής εμφανίζονται κάτω από τη φόρμα «Στοιχεία λογαριασμού», με τους κανονικούς συνδέσμους επεξεργασίας. Λιγότερες καρτέλες για τον πελάτη.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_account_menu_items', 'perfectpixel_merge_addresses_menu', 60 );\nadd_action( 'woocommerce_account_edit-account_endpoint', 'perfectpixel_merge_addresses_content', 20 );\n\nfunction perfectpixel_merge_addresses_menu( $items ) {\n\tunset( $items['edit-address'] );\n\treturn $items;\n}\n\nfunction perfectpixel_merge_addresses_content() {\n\techo '<div class=\"perfectpixel-merged-addresses\" style=\"margin-top:2.5em\">';\n\twoocommerce_account_edit_address( '' ); // The addresses overview with \"Edit\" links.\n\techo '</div>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "my-account",
+        "tabs",
+        "addresses"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-merge-account-tabs/"
+    ],
+    "updated": "2026-11-18T17:55:06+00:00"
+}

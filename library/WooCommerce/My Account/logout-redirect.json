@@ -1,0 +1,29 @@
+{
+    "title": "Redirect customers to a custom page after logout",
+    "description": "Μετά την αποσύνδεση από τον λογαριασμό, ο πελάτης μεταφέρεται σε σελίδα που ορίζετε (π.χ. αρχική ή κατάστημα) αντί για τη σελίδα «Ο λογαριασμός μου» με τη φόρμα σύνδεσης.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_logout_default_redirect_url', 'perfectpixel_logout_redirect' );\n\nfunction perfectpixel_logout_redirect( $url ) {\n\t$target = trim( '{{logout_redirect_url}}' );\n\tif ( '' === $target ) {\n\t\treturn $url;\n\t}\n\treturn wp_validate_redirect( 0 === strpos( $target, '/' ) ? home_url( $target ) : $target, $url );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "my-account",
+        "redirect",
+        "logout"
+    ],
+    "variables": [
+        {
+            "name": "logout_redirect_url",
+            "label": "URL μετά την αποσύνδεση",
+            "default": "/",
+            "description": "Σχετικό (π.χ. /shop/) ή πλήρες URL του site σας"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-logout-redirect-my-account/"
+    ],
+    "updated": "2026-11-18T17:55:06+00:00"
+}

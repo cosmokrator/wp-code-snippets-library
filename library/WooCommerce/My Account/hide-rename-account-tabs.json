@@ -1,0 +1,35 @@
+{
+    "title": "Hide or rename My Account tabs",
+    "description": "Κρύβει καρτέλες του λογαριασμού πελάτη που δεν χρειάζεστε (π.χ. «Λήψεις» αν δεν πουλάτε ψηφιακά, «Τρόποι πληρωμής») και μετονομάζει άλλες (π.χ. «Διευθύνσεις» → «Οι διευθύνσεις μου»). Ισχύει και για καρτέλες από plugins. Κλειδιά καρτελών: dashboard, orders, downloads, edit-address, payment-methods, edit-account, customer-logout (και καρτέλες από plugins).",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_account_menu_items', 'perfectpixel_hide_rename_account_tabs', 55 );\n\nfunction perfectpixel_hide_rename_account_tabs( $items ) {\n\tforeach ( array_filter( array_map( 'trim', explode( ',', '{{hidden_account_tabs}}' ) ) ) as $key ) {\n\t\tunset( $items[ $key ] );\n\t}\n\tforeach ( explode( '|', '{{renamed_account_tabs}}' ) as $pair ) {\n\t\t$parts = array_map( 'trim', explode( '=', $pair, 2 ) );\n\t\tif ( 2 === count( $parts ) && isset( $items[ $parts[0] ] ) && '' !== $parts[1] ) {\n\t\t\t$items[ $parts[0] ] = $parts[1];\n\t\t}\n\t}\n\treturn $items;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "my-account",
+        "tabs",
+        "labels"
+    ],
+    "variables": [
+        {
+            "name": "hidden_account_tabs",
+            "label": "Καρτέλες προς απόκρυψη (με κόμμα)",
+            "default": "downloads",
+            "description": "Κλειδιά καρτελών. Κενό = καμία"
+        },
+        {
+            "name": "renamed_account_tabs",
+            "label": "Μετονομασίες κλειδί=όνομα (με |)",
+            "default": "edit-address=Οι διευθύνσεις μου",
+            "description": "Χωρίς απόστροφο ('). Π.χ. orders=Οι αγορές μου|edit-account=Το προφίλ μου"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-hide-rename-account-tab/"
+    ],
+    "updated": "2026-11-18T17:55:06+00:00"
+}

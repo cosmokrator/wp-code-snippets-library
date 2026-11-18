@@ -1,0 +1,30 @@
+{
+    "title": "Redirect after login by user role",
+    "description": "Μετά τη σύνδεση από τη σελίδα «Ο λογαριασμός μου», κάθε ρόλος χρήστη μεταφέρεται σε διαφορετική σελίδα, π.χ. πελάτες χονδρικής στη σελίδα παραγγελιών χονδρικής, συνδρομητές στο περιεχόμενο μελών, διαχειριστές στον πίνακα ελέγχου του WordPress. Γράψτε ζεύγη ρόλος=URL χωρισμένα με |. Οι ρόλοι εκτός λίστας έχουν την κανονική συμπεριφορά.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_login_redirect', 'perfectpixel_login_redirect_by_role', 30, 2 );\n\nfunction perfectpixel_login_redirect_by_role( $redirect, $user ) {\n\tif ( ! $user instanceof WP_User || ! empty( $_POST['redirect'] ) ) {\n\t\treturn $redirect;\n\t}\n\tforeach ( explode( '|', '{{login_redirect_roles}}' ) as $pair ) {\n\t\t$parts = array_map( 'trim', explode( '=', $pair, 2 ) );\n\t\tif ( 2 === count( $parts ) && in_array( $parts[0], (array) $user->roles, true ) && '' !== $parts[1] ) {\n\t\t\treturn wp_validate_redirect( 0 === strpos( $parts[1], '/' ) ? home_url( $parts[1] ) : $parts[1], $redirect );\n\t\t}\n\t}\n\treturn $redirect;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "my-account",
+        "redirect",
+        "login",
+        "user-roles"
+    ],
+    "variables": [
+        {
+            "name": "login_redirect_roles",
+            "label": "Ρόλος=URL (με |)",
+            "default": "administrator=/wp-admin/|shop_manager=/wp-admin/edit.php?post_type=shop_order",
+            "description": "Π.χ. wholesale_customer=/xondriki/|subscriber=/members/"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-redirect-customer-to-url-upon-login/"
+    ],
+    "updated": "2026-11-18T17:55:06+00:00"
+}

@@ -1,0 +1,29 @@
+{
+    "title": "Reorder the My Account tabs",
+    "description": "Αλλάζει τη σειρά των καρτελών στο μενού του λογαριασμού πελάτη, π.χ. «Λήψεις» πριν από «Παραγγελίες». Γράψτε τα κλειδιά με τη σειρά που θέλετε· όσες καρτέλες δεν γράψετε μπαίνουν μετά με την αρχική τους σειρά, και η «Αποσύνδεση» μένει πάντα τελευταία. Κλειδιά καρτελών: dashboard, orders, downloads, edit-address, payment-methods, edit-account, customer-logout (και καρτέλες από plugins).",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_account_menu_items', 'perfectpixel_reorder_account_tabs', 50 );\n\nfunction perfectpixel_reorder_account_tabs( $items ) {\n\t$ordered = array();\n\tforeach ( array_filter( array_map( 'trim', explode( ',', '{{account_tabs_order}}' ) ) ) as $key ) {\n\t\tif ( isset( $items[ $key ] ) && 'customer-logout' !== $key ) {\n\t\t\t$ordered[ $key ] = $items[ $key ];\n\t\t}\n\t}\n\t$logout = isset( $items['customer-logout'] ) ? array( 'customer-logout' => $items['customer-logout'] ) : array();\n\treturn $ordered + array_diff_key( $items, $ordered, $logout ) + $logout;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "my-account",
+        "tabs",
+        "menu"
+    ],
+    "variables": [
+        {
+            "name": "account_tabs_order",
+            "label": "Σειρά καρτελών (με κόμμα)",
+            "default": "dashboard,downloads,orders,edit-account,edit-address",
+            "description": "Κλειδιά καρτελών με κόμμα"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-move-reorder-my-account-tabs/"
+    ],
+    "updated": "2026-11-18T17:55:06+00:00"
+}
