@@ -1,0 +1,41 @@
+{
+    "title": "Collapse a long short description with \"Read more\"",
+    "description": "Αν η σύντομη περιγραφή στη σελίδα προϊόντος είναι μεγάλη, εμφανίζεται μόνο το πάνω μέρος της (ύψος που ορίζετε) με σβήσιμο προς τα κάτω και σύνδεσμο «Περισσότερα» που την ανοίγει. Οι μικρές περιγραφές δεν αλλάζουν. Δεν κόβει το HTML, άρα δεν χαλάνε λίστες και σύνδεσμοι. Ισχύει για το κλασικό template σελίδας προϊόντος· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_after_single_product', 'perfectpixel_short_description_read_more' );\n\nfunction perfectpixel_short_description_read_more() {\n\t$cfg = array(\n\t\t'height' => max( 40, (int) '{{short_desc_max_height}}' ),\n\t\t'more'   => '{{short_desc_more}}',\n\t\t'less'   => '{{short_desc_less}}',\n\t);\n\t?>\n\t<script>\n\t( function ( cfg ) {\n\t\tdocument.querySelectorAll( '.woocommerce-product-details__short-description' ).forEach( function ( box ) {\n\t\t\tif ( box.scrollHeight <= cfg.height + 40 ) {\n\t\t\t\treturn;\n\t\t\t}\n\t\t\tvar collapse = function ( on ) {\n\t\t\t\tbox.style.maxHeight = on ? cfg.height + 'px' : 'none';\n\t\t\t\tbox.style.overflow = on ? 'hidden' : '';\n\t\t\t\tbox.style.webkitMaskImage = box.style.maskImage = on ? 'linear-gradient(#000 60%, transparent)' : '';\n\t\t\t\tlink.textContent = on ? cfg.more : cfg.less;\n\t\t\t};\n\t\t\tvar link = document.createElement( 'a' );\n\t\t\tlink.href = '#';\n\t\t\tlink.className = 'perfectpixel-read-more';\n\t\t\tlink.style.display = 'inline-block';\n\t\t\tlink.style.marginBottom = '1em';\n\t\t\tlink.addEventListener( 'click', function ( e ) {\n\t\t\t\te.preventDefault();\n\t\t\t\tcollapse( 'none' !== box.style.maxHeight );\n\t\t\t} );\n\t\t\tbox.parentNode.insertBefore( link, box.nextSibling );\n\t\t\tcollapse( true );\n\t\t} );\n\t} )( <?php echo wp_json_encode( $cfg ); ?> );\n\t</script>\n\t<?php\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "description",
+        "ux"
+    ],
+    "variables": [
+        {
+            "name": "short_desc_max_height",
+            "label": "Ορατό ύψος (px)",
+            "default": "120",
+            "description": "Μόνο αριθμός"
+        },
+        {
+            "name": "short_desc_more",
+            "label": "Κείμενο ανοίγματος",
+            "default": "Περισσότερα",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "short_desc_less",
+            "label": "Κείμενο κλεισίματος",
+            "default": "Λιγότερα",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-truncate-short-description-with-read-more-toggle/"
+    ],
+    "updated": "2026-11-18T15:11:01+00:00"
+}

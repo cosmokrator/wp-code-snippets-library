@@ -1,0 +1,41 @@
+{
+    "title": "Move upsells under the add to cart button",
+    "description": "Μετακινεί τα upsells («Μπορεί επίσης να σας αρέσουν…») από το κάτω μέρος της σελίδας προϊόντος ακριβώς κάτω από το κουμπί αγοράς, σε λιγότερες στήλες, ώστε ο πελάτης να τα δει χωρίς scroll. Προαιρετικά κρύβει τα κουμπιά «Προσθήκη στο καλάθι» μέσα στα upsells. Ισχύει για το κλασικό template σελίδας προϊόντος· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'init', 'perfectpixel_move_upsells_setup' );\nadd_filter( 'woocommerce_upsell_display_args', 'perfectpixel_move_upsells_args' );\nadd_filter( 'woocommerce_loop_add_to_cart_link', 'perfectpixel_move_upsells_buttons', 50 );\n\nfunction perfectpixel_move_upsells_setup() {\n\tremove_action( 'woocommerce_after_single_product_summary', 'woocommerce_upsell_display', 15 );\n\tadd_action( 'woocommerce_single_product_summary', 'woocommerce_upsell_display', 35 );\n}\n\nfunction perfectpixel_move_upsells_args( $args ) {\n\t$args['columns']        = max( 1, (int) '{{upsells_columns}}' );\n\t$args['posts_per_page'] = max( 1, (int) '{{upsells_limit}}' );\n\treturn $args;\n}\n\nfunction perfectpixel_move_upsells_buttons( $html ) {\n\treturn ( 'yes' === '{{upsells_hide_buttons}}' && 'up-sells' === wc_get_loop_prop( 'name' ) ) ? '' : $html;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "upsells",
+        "layout"
+    ],
+    "variables": [
+        {
+            "name": "upsells_columns",
+            "label": "Στήλες",
+            "default": "2",
+            "description": "Μόνο αριθμός"
+        },
+        {
+            "name": "upsells_limit",
+            "label": "Μέγιστος αριθμός προϊόντων",
+            "default": "2",
+            "description": "Μόνο αριθμός"
+        },
+        {
+            "name": "upsells_hide_buttons",
+            "label": "Απόκρυψη κουμπιών αγοράς (yes/no)",
+            "default": "yes",
+            "description": "yes ή no"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-move-customize-upsells-single-product/"
+    ],
+    "updated": "2026-11-18T15:11:01+00:00"
+}

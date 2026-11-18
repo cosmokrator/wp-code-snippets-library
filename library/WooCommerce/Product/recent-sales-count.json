@@ -1,0 +1,41 @@
+{
+    "title": "Show how many were sold in the last days",
+    "description": "Στη σελίδα προϊόντος εμφανίζει μήνυμα κοινωνικής απόδειξης, π.χ. «🔥 23 αγορές τις τελευταίες 7 ημέρες», μετρώντας τα τεμάχια από ολοκληρωμένες και υπό επεξεργασία παραγγελίες. Εμφανίζεται μόνο αν ο αριθμός φτάνει ένα ελάχιστο. Ο αριθμός ανανεώνεται κάθε μία ώρα. Ισχύει για το κλασικό template σελίδας προϊόντος· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_single_product_summary', 'perfectpixel_recent_sales_count', 11 );\n\nfunction perfectpixel_recent_sales_count() {\n\tglobal $product, $wpdb;\n\tif ( ! $product ) {\n\t\treturn;\n\t}\n\t$days = max( 1, (int) '{{recent_sales_days}}' );\n\t$key  = 'perfectpixel_recent_sales_' . $product->get_id() . '_' . $days;\n\t$sold = get_transient( $key );\n\tif ( false === $sold ) {\n\t\t$sold = (int) $wpdb->get_var(\n\t\t\t$wpdb->prepare(\n\t\t\t\t\"SELECT SUM(l.product_qty) FROM {$wpdb->prefix}wc_order_product_lookup l\n\t\t\t\tINNER JOIN {$wpdb->prefix}wc_order_stats s ON s.order_id = l.order_id\n\t\t\t\tWHERE l.product_id = %d AND l.date_created >= %s AND s.status IN ('wc-completed','wc-processing')\",\n\t\t\t\t$product->get_id(),\n\t\t\t\tgmdate( 'Y-m-d H:i:s', time() - $days * DAY_IN_SECONDS )\n\t\t\t)\n\t\t);\n\t\tset_transient( $key, $sold, HOUR_IN_SECONDS );\n\t}\n\tif ( $sold >= max( 1, (int) '{{recent_sales_min}}' ) ) {\n\t\t$text = str_replace( array( '{count}', '{days}' ), array( (int) $sold, $days ), '{{recent_sales_text}}' );\n\t\techo '<p class=\"perfectpixel-recent-sales\">' . esc_html( $text ) . '</p>';\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "sales",
+        "social-proof"
+    ],
+    "variables": [
+        {
+            "name": "recent_sales_days",
+            "label": "Ημέρες",
+            "default": "7",
+            "description": "Μόνο αριθμός"
+        },
+        {
+            "name": "recent_sales_min",
+            "label": "Ελάχιστος αριθμός για εμφάνιση",
+            "default": "5",
+            "description": "Μόνο αριθμός"
+        },
+        {
+            "name": "recent_sales_text",
+            "label": "Μήνυμα",
+            "default": "🔥 {count} αγορές τις τελευταίες {days} ημέρες",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-count-product-recent-sales/"
+    ],
+    "updated": "2026-11-18T15:11:01+00:00"
+}

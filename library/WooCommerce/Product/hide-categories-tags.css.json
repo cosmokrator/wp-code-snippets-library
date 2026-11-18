@@ -1,0 +1,22 @@
+{
+    "title": "Hide categories and tags on the product page",
+    "description": "CSS που κρύβει τις γραμμές «Κατηγορία:» και «Ετικέτα:» κάτω από το κουμπί αγοράς στη σελίδα προϊόντος, αφήνοντας τον κωδικό (SKU). Σβήστε τη γραμμή του selector που θέλετε να παραμείνει ορατό.",
+    "type": "css",
+    "code": ".single-product .product_meta .posted_in,\n.single-product .product_meta .tagged_as {\n\tdisplay: none !important;\n}",
+    "location": "site_header",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "css",
+        "product-meta"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-hide-category-tag-single-product-page/"
+    ],
+    "updated": "2026-11-18T15:11:01+00:00"
+}

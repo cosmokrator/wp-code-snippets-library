@@ -1,0 +1,35 @@
+{
+    "title": "Redirect customers who already bought a product",
+    "description": "Αν ένας συνδεδεμένος πελάτης έχει ήδη αγοράσει ένα από τα προϊόντα που ορίζετε (π.χ. μάθημα ή ισόβια συνδρομή), όταν ανοίγει τη σελίδα του μεταφέρεται σε άλλη σελίδα, π.χ. «Τα μαθήματά μου» ή τις λήψεις του λογαριασμού του.",
+    "type": "php",
+    "code": "add_action( 'template_redirect', 'perfectpixel_redirect_past_buyers' );\n\nfunction perfectpixel_redirect_past_buyers() {\n\tif ( ! function_exists( 'is_product' ) || ! is_product() || ! is_user_logged_in() ) {\n\t\treturn;\n\t}\n\t$product_id = get_queried_object_id();\n\tif ( ! in_array( $product_id, wp_parse_id_list( '{{past_buyer_redirect_ids}}' ), true ) ) {\n\t\treturn;\n\t}\n\t$user = wp_get_current_user();\n\tif ( wc_customer_bought_product( $user->user_email, $user->ID, $product_id ) ) {\n\t\t$url = '{{past_buyer_redirect_url}}';\n\t\twp_safe_redirect( 0 === strpos( $url, '/' ) ? home_url( $url ) : $url );\n\t\texit;\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "redirect",
+        "customers",
+        "digital"
+    ],
+    "variables": [
+        {
+            "name": "past_buyer_redirect_ids",
+            "label": "IDs προϊόντων (με κόμμα)",
+            "default": "",
+            "description": "Υποχρεωτικό: χωρίς IDs δεν γίνεται καμία ανακατεύθυνση"
+        },
+        {
+            "name": "past_buyer_redirect_url",
+            "label": "URL ανακατεύθυνσης",
+            "default": "/my-account/downloads/",
+            "description": "Σχετικό ή πλήρες URL του site σας"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-single-product-page-redirect-for-logged-in-customers/"
+    ],
+    "updated": "2026-11-18T15:11:01+00:00"
+}

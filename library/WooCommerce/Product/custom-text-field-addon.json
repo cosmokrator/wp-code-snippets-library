@@ -1,0 +1,48 @@
+{
+    "title": "Add a custom text field to products (personalization)",
+    "description": "Προσθέτει πεδίο κειμένου πάνω από το κουμπί αγοράς (π.χ. «Κείμενο χάραξης»). Ό,τι γράψει ο πελάτης εμφανίζεται στο καλάθι, στο checkout, στην παραγγελία και στα emails. Μπορεί να είναι υποχρεωτικό και να ισχύει μόνο σε συγκεκριμένα προϊόντα. Χωρίς χρέωση· για επιπλέον κόστος χρειάζεται plugin add-ons. Ισχύει για το κλασικό template σελίδας προϊόντος· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_before_add_to_cart_button', 'perfectpixel_addon_field' );\nadd_filter( 'woocommerce_add_to_cart_validation', 'perfectpixel_addon_validate', 10, 2 );\nadd_filter( 'woocommerce_add_cart_item_data', 'perfectpixel_addon_cart_data', 10, 2 );\nadd_filter( 'woocommerce_get_item_data', 'perfectpixel_addon_item_data', 10, 2 );\nadd_action( 'woocommerce_checkout_create_order_line_item', 'perfectpixel_addon_order_meta', 10, 3 );\n\nfunction perfectpixel_addon_applies( $product_id ) {\n\t$ids = wp_parse_id_list( '{{addon_field_product_ids}}' );\n\treturn ! $ids || in_array( (int) $product_id, $ids, true );\n}\n\nfunction perfectpixel_addon_value() {\n\treturn isset( $_POST['perfectpixel_addon'] ) ? mb_substr( sanitize_text_field( wp_unslash( $_POST['perfectpixel_addon'] ) ), 0, 100 ) : '';\n}\n\nfunction perfectpixel_addon_field() {\n\tglobal $product;\n\tif ( ! $product || ! perfectpixel_addon_applies( $product->get_id() ) ) {\n\t\treturn;\n\t}\n\t$required = 'yes' === '{{addon_field_required}}';\n\tprintf(\n\t\t'<p class=\"form-row perfectpixel-addon\" style=\"width:100%%\"><label for=\"perfectpixel_addon\">%s%s</label><input type=\"text\" class=\"input-text\" id=\"perfectpixel_addon\" name=\"perfectpixel_addon\" maxlength=\"100\"%s></p>',\n\t\tesc_html( '{{addon_field_label}}' ),\n\t\t$required ? ' <abbr class=\"required\">*</abbr>' : '',\n\t\t$required ? ' required' : ''\n\t);\n}\n\nfunction perfectpixel_addon_validate( $passed, $product_id ) {\n\tif ( perfectpixel_addon_applies( $product_id ) && 'yes' === '{{addon_field_required}}' && '' === perfectpixel_addon_value() && ! wp_doing_ajax() ) {\n\t\twc_add_notice( '{{addon_field_error}}', 'error' );\n\t\treturn false;\n\t}\n\treturn $passed;\n}\n\nfunction perfectpixel_addon_cart_data( $data, $product_id ) {\n\t$value = perfectpixel_addon_value();\n\tif ( '' !== $value && perfectpixel_addon_applies( $product_id ) ) {\n\t\t$data['perfectpixel_addon'] = $value; // Different text = separate cart line.\n\t}\n\treturn $data;\n}\n\nfunction perfectpixel_addon_item_data( $item_data, $cart_item ) {\n\tif ( ! empty( $cart_item['perfectpixel_addon'] ) ) {\n\t\t$item_data[] = array( 'key' => '{{addon_field_label}}', 'value' => $cart_item['perfectpixel_addon'] );\n\t}\n\treturn $item_data;\n}\n\nfunction perfectpixel_addon_order_meta( $item, $cart_item_key, $values ) {\n\tif ( ! empty( $values['perfectpixel_addon'] ) ) {\n\t\t$item->add_meta_data( '{{addon_field_label}}', $values['perfectpixel_addon'], true );\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "add-ons",
+        "personalization",
+        "cart"
+    ],
+    "variables": [
+        {
+            "name": "addon_field_label",
+            "label": "Ετικέτα πεδίου",
+            "default": "Κείμενο χάραξης",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "addon_field_required",
+            "label": "Υποχρεωτικό (yes/no)",
+            "default": "no",
+            "description": "yes ή no"
+        },
+        {
+            "name": "addon_field_error",
+            "label": "Μήνυμα αν λείπει",
+            "default": "Συμπληρώστε το κείμενο χάραξης.",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "addon_field_product_ids",
+            "label": "IDs προϊόντων (με κόμμα)",
+            "default": "",
+            "description": "Κενό = όλα τα προϊόντα"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-product-add-ons-without-plugin/"
+    ],
+    "updated": "2026-11-18T15:11:01+00:00"
+}

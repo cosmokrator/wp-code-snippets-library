@@ -1,0 +1,22 @@
+{
+    "title": "Related products by the first word of the title",
+    "description": "Τα «Σχετικά προϊόντα» επιλέγονται με βάση την πρώτη λέξη του τίτλου (π.χ. όλα τα «Μπλουζάκι …») αντί για κατηγορίες/ετικέτες. Αν δεν βρεθούν τέτοια προϊόντα, μένουν τα κανονικά σχετικά. Το αποτέλεσμα αποθηκεύεται για 12 ώρες ανά προϊόν ώστε να μη γίνεται αναζήτηση σε κάθε προβολή. Μπορείτε να το αλλάξετε για άλλα κριτήρια.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_related_products', 'perfectpixel_related_by_title_keyword', 20, 3 );\n\nfunction perfectpixel_related_by_title_keyword( $related, $product_id, $args ) {\n\t$cache_key = 'perfectpixel_rel_kw_' . $product_id;\n\t$cached    = get_transient( $cache_key );\n\tif ( false === $cached ) {\n\t\t$words = preg_split( '/\\s+/u', trim( wp_strip_all_tags( get_the_title( $product_id ) ) ) );\n\t\t$word  = $words ? $words[0] : '';\n\t\t$cached = array();\n\t\tif ( mb_strlen( $word ) >= 3 ) {\n\t\t\t$cached = get_posts(\n\t\t\t\tarray(\n\t\t\t\t\t'post_type'      => 'product',\n\t\t\t\t\t'post_status'    => 'publish',\n\t\t\t\t\t's'              => $word,\n\t\t\t\t\t'fields'         => 'ids',\n\t\t\t\t\t'posts_per_page' => 20,\n\t\t\t\t\t'post__not_in'   => array( $product_id ),\n\t\t\t\t\t'no_found_rows'  => true,\n\t\t\t\t)\n\t\t\t);\n\t\t}\n\t\tset_transient( $cache_key, $cached, 12 * HOUR_IN_SECONDS );\n\t}\n\treturn $cached ? $cached : $related;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "related-products",
+        "cross-selling"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-custom-related-products/"
+    ],
+    "updated": "2026-11-18T15:11:01+00:00"
+}

@@ -1,0 +1,35 @@
+{
+    "title": "List shipping zones and rates on the product page",
+    "description": "Κάτω από το κουμπί αγοράς εμφανίζει τις ζώνες αποστολής και τις ενεργές μεθόδους τους με το κόστος (π.χ. «Ελλάδα: Courier 3,50 € · Δωρεάν αποστολή από 50 €»), ώστε ο πελάτης να ξέρει τα μεταφορικά πριν φτάσει στο checkout. Κόστη με τύπους (π.χ. [qty]) εμφανίζονται χωρίς ποσό. Ισχύει για το κλασικό template σελίδας προϊόντος· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_after_add_to_cart_form', 'perfectpixel_product_page_shipping_rates' );\n\nfunction perfectpixel_product_page_shipping_rates() {\n\tglobal $product;\n\tif ( ! $product || ! $product->needs_shipping() || ! class_exists( 'WC_Shipping_Zones' ) ) {\n\t\treturn;\n\t}\n\t$zones   = WC_Shipping_Zones::get_zones();\n\t$zones[] = array( 'zone_id' => 0 ); // \"Rest of the world\".\n\t$rows    = array();\n\n\tforeach ( $zones as $data ) {\n\t\t$zone    = new WC_Shipping_Zone( $data['zone_id'] );\n\t\t$methods = array();\n\t\tforeach ( $zone->get_shipping_methods( true ) as $method ) {\n\t\t\t$label = $method->get_title();\n\t\t\tif ( isset( $method->cost ) && is_numeric( $method->cost ) && (float) $method->cost > 0 ) {\n\t\t\t\t$label .= ' ' . wc_price( $method->cost );\n\t\t\t} elseif ( 'free_shipping' === $method->id && ! empty( $method->min_amount ) ) {\n\t\t\t\t$label .= ' ' . esc_html( '{{product_shipping_free_from}}' ) . ' ' . wc_price( $method->min_amount );\n\t\t\t}\n\t\t\t$methods[] = $label;\n\t\t}\n\t\tif ( $methods ) {\n\t\t\t$name   = $data['zone_id'] ? $zone->get_zone_name() : __( 'Locations not covered by your other zones', 'woocommerce' );\n\t\t\t$rows[] = '<li><strong>' . esc_html( $name ) . ':</strong> ' . wp_kses_post( implode( ' &middot; ', $methods ) ) . '</li>';\n\t\t}\n\t}\n\tif ( $rows ) {\n\t\techo '<div class=\"perfectpixel-product-shipping\"><h4>' . esc_html( '{{product_shipping_heading}}' ) . '</h4><ul>' . implode( '', $rows ) . '</ul></div>';\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "shipping",
+        "transparency"
+    ],
+    "variables": [
+        {
+            "name": "product_shipping_heading",
+            "label": "Τίτλος",
+            "default": "Μεταφορικά",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "product_shipping_free_from",
+            "label": "Κείμενο ελάχιστου ποσού",
+            "default": "από",
+            "description": "Χωρίς απόστροφο ('). Π.χ. «Δωρεάν αποστολή από 50 €»"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-show-shipping-rates-single-product-page/"
+    ],
+    "updated": "2026-11-18T15:11:01+00:00"
+}

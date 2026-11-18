@@ -1,0 +1,41 @@
+{
+    "title": "Rename the product tabs",
+    "description": "Αλλάζει τα ονόματα των καρτελών της σελίδας προϊόντος: «Περιγραφή», «Επιπρόσθετες πληροφορίες» και «Αξιολογήσεις». Στις αξιολογήσεις το {count} αντικαθίσταται με το πλήθος τους. Αφήστε κενό όποιο δεν θέλετε να αλλάξει.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_product_tabs', 'perfectpixel_rename_product_tabs', 98 );\n\nfunction perfectpixel_rename_product_tabs( $tabs ) {\n\tglobal $product;\n\t$titles = array(\n\t\t'description'            => '{{tab_title_description}}',\n\t\t'additional_information' => '{{tab_title_additional}}',\n\t\t'reviews'                => '{{tab_title_reviews}}',\n\t);\n\tforeach ( $titles as $key => $title ) {\n\t\tif ( isset( $tabs[ $key ] ) && '' !== trim( $title ) ) {\n\t\t\t$count               = $product ? $product->get_review_count() : 0;\n\t\t\t$tabs[ $key ]['title'] = str_replace( '{count}', (int) $count, $title );\n\t\t}\n\t}\n\treturn $tabs;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "tabs",
+        "labels"
+    ],
+    "variables": [
+        {
+            "name": "tab_title_description",
+            "label": "Περιγραφή",
+            "default": "Λεπτομέρειες",
+            "description": "Χωρίς απόστροφο ('). Κενό = χωρίς αλλαγή"
+        },
+        {
+            "name": "tab_title_additional",
+            "label": "Επιπρόσθετες πληροφορίες",
+            "default": "Χαρακτηριστικά",
+            "description": "Χωρίς απόστροφο ('). Κενό = χωρίς αλλαγή"
+        },
+        {
+            "name": "tab_title_reviews",
+            "label": "Αξιολογήσεις",
+            "default": "Κριτικές ({count})",
+            "description": "Χωρίς απόστροφο ('). Κενό = χωρίς αλλαγή"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-edit-product-tabs-labels/"
+    ],
+    "updated": "2026-11-18T15:11:01+00:00"
+}

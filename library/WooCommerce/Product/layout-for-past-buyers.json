@@ -1,0 +1,36 @@
+{
+    "title": "Different product page for customers who already bought it",
+    "description": "Όταν ένας συνδεδεμένος πελάτης που έχει ήδη αγοράσει το προϊόν ανοίγει τη σελίδα του, δεν βλέπει τιμή και κουμπί αγοράς, αλλά ένα δικό σας μήνυμα (π.χ. σύνδεσμο προς το μάθημα ή τις λήψεις του). Ιδανικό για ψηφιακά προϊόντα, μαθήματα και συνδρομές. Επιτρέπεται απλό HTML στο μήνυμα. Ισχύει για το κλασικό template σελίδας προϊόντος· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_before_single_product', 'perfectpixel_past_buyer_layout' );\n\nfunction perfectpixel_past_buyer_layout() {\n\tglobal $product;\n\tif ( ! $product || ! is_user_logged_in() ) {\n\t\treturn;\n\t}\n\t$ids = wp_parse_id_list( '{{past_buyer_product_ids}}' );\n\tif ( $ids && ! in_array( $product->get_id(), $ids, true ) ) {\n\t\treturn;\n\t}\n\t$user = wp_get_current_user();\n\tif ( ! wc_customer_bought_product( $user->user_email, $user->ID, $product->get_id() ) ) {\n\t\treturn;\n\t}\n\tremove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_price', 10 );\n\tremove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_add_to_cart', 30 );\n\tremove_action( 'woocommerce_before_single_product_summary', 'woocommerce_show_product_sale_flash', 10 );\n\tadd_action( 'woocommerce_single_product_summary', 'perfectpixel_past_buyer_message', 30 );\n}\n\nfunction perfectpixel_past_buyer_message() {\n\techo '<div class=\"woocommerce-info perfectpixel-past-buyer\">' . wp_kses_post( '{{past_buyer_message}}' ) . '</div>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "customers",
+        "conditional",
+        "digital"
+    ],
+    "variables": [
+        {
+            "name": "past_buyer_message",
+            "label": "Μήνυμα",
+            "default": "Έχετε ήδη αγοράσει αυτό το προϊόν. Θα το βρείτε στο <a href=\"/my-account/downloads/\">Ο λογαριασμός μου → Λήψεις</a>.",
+            "description": "Χωρίς απόστροφο ('). Επιτρέπεται απλό HTML"
+        },
+        {
+            "name": "past_buyer_product_ids",
+            "label": "IDs προϊόντων (με κόμμα)",
+            "default": "",
+            "description": "Κενό = όλα τα προϊόντα"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-logged-in-only-product-layout/"
+    ],
+    "updated": "2026-11-18T15:11:01+00:00"
+}

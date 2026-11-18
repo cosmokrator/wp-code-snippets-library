@@ -1,0 +1,29 @@
+{
+    "title": "Add links that open and scroll to product tabs",
+    "description": "Κάτω από τη σύντομη περιγραφή εμφανίζει συνδέσμους προς τις καρτέλες του προϊόντος (π.χ. «Περιγραφή · Αξιολογήσεις (3)»). Με κλικ η αντίστοιχη καρτέλα ανοίγει και η σελίδα κυλά ομαλά μέχρι εκεί. Ισχύει για το κλασικό template σελίδας προϊόντος· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_single_product_summary', 'perfectpixel_links_to_product_tabs', 21 );\n\nfunction perfectpixel_links_to_product_tabs() {\n\t$tabs = apply_filters( 'woocommerce_product_tabs', array() );\n\tif ( ! $tabs ) {\n\t\treturn;\n\t}\n\t$links = array();\n\tforeach ( $tabs as $key => $tab ) {\n\t\t$title   = wp_strip_all_tags( apply_filters( 'woocommerce_product_' . $key . '_tab_title', $tab['title'], $key ) );\n\t\t$links[] = '<a href=\"#tab-' . esc_attr( $key ) . '\" data-perfectpixel-tab=\"' . esc_attr( $key ) . '\">' . esc_html( $title ) . '</a>';\n\t}\n\techo '<p class=\"perfectpixel-tab-links\">' . esc_html( '{{tab_links_label}}' ) . ' ' . implode( ' &middot; ', $links ) . '</p>';\n\t?>\n\t<script>\n\tdocument.addEventListener( 'click', function ( e ) {\n\t\tvar link = e.target.closest( '[data-perfectpixel-tab]' );\n\t\tif ( ! link ) {\n\t\t\treturn;\n\t\t}\n\t\tvar key    = link.getAttribute( 'data-perfectpixel-tab' );\n\t\tvar opener = document.querySelector( '.wc-tabs a[href=\"#tab-' + key + '\"]' );\n\t\tvar target = document.getElementById( 'tab-' + key );\n\t\tif ( ! target ) {\n\t\t\treturn;\n\t\t}\n\t\te.preventDefault();\n\t\tif ( opener ) {\n\t\t\topener.click();\n\t\t}\n\t\t( opener ? opener.closest( '.woocommerce-tabs' ) : target ).scrollIntoView( { behavior: 'smooth', block: 'start' } );\n\t} );\n\t</script>\n\t<?php\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "tabs",
+        "navigation"
+    ],
+    "variables": [
+        {
+            "name": "tab_links_label",
+            "label": "Ετικέτα",
+            "default": "Δείτε:",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-scroll-to-product-tab-single-product-page/"
+    ],
+    "updated": "2026-11-18T15:11:01+00:00"
+}

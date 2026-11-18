@@ -1,0 +1,35 @@
+{
+    "title": "Remove or change the headings inside product tabs",
+    "description": "Μέσα στις καρτέλες «Περιγραφή» και «Επιπρόσθετες πληροφορίες» το WooCommerce επαναλαμβάνει το όνομα της καρτέλας ως επικεφαλίδα. Το snippet την αφαιρεί ή την αλλάζει. Αφήστε κενό για αφαίρεση.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_product_description_heading', 'perfectpixel_description_tab_heading' );\nadd_filter( 'woocommerce_product_additional_information_heading', 'perfectpixel_additional_tab_heading' );\n\nfunction perfectpixel_description_tab_heading() {\n\treturn '{{description_tab_heading}}';\n}\n\nfunction perfectpixel_additional_tab_heading() {\n\treturn '{{additional_tab_heading}}';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "tabs",
+        "headings"
+    ],
+    "variables": [
+        {
+            "name": "description_tab_heading",
+            "label": "Επικεφαλίδα περιγραφής",
+            "default": "",
+            "description": "Χωρίς απόστροφο ('). Κενό = χωρίς επικεφαλίδα"
+        },
+        {
+            "name": "additional_tab_heading",
+            "label": "Επικεφαλίδα επιπρόσθετων πληροφοριών",
+            "default": "",
+            "description": "Χωρίς απόστροφο ('). Κενό = χωρίς επικεφαλίδα"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-remove-description-heading-tabs/"
+    ],
+    "updated": "2026-11-18T15:11:01+00:00"
+}

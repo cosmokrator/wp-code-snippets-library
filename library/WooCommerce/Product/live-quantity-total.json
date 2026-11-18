@@ -1,0 +1,29 @@
+{
+    "title": "Show a live total when the quantity changes",
+    "description": "Σε απλά προϊόντα, κάτω από το κουμπί αγοράς εμφανίζεται «Σύνολο: …» που υπολογίζεται αμέσως καθώς ο πελάτης αλλάζει την ποσότητα (τιμή × ποσότητα), με τη μορφή τιμών του καταστήματος. Δεν λαμβάνει υπόψη εκπτώσεις ποσότητας από plugins. Ισχύει για το κλασικό template σελίδας προϊόντος· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_after_add_to_cart_button', 'perfectpixel_live_quantity_total' );\n\nfunction perfectpixel_live_quantity_total() {\n\tglobal $product;\n\tif ( ! $product || ! $product->is_type( 'simple' ) || $product->is_sold_individually() ) {\n\t\treturn;\n\t}\n\t$cfg = array(\n\t\t'price'    => (float) wc_get_price_to_display( $product ),\n\t\t'decimals' => wc_get_price_decimals(),\n\t\t'dec'      => wc_get_price_decimal_separator(),\n\t\t'thousand' => wc_get_price_thousand_separator(),\n\t\t'format'   => html_entity_decode( sprintf( get_woocommerce_price_format(), get_woocommerce_currency_symbol(), '%v' ) ),\n\t);\n\t?>\n\t<div class=\"perfectpixel-live-total\" style=\"margin-top:1em;width:100%\"><?php echo esc_html( '{{live_total_label}}' ); ?> <strong></strong></div>\n\t<script>\n\t( function ( box, cfg ) {\n\t\tvar form  = box.closest( 'form.cart' );\n\t\tvar input = form && form.querySelector( 'input.qty' );\n\t\tvar out   = box.querySelector( 'strong' );\n\t\tvar money = function ( n ) {\n\t\t\tvar parts = n.toFixed( cfg.decimals ).split( '.' );\n\t\t\tparts[0] = parts[0].replace( /\\B(?=(\\d{3})+(?!\\d))/g, cfg.thousand );\n\t\t\treturn cfg.format.replace( '%v', parts.join( cfg.dec ) );\n\t\t};\n\t\tvar update = function () {\n\t\t\tvar qty = Math.max( 0, parseFloat( input ? input.value : 1 ) || 0 );\n\t\t\tout.textContent = money( cfg.price * qty );\n\t\t};\n\t\tif ( input ) {\n\t\t\tinput.addEventListener( 'input', update );\n\t\t\tinput.addEventListener( 'change', update );\n\t\t}\n\t\tupdate();\n\t} )( document.currentScript.previousElementSibling, <?php echo wp_json_encode( $cfg ); ?> );\n\t</script>\n\t<?php\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "quantity",
+        "prices"
+    ],
+    "variables": [
+        {
+            "name": "live_total_label",
+            "label": "Ετικέτα",
+            "default": "Σύνολο:",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-calculate-subtotal-on-quantity-increment-single-product/"
+    ],
+    "updated": "2026-11-18T15:11:01+00:00"
+}

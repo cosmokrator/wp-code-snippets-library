@@ -1,0 +1,22 @@
+{
+    "title": "Checkbox to hide related products per product",
+    "description": "Προσθέτει στη σελίδα επεξεργασίας προϊόντος (καρτέλα «Γενικά») το κουτάκι «Απόκρυψη σχετικών προϊόντων». Όταν είναι τσεκαρισμένο, η ενότητα «Σχετικά προϊόντα» δεν εμφανίζεται στη σελίδα αυτού του προϊόντος. Ισχύει για το κλασικό template σελίδας προϊόντος· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_product_options_general_product_data', 'perfectpixel_hide_related_checkbox' );\nadd_action( 'woocommerce_admin_process_product_object', 'perfectpixel_hide_related_save' );\nadd_action( 'woocommerce_before_single_product', 'perfectpixel_hide_related_maybe' );\n\nfunction perfectpixel_hide_related_checkbox() {\n\techo '<div class=\"options_group\">';\n\twoocommerce_wp_checkbox(\n\t\tarray(\n\t\t\t'id'          => '_perfectpixel_hide_related',\n\t\t\t'label'       => 'Απόκρυψη σχετικών προϊόντων',\n\t\t\t'description' => 'Να μην εμφανίζονται «Σχετικά προϊόντα» σε αυτό το προϊόν',\n\t\t)\n\t);\n\techo '</div>';\n}\n\nfunction perfectpixel_hide_related_save( $product ) {\n\t$product->update_meta_data( '_perfectpixel_hide_related', isset( $_POST['_perfectpixel_hide_related'] ) ? 'yes' : 'no' );\n}\n\nfunction perfectpixel_hide_related_maybe() {\n\tglobal $product;\n\tif ( $product && 'yes' === $product->get_meta( '_perfectpixel_hide_related' ) ) {\n\t\tremove_action( 'woocommerce_after_single_product_summary', 'woocommerce_output_related_products', 20 );\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "related-products",
+        "admin"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-checkbox-to-disable-related-products-conditionally/"
+    ],
+    "updated": "2026-11-18T15:11:01+00:00"
+}

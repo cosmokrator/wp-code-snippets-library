@@ -1,0 +1,23 @@
+{
+    "title": "Full width product image on the product page",
+    "description": "CSS που κάνει την κύρια εικόνα της σελίδας προϊόντος να πιάνει όλο το πλάτος (σαν hero εικόνα), με τον τίτλο, την τιμή και το κουμπί αγοράς από κάτω. Χρειάζονται εικόνες αρκετά μεγάλης ανάλυσης. Ανάλογα με το theme ίσως χρειαστούν προσαρμογές στους selectors.",
+    "type": "css",
+    "code": ".single-product div.product .woocommerce-product-gallery,\n.single-product div.product .summary {\n\tfloat: none !important;\n\twidth: 100% !important;\n\tmargin-right: 0 !important;\n}\n.single-product div.product .woocommerce-product-gallery img {\n\twidth: 100%;\n\theight: auto;\n}",
+    "location": "site_header",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "css",
+        "images",
+        "layout"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-full-width-featured-image-single-product-page/"
+    ],
+    "updated": "2026-11-18T15:11:01+00:00"
+}

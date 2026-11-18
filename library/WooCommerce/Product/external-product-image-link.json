@@ -1,0 +1,23 @@
+{
+    "title": "Link the image of external products to the external URL",
+    "description": "Σε εξωτερικά/affiliate προϊόντα, η κύρια εικόνα της σελίδας προϊόντος οδηγεί στον ίδιο εξωτερικό σύνδεσμο με το κουμπί αγοράς (σε νέα καρτέλα). Για να δουλέψει, απενεργοποιούνται σε αυτά τα προϊόντα το zoom, το lightbox και ο slider της γκαλερί. Ισχύει για το κλασικό template σελίδας προϊόντος· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_single_product_image_thumbnail_html', 'perfectpixel_external_image_link', 20 );\nadd_filter( 'woocommerce_single_product_zoom_enabled', 'perfectpixel_external_disable_gallery_feature' );\nadd_filter( 'woocommerce_single_product_photoswipe_enabled', 'perfectpixel_external_disable_gallery_feature' );\nadd_filter( 'woocommerce_single_product_flexslider_enabled', 'perfectpixel_external_disable_gallery_feature' );\n\nfunction perfectpixel_external_current_url() {\n\tif ( ! function_exists( 'is_product' ) || ! is_product() ) {\n\t\treturn '';\n\t}\n\t$product = wc_get_product( get_queried_object_id() );\n\treturn ( $product && $product->is_type( 'external' ) ) ? $product->get_product_url() : '';\n}\n\nfunction perfectpixel_external_disable_gallery_feature( $enabled ) {\n\treturn perfectpixel_external_current_url() ? false : $enabled;\n}\n\nfunction perfectpixel_external_image_link( $html ) {\n\t$url = perfectpixel_external_current_url();\n\tif ( ! $url ) {\n\t\treturn $html;\n\t}\n\treturn preg_replace( '/<a href=\"[^\"]*\"/', '<a href=\"' . esc_url( $url ) . '\" target=\"_blank\" rel=\"noopener noreferrer nofollow\"', $html, 1 );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "external",
+        "images",
+        "links"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-edit-external-product-image-url/"
+    ],
+    "updated": "2026-11-18T15:11:01+00:00"
+}

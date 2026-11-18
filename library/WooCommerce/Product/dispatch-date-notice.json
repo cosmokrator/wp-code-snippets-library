@@ -1,0 +1,48 @@
+{
+    "title": "Show the estimated dispatch day on the product page",
+    "description": "Κάτω από το κουμπί αγοράς εμφανίζει πότε θα αποσταλεί η παραγγελία, με βάση την ώρα και τη μέρα: π.χ. «Παραγγείλτε πριν τις 15:00 και αποστέλλεται σήμερα!» ή «Αποστέλλεται τη Δευτέρα». Αποστολές γίνονται μόνο τις εργάσιμες (Δευτέρα–Παρασκευή). Το {day} αντικαθίσταται με την ημέρα αποστολής. Μόνο για προϊόντα σε απόθεμα. Ισχύει για το κλασικό template σελίδας προϊόντος· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_after_add_to_cart_form', 'perfectpixel_dispatch_date_notice' );\n\nfunction perfectpixel_dispatch_date_notice() {\n\tglobal $product;\n\tif ( ! $product || ! $product->is_in_stock() || $product->is_virtual() ) {\n\t\treturn;\n\t}\n\t$now     = current_datetime();\n\t$weekday = (int) $now->format( 'N' ); // 1 = Monday ... 7 = Sunday.\n\tif ( $weekday <= 5 && (int) $now->format( 'G' ) < (int) '{{dispatch_cutoff_hour}}' ) {\n\t\t$text = esc_html( '{{dispatch_today_text}}' );\n\t} else {\n\t\t$next = $now->modify( '+1 day' );\n\t\twhile ( (int) $next->format( 'N' ) > 5 ) {\n\t\t\t$next = $next->modify( '+1 day' );\n\t\t}\n\t\t$tomorrow = $now->modify( '+1 day' )->format( 'Y-m-d' ) === $next->format( 'Y-m-d' );\n\t\t$day      = $tomorrow ? '{{dispatch_tomorrow_word}}' : wp_date( 'l', $next->getTimestamp() );\n\t\t$text     = str_replace( '{day}', esc_html( $day ), esc_html( '{{dispatch_later_text}}' ) );\n\t}\n\techo '<p class=\"perfectpixel-dispatch-notice\" style=\"margin-top:1em\">&#128666; ' . $text . '</p>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "shipping",
+        "delivery",
+        "urgency"
+    ],
+    "variables": [
+        {
+            "name": "dispatch_cutoff_hour",
+            "label": "Ώρα αποκοπής (0-23)",
+            "default": "15",
+            "description": "Μόνο αριθμός, ώρα του site"
+        },
+        {
+            "name": "dispatch_today_text",
+            "label": "Μήνυμα για σήμερα",
+            "default": "Παραγγείλτε πριν τις 15:00 και αποστέλλεται σήμερα!",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "dispatch_later_text",
+            "label": "Μήνυμα για επόμενη μέρα",
+            "default": "Αποστέλλεται {day}.",
+            "description": "Χωρίς απόστροφο ('). Το {day} γίνεται «αύριο» ή όνομα ημέρας"
+        },
+        {
+            "name": "dispatch_tomorrow_word",
+            "label": "Λέξη για αύριο",
+            "default": "αύριο",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-show-dispatch-est-shipping-date-single-product/"
+    ],
+    "updated": "2026-11-18T15:11:01+00:00"
+}
