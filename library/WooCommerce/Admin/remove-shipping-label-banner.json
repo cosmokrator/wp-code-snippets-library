@@ -1,0 +1,22 @@
+{
+    "title": "Remove the \"Create shipping label\" banner from orders",
+    "description": "Κρύβει το banner «Print discounted shipping labels with a click… Create shipping label» που εμφανίζει το WooCommerce στην κορυφή της σελίδας παραγγελίας για να προωθήσει το WooCommerce Shipping. Οι υπόλοιπες λειτουργίες της σελίδας δεν αλλάζουν.",
+    "type": "php",
+    "code": "add_filter( 'pre_option_woocommerce_shipping_dismissed_timestamp', 'perfectpixel_remove_shipping_label_banner' );\n\nfunction perfectpixel_remove_shipping_label_banner() {\n\treturn -1; // \"Dismissed forever\".\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "admin",
+        "orders",
+        "notices"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-remove-create-shipping-label-banner-order-admin/"
+    ],
+    "updated": "2026-11-18T17:59:08+00:00"
+}

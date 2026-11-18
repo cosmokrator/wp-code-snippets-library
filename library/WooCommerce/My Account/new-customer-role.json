@@ -1,0 +1,29 @@
+{
+    "title": "Assign a different role to new customers",
+    "description": "Οι νέοι πελάτες που δημιουργούν λογαριασμό (από τον λογαριασμό ή στο checkout) παίρνουν τον ρόλο που ορίζετε αντί για «Πελάτης», π.χ. έναν δικό σας ρόλο «Πελάτης σε αναμονή έγκρισης» ή «subscriber». Για ασφάλεια, δεν επιτρέπονται ρόλοι που μπορούν να επεξεργάζονται περιεχόμενο ή να διαχειρίζονται το site.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_new_customer_data', 'perfectpixel_new_customer_role' );\n\nfunction perfectpixel_new_customer_role( $data ) {\n\t$role = get_role( sanitize_key( '{{new_customer_role}}' ) );\n\t// Never hand out roles that can edit content or manage the site.\n\tif ( $role && ! $role->has_cap( 'edit_posts' ) && ! $role->has_cap( 'manage_woocommerce' ) && ! $role->has_cap( 'manage_options' ) ) {\n\t\t$data['role'] = $role->name;\n\t}\n\treturn $data;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "my-account",
+        "user-roles",
+        "registration"
+    ],
+    "variables": [
+        {
+            "name": "new_customer_role",
+            "label": "Ρόλος (slug)",
+            "default": "subscriber",
+            "description": "Π.χ. subscriber ή wholesale_pending"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-change-user-role-new-customers/"
+    ],
+    "updated": "2026-11-18T17:59:08+00:00"
+}

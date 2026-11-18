@@ -1,0 +1,36 @@
+{
+    "title": "Add text above the login and registration forms",
+    "description": "Στη σελίδα «Ο λογαριασμός μου» για επισκέπτες, εμφανίζει σύντομο κείμενο πάνω από τη φόρμα σύνδεσης και πάνω από τη φόρμα εγγραφής, π.χ. τι κερδίζει ο πελάτης με λογαριασμό ή οδηγίες για παλιούς πελάτες. Επιτρέπεται απλό HTML. Αφήστε κενό όποιο δεν θέλετε.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_login_form_start', 'perfectpixel_login_intro_text' );\nadd_action( 'woocommerce_register_form_start', 'perfectpixel_register_intro_text', 5 );\n\nfunction perfectpixel_login_intro_text() {\n\tif ( is_account_page() && '' !== trim( '{{login_intro_text}}' ) ) {\n\t\techo '<div class=\"perfectpixel-login-intro\">' . wp_kses_post( '{{login_intro_text}}' ) . '</div>';\n\t}\n}\n\nfunction perfectpixel_register_intro_text() {\n\tif ( is_account_page() && '' !== trim( '{{register_intro_text}}' ) ) {\n\t\techo '<div class=\"perfectpixel-register-intro\">' . wp_kses_post( '{{register_intro_text}}' ) . '</div>';\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "my-account",
+        "login",
+        "registration",
+        "content"
+    ],
+    "variables": [
+        {
+            "name": "login_intro_text",
+            "label": "Κείμενο πάνω από τη σύνδεση",
+            "default": "<p>Συνδεθείτε για να δείτε τις παραγγελίες και τις λήψεις σας.</p>",
+            "description": "Χωρίς απόστροφο ('). Κενό = τίποτα"
+        },
+        {
+            "name": "register_intro_text",
+            "label": "Κείμενο πάνω από την εγγραφή",
+            "default": "<p>Με λογαριασμό αγοράζετε πιο γρήγορα και παρακολουθείτε τις παραγγελίες σας.</p>",
+            "description": "Χωρίς απόστροφο ('). Κενό = τίποτα"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-show-extra-content-my-account-page/"
+    ],
+    "updated": "2026-11-18T17:59:08+00:00"
+}

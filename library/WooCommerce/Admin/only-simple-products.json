@@ -1,0 +1,29 @@
+{
+    "title": "Allow only simple products in the product editor",
+    "description": "Για καταστήματα που πουλούν μόνο απλά προϊόντα: η λίστα «Τύπος προϊόντος» στη σελίδα επεξεργασίας δείχνει μόνο «Απλό προϊόν» (χωρίς μεταβλητά, ομαδοποιημένα, εξωτερικά), ώστε να μη γίνονται λάθη. Προαιρετικά κρύβει και τα κουτάκια «Εικονικό» / «Με δυνατότητα λήψης». Τα υπάρχοντα προϊόντα άλλων τύπων δεν αλλάζουν.",
+    "type": "php",
+    "code": "add_filter( 'product_type_selector', 'perfectpixel_only_simple_products' );\nadd_filter( 'product_type_options', 'perfectpixel_only_simple_product_options' );\n\nfunction perfectpixel_only_simple_products( $types ) {\n\tglobal $post;\n\t$keep = array( 'simple' );\n\t// Keep the current type of an existing product, so it is not broken on save.\n\t$product = $post ? wc_get_product( $post->ID ) : null;\n\tif ( $product && 'simple' !== $product->get_type() ) {\n\t\t$keep[] = $product->get_type();\n\t}\n\treturn array_intersect_key( $types, array_flip( $keep ) );\n}\n\nfunction perfectpixel_only_simple_product_options( $options ) {\n\tif ( 'yes' === '{{hide_virtual_downloadable}}' ) {\n\t\tunset( $options['virtual'], $options['downloadable'] );\n\t}\n\treturn $options;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "admin",
+        "products",
+        "product-types"
+    ],
+    "variables": [
+        {
+            "name": "hide_virtual_downloadable",
+            "label": "Απόκρυψη Εικονικό/Λήψη (yes/no)",
+            "default": "no",
+            "description": "yes = κρύβονται τα δύο κουτάκια"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-allow-only-simple-products/"
+    ],
+    "updated": "2026-11-18T17:59:08+00:00"
+}

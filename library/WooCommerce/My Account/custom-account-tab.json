@@ -1,0 +1,48 @@
+{
+    "title": "Add a custom tab with content to My Account",
+    "description": "Προσθέτει νέα καρτέλα στον λογαριασμό πελάτη με δικό σας περιεχόμενο (π.χ. «Υποστήριξη» με φόρμα επικοινωνίας μέσω shortcode, «Οδηγοί» ή «Προνόμια μελών»). Επιτρέπεται απλό HTML και shortcodes. Μετά την ενεργοποίηση (ή αλλαγή του slug) πηγαίνετε στις Ρυθμίσεις → Μόνιμοι σύνδεσμοι και πατήστε «Αποθήκευση».",
+    "type": "php",
+    "code": "add_action( 'init', 'perfectpixel_custom_account_tab_endpoint' );\nadd_filter( 'woocommerce_get_query_vars', 'perfectpixel_custom_account_tab_query_var' );\nadd_filter( 'woocommerce_account_menu_items', 'perfectpixel_custom_account_tab_menu', 42 );\n\nfunction perfectpixel_custom_account_tab_slug() {\n\treturn sanitize_title( '{{custom_tab_slug}}' );\n}\n\nfunction perfectpixel_custom_account_tab_endpoint() {\n\t$slug = perfectpixel_custom_account_tab_slug();\n\tadd_rewrite_endpoint( $slug, EP_ROOT | EP_PAGES );\n\tadd_action( 'woocommerce_account_' . $slug . '_endpoint', 'perfectpixel_custom_account_tab_content' );\n\tadd_filter( 'woocommerce_endpoint_' . $slug . '_title', 'perfectpixel_custom_account_tab_title' );\n}\n\nfunction perfectpixel_custom_account_tab_query_var( $vars ) {\n\t$slug          = perfectpixel_custom_account_tab_slug();\n\t$vars[ $slug ] = $slug;\n\treturn $vars;\n}\n\nfunction perfectpixel_custom_account_tab_menu( $items ) {\n\t$slug  = perfectpixel_custom_account_tab_slug();\n\t$after = trim( '{{custom_tab_after}}' );\n\t$new   = array();\n\tforeach ( $items as $key => $label ) {\n\t\t$new[ $key ] = $label;\n\t\tif ( $key === $after ) {\n\t\t\t$new[ $slug ] = '{{custom_tab_label}}';\n\t\t}\n\t}\n\tif ( ! isset( $new[ $slug ] ) ) {\n\t\t$new = array_slice( $new, 0, -1, true ) + array( $slug => '{{custom_tab_label}}' ) + array_slice( $new, -1, null, true );\n\t}\n\treturn $new;\n}\n\nfunction perfectpixel_custom_account_tab_title() {\n\treturn '{{custom_tab_label}}';\n}\n\nfunction perfectpixel_custom_account_tab_content() {\n\techo wp_kses_post( do_shortcode( '{{custom_tab_html}}' ) );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "my-account",
+        "tabs",
+        "endpoints",
+        "content"
+    ],
+    "variables": [
+        {
+            "name": "custom_tab_slug",
+            "label": "Slug (στο URL)",
+            "default": "support",
+            "description": "Μόνο λατινικά πεζά και -"
+        },
+        {
+            "name": "custom_tab_label",
+            "label": "Όνομα καρτέλας",
+            "default": "Υποστήριξη",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "custom_tab_html",
+            "label": "Περιεχόμενο",
+            "default": "<p>Χρειάζεστε βοήθεια; Στείλτε μας μήνυμα και θα απαντήσουμε εντός 24 ωρών.</p>",
+            "description": "Χωρίς απόστροφο ('). Επιτρέπεται απλό HTML και shortcodes"
+        },
+        {
+            "name": "custom_tab_after",
+            "label": "Μετά από την καρτέλα",
+            "default": "orders",
+            "description": "Κλειδί καρτέλας, π.χ. orders"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-new-tab-account-page/"
+    ],
+    "updated": "2026-11-18T17:59:08+00:00"
+}

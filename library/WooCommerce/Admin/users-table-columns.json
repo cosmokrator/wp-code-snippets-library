@@ -1,0 +1,36 @@
+{
+    "title": "Add WooCommerce columns to the admin Users table",
+    "description": "Στη λίστα Χρήστες του WordPress προσθέτει στήλες με στοιχεία WooCommerce: τον αριθμό παραγγελιών και το συνολικό ποσό που έχει ξοδέψει κάθε πελάτης, καθώς και ένα πεδίο του πελάτη που ορίζετε (π.χ. τηλέφωνο ή χώρα χρέωσης).",
+    "type": "php",
+    "code": "add_filter( 'manage_users_columns', 'perfectpixel_users_table_columns' );\nadd_filter( 'manage_users_custom_column', 'perfectpixel_users_table_column_value', 10, 3 );\n\nfunction perfectpixel_users_table_columns( $columns ) {\n\tif ( '' !== sanitize_key( '{{users_column_meta_key}}' ) ) {\n\t\t$columns['perfectpixel_meta'] = '{{users_column_meta_label}}';\n\t}\n\t$columns['perfectpixel_orders'] = 'Παραγγελίες';\n\t$columns['perfectpixel_spent']  = 'Σύνολο αγορών';\n\treturn $columns;\n}\n\nfunction perfectpixel_users_table_column_value( $output, $column, $user_id ) {\n\tswitch ( $column ) {\n\t\tcase 'perfectpixel_meta':\n\t\t\treturn esc_html( (string) get_user_meta( $user_id, sanitize_key( '{{users_column_meta_key}}' ), true ) );\n\t\tcase 'perfectpixel_orders':\n\t\t\treturn esc_html( wc_get_customer_order_count( $user_id ) );\n\t\tcase 'perfectpixel_spent':\n\t\t\treturn wp_kses_post( wc_price( wc_get_customer_total_spent( $user_id ) ) );\n\t}\n\treturn $output;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "admin",
+        "users",
+        "customers",
+        "columns"
+    ],
+    "variables": [
+        {
+            "name": "users_column_meta_key",
+            "label": "Πεδίο πελάτη (meta key)",
+            "default": "billing_phone",
+            "description": "Π.χ. billing_phone ή billing_country. Κενό = χωρίς αυτή τη στήλη"
+        },
+        {
+            "name": "users_column_meta_label",
+            "label": "Τίτλος στήλης πεδίου",
+            "default": "Τηλέφωνο",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-column-to-users-dashboard-table/"
+    ],
+    "updated": "2026-11-18T17:59:08+00:00"
+}

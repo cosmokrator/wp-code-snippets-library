@@ -1,0 +1,23 @@
+{
+    "title": "Search admin orders by country code (HPOS)",
+    "description": "Με το HPOS, η αναζήτηση στη λίστα παραγγελιών προσφέρει φίλτρα πεδίων (Όλα, Πελάτες, Προϊόντα…). Το snippet προσθέτει το φίλτρο «Χώρα» ώστε γράφοντας κωδικό χώρας 2 γραμμάτων (π.χ. CY) να βρίσκετε τις παραγγελίες με αυτή τη χώρα χρέωσης ή αποστολής. Στην παλιά αποθήκευση παραγγελιών (posts) δεν κάνει τίποτα.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_hpos_admin_search_filters', 'perfectpixel_order_search_country_option' );\nadd_filter( 'woocommerce_hpos_generate_where_for_search_filter', 'perfectpixel_order_search_country_where', 10, 4 );\n\nfunction perfectpixel_order_search_country_option( $options ) {\n\t$options['perfectpixel_country'] = 'Χώρα (κωδικός 2 γραμμάτων)';\n\treturn $options;\n}\n\nfunction perfectpixel_order_search_country_where( $where, $search_term, $search_filter, $query ) {\n\tglobal $wpdb;\n\tif ( 'perfectpixel_country' !== $search_filter ) {\n\t\treturn $where;\n\t}\n\t$code = strtoupper( substr( preg_replace( '/[^A-Za-z]/', '', (string) $search_term ), 0, 2 ) );\n\tif ( 2 !== strlen( $code ) ) {\n\t\treturn '1=0';\n\t}\n\t$orders    = $query->get_table_name( 'orders' );\n\t$addresses = $query->get_table_name( 'addresses' );\n\treturn $wpdb->prepare( \"{$orders}.id IN ( SELECT order_id FROM {$addresses} WHERE country = %s )\", $code );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "orders",
+        "admin",
+        "search",
+        "hpos"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-search-orders-by-2-letter-country-code-hpos/"
+    ],
+    "updated": "2026-11-18T17:59:08+00:00"
+}

@@ -1,0 +1,22 @@
+{
+    "title": "Remove the \"Payments\" item from the admin menu",
+    "description": "Αφαιρεί το στοιχείο «Πληρωμές» που προσθέτουν οι νεότερες εκδόσεις του WooCommerce στο αριστερό μενού του διαχειριστή (κυρίως για προώθηση του WooPayments). Οι ρυθμίσεις πληρωμών παραμένουν προσβάσιμες από WooCommerce → Ρυθμίσεις → Πληρωμές.",
+    "type": "php",
+    "code": "add_action( 'admin_menu', 'perfectpixel_remove_payments_menu', 999 );\n\nfunction perfectpixel_remove_payments_menu() {\n\tglobal $menu;\n\tif ( ! is_array( $menu ) ) {\n\t\treturn;\n\t}\n\tforeach ( $menu as $item ) {\n\t\t$slug = isset( $item[2] ) ? (string) $item[2] : '';\n\t\tforeach ( array( 'PAYMENTS_MENU_ITEM', 'wc-settings&tab=checkout', 'wc-pay-welcome-page', 'task=payments' ) as $marker ) {\n\t\t\tif ( false !== strpos( $slug, $marker ) ) {\n\t\t\t\tremove_menu_page( $slug );\n\t\t\t\tbreak;\n\t\t\t}\n\t\t}\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "admin",
+        "menu",
+        "payments"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-remove-payments-from-wordpress-sidebar-admin-menu/"
+    ],
+    "updated": "2026-11-18T17:59:08+00:00"
+}

@@ -1,0 +1,22 @@
+{
+    "title": "Helper: check if a customer bought a product in the last X days",
+    "description": "Βοηθητική συνάρτηση για developers: perfectpixel_customer_bought_product_recently( $user_id, $product_id, $days ) επιστρέφει true αν ο πελάτης αγόρασε το προϊόν (ή παραλλαγή του) μέσα στις τελευταίες X ημέρες, π.χ. για ετήσιες άδειες ή συνδρομές χωρίς plugin. Το wc_customer_bought_product του WooCommerce δεν κοιτάζει ημερομηνίες. Δεν εμφανίζει τίποτα μόνο του.",
+    "type": "php",
+    "code": "/**\n * Whether a customer bought a product (or one of its variations) in the last $days days.\n *\n * @param int $user_id    Customer user ID.\n * @param int $product_id Product or variation ID.\n * @param int $days       Number of days to look back.\n * @return bool\n */\nfunction perfectpixel_customer_bought_product_recently( $user_id, $product_id, $days = 365 ) {\n\tif ( ! $user_id || ! $product_id ) {\n\t\treturn false;\n\t}\n\t$orders = wc_get_orders(\n\t\tarray(\n\t\t\t'customer_id'  => (int) $user_id,\n\t\t\t'status'       => wc_get_is_paid_statuses(),\n\t\t\t'date_created' => '>' . ( time() - max( 1, (int) $days ) * DAY_IN_SECONDS ),\n\t\t\t'limit'        => -1,\n\t\t)\n\t);\n\tforeach ( $orders as $order ) {\n\t\tforeach ( $order->get_items() as $item ) {\n\t\t\tif ( (int) $item->get_product_id() === (int) $product_id || (int) $item->get_variation_id() === (int) $product_id ) {\n\t\t\t\treturn true;\n\t\t\t}\n\t\t}\n\t}\n\treturn false;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "development",
+        "customers",
+        "helpers"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-check-user-bought-product-last-365-days/"
+    ],
+    "updated": "2026-11-18T17:59:08+00:00"
+}

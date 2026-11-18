@@ -1,0 +1,35 @@
+{
+    "title": "Add first and last name to the registration form",
+    "description": "Προσθέτει τα πεδία «Όνομα» και «Επώνυμο» (υποχρεωτικά) στη φόρμα εγγραφής του «Ο λογαριασμός μου», που κανονικά ζητά μόνο email (και κωδικό). Τα στοιχεία αποθηκεύονται στον χρήστη και στη διεύθυνση χρέωσης, ώστε να είναι ήδη συμπληρωμένα στο checkout.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_register_form_start', 'perfectpixel_registration_name_fields' );\nadd_filter( 'woocommerce_registration_errors', 'perfectpixel_registration_name_validate', 10, 3 );\nadd_action( 'woocommerce_created_customer', 'perfectpixel_registration_name_save' );\n\nfunction perfectpixel_registration_name_fields() {\n\tforeach ( array( 'billing_first_name' => __( 'First name', 'woocommerce' ), 'billing_last_name' => __( 'Last name', 'woocommerce' ) ) as $key => $label ) {\n\t\t$value = isset( $_POST[ $key ] ) ? sanitize_text_field( wp_unslash( $_POST[ $key ] ) ) : '';\n\t\tprintf(\n\t\t\t'<p class=\"form-row form-row-%1$s\"><label for=\"reg_%2$s\">%3$s <span class=\"required\">*</span></label><input type=\"text\" class=\"input-text\" name=\"%2$s\" id=\"reg_%2$s\" value=\"%4$s\" autocomplete=\"%5$s\" required></p>',\n\t\t\t'billing_first_name' === $key ? 'first' : 'last',\n\t\t\tesc_attr( $key ),\n\t\t\tesc_html( $label ),\n\t\t\tesc_attr( $value ),\n\t\t\t'billing_first_name' === $key ? 'given-name' : 'family-name'\n\t\t);\n\t}\n\techo '<div class=\"clear\"></div>';\n}\n\nfunction perfectpixel_registration_name_validate( $errors, $username, $email ) {\n\tif ( is_checkout() ) {\n\t\treturn $errors; // The checkout has its own name fields.\n\t}\n\tif ( empty( $_POST['billing_first_name'] ) ) {\n\t\t$errors->add( 'billing_first_name_error', '{{reg_first_name_error}}' );\n\t}\n\tif ( empty( $_POST['billing_last_name'] ) ) {\n\t\t$errors->add( 'billing_last_name_error', '{{reg_last_name_error}}' );\n\t}\n\treturn $errors;\n}\n\nfunction perfectpixel_registration_name_save( $customer_id ) {\n\tforeach ( array( 'first_name', 'last_name' ) as $field ) {\n\t\tif ( ! empty( $_POST[ 'billing_' . $field ] ) ) {\n\t\t\t$value = sanitize_text_field( wp_unslash( $_POST[ 'billing_' . $field ] ) );\n\t\t\tupdate_user_meta( $customer_id, $field, $value );\n\t\t\tupdate_user_meta( $customer_id, 'billing_' . $field, $value );\n\t\t}\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "my-account",
+        "registration",
+        "custom-fields"
+    ],
+    "variables": [
+        {
+            "name": "reg_first_name_error",
+            "label": "Μήνυμα αν λείπει το όνομα",
+            "default": "Συμπληρώστε το όνομά σας.",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "reg_last_name_error",
+            "label": "Μήνυμα αν λείπει το επώνυμο",
+            "default": "Συμπληρώστε το επώνυμό σας.",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-first-last-name-account-register-form/"
+    ],
+    "updated": "2026-11-18T17:59:08+00:00"
+}

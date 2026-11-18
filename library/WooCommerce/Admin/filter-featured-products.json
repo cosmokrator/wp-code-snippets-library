@@ -1,0 +1,23 @@
+{
+    "title": "Filter the admin products list by featured",
+    "description": "Στη λίστα Προϊόντα του διαχειριστή, δίπλα στα φίλτρα κατηγορίας/τύπου/αποθέματος, προσθέτει φίλτρο «Προβεβλημένα / Μη προβεβλημένα», ώστε να βλέπετε μαζί όλα τα προϊόντα που έχετε σημειώσει με το αστεράκι.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_products_admin_list_table_filters', 'perfectpixel_featured_filter_register' );\nadd_filter( 'request', 'perfectpixel_featured_filter_query' );\n\nfunction perfectpixel_featured_filter_register( $filters ) {\n\t$filters['perfectpixel_featured'] = 'perfectpixel_featured_filter_select';\n\treturn $filters;\n}\n\nfunction perfectpixel_featured_filter_select() {\n\t$current = isset( $_GET['perfectpixel_featured'] ) ? sanitize_key( $_GET['perfectpixel_featured'] ) : '';\n\techo '<select name=\"perfectpixel_featured\">';\n\tforeach ( array( '' => 'Όλα (προβολή)', 'yes' => 'Προβεβλημένα', 'no' => 'Μη προβεβλημένα' ) as $value => $label ) {\n\t\tprintf( '<option value=\"%s\"%s>%s</option>', esc_attr( $value ), selected( $current, $value, false ), esc_html( $label ) );\n\t}\n\techo '</select>';\n}\n\nfunction perfectpixel_featured_filter_query( $vars ) {\n\tglobal $typenow;\n\tif ( ! is_admin() || 'product' !== $typenow || empty( $_GET['perfectpixel_featured'] ) ) {\n\t\treturn $vars;\n\t}\n\t$vars['tax_query'][] = array(\n\t\t'taxonomy' => 'product_visibility',\n\t\t'field'    => 'name',\n\t\t'terms'    => array( 'featured' ),\n\t\t'operator' => 'yes' === $_GET['perfectpixel_featured'] ? 'IN' : 'NOT IN',\n\t);\n\treturn $vars;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "admin",
+        "products",
+        "featured",
+        "filters"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-filter-by-featured-products-admin/"
+    ],
+    "updated": "2026-11-18T17:59:08+00:00"
+}
