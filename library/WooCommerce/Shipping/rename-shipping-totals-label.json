@@ -1,0 +1,28 @@
+{
+    "title": "Rename the \"Shipping\" label in cart & checkout totals",
+    "description": "Αλλάζει τον τίτλο της γραμμής «Αποστολή» στα σύνολα του καλαθιού και του checkout (π.χ. «Μεταφορικά» ή «Αποστολή & συσκευασία»). Ορίστε το κείμενο στη μεταβλητή. Ισχύει για το κλασικό καλάθι/checkout.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_shipping_package_name', 'perfectpixel_rename_shipping_totals_label', 10, 3 );\n\nfunction perfectpixel_rename_shipping_totals_label( $name, $index, $package ) {\n\t// Keep WooCommerce's numbering when the cart is split in several packages.\n\treturn $index > 0 ? '{{shipping_totals_label}} ' . ( $index + 1 ) : '{{shipping_totals_label}}';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shipping",
+        "texts"
+    ],
+    "variables": [
+        {
+            "name": "shipping_totals_label",
+            "label": "Τίτλος",
+            "default": "Μεταφορικά",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-edit-translate-shipping-handling-cart-checkout-page/"
+    ],
+    "updated": "2026-11-18T10:34:30+00:00"
+}

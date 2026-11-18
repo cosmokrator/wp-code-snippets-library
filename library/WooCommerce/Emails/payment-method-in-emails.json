@@ -1,0 +1,28 @@
+{
+    "title": "Show the payment method below the order table in emails",
+    "description": "Προσθέτει ξεχωριστή γραμμή «Τρόπος πληρωμής: …» κάτω από τον πίνακα προϊόντων στα emails παραγγελιών (HTML και απλού κειμένου), για να φαίνεται καθαρά. Ορίστε την ετικέτα στη μεταβλητή.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_email_after_order_table', 'perfectpixel_payment_method_in_emails', 15, 4 );\n\nfunction perfectpixel_payment_method_in_emails( $order, $sent_to_admin, $plain_text, $email ) {\n\t$title = $order->get_payment_method_title();\n\tif ( '' === (string) $title ) {\n\t\treturn;\n\t}\n\tif ( $plain_text ) {\n\t\techo \"\\n\" . esc_html( '{{email_payment_label}}' ) . ' ' . esc_html( $title ) . \"\\n\";\n\t} else {\n\t\techo '<p><strong>' . esc_html( '{{email_payment_label}}' ) . '</strong> ' . esc_html( $title ) . '</p>';\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "emails",
+        "payment"
+    ],
+    "variables": [
+        {
+            "name": "email_payment_label",
+            "label": "Ετικέτα",
+            "default": "Τρόπος πληρωμής:",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-payment-method-order-emails/"
+    ],
+    "updated": "2026-11-18T10:34:30+00:00"
+}

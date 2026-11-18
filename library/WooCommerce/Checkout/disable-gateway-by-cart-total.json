@@ -1,0 +1,22 @@
+{
+    "title": "Disable payment methods above or below a cart total",
+    "description": "Κρύβει τρόπους πληρωμής ανάλογα με το σύνολο του καλαθιού, π.χ. καμία αντικαταβολή για παραγγελίες πάνω από 500 € ή καμία τραπεζική κατάθεση κάτω από 10 €. Ορίστε τους κανόνες στο $rules: ID τρόπου πληρωμής => [ελάχιστο, μέγιστο] (0 = χωρίς όριο).",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_available_payment_gateways', 'perfectpixel_disable_gateway_by_cart_total' );\n\nfunction perfectpixel_disable_gateway_by_cart_total( $gateways ) {\n\tif ( is_admin() || ! WC()->cart ) {\n\t\treturn $gateways;\n\t}\n\t// Gateway ID => [ minimum total, maximum total ] (0 = no limit). The gateway is shown only inside the range.\n\t$rules = array(\n\t\t'cod'  => array( 0, 500 ),\n\t\t'bacs' => array( 10, 0 ),\n\t);\n\n\t$total = (float) WC()->cart->get_total( 'edit' );\n\tforeach ( $rules as $id => $range ) {\n\t\tlist( $min, $max ) = $range;\n\t\tif ( ( $min > 0 && $total < $min ) || ( $max > 0 && $total > $max ) ) {\n\t\t\tunset( $gateways[ $id ] );\n\t\t}\n\t}\n\treturn $gateways;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "payment",
+        "conditional"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-disable-paypal-orders-100/"
+    ],
+    "updated": "2026-11-18T10:34:30+00:00"
+}

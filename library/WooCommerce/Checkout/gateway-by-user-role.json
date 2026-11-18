@@ -1,0 +1,23 @@
+{
+    "title": "Show or hide payment methods by user role",
+    "description": "Κρύβει τρόπους πληρωμής ανάλογα με τον ρόλο του χρήστη (π.χ. αντικαταβολή μόνο για συνδεδεμένους «Πελάτες», ή τραπεζική κατάθεση/πίστωση μόνο για χονδρεμπόρους). Δύο είδη κανόνων: $hide_for (ρόλος => τρόποι προς απόκρυψη) και $only_for (τρόπος πληρωμής => ρόλοι που τον βλέπουν). Οι επισκέπτες έχουν ρόλο «guest».",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_available_payment_gateways', 'perfectpixel_gateway_by_user_role' );\n\nfunction perfectpixel_gateway_by_user_role( $gateways ) {\n\tif ( is_admin() ) {\n\t\treturn $gateways;\n\t}\n\t// Role => gateway IDs hidden for that role.\n\t$hide_for = array(\n\t\t'guest' => array( 'cod' ),\n\t);\n\t// Gateway ID => roles that can see it (everyone else does not).\n\t$only_for = array(\n\t\t'cheque' => array( 'wholesale_customer', 'administrator' ),\n\t);\n\n\t$user  = wp_get_current_user();\n\t$roles = $user->exists() ? (array) $user->roles : array( 'guest' );\n\n\tforeach ( $roles as $role ) {\n\t\tforeach ( $hide_for[ $role ] ?? array() as $id ) {\n\t\t\tunset( $gateways[ $id ] );\n\t\t}\n\t}\n\tforeach ( $only_for as $id => $allowed_roles ) {\n\t\tif ( ! array_intersect( $roles, $allowed_roles ) ) {\n\t\t\tunset( $gateways[ $id ] );\n\t\t}\n\t}\n\treturn $gateways;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "payment",
+        "roles",
+        "b2b"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/disable-payment-gateway-specific-user-role-woocommerce/"
+    ],
+    "updated": "2026-11-18T10:34:30+00:00"
+}

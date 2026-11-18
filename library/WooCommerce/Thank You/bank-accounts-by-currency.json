@@ -1,0 +1,23 @@
+{
+    "title": "Show only the bank account matching the order currency",
+    "description": "Αν έχετε πολλούς τραπεζικούς λογαριασμούς για την «Τραπεζική κατάθεση» (π.χ. έναν σε EUR κι έναν σε USD), στη σελίδα ευχαριστίας και στα emails εμφανίζεται μόνο ο λογαριασμός που ταιριάζει στο νόμισμα της παραγγελίας. Αντιστοιχίστε στο $by_currency νόμισμα => IBAN (ή αριθμό λογαριασμού). Αν δεν βρεθεί αντιστοίχιση, εμφανίζονται όλοι.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_bacs_accounts', 'perfectpixel_bank_accounts_by_currency', 10, 2 );\n\nfunction perfectpixel_bank_accounts_by_currency( $accounts, $order_id = 0 ) {\n\t// Currency => IBAN or account number of the bank account to show.\n\t$by_currency = array(\n\t\t'EUR' => 'GR0000000000000000000000000',\n\t\t'USD' => 'GB00XXXX00000000000000',\n\t);\n\n\t$order = $order_id ? wc_get_order( $order_id ) : false;\n\tif ( ! $order || empty( $by_currency[ $order->get_currency() ] ) ) {\n\t\treturn $accounts;\n\t}\n\t$wanted = strtoupper( str_replace( ' ', '', $by_currency[ $order->get_currency() ] ) );\n\n\t$filtered = array_filter(\n\t\t(array) $accounts,\n\t\tstatic function ( $account ) use ( $wanted ) {\n\t\t\t$iban   = strtoupper( str_replace( ' ', '', (string) ( $account['iban'] ?? '' ) ) );\n\t\t\t$number = strtoupper( str_replace( ' ', '', (string) ( $account['account_number'] ?? '' ) ) );\n\t\t\treturn $wanted === $iban || $wanted === $number;\n\t\t}\n\t);\n\treturn $filtered ? array_values( $filtered ) : $accounts;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "thank-you",
+        "payment",
+        "bacs",
+        "currency"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-show-hide-bank-accounts-based-on-order/"
+    ],
+    "updated": "2026-11-18T10:34:30+00:00"
+}

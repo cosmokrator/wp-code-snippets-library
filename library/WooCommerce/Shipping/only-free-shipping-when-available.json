@@ -1,0 +1,28 @@
+{
+    "title": "Hide other shipping rates when free shipping is available",
+    "description": "Όταν το καλάθι δικαιούται δωρεάν αποστολή, κρύβονται οι υπόλοιποι (χρεωμένοι) τρόποι αποστολής, ώστε ο πελάτης να μη διαλέξει κατά λάθος πληρωμένη αποστολή. Προαιρετικά κρατά και την παραλαβή από το κατάστημα (μεταβλητή). Λειτουργεί και με το checkout με blocks.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_package_rates', 'perfectpixel_only_free_shipping_when_available', 100 );\n\nfunction perfectpixel_only_free_shipping_when_available( $rates ) {\n\t$keep = array();\n\tforeach ( $rates as $rate_id => $rate ) {\n\t\tif ( 'free_shipping' === $rate->get_method_id() ) {\n\t\t\t$keep[ $rate_id ] = $rate;\n\t\t}\n\t}\n\tif ( ! $keep ) {\n\t\treturn $rates;\n\t}\n\tif ( 'yes' === '{{keep_local_pickup}}' ) {\n\t\tforeach ( $rates as $rate_id => $rate ) {\n\t\t\tif ( in_array( $rate->get_method_id(), array( 'local_pickup', 'pickup_location' ), true ) ) {\n\t\t\t\t$keep[ $rate_id ] = $rate;\n\t\t\t}\n\t\t}\n\t}\n\treturn $keep;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shipping",
+        "free-shipping"
+    ],
+    "variables": [
+        {
+            "name": "keep_local_pickup",
+            "label": "Να μένει και η παραλαβή από το κατάστημα (yes/no)",
+            "default": "yes",
+            "description": ""
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-hide-shipping-options-free-shipping-available/"
+    ],
+    "updated": "2026-11-18T10:34:30+00:00"
+}

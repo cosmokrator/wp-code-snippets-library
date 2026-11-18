@@ -1,0 +1,23 @@
+{
+    "title": "Show or hide payment methods by billing country",
+    "description": "Κρύβει τρόπους πληρωμής ανάλογα με τη χώρα χρέωσης, π.χ. αντικαταβολή μόνο για Ελλάδα και Κύπρο. Η λίστα ενημερώνεται μόλις ο πελάτης αλλάξει χώρα. Ορίστε κανόνες στο $only_in (τρόπος πληρωμής => χώρες όπου εμφανίζεται) και στο $hide_in (τρόπος πληρωμής => χώρες όπου κρύβεται).",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_available_payment_gateways', 'perfectpixel_gateway_by_billing_country' );\n\nfunction perfectpixel_gateway_by_billing_country( $gateways ) {\n\tif ( is_admin() || ! WC()->customer ) {\n\t\treturn $gateways;\n\t}\n\t// Gateway ID => countries where it is shown (hidden everywhere else).\n\t$only_in = array(\n\t\t'cod' => array( 'GR', 'CY' ),\n\t);\n\t// Gateway ID => countries where it is hidden.\n\t$hide_in = array(\n\t\t// 'bacs' => array( 'US' ),\n\t);\n\n\t$country = WC()->customer->get_billing_country();\n\tforeach ( $only_in as $id => $countries ) {\n\t\tif ( $country && ! in_array( $country, $countries, true ) ) {\n\t\t\tunset( $gateways[ $id ] );\n\t\t}\n\t}\n\tforeach ( $hide_in as $id => $countries ) {\n\t\tif ( in_array( $country, $countries, true ) ) {\n\t\t\tunset( $gateways[ $id ] );\n\t\t}\n\t}\n\treturn $gateways;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "payment",
+        "countries",
+        "conditional"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/disable-payment-gateway-specific-country-woocommerce/"
+    ],
+    "updated": "2026-11-18T10:34:30+00:00"
+}

@@ -1,0 +1,21 @@
+{
+    "title": "Prevent the Enter key from submitting the checkout",
+    "description": "Το πλήκτρο Enter μέσα στα πεδία του checkout δεν στέλνει πια την παραγγελία (π.χ. κατά λάθος, πριν ο πελάτης διαλέξει αποστολή ή πληρωμή). Η παραγγελία ολοκληρώνεται μόνο με το κουμπί. Στις περιοχές κειμένου (σημειώσεις) το Enter αλλάζει κανονικά γραμμή. Λειτουργεί με το κλασικό checkout (shortcode)· το checkout με blocks δεν χρησιμοποιεί αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_after_checkout_form', 'perfectpixel_disable_enter_on_checkout' );\n\nfunction perfectpixel_disable_enter_on_checkout() {\n\t?>\n\t<script>\n\tdocument.addEventListener( 'keydown', function ( e ) {\n\t\tif ( 'Enter' !== e.key ) {\n\t\t\treturn;\n\t\t}\n\t\tvar el = e.target;\n\t\tif ( el && el.form && el.form.classList.contains( 'checkout' ) && 'INPUT' === el.tagName && 'submit' !== el.type ) {\n\t\t\te.preventDefault();\n\t\t}\n\t} );\n\t</script>\n\t<?php\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "ux"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-disable-keyboard-checkout-page/"
+    ],
+    "updated": "2026-11-18T10:34:30+00:00"
+}
