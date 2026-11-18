@@ -1,0 +1,22 @@
+{
+    "title": "Show only the price for paid shipping rates",
+    "description": "Στους τρόπους αποστολής με κόστος εμφανίζεται μόνο η τιμή (π.χ. «3,50 €») αντί για «Όνομα μεθόδου: 3,50 €», για πιο καθαρή στοίχιση των συνόλων. Οι δωρεάν μέθοδοι και η παραλαβή κρατούν το όνομά τους. Ισχύει για το κλασικό καλάθι/checkout.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_cart_shipping_method_full_label', 'perfectpixel_hide_shipping_rate_label', 10, 2 );\n\nfunction perfectpixel_hide_shipping_rate_label( $label, $method ) {\n\tif ( (float) $method->get_cost() <= 0 ) {\n\t\treturn $label;\n\t}\n\t$pos = strpos( $label, ':' );\n\treturn false === $pos ? $label : ltrim( substr( $label, $pos + 1 ) );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shipping",
+        "cart",
+        "checkout"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-remove-shipping-labels-cart-checkout-page-e-g-flat-rate/"
+    ],
+    "updated": "2026-11-18T10:05:16+00:00"
+}

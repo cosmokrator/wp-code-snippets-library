@@ -1,0 +1,29 @@
+{
+    "title": "Hide coupon codes in cart & checkout totals",
+    "description": "Στη γραμμή έκπτωσης των συνόλων εμφανίζεται μια γενική ετικέτα (π.χ. «Έκπτωση») αντί για «Κουπόνι: ΚΩΔΙΚΟΣ», ώστε ο κωδικός να μη φαίνεται και να μη μοιράζεται (π.χ. για κουπόνια που εφαρμόζονται αυτόματα). Ορίστε την ετικέτα στη μεταβλητή. Ισχύει για το κλασικό καλάθι/checkout.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_cart_totals_coupon_label', 'perfectpixel_hide_coupon_code_label', 10, 2 );\n\nfunction perfectpixel_hide_coupon_code_label( $label, $coupon ) {\n\treturn esc_html( '{{coupon_generic_label}}' );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "coupons",
+        "cart",
+        "checkout"
+    ],
+    "variables": [
+        {
+            "name": "coupon_generic_label",
+            "label": "Ετικέτα",
+            "default": "Έκπτωση",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-hide-coupon-code-cartcheckout-page/"
+    ],
+    "updated": "2026-11-18T10:05:16+00:00"
+}

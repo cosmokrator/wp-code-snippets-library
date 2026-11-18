@@ -1,0 +1,29 @@
+{
+    "title": "Redirect to a custom thank you page",
+    "description": "Μετά την παραγγελία ο πελάτης μεταφέρεται σε δική σας σελίδα ευχαριστίας (π.χ. με προσφορές, social, οδηγίες) αντί για την προεπιλεγμένη. Στη σελίδα περνούν ο αριθμός και το κλειδί της παραγγελίας (order, key), ώστε να μπορείτε να τη δείξετε. Η ανακατεύθυνση γίνεται πριν φορτώσει η σελίδα, οπότε δουλεύει αξιόπιστα. Ορίστε το ID της σελίδας στη μεταβλητή.",
+    "type": "php",
+    "code": "add_action( 'template_redirect', 'perfectpixel_custom_thank_you_redirect' );\n\nfunction perfectpixel_custom_thank_you_redirect() {\n\t$page_id = (int) '{{thank_you_page_id}}';\n\tif ( ! $page_id || ! function_exists( 'is_wc_endpoint_url' ) || ! is_wc_endpoint_url( 'order-received' ) ) {\n\t\treturn;\n\t}\n\t$order_id = absint( get_query_var( 'order-received' ) );\n\t$order    = $order_id ? wc_get_order( $order_id ) : false;\n\t$key      = isset( $_GET['key'] ) ? wc_clean( wp_unslash( $_GET['key'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification\n\n\tif ( ! $order || ! hash_equals( $order->get_order_key(), $key ) || $order->has_status( 'failed' ) ) {\n\t\treturn; // Failed payments keep the default page with the \"pay again\" options.\n\t}\n\twp_safe_redirect(\n\t\tadd_query_arg(\n\t\t\tarray(\n\t\t\t\t'order' => $order->get_id(),\n\t\t\t\t'key'   => $order->get_order_key(),\n\t\t\t),\n\t\t\tget_permalink( $page_id )\n\t\t)\n\t);\n\texit;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "thank-you",
+        "redirect"
+    ],
+    "variables": [
+        {
+            "name": "thank_you_page_id",
+            "label": "ID σελίδας ευχαριστίας",
+            "default": "0",
+            "description": "Μόνο αριθμός"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/resolved-woocommerce-redirect-custom-thank-page/"
+    ],
+    "updated": "2026-11-18T10:05:16+00:00"
+}

@@ -1,0 +1,22 @@
+{
+    "title": "Add HTML/JavaScript to the checkout page only",
+    "description": "Πρότυπο για κώδικα τρίτων (π.χ. σφραγίδα SSL, chat, script μετατροπών) που πρέπει να φορτώνει μόνο στο checkout, όχι στη σελίδα ευχαριστίας ή πληρωμής παραγγελίας. Επικολλήστε τον κώδικα στη θέση του παραδείγματος, ανάμεσα στις γραμμές HTML.",
+    "type": "php",
+    "code": "add_action( 'wp_footer', 'perfectpixel_scripts_on_checkout_only' );\n\nfunction perfectpixel_scripts_on_checkout_only() {\n\tif ( ! function_exists( 'is_checkout' ) || ! is_checkout() || is_wc_endpoint_url() ) {\n\t\treturn;\n\t}\n\t// Paste your HTML / <script> code between the two HTML lines.\n\techo <<<'HTML'\n<!-- Example: replace with your own code -->\n<script>\n\tconsole.log( 'Checkout page loaded' );\n</script>\nHTML;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "scripts",
+        "template"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-html-javascript-checkout-page/"
+    ],
+    "updated": "2026-11-18T10:05:16+00:00"
+}

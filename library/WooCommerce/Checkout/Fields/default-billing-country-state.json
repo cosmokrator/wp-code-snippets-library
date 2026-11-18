@@ -1,0 +1,35 @@
+{
+    "title": "Set the default billing country and state",
+    "description": "Προεπιλέγει χώρα και νομό χρέωσης στο checkout όταν ο πελάτης δεν έχει ήδη αποθηκευμένα (π.χ. Ελλάδα / Αττική), ώστε να γλιτώνει χρόνο. Αφήστε τον νομό κενό αν δεν θέλετε προεπιλογή νομού. Ορίστε τους κωδικούς στις μεταβλητές. Λειτουργεί με το κλασικό checkout (shortcode)· το checkout με blocks δεν χρησιμοποιεί αυτό το hook.",
+    "type": "php",
+    "code": "add_filter( 'default_checkout_billing_country', 'perfectpixel_default_billing_country' );\nadd_filter( 'default_checkout_billing_state', 'perfectpixel_default_billing_state' );\n\nfunction perfectpixel_default_billing_country( $country ) {\n\treturn $country ? $country : strtoupper( '{{default_country}}' );\n}\n\nfunction perfectpixel_default_billing_state( $state ) {\n\treturn $state ? $state : strtoupper( '{{default_state}}' );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "checkout-fields",
+        "address"
+    ],
+    "variables": [
+        {
+            "name": "default_country",
+            "label": "Χώρα (ISO)",
+            "default": "GR",
+            "description": ""
+        },
+        {
+            "name": "default_state",
+            "label": "Νομός (κωδικός WooCommerce)",
+            "default": "I",
+            "description": "Για την Ελλάδα: I = Αττική. Κενό = χωρίς προεπιλογή"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-set-default-state-checkout-page/"
+    ],
+    "updated": "2026-11-18T10:05:16+00:00"
+}

@@ -1,0 +1,22 @@
+{
+    "title": "Sort shipping rates from cheapest to most expensive",
+    "description": "Ταξινομεί τους διαθέσιμους τρόπους αποστολής από τον φθηνότερο στον ακριβότερο (π.χ. όταν έρχονται από διαφορετικές courier/plugins και εμφανίζονται ανακατεμένοι). Λειτουργεί και με το checkout με blocks. Αν δεν δείτε αλλαγή, αλλάξτε κάτι στο καλάθι (τα μεταφορικά κρατιούνται σε cache).",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_package_rates', 'perfectpixel_sort_shipping_rates_by_cost', 9999 );\n\nfunction perfectpixel_sort_shipping_rates_by_cost( $rates ) {\n\tif ( count( $rates ) < 2 ) {\n\t\treturn $rates;\n\t}\n\tuasort(\n\t\t$rates,\n\t\tstatic function ( $a, $b ) {\n\t\t\t$cost_a = (float) $a->get_cost() + array_sum( (array) $a->get_taxes() );\n\t\t\t$cost_b = (float) $b->get_cost() + array_sum( (array) $b->get_taxes() );\n\t\t\treturn $cost_a <=> $cost_b;\n\t\t}\n\t);\n\treturn $rates;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shipping",
+        "cart",
+        "checkout"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-sort-shipping-costs-low-high/"
+    ],
+    "updated": "2026-11-18T10:05:16+00:00"
+}
