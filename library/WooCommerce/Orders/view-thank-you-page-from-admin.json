@@ -1,0 +1,29 @@
+{
+    "title": "Open the customer thank you page from the order screen",
+    "description": "Προσθέτει την ενέργεια «Προβολή σελίδας ευχαριστίας» στη λίστα «Ενέργειες παραγγελίας» της σελίδας παραγγελίας στη διαχείριση, ώστε να ανοίγετε τη σελίδα ευχαριστίας μιας παραγγελίας χωρίς να φτιάχνετε το URL με το χέρι ή να κάνετε δοκιμαστικές παραγγελίες. Ορίστε το κείμενο στη μεταβλητή.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_order_actions', 'perfectpixel_order_action_view_thankyou' );\nadd_action( 'woocommerce_order_action_perfectpixel_view_thankyou', 'perfectpixel_order_action_view_thankyou_run' );\n\nfunction perfectpixel_order_action_view_thankyou( $actions ) {\n\t$actions['perfectpixel_view_thankyou'] = '{{view_thankyou_label}}';\n\treturn $actions;\n}\n\nfunction perfectpixel_order_action_view_thankyou_run( $order ) {\n\t// The order is saved first; redirect once WooCommerce finishes the request.\n\tadd_filter(\n\t\t'redirect_post_location',\n\t\tstatic function () use ( $order ) {\n\t\t\treturn $order->get_checkout_order_received_url();\n\t\t}\n\t);\n\tadd_filter(\n\t\t'woocommerce_redirect_order_location',\n\t\tstatic function () use ( $order ) {\n\t\t\treturn $order->get_checkout_order_received_url();\n\t\t}\n\t);\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "orders",
+        "admin",
+        "thank-you"
+    ],
+    "variables": [
+        {
+            "name": "view_thankyou_label",
+            "label": "Κείμενο ενέργειας",
+            "default": "Προβολή σελίδας ευχαριστίας",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-view-thank-you-page-order-admin/"
+    ],
+    "updated": "2026-11-18T10:53:18+00:00"
+}

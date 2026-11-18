@@ -1,0 +1,35 @@
+{
+    "title": "\"Share your purchase\" buttons on the thank you page",
+    "description": "Εμφανίζει κουμπιά κοινοποίησης στο X (Twitter) και στο Facebook στη σελίδα ευχαριστίας, με έτοιμο κείμενο που περιλαμβάνει τα προϊόντα της παραγγελίας και σύνδεσμο στο κατάστημα. Ορίστε τίτλο και κείμενο στις μεταβλητές (%s = προϊόντα).",
+    "type": "php",
+    "code": "add_action( 'woocommerce_thankyou', 'perfectpixel_share_purchase_buttons', 15 );\n\nfunction perfectpixel_share_purchase_buttons( $order_id ) {\n\t$order = wc_get_order( $order_id );\n\tif ( ! $order || $order->has_status( 'failed' ) ) {\n\t\treturn;\n\t}\n\t$names = array();\n\tforeach ( $order->get_items() as $item ) {\n\t\t$names[] = $item->get_name();\n\t}\n\t$text = sprintf( '{{share_text}}', implode( ', ', array_slice( $names, 0, 3 ) ) );\n\t$url  = home_url( '/' );\n\n\t$x  = add_query_arg( array( 'text' => rawurlencode( $text ), 'url' => rawurlencode( $url ) ), 'https://x.com/intent/tweet' );\n\t$fb = add_query_arg( 'u', rawurlencode( $url ), 'https://www.facebook.com/sharer/sharer.php' );\n\n\tprintf(\n\t\t'<section class=\"perfectpixel-share-purchase\" style=\"margin:2em 0\"><h2>%1$s</h2><p><a class=\"button\" href=\"%2$s\" target=\"_blank\" rel=\"noopener\">X</a> <a class=\"button\" href=\"%3$s\" target=\"_blank\" rel=\"noopener\">Facebook</a></p></section>',\n\t\tesc_html( '{{share_title}}' ),\n\t\tesc_url( $x ),\n\t\tesc_url( $fb )\n\t);\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "thank-you",
+        "social",
+        "marketing"
+    ],
+    "variables": [
+        {
+            "name": "share_title",
+            "label": "Τίτλος",
+            "default": "Πείτε το στους φίλους σας!",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "share_text",
+            "label": "Κείμενο κοινοποίησης",
+            "default": "Μόλις αγόρασα %s!",
+            "description": "%s = ονόματα προϊόντων. Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-share-purchase-twitter-thank-page/"
+    ],
+    "updated": "2026-11-18T10:53:18+00:00"
+}

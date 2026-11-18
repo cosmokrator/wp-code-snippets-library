@@ -1,0 +1,23 @@
+{
+    "title": "Add conversion tracking code to the thank you page",
+    "description": "Πρότυπο για κώδικα μετατροπών (Google Ads, Meta, affiliate κ.λπ.) στη σελίδα ευχαριστίας, με έτοιμες τις τιμές της παραγγελίας (αριθμός, σύνολο, νόμισμα) σε JavaScript. Τρέχει μόνο μία φορά ανά παραγγελία (όχι ξανά σε ανανέωση της σελίδας) και ποτέ για αποτυχημένες πληρωμές. Επικολλήστε τον κώδικά σας στη θέση του παραδείγματος.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_thankyou', 'perfectpixel_conversion_tracking_code', 20 );\n\nfunction perfectpixel_conversion_tracking_code( $order_id ) {\n\t$order = wc_get_order( $order_id );\n\tif ( ! $order || $order->has_status( 'failed' ) || $order->get_meta( '_perfectpixel_conversion_tracked' ) ) {\n\t\treturn;\n\t}\n\t$order->update_meta_data( '_perfectpixel_conversion_tracked', 1 );\n\t$order->save();\n\n\t$data = array(\n\t\t'id'       => $order->get_order_number(),\n\t\t'total'    => (float) $order->get_total(),\n\t\t'currency' => $order->get_currency(),\n\t);\n\techo '<script>window.perfectpixelOrder = ' . wp_json_encode( $data ) . ';</script>';\n\n\t// Paste your tracking code between the two HTML lines. Use perfectpixelOrder.total etc.\n\techo <<<'HTML'\n<script>\n\t// Example: gtag( 'event', 'conversion', { send_to: 'AW-XXXX/YYYY', value: perfectpixelOrder.total, currency: perfectpixelOrder.currency, transaction_id: perfectpixelOrder.id } );\n\tconsole.log( 'Order tracked', window.perfectpixelOrder );\n</script>\nHTML;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "thank-you",
+        "tracking",
+        "analytics",
+        "template"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-conversion-tracking-code-thank-page/"
+    ],
+    "updated": "2026-11-18T10:53:18+00:00"
+}

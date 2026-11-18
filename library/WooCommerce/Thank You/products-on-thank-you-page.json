@@ -1,0 +1,35 @@
+{
+    "title": "Show products (e.g. best sellers) on the thank you page",
+    "description": "Εμφανίζει μια λίστα προϊόντων κάτω από τα στοιχεία της παραγγελίας στη σελίδα ευχαριστίας (π.χ. τα πιο δημοφιλή ή μια κατηγορία), για επόμενη αγορά. Χρησιμοποιεί το shortcode [products] του WooCommerce, οπότε μπορείτε να αλλάξετε όριο, στήλες, κατηγορία κ.λπ. Ορίστε τίτλο και shortcode στις μεταβλητές.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_thankyou', 'perfectpixel_products_on_thank_you_page', 20 );\n\nfunction perfectpixel_products_on_thank_you_page( $order_id ) {\n\t$order = wc_get_order( $order_id );\n\tif ( ! $order || $order->has_status( 'failed' ) ) {\n\t\treturn;\n\t}\n\techo '<section class=\"perfectpixel-thankyou-products\"><h2>' . esc_html( '{{thankyou_products_title}}' ) . '</h2>';\n\techo do_shortcode( '{{thankyou_products_shortcode}}' ); // phpcs:ignore WordPress.Security.EscapeOutput\n\techo '</section>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "thank-you",
+        "upsell",
+        "products"
+    ],
+    "variables": [
+        {
+            "name": "thankyou_products_title",
+            "label": "Τίτλος",
+            "default": "Μπορεί να σας ενδιαφέρουν",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "thankyou_products_shortcode",
+            "label": "Shortcode",
+            "default": "[products limit=\"4\" columns=\"4\" best_selling=\"true\"]",
+            "description": "π.χ. [products limit=\"4\" category=\"accessories\"]. Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-display-product-up-sells-thank-you-page/"
+    ],
+    "updated": "2026-11-18T10:53:18+00:00"
+}

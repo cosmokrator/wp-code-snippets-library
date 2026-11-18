@@ -1,0 +1,28 @@
+{
+    "title": "Include a WordPress page inside the thank you page",
+    "description": "Ενσωματώνει το περιεχόμενο μιας σελίδας WordPress (που φτιάχνετε με τον editor ή page builder) μέσα στην κανονική σελίδα ευχαριστίας, χωρίς ανακατεύθυνση, ώστε να συνεχίζουν να λειτουργούν τα tracking και οι πληρωμές. Ορίστε το ID της σελίδας στη μεταβλητή.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_thankyou', 'perfectpixel_include_page_in_thank_you', 5 );\n\nfunction perfectpixel_include_page_in_thank_you( $order_id ) {\n\t$page = get_post( (int) '{{thankyou_page_content_id}}' );\n\tif ( ! $page || 'publish' !== $page->post_status ) {\n\t\treturn;\n\t}\n\techo '<div class=\"perfectpixel-thankyou-content\">' . apply_filters( 'the_content', $page->post_content ) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput -- Page content.\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "thank-you",
+        "content"
+    ],
+    "variables": [
+        {
+            "name": "thankyou_page_content_id",
+            "label": "ID σελίδας",
+            "default": "0",
+            "description": "Μόνο αριθμός"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-include-custom-wp-page-thank-you-page/"
+    ],
+    "updated": "2026-11-18T10:53:18+00:00"
+}

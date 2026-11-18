@@ -1,0 +1,22 @@
+{
+    "title": "Don't run thank you page tracking when the payment failed",
+    "description": "Όταν η πληρωμή αποτυγχάνει, ο πελάτης βλέπει πάλι τη σελίδα ευχαριστίας (με επιλογή να ξαναπληρώσει) και πολλά plugins μετρούν λανθασμένα μετατροπή ή προμήθεια affiliate. Για αποτυχημένες παραγγελίες αυτό το snippet δεν εκτελεί τον κώδικα τρίτων της σελίδας ευχαριστίας· τα στοιχεία της παραγγελίας εξακολουθούν να εμφανίζονται.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_before_thankyou', 'perfectpixel_no_tracking_on_failed_orders', 1 );\n\nfunction perfectpixel_no_tracking_on_failed_orders( $order_id ) {\n\t$order = wc_get_order( $order_id );\n\tif ( ! $order || ! $order->has_status( 'failed' ) ) {\n\t\treturn;\n\t}\n\t// Remove third-party callbacks, keep WooCommerce's own order details.\n\tremove_all_actions( 'woocommerce_thankyou' );\n\tremove_all_actions( 'woocommerce_thankyou_' . $order->get_payment_method() );\n\tadd_action( 'woocommerce_thankyou', 'woocommerce_order_details_table', 10 );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "thank-you",
+        "tracking",
+        "analytics"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-disable-tracking-if-order-failed-thank-you-page/"
+    ],
+    "updated": "2026-11-18T10:53:18+00:00"
+}

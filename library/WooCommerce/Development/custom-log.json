@@ -1,0 +1,21 @@
+{
+    "title": "Write your own WooCommerce logs",
+    "description": "Βοηθητική συνάρτηση perfectpixel_log() που γράφει μηνύματα σε δικό σας αρχείο καταγραφής του WooCommerce (WooCommerce → Κατάσταση → Αρχεία καταγραφής), για αποσφαλμάτωση ή καταγραφή γεγονότων. Ως παράδειγμα καταγράφει κάθε αποθήκευση προϊόντος από τη διαχείριση (ποιος και πότε).",
+    "type": "php",
+    "code": "add_action( 'woocommerce_update_product', 'perfectpixel_log_product_update' );\n\n/**\n * Write a line to the \"perfectpixel\" WooCommerce log. Levels: debug, info, notice, warning, error.\n */\nfunction perfectpixel_log( $message, $level = 'info', $source = 'perfectpixel' ) {\n\tif ( ! function_exists( 'wc_get_logger' ) ) {\n\t\treturn;\n\t}\n\tif ( ! is_string( $message ) ) {\n\t\t$message = wp_json_encode( $message );\n\t}\n\twc_get_logger()->log( $level, $message, array( 'source' => $source ) );\n}\n\n// Example: who edited which product.\nfunction perfectpixel_log_product_update( $product_id ) {\n\t$user = wp_get_current_user();\n\tperfectpixel_log( sprintf( 'Product #%d updated by %s', $product_id, $user->exists() ? $user->user_login : 'system' ) );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "development",
+        "logs"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-create-custom-logs/"
+    ],
+    "updated": "2026-11-18T10:53:18+00:00"
+}

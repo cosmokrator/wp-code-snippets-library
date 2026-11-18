@@ -1,0 +1,22 @@
+{
+    "title": "Remove product links from the order table",
+    "description": "Τα ονόματα προϊόντων στον πίνακα παραγγελίας (σελίδα ευχαριστίας, προβολή παραγγελίας και emails) γίνονται απλό κείμενο αντί για συνδέσμους, ώστε ο πελάτης να μη φεύγει από τη σελίδα ευχαριστίας πριν δει τις προσφορές/ενέργειες που θέλετε.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_order_item_permalink', '__return_false' );",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "thank-you",
+        "orders",
+        "emails"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-remove-permalink-product-order-table/"
+    ],
+    "updated": "2026-11-18T10:53:18+00:00"
+}

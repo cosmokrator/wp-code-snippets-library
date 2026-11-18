@@ -1,0 +1,22 @@
+{
+    "title": "Hide \"via [shipping method]\" next to the shipping cost",
+    "description": "Αφαιρεί την ένδειξη «μέσω [τρόπος αποστολής]» δίπλα στο κόστος αποστολής στη σελίδα ευχαριστίας, στην προβολή παραγγελίας του «Ο λογαριασμός μου» και στα emails.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_order_shipping_to_display_shipped_via', '__return_empty_string' );",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "thank-you",
+        "shipping",
+        "orders"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-hide-shipping-via/"
+    ],
+    "updated": "2026-11-18T10:53:18+00:00"
+}

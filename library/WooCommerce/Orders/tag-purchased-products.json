@@ -1,0 +1,29 @@
+{
+    "title": "Automatically tag products when they are purchased",
+    "description": "Προσθέτει μια ετικέτα προϊόντος (π.χ. «Πουλήθηκε») σε κάθε προϊόν μόλις πληρωθεί μια παραγγελία που το περιέχει, για να ξεχωρίζετε τα προϊόντα που έχουν πουληθεί (π.χ. για προσφορές ή λίστες). Η ετικέτα δημιουργείται αν δεν υπάρχει. Γίνεται με την πληρωμή, όχι με την προβολή της σελίδας ευχαριστίας. Ορίστε το όνομα της ετικέτας στη μεταβλητή.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_payment_complete', 'perfectpixel_tag_purchased_products' );\nadd_action( 'woocommerce_order_status_completed', 'perfectpixel_tag_purchased_products' );\n\nfunction perfectpixel_tag_purchased_products( $order_id ) {\n\t$order = wc_get_order( $order_id );\n\tif ( ! $order || $order->get_meta( '_perfectpixel_products_tagged' ) ) {\n\t\treturn;\n\t}\n\tforeach ( $order->get_items() as $item ) {\n\t\t$product_id = $item->get_product_id();\n\t\tif ( $product_id ) {\n\t\t\twp_set_object_terms( $product_id, '{{purchased_tag}}', 'product_tag', true );\n\t\t}\n\t}\n\t$order->update_meta_data( '_perfectpixel_products_tagged', 1 );\n\t$order->save();\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "orders",
+        "products",
+        "tags"
+    ],
+    "variables": [
+        {
+            "name": "purchased_tag",
+            "label": "Ετικέτα προϊόντος",
+            "default": "Πουλήθηκε",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-automatically-tag-purchased-products/"
+    ],
+    "updated": "2026-11-18T10:53:18+00:00"
+}
