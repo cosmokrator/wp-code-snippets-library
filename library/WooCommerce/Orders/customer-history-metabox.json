@@ -1,0 +1,30 @@
+{
+    "title": "Show the customer order history on the order edit screen",
+    "description": "Στη σελίδα επεξεργασίας παραγγελίας προσθέτει πλαίσιο «Ιστορικό πελάτη» με τις προηγούμενες παραγγελίες του ίδιου πελάτη (με λογαριασμό ή με το ίδιο email χρέωσης): αριθμός, ημερομηνία, κατάσταση και σύνολο, με συνδέσμους. Βοηθά στην εξυπηρέτηση χωρίς να ψάχνετε στη λίστα παραγγελιών. Λειτουργεί και με HPOS.",
+    "type": "php",
+    "code": "add_action( 'add_meta_boxes', 'perfectpixel_customer_history_metabox' );\n\nfunction perfectpixel_customer_history_metabox() {\n\t$screen = function_exists( 'wc_get_page_screen_id' ) ? wc_get_page_screen_id( 'shop-order' ) : 'shop_order';\n\tadd_meta_box( 'perfectpixel_customer_history', 'Ιστορικό πελάτη', 'perfectpixel_customer_history_render', $screen, 'side', 'low' );\n}\n\nfunction perfectpixel_customer_history_render( $post_or_order ) {\n\t$order = $post_or_order instanceof WC_Order ? $post_or_order : wc_get_order( $post_or_order->ID );\n\tif ( ! $order ) {\n\t\treturn;\n\t}\n\t$args = array(\n\t\t'limit'   => max( 1, (int) '{{customer_history_limit}}' ),\n\t\t'exclude' => array( $order->get_id() ),\n\t\t'type'    => 'shop_order',\n\t\t'orderby' => 'date',\n\t\t'order'   => 'DESC',\n\t);\n\tif ( $order->get_customer_id() ) {\n\t\t$args['customer_id'] = $order->get_customer_id();\n\t} elseif ( $order->get_billing_email() ) {\n\t\t$args['billing_email'] = $order->get_billing_email();\n\t} else {\n\t\treturn;\n\t}\n\t$orders = wc_get_orders( $args );\n\tif ( ! $orders ) {\n\t\techo '<p>Δεν υπάρχουν άλλες παραγγελίες από αυτόν τον πελάτη.</p>';\n\t\treturn;\n\t}\n\techo '<ul style=\"margin:0\">';\n\tforeach ( $orders as $past ) {\n\t\tprintf(\n\t\t\t'<li><a href=\"%s\">#%s</a> · %s · %s · %s</li>',\n\t\t\tesc_url( $past->get_edit_order_url() ),\n\t\t\tesc_html( $past->get_order_number() ),\n\t\t\tesc_html( wc_format_datetime( $past->get_date_created() ) ),\n\t\t\tesc_html( wc_get_order_status_name( $past->get_status() ) ),\n\t\t\twp_kses_post( $past->get_formatted_order_total() )\n\t\t);\n\t}\n\techo '</ul>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "orders",
+        "admin",
+        "customers",
+        "meta-box"
+    ],
+    "variables": [
+        {
+            "name": "customer_history_limit",
+            "label": "Μέγιστος αριθμός παραγγελιών",
+            "default": "10",
+            "description": "Μόνο αριθμός"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-view-customer-order-history-on-single-order-admin-page/"
+    ],
+    "updated": "2026-11-18T17:39:20+00:00"
+}

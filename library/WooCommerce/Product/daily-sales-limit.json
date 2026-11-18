@@ -1,0 +1,35 @@
+{
+    "title": "Limit how many units of a product can be sold per day",
+    "description": "Ορίζει μέγιστο αριθμό τεμαχίων που μπορούν να πουληθούν ανά ημέρα για επιλεγμένα προϊόντα (π.χ. 20 ημερήσιες μερίδες, 5 ραντεβού), ανεξάρτητα από το απόθεμα. Όταν συμπληρωθεί το όριο, το προϊόν γίνεται μη διαθέσιμο μέχρι την επόμενη μέρα. Μετρώνται οι παραγγελίες σε επεξεργασία, σε αναμονή και ολοκληρωμένες.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_is_purchasable', 'perfectpixel_daily_sales_limit', 40, 2 );\nadd_action( 'woocommerce_new_order', 'perfectpixel_daily_sales_flush' );\nadd_action( 'woocommerce_order_status_changed', 'perfectpixel_daily_sales_flush' );\n\nfunction perfectpixel_daily_sold_today( $product_id ) {\n\t$key  = 'perfectpixel_daily_sold_' . $product_id . '_' . current_time( 'Ymd' );\n\t$sold = get_transient( $key );\n\tif ( false === $sold ) {\n\t\t$sold   = 0;\n\t\t$orders = wc_get_orders(\n\t\t\tarray(\n\t\t\t\t'status'       => array( 'processing', 'on-hold', 'completed' ),\n\t\t\t\t'date_created' => '>=' . strtotime( current_time( 'Y-m-d' ) . ' 00:00:00 ' . wp_timezone_string() ),\n\t\t\t\t'limit'        => -1,\n\t\t\t\t'type'         => 'shop_order',\n\t\t\t)\n\t\t);\n\t\tforeach ( $orders as $order ) {\n\t\t\tforeach ( $order->get_items() as $item ) {\n\t\t\t\tif ( (int) $item->get_product_id() === (int) $product_id ) {\n\t\t\t\t\t$sold += (int) $item->get_quantity();\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\tset_transient( $key, $sold, 5 * MINUTE_IN_SECONDS );\n\t}\n\treturn (int) $sold;\n}\n\nfunction perfectpixel_daily_sales_limit( $purchasable, $product ) {\n\t$id = $product->get_parent_id() ? $product->get_parent_id() : $product->get_id();\n\tif ( ! $purchasable || is_admin() || ! in_array( $id, wp_parse_id_list( '{{daily_limit_product_ids}}' ), true ) ) {\n\t\treturn $purchasable;\n\t}\n\treturn perfectpixel_daily_sold_today( $id ) < max( 1, (int) '{{daily_limit_qty}}' );\n}\n\nfunction perfectpixel_daily_sales_flush() {\n\tforeach ( wp_parse_id_list( '{{daily_limit_product_ids}}' ) as $id ) {\n\t\tdelete_transient( 'perfectpixel_daily_sold_' . $id . '_' . current_time( 'Ymd' ) );\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "products",
+        "limits",
+        "stock"
+    ],
+    "variables": [
+        {
+            "name": "daily_limit_product_ids",
+            "label": "IDs προϊόντων (με κόμμα)",
+            "default": "",
+            "description": "Υποχρεωτικό"
+        },
+        {
+            "name": "daily_limit_qty",
+            "label": "Μέγιστα τεμάχια ανά ημέρα",
+            "default": "20",
+            "description": "Μόνο αριθμός"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-limit-sales-per-day/"
+    ],
+    "updated": "2026-11-18T17:39:20+00:00"
+}

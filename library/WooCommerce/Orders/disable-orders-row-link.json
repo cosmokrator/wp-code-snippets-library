@@ -1,0 +1,22 @@
+{
+    "title": "Stop order rows from being clickable in the admin list",
+    "description": "Στη λίστα παραγγελιών του διαχειριστή, ολόκληρη η γραμμή κάθε παραγγελίας είναι σύνδεσμος, οπότε όταν προσπαθείτε να επιλέξετε κείμενο (π.χ. διεύθυνση για αντιγραφή) ανοίγει η παραγγελία. Το snippet το απενεργοποιεί· η παραγγελία ανοίγει από τον αριθμό της. Λειτουργεί και με HPOS.",
+    "type": "php",
+    "code": "add_filter( 'post_class', 'perfectpixel_orders_row_no_link', 10, 3 );\nadd_filter( 'woocommerce_shop_order_list_table_order_css_classes', 'perfectpixel_orders_row_no_link_hpos' );\n\n// WooCommerce's list table script skips rows with the \"no-link\" class.\nfunction perfectpixel_orders_row_no_link( $classes, $class, $post_id ) {\n\tif ( is_admin() && 'shop_order' === get_post_type( $post_id ) ) {\n\t\t$classes[] = 'no-link';\n\t}\n\treturn $classes;\n}\n\nfunction perfectpixel_orders_row_no_link_hpos( $classes ) {\n\t$classes[] = 'no-link';\n\treturn $classes;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "orders",
+        "admin",
+        "ux"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-disable-orders-table-row-link/"
+    ],
+    "updated": "2026-11-18T17:39:20+00:00"
+}

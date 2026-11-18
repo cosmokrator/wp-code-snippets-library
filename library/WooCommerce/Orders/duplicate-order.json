@@ -1,0 +1,22 @@
+{
+    "title": "Duplicate an order from the order edit screen",
+    "description": "Στη σελίδα επεξεργασίας παραγγελίας, στη λίστα «Ενέργειες παραγγελίας», προσθέτει «Δημιουργία αντιγράφου». Δημιουργεί νέα παραγγελία «Εκκρεμεί πληρωμή» με τον ίδιο πελάτη, τις ίδιες διευθύνσεις, τα ίδια προϊόντα, μεταφορικά και χρεώσεις, και σημειώνει και στις δύο τον σύνδεσμο μεταξύ τους. Χρήσιμο για επαναλαμβανόμενες παραγγελίες B2B ή τηλεφωνικές παραγγελίες.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_order_actions', 'perfectpixel_duplicate_order_action' );\nadd_action( 'woocommerce_order_action_perfectpixel_duplicate', 'perfectpixel_duplicate_order' );\n\nfunction perfectpixel_duplicate_order_action( $actions ) {\n\t$actions['perfectpixel_duplicate'] = 'Δημιουργία αντιγράφου παραγγελίας';\n\treturn $actions;\n}\n\nfunction perfectpixel_duplicate_order( $order ) {\n\t$copy = wc_create_order(\n\t\tarray(\n\t\t\t'customer_id' => $order->get_customer_id(),\n\t\t\t'created_via' => 'perfectpixel_duplicate',\n\t\t)\n\t);\n\tif ( is_wp_error( $copy ) ) {\n\t\treturn;\n\t}\n\t$copy->set_address( $order->get_address( 'billing' ), 'billing' );\n\t$copy->set_address( $order->get_address( 'shipping' ), 'shipping' );\n\t$copy->set_currency( $order->get_currency() );\n\t$copy->set_prices_include_tax( $order->get_prices_include_tax() );\n\t$copy->set_customer_note( $order->get_customer_note() );\n\n\tforeach ( $order->get_items( array( 'line_item', 'shipping', 'fee' ) ) as $item ) {\n\t\t// A fresh item of the same class, so no database rows of the original are reused.\n\t\t$class = get_class( $item );\n\t\t$new   = new $class();\n\t\t$data  = $item->get_data();\n\t\tunset( $data['id'], $data['order_id'], $data['meta_data'] );\n\t\t$new->set_props( $data );\n\t\tforeach ( $item->get_meta_data() as $meta ) {\n\t\t\t$new->add_meta_data( $meta->key, $meta->value, false );\n\t\t}\n\t\t$copy->add_item( $new );\n\t}\n\t$copy->calculate_totals();\n\t$copy->set_status( 'pending' );\n\t$copy->add_order_note( sprintf( 'Αντίγραφο της παραγγελίας #%s.', $order->get_order_number() ) );\n\t$copy->save();\n\n\t$order->add_order_note( sprintf( 'Δημιουργήθηκε αντίγραφο: #%1$s (%2$s)', $copy->get_order_number(), $copy->get_edit_order_url() ) );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "orders",
+        "admin",
+        "duplicate"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-duplicate-order-wordpress-dashboard/"
+    ],
+    "updated": "2026-11-18T17:39:20+00:00"
+}

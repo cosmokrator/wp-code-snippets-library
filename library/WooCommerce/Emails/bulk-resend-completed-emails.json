@@ -1,0 +1,22 @@
+{
+    "title": "Resend all \"Completed order\" emails to a customer",
+    "description": "Προσθέτει τη σελίδα WooCommerce → «Επαναποστολή emails», όπου γράφετε το email ενός πελάτη και του στέλνονται ξανά τα emails «Ολοκληρωμένη παραγγελία» όλων των ολοκληρωμένων παραγγελιών του (έως 50). Χρήσιμο για ψηφιακά προϊόντα, όταν ο πελάτης χάσει τους συνδέσμους λήψης ή τα στοιχεία πρόσβασης.",
+    "type": "php",
+    "code": "add_action( 'admin_menu', 'perfectpixel_resend_completed_menu', 61 );\n\nfunction perfectpixel_resend_completed_menu() {\n\tadd_submenu_page( 'woocommerce', 'Επαναποστολή emails', 'Επαναποστολή emails', 'manage_woocommerce', 'perfectpixel-resend-completed', 'perfectpixel_resend_completed_page' );\n}\n\nfunction perfectpixel_resend_completed_page() {\n\tif ( ! current_user_can( 'manage_woocommerce' ) ) {\n\t\treturn;\n\t}\n\techo '<div class=\"wrap\"><h1>Επαναποστολή emails «Ολοκληρωμένη παραγγελία»</h1>';\n\tif ( isset( $_POST['perfectpixel_resend_email'] ) && check_admin_referer( 'perfectpixel_resend_completed' ) ) {\n\t\t$email  = sanitize_email( wp_unslash( $_POST['perfectpixel_resend_email'] ) );\n\t\t$orders = $email ? wc_get_orders( array( 'billing_email' => $email, 'status' => array( 'completed' ), 'limit' => 50, 'type' => 'shop_order' ) ) : array();\n\t\t$mails  = WC()->mailer()->get_emails();\n\t\t$sent   = 0;\n\t\tif ( isset( $mails['WC_Email_Customer_Completed_Order'] ) ) {\n\t\t\tforeach ( $orders as $order ) {\n\t\t\t\t$mails['WC_Email_Customer_Completed_Order']->trigger( $order->get_id(), $order );\n\t\t\t\t$order->add_order_note( 'Το email «Ολοκληρωμένη παραγγελία» στάλθηκε ξανά (μαζική επαναποστολή).', false, true );\n\t\t\t\t$sent++;\n\t\t\t}\n\t\t}\n\t\tprintf( '<div class=\"notice notice-%s\"><p>Στάλθηκαν %d emails.</p></div>', $sent ? 'success' : 'warning', (int) $sent );\n\t}\n\techo '<form method=\"post\">';\n\twp_nonce_field( 'perfectpixel_resend_completed' );\n\techo '<p><label>Email χρέωσης πελάτη<br><input type=\"email\" name=\"perfectpixel_resend_email\" class=\"regular-text\" required></label></p>';\n\tsubmit_button( 'Επαναποστολή' );\n\techo '</form></div>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "emails",
+        "admin",
+        "customers"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-bulk-resend-customer-completed-order-emails/"
+    ],
+    "updated": "2026-11-18T17:39:20+00:00"
+}

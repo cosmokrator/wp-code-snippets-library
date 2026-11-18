@@ -1,0 +1,35 @@
+{
+    "title": "Change the address format for a country",
+    "description": "Αλλάζει τη σειρά και τις γραμμές με τις οποίες εμφανίζονται οι διευθύνσεις μιας χώρας σε σελίδα ευχαριστίας, emails, λογαριασμό και παραγγελίες, π.χ. για Ελλάδα «Οδός Αριθμός» στην ίδια γραμμή και «ΤΚ Πόλη» μαζί. Γράψτε τη μορφή με | για αλλαγή γραμμής και πεδία {name}, {company}, {address_1}, {address_2}, {city}, {state}, {postcode}, {country}.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_localisation_address_formats', 'perfectpixel_country_address_format' );\n\nfunction perfectpixel_country_address_format( $formats ) {\n\t$country = strtoupper( sanitize_text_field( '{{address_format_country}}' ) );\n\tif ( $country ) {\n\t\t$formats[ $country ] = str_replace( '|', \"\\n\", '{{address_format_template}}' );\n\t}\n\treturn $formats;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "orders",
+        "addresses",
+        "localization"
+    ],
+    "variables": [
+        {
+            "name": "address_format_country",
+            "label": "Χώρα (κωδικός)",
+            "default": "GR",
+            "description": "Κωδικός 2 γραμμάτων"
+        },
+        {
+            "name": "address_format_template",
+            "label": "Μορφή (| = νέα γραμμή)",
+            "default": "{name}|{company}|{address_1} {address_2}|{postcode} {city}|{state}|{country}",
+            "description": "Πεδία σε άγκιστρα, | για νέα γραμμή"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-change-address-format-specific-country/"
+    ],
+    "updated": "2026-11-18T17:39:20+00:00"
+}

@@ -1,0 +1,34 @@
+{
+    "title": "Add a prefix or suffix to order numbers",
+    "description": "Προσθέτει πρόθεμα ή/και επίθημα στον αριθμό παραγγελίας που βλέπουν πελάτης και διαχειριστής (λίστα παραγγελιών, emails, λογαριασμός, σελίδα ευχαριστίας), π.χ. «ΠΡ-1234» ή «1234-2026». Ο πραγματικός αριθμός (ID) της παραγγελίας δεν αλλάζει.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_order_number', 'perfectpixel_order_number_prefix', 20 );\n\nfunction perfectpixel_order_number_prefix( $number ) {\n\treturn '{{order_number_prefix}}' . $number . '{{order_number_suffix}}';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "orders",
+        "order-number"
+    ],
+    "variables": [
+        {
+            "name": "order_number_prefix",
+            "label": "Πρόθεμα",
+            "default": "ΠΡ-",
+            "description": "Χωρίς απόστροφο ('). Κενό = χωρίς πρόθεμα"
+        },
+        {
+            "name": "order_number_suffix",
+            "label": "Επίθημα",
+            "default": "",
+            "description": "Χωρίς απόστροφο ('). Κενό = χωρίς επίθημα"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-order-number-prefix-suffix/"
+    ],
+    "updated": "2026-11-18T17:39:20+00:00"
+}

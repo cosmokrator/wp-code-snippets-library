@@ -1,0 +1,30 @@
+{
+    "title": "Add an editable field to each item in the order admin",
+    "description": "Στον πίνακα προϊόντων της σελίδας επεξεργασίας παραγγελίας προσθέτει μια στήλη με επεξεργάσιμο πεδίο για κάθε προϊόν, π.χ. «Απεσταλμένη ποσότητα» ή «Αριθμός σειράς». Η τιμή αποθηκεύεται στη γραμμή της παραγγελίας όταν πατήσετε «Αποθήκευση» στα προϊόντα ή «Ενημέρωση» στην παραγγελία. Δεν εμφανίζεται στον πελάτη.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_admin_order_item_headers', 'perfectpixel_order_item_field_header' );\nadd_action( 'woocommerce_admin_order_item_values', 'perfectpixel_order_item_field_value', 10, 3 );\nadd_action( 'woocommerce_before_save_order_item', 'perfectpixel_order_item_field_save' );\n\nfunction perfectpixel_order_item_field_header() {\n\techo '<th class=\"perfectpixel-item-field\">' . esc_html( '{{order_item_field_label}}' ) . '</th>';\n}\n\nfunction perfectpixel_order_item_field_value( $product, $item, $item_id ) {\n\tif ( ! $item instanceof WC_Order_Item_Product ) {\n\t\techo '<td></td>';\n\t\treturn;\n\t}\n\t$value = $item->get_meta( '_perfectpixel_item_field' );\n\techo '<td class=\"perfectpixel-item-field\" width=\"1%\"><div class=\"view\">' . esc_html( $value ) . '</div><div class=\"edit\" style=\"display:none\"><input type=\"text\" name=\"perfectpixel_item_field[' . absint( $item_id ) . ']\" value=\"' . esc_attr( $value ) . '\" style=\"width:6em\"></div></td>';\n}\n\nfunction perfectpixel_order_item_field_save( $item ) {\n\tif ( ! current_user_can( 'edit_shop_orders' ) ) {\n\t\treturn;\n\t}\n\t// Items are saved via ajax (serialized form in $_POST['items']) or with the whole order form.\n\t$data = $_POST;\n\tif ( isset( $_POST['items'] ) && is_string( $_POST['items'] ) ) {\n\t\tparse_str( wp_unslash( $_POST['items'] ), $data );\n\t}\n\tif ( isset( $data['perfectpixel_item_field'][ $item->get_id() ] ) ) {\n\t\t$item->update_meta_data( '_perfectpixel_item_field', sanitize_text_field( wp_unslash( $data['perfectpixel_item_field'][ $item->get_id() ] ) ) );\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "orders",
+        "admin",
+        "custom-fields",
+        "order-items"
+    ],
+    "variables": [
+        {
+            "name": "order_item_field_label",
+            "label": "Τίτλος στήλης",
+            "default": "Απεστάλη",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-item-custom-field-edit-order-page/"
+    ],
+    "updated": "2026-11-18T17:39:20+00:00"
+}

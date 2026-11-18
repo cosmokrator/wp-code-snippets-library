@@ -1,0 +1,35 @@
+{
+    "title": "Add free products to an order after a bundle is purchased",
+    "description": "Όταν πληρωθεί μια παραγγελία που περιέχει ένα προϊόν «πακέτο», προστίθενται αυτόματα στην παραγγελία τα προϊόντα του πακέτου με τιμή 0, ώστε ο πελάτης να αποκτήσει πρόσβαση/λήψεις για καθένα, χωρίς plugin bundles. Το σύνολο της παραγγελίας δεν αλλάζει. Γίνεται μία φορά ανά παραγγελία.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_payment_complete', 'perfectpixel_add_products_after_purchase', 5 );\nadd_action( 'woocommerce_order_status_processing', 'perfectpixel_add_products_after_purchase', 5 );\n\nfunction perfectpixel_add_products_after_purchase( $order_id ) {\n\t$order   = wc_get_order( $order_id );\n\t$trigger = (int) '{{bundle_trigger_product_id}}';\n\tif ( ! $order || ! $trigger || $order->get_meta( '_perfectpixel_bundle_added' ) ) {\n\t\treturn;\n\t}\n\t$found = false;\n\tforeach ( $order->get_items() as $item ) {\n\t\tif ( (int) $item->get_product_id() === $trigger ) {\n\t\t\t$found = true;\n\t\t\tbreak;\n\t\t}\n\t}\n\tif ( ! $found ) {\n\t\treturn;\n\t}\n\tforeach ( wp_parse_id_list( '{{bundle_added_product_ids}}' ) as $product_id ) {\n\t\t$product = wc_get_product( $product_id );\n\t\tif ( $product ) {\n\t\t\t$order->add_product( $product, 1, array( 'subtotal' => 0, 'total' => 0 ) );\n\t\t}\n\t}\n\t$order->update_meta_data( '_perfectpixel_bundle_added', 1 );\n\t$order->calculate_totals( false );\n\t$order->save();\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "orders",
+        "bundles",
+        "automation"
+    ],
+    "variables": [
+        {
+            "name": "bundle_trigger_product_id",
+            "label": "ID προϊόντος-πακέτου",
+            "default": "0",
+            "description": "Μόνο αριθμός"
+        },
+        {
+            "name": "bundle_added_product_ids",
+            "label": "IDs προϊόντων προς προσθήκη (με κόμμα)",
+            "default": "",
+            "description": "Μόνο αριθμοί, με κόμμα"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-product-to-order-after-purchase/"
+    ],
+    "updated": "2026-11-18T17:39:20+00:00"
+}

@@ -1,0 +1,29 @@
+{
+    "title": "Free products only for logged-in customers (anti-spam)",
+    "description": "Τα δωρεάν προϊόντα (τιμή 0) μπορούν να «αγοραστούν» μόνο από συνδεδεμένους πελάτες. Οι επισκέπτες βλέπουν στη θέση του κουμπιού σύνδεσμο προς σύνδεση/εγγραφή. Σταματά τα bots που δημιουργούν δεκάδες ψεύτικες παραγγελίες σε δωρεάν προϊόντα (και τα admin emails που τις συνοδεύουν).",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_is_purchasable', 'perfectpixel_free_products_logged_in_only', 20, 2 );\nadd_action( 'woocommerce_single_product_summary', 'perfectpixel_free_products_login_link', 31 );\n\nfunction perfectpixel_is_free_product( $product ) {\n\treturn $product && '' !== $product->get_price() && 0.0 === (float) $product->get_price();\n}\n\nfunction perfectpixel_free_products_logged_in_only( $purchasable, $product ) {\n\treturn ( ! is_user_logged_in() && perfectpixel_is_free_product( $product ) ) ? false : $purchasable;\n}\n\nfunction perfectpixel_free_products_login_link() {\n\tglobal $product;\n\tif ( ! is_user_logged_in() && perfectpixel_is_free_product( $product ) ) {\n\t\t$url = add_query_arg( 'redirect_to', rawurlencode( get_permalink( $product->get_id() ) ), wc_get_page_permalink( 'myaccount' ) );\n\t\techo '<p><a class=\"button\" href=\"' . esc_url( $url ) . '\">' . esc_html( '{{free_login_text}}' ) . '</a></p>';\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "security",
+        "spam",
+        "free-products"
+    ],
+    "variables": [
+        {
+            "name": "free_login_text",
+            "label": "Κείμενο για επισκέπτες",
+            "default": "Συνδεθείτε για να το αποκτήσετε δωρεάν",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-how-to-stop-spam-orders-on-free-products/"
+    ],
+    "updated": "2026-11-18T17:39:20+00:00"
+}

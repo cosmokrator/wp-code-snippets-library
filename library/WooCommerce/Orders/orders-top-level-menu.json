@@ -1,0 +1,29 @@
+{
+    "title": "Add \"Orders\" as a top-level admin menu item",
+    "description": "Προσθέτει το «Παραγγελίες» ως ξεχωριστό στοιχείο στο αριστερό μενού του διαχειριστή (με εικονίδιο και αριθμό παραγγελιών σε επεξεργασία), ώστε να ανοίγει με ένα κλικ αντί να ψάχνετε μέσα στο WooCommerce. Λειτουργεί και με HPOS. Μπορείτε να ορίσετε τη θέση του στο μενού.",
+    "type": "php",
+    "code": "add_action( 'admin_menu', 'perfectpixel_orders_top_level_menu', 99 );\n\nfunction perfectpixel_orders_top_level_menu() {\n\tif ( ! current_user_can( 'edit_shop_orders' ) ) {\n\t\treturn;\n\t}\n\t$hpos = class_exists( '\\Automattic\\WooCommerce\\Utilities\\OrderUtil' ) && \\Automattic\\WooCommerce\\Utilities\\OrderUtil::custom_orders_table_usage_is_enabled();\n\t$url  = $hpos ? 'admin.php?page=wc-orders' : 'edit.php?post_type=shop_order';\n\t$count = function_exists( 'wc_orders_count' ) ? (int) wc_orders_count( 'processing' ) : 0;\n\t$title = __( 'Orders', 'woocommerce' ) . ( $count ? ' <span class=\"awaiting-mod count-' . $count . '\"><span class=\"processing-count\">' . number_format_i18n( $count ) . '</span></span>' : '' );\n\tadd_menu_page( __( 'Orders', 'woocommerce' ), $title, 'edit_shop_orders', $url, '', 'dashicons-cart', (float) '{{orders_menu_position}}' );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "orders",
+        "admin",
+        "menu"
+    ],
+    "variables": [
+        {
+            "name": "orders_menu_position",
+            "label": "Θέση στο μενού",
+            "default": "3",
+            "description": "Αριθμός: 2 = μετά τον Πίνακα ελέγχου, 56 = μετά το WooCommerce"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-move-orders-top-level-menu-wp-admin/"
+    ],
+    "updated": "2026-11-18T17:39:20+00:00"
+}

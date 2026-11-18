@@ -1,0 +1,35 @@
+{
+    "title": "Sort order items by name, SKU, quantity or total",
+    "description": "Τα προϊόντα μιας παραγγελίας εμφανίζονται με σταθερή σειρά (αλφαβητικά, κατά κωδικό SKU, ποσότητα ή αξία) αντί για τη σειρά που μπήκαν στο καλάθι. Ισχύει παντού: σελίδα ευχαριστίας, emails, λογαριασμός πελάτη, σελίδα παραγγελίας στον διαχειριστή και plugins τιμολογίων/δελτίων που διαβάζουν τα ίδια δεδομένα.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_order_get_items', 'perfectpixel_sort_order_items', 10, 3 );\n\nfunction perfectpixel_sort_order_items( $items, $order, $types ) {\n\tif ( count( $items ) < 2 || ! in_array( 'line_item', (array) $types, true ) ) {\n\t\treturn $items;\n\t}\n\t$by = '{{order_items_sort_by}}';\n\tuasort(\n\t\t$items,\n\t\tfunction ( $a, $b ) use ( $by ) {\n\t\t\tif ( ! $a instanceof WC_Order_Item_Product || ! $b instanceof WC_Order_Item_Product ) {\n\t\t\t\treturn 0;\n\t\t\t}\n\t\t\tswitch ( $by ) {\n\t\t\t\tcase 'sku':\n\t\t\t\t\t$pa = $a->get_product();\n\t\t\t\t\t$pb = $b->get_product();\n\t\t\t\t\treturn strnatcasecmp( $pa ? $pa->get_sku() : '', $pb ? $pb->get_sku() : '' );\n\t\t\t\tcase 'qty':\n\t\t\t\t\treturn $a->get_quantity() <=> $b->get_quantity();\n\t\t\t\tcase 'total':\n\t\t\t\t\treturn (float) $a->get_total() <=> (float) $b->get_total();\n\t\t\t\tdefault:\n\t\t\t\t\treturn strnatcasecmp( $a->get_name(), $b->get_name() );\n\t\t\t}\n\t\t}\n\t);\n\treturn 'yes' === '{{order_items_sort_desc}}' ? array_reverse( $items, true ) : $items;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "orders",
+        "sorting",
+        "packing"
+    ],
+    "variables": [
+        {
+            "name": "order_items_sort_by",
+            "label": "Ταξινόμηση κατά (name/sku/qty/total)",
+            "default": "name",
+            "description": "name, sku, qty ή total"
+        },
+        {
+            "name": "order_items_sort_desc",
+            "label": "Φθίνουσα σειρά (yes/no)",
+            "default": "no",
+            "description": "yes = από το μεγαλύτερο στο μικρότερο"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-sort-order-items-by-name-sku-total-quantity/"
+    ],
+    "updated": "2026-11-18T17:39:20+00:00"
+}

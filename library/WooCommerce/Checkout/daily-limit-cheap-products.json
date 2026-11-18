@@ -1,0 +1,35 @@
+{
+    "title": "Limit daily orders of cheap products (anti-carding)",
+    "description": "Προστασία από επιθέσεις «carding», που συνήθως δοκιμάζουν κλεμμένες κάρτες σε φθηνά προϊόντα: τα προϊόντα κάτω από μια τιμή (π.χ. 10 €) μπορούν να μπουν σε έως Χ παραγγελίες την ημέρα συνολικά. Όταν συμπληρωθεί το όριο, γίνονται προσωρινά μη διαθέσιμα μέχρι την επόμενη μέρα.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_new_order', 'perfectpixel_cheap_orders_count', 20, 2 );\nadd_filter( 'woocommerce_is_purchasable', 'perfectpixel_cheap_orders_limit', 30, 2 );\n\nfunction perfectpixel_cheap_orders_key() {\n\treturn 'perfectpixel_cheap_orders_' . current_time( 'Ymd' );\n}\n\nfunction perfectpixel_is_cheap( $product ) {\n\t$price = $product ? $product->get_price() : '';\n\treturn '' !== $price && (float) $price > 0 && (float) $price <= (float) '{{cheap_price_threshold}}';\n}\n\nfunction perfectpixel_cheap_orders_count( $order_id, $order = null ) {\n\t$order = $order ? $order : wc_get_order( $order_id );\n\tif ( ! $order ) {\n\t\treturn;\n\t}\n\tforeach ( $order->get_items() as $item ) {\n\t\tif ( perfectpixel_is_cheap( $item->get_product() ) ) {\n\t\t\tset_transient( perfectpixel_cheap_orders_key(), (int) get_transient( perfectpixel_cheap_orders_key() ) + 1, DAY_IN_SECONDS );\n\t\t\treturn;\n\t\t}\n\t}\n}\n\nfunction perfectpixel_cheap_orders_limit( $purchasable, $product ) {\n\tif ( $purchasable && ! is_admin() && perfectpixel_is_cheap( $product ) && (int) get_transient( perfectpixel_cheap_orders_key() ) >= max( 1, (int) '{{cheap_daily_orders}}' ) ) {\n\t\treturn false;\n\t}\n\treturn $purchasable;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "security",
+        "fraud",
+        "checkout"
+    ],
+    "variables": [
+        {
+            "name": "cheap_price_threshold",
+            "label": "Όριο τιμής",
+            "default": "10",
+            "description": "Μόνο αριθμός. Προϊόντα με τιμή έως αυτό το ποσό"
+        },
+        {
+            "name": "cheap_daily_orders",
+            "label": "Μέγιστες παραγγελίες ανά ημέρα",
+            "default": "20",
+            "description": "Μόνο αριθμός"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-limit-daily-sales-anti-spam-carding/"
+    ],
+    "updated": "2026-11-18T17:39:20+00:00"
+}
