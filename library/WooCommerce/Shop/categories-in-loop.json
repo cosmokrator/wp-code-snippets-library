@@ -1,0 +1,21 @@
+{
+    "title": "Show product categories under shop products",
+    "description": "Στις λίστες προϊόντων, κάτω από τον τίτλο κάθε προϊόντος, εμφανίζει τις κατηγορίες του ως συνδέσμους (π.χ. «Παπούτσια, Αθλητικά»), ώστε ο πελάτης να μεταβαίνει εύκολα σε σχετικές κατηγορίες. Ισχύει για τις κλασικές σελίδες καταστήματος/κατηγοριών· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_after_shop_loop_item_title', 'perfectpixel_categories_in_loop', 3 );\n\nfunction perfectpixel_categories_in_loop() {\n\tglobal $product;\n\tif ( $product ) {\n\t\techo wc_get_product_category_list( $product->get_id(), ', ', '<div class=\"perfectpixel-loop-categories\" style=\"font-size:.8em;opacity:.8;margin:.25em 0\">', '</div>' ); // Core function returns escaped links.\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shop",
+        "categories"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-display-product-categories-shop/"
+    ],
+    "updated": "2026-11-18T16:08:04+00:00"
+}

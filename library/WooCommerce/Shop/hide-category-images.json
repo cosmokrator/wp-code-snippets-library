@@ -1,0 +1,22 @@
+{
+    "title": "Hide category images in the shop",
+    "description": "Όταν το κατάστημα εμφανίζει κατηγορίες πριν από τα προϊόντα, κρύβει τις εικόνες τους (και το placeholder) και αφήνει μόνο τα ονόματα. Χρήσιμο όταν οι κατηγορίες δεν έχουν εικόνες και πιάνουν πολύ χώρο. Ισχύει για τις κλασικές σελίδες καταστήματος/κατηγοριών· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'init', 'perfectpixel_hide_category_images' );\n\nfunction perfectpixel_hide_category_images() {\n\tremove_action( 'woocommerce_before_subcategory_title', 'woocommerce_subcategory_thumbnail', 10 );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shop",
+        "categories",
+        "images"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-hide-category-images-shop/"
+    ],
+    "updated": "2026-11-18T16:08:04+00:00"
+}

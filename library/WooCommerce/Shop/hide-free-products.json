@@ -1,0 +1,22 @@
+{
+    "title": "Hide free products from the shop",
+    "description": "Τα προϊόντα με τιμή 0 (π.χ. δωρεάν δείγματα ή δωρεάν εκδόσεις μαθημάτων) δεν εμφανίζονται στις λίστες του καταστήματος. Παραμένουν διαθέσιμα με απευθείας σύνδεσμο. Τα προϊόντα χωρίς τιμή δεν επηρεάζονται. Επηρεάζει το κατάστημα, τις κατηγορίες, τις ετικέτες και την αναζήτηση προϊόντων (κύριο query του WooCommerce)· όχι blocks ή shortcodes με δικό τους query.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_product_query', 'perfectpixel_hide_free_products' );\n\nfunction perfectpixel_hide_free_products( $q ) {\n\t$meta_query   = (array) $q->get( 'meta_query' );\n\t$meta_query[] = array(\n\t\t'relation' => 'OR',\n\t\tarray(\n\t\t\t'key'     => '_price',\n\t\t\t'value'   => 0,\n\t\t\t'compare' => '>',\n\t\t\t'type'    => 'DECIMAL(10,4)',\n\t\t),\n\t\tarray(\n\t\t\t'key'     => '_price',\n\t\t\t'compare' => 'NOT EXISTS',\n\t\t),\n\t);\n\t$q->set( 'meta_query', $meta_query );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shop",
+        "prices",
+        "query"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-hide-free-products-code-snippet/"
+    ],
+    "updated": "2026-11-18T16:08:04+00:00"
+}

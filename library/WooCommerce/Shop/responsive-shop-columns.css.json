@@ -1,0 +1,23 @@
+{
+    "title": "Responsive number of shop columns",
+    "description": "CSS που αλλάζει τον αριθμό στηλών του πλέγματος προϊόντων ανάλογα με το πλάτος της οθόνης: 2 σε κινητά, 3 σε tablets, 4 σε desktop και 5 σε πολύ μεγάλες οθόνες. Αλλάξτε τους αριθμούς στο repeat(). Αντικαθιστά τη διάταξη float του theme με CSS grid· ίσως χρειαστεί προσαρμογή σε themes με δική τους διάταξη.",
+    "type": "css",
+    "code": ".woocommerce ul.products {\n\tdisplay: grid !important;\n\tgrid-template-columns: repeat(2, 1fr);\n\tgap: 1.5em;\n}\n.woocommerce ul.products::before,\n.woocommerce ul.products::after {\n\tdisplay: none !important;\n}\n.woocommerce ul.products li.product {\n\tfloat: none !important;\n\twidth: auto !important;\n\tmargin: 0 !important;\n}\n@media (min-width: 768px) {\n\t.woocommerce ul.products { grid-template-columns: repeat(3, 1fr); }\n}\n@media (min-width: 1024px) {\n\t.woocommerce ul.products { grid-template-columns: repeat(4, 1fr); }\n}\n@media (min-width: 1440px) {\n\t.woocommerce ul.products { grid-template-columns: repeat(5, 1fr); }\n}",
+    "location": "site_header",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shop",
+        "css",
+        "layout",
+        "responsive"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-shop-columns-responsive/"
+    ],
+    "updated": "2026-11-18T16:08:04+00:00"
+}

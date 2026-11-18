@@ -1,0 +1,29 @@
+{
+    "title": "Add an \"On sale\" option to the shop sorting",
+    "description": "Προσθέτει την επιλογή «Σε προσφορά» στη λίστα ταξινόμησης του καταστήματος, που δείχνει μόνο τα προϊόντα σε έκπτωση. Μπορείτε να στέλνετε πελάτες απευθείας εκεί με σύνδεσμο ?orderby=on_sale (π.χ. για Black Friday). Επηρεάζει το κατάστημα, τις κατηγορίες, τις ετικέτες και την αναζήτηση προϊόντων (κύριο query του WooCommerce)· όχι blocks ή shortcodes με δικό τους query.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_catalog_orderby', 'perfectpixel_on_sale_sort_option' );\nadd_action( 'woocommerce_product_query', 'perfectpixel_on_sale_sort_query' );\n\nfunction perfectpixel_on_sale_sort_option( $options ) {\n\t$options['on_sale'] = '{{on_sale_sort_label}}';\n\treturn $options;\n}\n\nfunction perfectpixel_on_sale_sort_query( $q ) {\n\tif ( isset( $_GET['orderby'] ) && 'on_sale' === wc_clean( wp_unslash( $_GET['orderby'] ) ) ) {\n\t\t$ids = wc_get_product_ids_on_sale();\n\t\t$q->set( 'post__in', $ids ? array_values( array_unique( array_map( 'intval', $ids ) ) ) : array( 0 ) );\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shop",
+        "sorting",
+        "sale"
+    ],
+    "variables": [
+        {
+            "name": "on_sale_sort_label",
+            "label": "Κείμενο επιλογής",
+            "default": "Σε προσφορά",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-display-only-products-on-sale-shop/"
+    ],
+    "updated": "2026-11-18T16:08:04+00:00"
+}

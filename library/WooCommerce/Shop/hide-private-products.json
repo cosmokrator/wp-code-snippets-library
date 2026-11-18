@@ -1,0 +1,22 @@
+{
+    "title": "Hide private products from the shop for admins",
+    "description": "Τα προϊόντα με ορατότητα «Ιδιωτικό» δεν εμφανίζονται στις λίστες του καταστήματος ούτε στους διαχειριστές (που κανονικά τα βλέπουν με το πρόθεμα «Ιδιωτικό:»). Έτσι το κατάστημα φαίνεται όπως το βλέπουν οι πελάτες. Παραμένουν προσβάσιμα με απευθείας σύνδεσμο και στον διαχειριστή. Επηρεάζει το κατάστημα, τις κατηγορίες, τις ετικέτες και την αναζήτηση προϊόντων (κύριο query του WooCommerce)· όχι blocks ή shortcodes με δικό τους query.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_product_query', 'perfectpixel_hide_private_products' );\n\nfunction perfectpixel_hide_private_products( $q ) {\n\t$q->set( 'post_status', 'publish' );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shop",
+        "query",
+        "admin"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-hide-private-products-shop/"
+    ],
+    "updated": "2026-11-18T16:08:04+00:00"
+}

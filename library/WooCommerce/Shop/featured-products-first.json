@@ -1,0 +1,22 @@
+{
+    "title": "Show featured products first in the default sorting",
+    "description": "Με την «Προεπιλεγμένη ταξινόμηση», τα προϊόντα που έχετε σημειώσει ως «Προβεβλημένα» (αστεράκι στη λίστα προϊόντων) εμφανίζονται πρώτα, και μετά τα υπόλοιπα με την κανονική σειρά. Οι άλλες ταξινομήσεις (τιμή, δημοφιλία κ.λπ.) δεν αλλάζουν. Επηρεάζει το κατάστημα, τις κατηγορίες, τις ετικέτες και την αναζήτηση προϊόντων (κύριο query του WooCommerce)· όχι blocks ή shortcodes με δικό τους query.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_product_query', 'perfectpixel_featured_first_flag' );\nadd_filter( 'posts_clauses', 'perfectpixel_featured_first_clauses', 20, 2 );\n\nfunction perfectpixel_featured_first_flag( $q ) {\n\t$orderby = isset( $_GET['orderby'] ) ? wc_clean( wp_unslash( $_GET['orderby'] ) ) : get_option( 'woocommerce_default_catalog_orderby', 'menu_order' );\n\tif ( 'menu_order' === $orderby ) {\n\t\t$q->set( 'perfectpixel_featured_first', 1 );\n\t}\n}\n\nfunction perfectpixel_featured_first_clauses( $clauses, $query ) {\n\tglobal $wpdb;\n\tif ( ! $query->get( 'perfectpixel_featured_first' ) ) {\n\t\treturn $clauses;\n\t}\n\t$term = get_term_by( 'slug', 'featured', 'product_visibility' );\n\tif ( ! $term ) {\n\t\treturn $clauses;\n\t}\n\t$clauses['join']   .= $wpdb->prepare( \" LEFT JOIN {$wpdb->term_relationships} pp_featured ON ( pp_featured.object_id = {$wpdb->posts}.ID AND pp_featured.term_taxonomy_id = %d )\", $term->term_taxonomy_id );\n\t$clauses['orderby'] = 'pp_featured.object_id IS NULL ASC' . ( $clauses['orderby'] ? ', ' . $clauses['orderby'] : '' );\n\treturn $clauses;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shop",
+        "sorting",
+        "featured"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-sort-by-featured-products-shop/"
+    ],
+    "updated": "2026-11-18T16:08:04+00:00"
+}

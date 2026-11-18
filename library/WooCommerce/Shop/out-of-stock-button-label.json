@@ -1,0 +1,30 @@
+{
+    "title": "Show \"Out of stock\" instead of \"Read more\" on shop buttons",
+    "description": "Στις λίστες προϊόντων, για προϊόντα που έχουν εξαντληθεί το κουμπί γράφει «Εξαντλήθηκε» αντί για το ασαφές «Διαβάστε περισσότερα». Το κουμπί εξακολουθεί να οδηγεί στη σελίδα του προϊόντος.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_product_add_to_cart_text', 'perfectpixel_out_of_stock_button_label', 50, 2 );\n\nfunction perfectpixel_out_of_stock_button_label( $text, $product ) {\n\treturn ( $product && ! $product->is_in_stock() ) ? '{{out_of_stock_button_label}}' : $text;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shop",
+        "stock",
+        "labels",
+        "buttons"
+    ],
+    "variables": [
+        {
+            "name": "out_of_stock_button_label",
+            "label": "Κείμενο κουμπιού",
+            "default": "Εξαντλήθηκε",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-rename-read-more-out-of-stock-shop/"
+    ],
+    "updated": "2026-11-18T16:08:04+00:00"
+}

@@ -1,0 +1,23 @@
+{
+    "title": "Let the product search find products by SKU",
+    "description": "Η αναζήτηση προϊόντων του site βρίσκει και προϊόντα με βάση τον κωδικό τους (SKU), ολόκληρο ή μέρος του, και των παραλλαγών (εμφανίζεται το γονικό προϊόν). Απαραίτητο για B2B καταστήματα όπου οι πελάτες ψάχνουν με κωδικό. Λειτουργεί με την κλασική αναζήτηση του WordPress (?s=...&post_type=product).",
+    "type": "php",
+    "code": "add_filter( 'posts_search', 'perfectpixel_search_by_sku', 20, 2 );\n\nfunction perfectpixel_search_by_sku( $search, $query ) {\n\tglobal $wpdb;\n\tif ( is_admin() || ! $query->is_main_query() || ! $query->is_search() || '' === $search ) {\n\t\treturn $search;\n\t}\n\t$term = trim( (string) $query->get( 's' ) );\n\tif ( mb_strlen( $term ) < 2 ) {\n\t\treturn $search;\n\t}\n\t$ids = $wpdb->get_col(\n\t\t$wpdb->prepare(\n\t\t\t\"SELECT DISTINCT IF( p.post_parent > 0, p.post_parent, p.ID ) FROM {$wpdb->prefix}wc_product_meta_lookup l\n\t\t\tINNER JOIN {$wpdb->posts} p ON p.ID = l.product_id\n\t\t\tWHERE l.sku LIKE %s LIMIT 200\",\n\t\t\t'%' . $wpdb->esc_like( $term ) . '%'\n\t\t)\n\t);\n\t$ids = array_filter( array_map( 'intval', $ids ) );\n\tif ( ! $ids || 0 !== strpos( ltrim( $search ), 'AND' ) ) {\n\t\treturn $search;\n\t}\n\t// Turn \" AND (title/content match)\" into \" AND ((title/content match) OR ID IN (sku matches))\".\n\treturn ' AND ( ' . substr( ltrim( $search ), 3 ) . \" OR {$wpdb->posts}.ID IN (\" . implode( ',', $ids ) . ') ) ';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shop",
+        "search",
+        "sku",
+        "b2b"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-search-products-by-sku/"
+    ],
+    "updated": "2026-11-18T16:08:04+00:00"
+}

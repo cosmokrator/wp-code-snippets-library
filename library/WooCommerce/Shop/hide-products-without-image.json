@@ -1,0 +1,22 @@
+{
+    "title": "Hide products without a featured image",
+    "description": "Τα προϊόντα που δεν έχουν κύρια εικόνα δεν εμφανίζονται στις λίστες του καταστήματος, ώστε να μη φαίνονται κενά placeholder. Τα προϊόντα παραμένουν προσβάσιμα με απευθείας σύνδεσμο. Επηρεάζει το κατάστημα, τις κατηγορίες, τις ετικέτες και την αναζήτηση προϊόντων (κύριο query του WooCommerce)· όχι blocks ή shortcodes με δικό τους query.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_product_query', 'perfectpixel_hide_products_without_image' );\n\nfunction perfectpixel_hide_products_without_image( $q ) {\n\t$meta_query   = (array) $q->get( 'meta_query' );\n\t$meta_query[] = array(\n\t\t'key'     => '_thumbnail_id',\n\t\t'value'   => 0,\n\t\t'compare' => '>',\n\t\t'type'    => 'NUMERIC',\n\t);\n\t$q->set( 'meta_query', $meta_query );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shop",
+        "images",
+        "query"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-auto-hide-products-without-a-featured-image/"
+    ],
+    "updated": "2026-11-18T16:08:04+00:00"
+}

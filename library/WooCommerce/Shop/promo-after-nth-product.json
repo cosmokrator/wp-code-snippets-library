@@ -1,0 +1,35 @@
+{
+    "title": "Insert a promo block after the nth product in the shop grid",
+    "description": "Προσθέτει ένα δικό σας «κουτί» (banner, προσφορά, κάλεσμα σε δράση) μέσα στο πλέγμα προϊόντων του καταστήματος και των κατηγοριών, μετά από έναν αριθμό προϊόντων (π.χ. μετά το 3ο). Επιτρέπεται απλό HTML. Δεν αλλάζει τη σελιδοποίηση ούτε τον μετρητή αποτελεσμάτων. Ισχύει για τις κλασικές σελίδες καταστήματος/κατηγοριών· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_shop_loop', 'perfectpixel_promo_after_nth_product' );\n\nfunction perfectpixel_promo_after_nth_product() {\n\t// 'loop' = number of products already printed on this page.\n\tif ( (int) wc_get_loop_prop( 'loop' ) !== max( 1, (int) '{{promo_after_position}}' ) || ! wc_get_loop_prop( 'is_paginated' ) ) {\n\t\treturn;\n\t}\n\techo '<li class=\"product perfectpixel-promo\" style=\"display:flex;align-items:center;justify-content:center;text-align:center;padding:1.5em;background:#f6f7f7\">' . wp_kses_post( '{{promo_block_html}}' ) . '</li>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shop",
+        "promotions",
+        "banners"
+    ],
+    "variables": [
+        {
+            "name": "promo_after_position",
+            "label": "Μετά από πόσα προϊόντα",
+            "default": "3",
+            "description": "Μόνο αριθμός"
+        },
+        {
+            "name": "promo_block_html",
+            "label": "Περιεχόμενο",
+            "default": "<a href=\"/shop/?orderby=on_sale\"><strong>Προσφορές εβδομάδας</strong><br>Έως -30% σε επιλεγμένα προϊόντα →</a>",
+            "description": "Χωρίς απόστροφο ('). Επιτρέπεται απλό HTML"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-inject-ad-after-the-nth-product-shop-page/"
+    ],
+    "updated": "2026-11-18T16:08:04+00:00"
+}

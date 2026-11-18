@@ -1,0 +1,29 @@
+{
+    "title": "Change the number of products per row",
+    "description": "Ορίζει πόσα προϊόντα εμφανίζονται ανά σειρά στο κατάστημα και στις κατηγορίες (π.χ. 1 για λίστα πλήρους πλάτους). Υπερισχύει της ρύθμισης του Customizer. Τα block themes ορίζουν τις στήλες στο block «Product Collection» και δεν επηρεάζονται.",
+    "type": "php",
+    "code": "add_filter( 'loop_shop_columns', 'perfectpixel_products_per_row', 999 );\n\nfunction perfectpixel_products_per_row() {\n\treturn min( 6, max( 1, (int) '{{shop_products_per_row}}' ) );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shop",
+        "layout",
+        "columns"
+    ],
+    "variables": [
+        {
+            "name": "shop_products_per_row",
+            "label": "Προϊόντα ανά σειρά",
+            "default": "3",
+            "description": "Μόνο αριθμός (1-6)"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-one-product-per-row-shop-page/"
+    ],
+    "updated": "2026-11-18T16:08:04+00:00"
+}

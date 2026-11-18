@@ -1,0 +1,22 @@
+{
+    "title": "Show the price range of each product category",
+    "description": "Όταν το κατάστημα εμφανίζει κατηγορίες, δίπλα στο όνομα κάθε κατηγορίας εμφανίζεται το εύρος τιμών των προϊόντων της (π.χ. «12,00 € – 89,00 €») αντί για τον αριθμό προϊόντων. Τα ποσά αποθηκεύονται για 12 ώρες και ανανεώνονται όταν αλλάζει κάποιο προϊόν. Ισχύει για τις κλασικές σελίδες καταστήματος/κατηγοριών· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_subcategory_count_html', 'perfectpixel_category_price_range', 10, 2 );\nadd_action( 'woocommerce_update_product', 'perfectpixel_category_price_range_flush' );\nadd_action( 'woocommerce_new_product', 'perfectpixel_category_price_range_flush' );\n\nfunction perfectpixel_category_price_range( $html, $category ) {\n\tglobal $wpdb;\n\t$version = (int) get_option( 'perfectpixel_cat_price_version', 1 );\n\t$key     = 'perfectpixel_cat_price_' . $category->term_id . '_' . $version;\n\t$range   = get_transient( $key );\n\tif ( false === $range ) {\n\t\t$terms = array_merge( array( (int) $category->term_id ), array_map( 'intval', get_term_children( $category->term_id, 'product_cat' ) ) );\n\t\t$tt    = array_map( 'intval', get_terms( array( 'taxonomy' => 'product_cat', 'include' => $terms, 'fields' => 'tt_ids', 'hide_empty' => false ) ) );\n\t\t$range = $tt ? $wpdb->get_row(\n\t\t\t\"SELECT MIN(l.min_price) AS min_price, MAX(l.max_price) AS max_price FROM {$wpdb->prefix}wc_product_meta_lookup l\n\t\t\tINNER JOIN {$wpdb->term_relationships} tr ON tr.object_id = l.product_id\n\t\t\tINNER JOIN {$wpdb->posts} p ON p.ID = l.product_id AND p.post_status = 'publish'\n\t\t\tWHERE tr.term_taxonomy_id IN (\" . implode( ',', $tt ) . ') AND l.max_price > 0',\n\t\t\tARRAY_A\n\t\t) : array();\n\t\tset_transient( $key, (array) $range, 12 * HOUR_IN_SECONDS );\n\t}\n\tif ( empty( $range['max_price'] ) ) {\n\t\treturn $html;\n\t}\n\t$text = (float) $range['min_price'] === (float) $range['max_price'] ? wc_price( $range['min_price'] ) : wc_format_price_range( $range['min_price'], $range['max_price'] );\n\treturn ' <mark class=\"count perfectpixel-cat-price\">' . wp_kses_post( $text ) . '</mark>';\n}\n\nfunction perfectpixel_category_price_range_flush() {\n\tupdate_option( 'perfectpixel_cat_price_version', (int) get_option( 'perfectpixel_cat_price_version', 1 ) + 1, false );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shop",
+        "categories",
+        "prices"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-product-category-price-range/"
+    ],
+    "updated": "2026-11-18T16:08:04+00:00"
+}

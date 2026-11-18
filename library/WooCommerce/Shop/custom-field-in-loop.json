@@ -1,0 +1,35 @@
+{
+    "title": "Show a custom field value under shop products",
+    "description": "Στις λίστες προϊόντων, κάτω από τον τίτλο κάθε προϊόντος, εμφανίζει την τιμή ενός προσαρμοσμένου πεδίου (π.χ. πεδίο ACF «υλικό» ή «χρόνος παράδοσης») με ετικέτα. Λειτουργεί και χωρίς ενεργό ACF, γιατί διαβάζει απευθείας το πεδίο. Τα προϊόντα χωρίς τιμή δεν δείχνουν τίποτα. Ισχύει για τις κλασικές σελίδες καταστήματος/κατηγοριών· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_after_shop_loop_item_title', 'perfectpixel_custom_field_in_loop', 4 );\n\nfunction perfectpixel_custom_field_in_loop() {\n\t$value = get_post_meta( get_the_ID(), sanitize_key( '{{loop_field_key}}' ), true );\n\tif ( is_array( $value ) ) {\n\t\t$value = implode( ', ', array_map( 'strval', array_filter( $value, 'is_scalar' ) ) );\n\t}\n\tif ( '' === trim( (string) $value ) ) {\n\t\treturn;\n\t}\n\t$label = trim( '{{loop_field_label}}' );\n\techo '<div class=\"perfectpixel-loop-field\" style=\"font-size:.85em;margin:.25em 0\">' . ( '' !== $label ? esc_html( $label ) . ' ' : '' ) . esc_html( $value ) . '</div>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shop",
+        "custom-fields",
+        "acf"
+    ],
+    "variables": [
+        {
+            "name": "loop_field_key",
+            "label": "Όνομα πεδίου (meta key)",
+            "default": "material",
+            "description": "Το name του πεδίου, π.χ. του ACF"
+        },
+        {
+            "name": "loop_field_label",
+            "label": "Ετικέτα",
+            "default": "Υλικό:",
+            "description": "Χωρίς απόστροφο ('). Κενό = χωρίς ετικέτα"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-acf-shop-page/"
+    ],
+    "updated": "2026-11-18T16:08:04+00:00"
+}

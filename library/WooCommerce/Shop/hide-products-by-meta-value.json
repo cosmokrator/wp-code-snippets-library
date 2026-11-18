@@ -1,0 +1,36 @@
+{
+    "title": "Hide products with a specific custom field value",
+    "description": "Τα προϊόντα που έχουν ένα συγκεκριμένο προσαρμοσμένο πεδίο με συγκεκριμένη τιμή (π.χ. πεδίο ACF «hide_from_shop» = 1) δεν εμφανίζονται στις λίστες του καταστήματος. Ορίστε το όνομα (meta key) και την τιμή του πεδίου. Παραμένουν προσβάσιμα με απευθείας σύνδεσμο. Επηρεάζει το κατάστημα, τις κατηγορίες, τις ετικέτες και την αναζήτηση προϊόντων (κύριο query του WooCommerce)· όχι blocks ή shortcodes με δικό τους query.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_product_query', 'perfectpixel_hide_products_by_meta' );\n\nfunction perfectpixel_hide_products_by_meta( $q ) {\n\t$key = sanitize_key( '{{hide_meta_key}}' );\n\tif ( '' === $key ) {\n\t\treturn;\n\t}\n\t$meta_query   = (array) $q->get( 'meta_query' );\n\t$meta_query[] = array(\n\t\t'relation' => 'OR',\n\t\tarray(\n\t\t\t'key'     => $key,\n\t\t\t'compare' => 'NOT EXISTS',\n\t\t),\n\t\tarray(\n\t\t\t'key'     => $key,\n\t\t\t'value'   => '{{hide_meta_value}}',\n\t\t\t'compare' => '!=',\n\t\t),\n\t);\n\t$q->set( 'meta_query', $meta_query );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shop",
+        "custom-fields",
+        "acf",
+        "query"
+    ],
+    "variables": [
+        {
+            "name": "hide_meta_key",
+            "label": "Όνομα πεδίου (meta key)",
+            "default": "hide_from_shop",
+            "description": "Το name του πεδίου, π.χ. του ACF"
+        },
+        {
+            "name": "hide_meta_value",
+            "label": "Τιμή που κρύβει το προϊόν",
+            "default": "1",
+            "description": "Ακριβής τιμή"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-hide-products-by-custom-field-value/"
+    ],
+    "updated": "2026-11-18T16:08:04+00:00"
+}

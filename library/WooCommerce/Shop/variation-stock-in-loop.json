@@ -1,0 +1,29 @@
+{
+    "title": "List variations and their stock under shop products",
+    "description": "Στις λίστες προϊόντων (κατάστημα, κατηγορίες), κάτω από κάθε μεταβλητό προϊόν εμφανίζει τις παραλλαγές με το απόθεμά τους, π.χ. «Κόκκινο, L: 3 σε απόθεμα» ή «Μπλε, M: Εξαντλημένο». Χρήσιμο για καταστήματα με λίγες παραλλαγές ανά προϊόν. Ισχύει για τις κλασικές σελίδες καταστήματος/κατηγοριών· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_after_shop_loop_item', 'perfectpixel_variation_stock_in_loop', 7 );\n\nfunction perfectpixel_variation_stock_in_loop() {\n\tglobal $product;\n\tif ( ! $product || ! $product->is_type( 'variable' ) ) {\n\t\treturn;\n\t}\n\t$children = $product->get_children();\n\tif ( ! $children || count( $children ) > max( 1, (int) '{{loop_variations_limit}}' ) ) {\n\t\treturn;\n\t}\n\techo '<ul class=\"perfectpixel-loop-variations\" style=\"list-style:none;margin:.5em 0;padding:0;font-size:.85em\">';\n\tforeach ( $children as $child_id ) {\n\t\t$variation = wc_get_product( $child_id );\n\t\tif ( ! $variation || ! $variation->variation_is_visible() ) {\n\t\t\tcontinue;\n\t\t}\n\t\t$availability = $variation->get_availability();\n\t\t$status       = $availability['availability'] ? $availability['availability'] : ( $variation->is_in_stock() ? __( 'In stock', 'woocommerce' ) : __( 'Out of stock', 'woocommerce' ) );\n\t\tprintf( '<li>%s: %s</li>', esc_html( wc_get_formatted_variation( $variation, true, false, false ) ), esc_html( wp_strip_all_tags( $status ) ) );\n\t}\n\techo '</ul>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shop",
+        "variations",
+        "stock"
+    ],
+    "variables": [
+        {
+            "name": "loop_variations_limit",
+            "label": "Μέγιστος αριθμός παραλλαγών ανά προϊόν",
+            "default": "10",
+            "description": "Μόνο αριθμός. Προϊόντα με περισσότερες παραλλαγές παραλείπονται"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-display-variations-name-stock-shop-page/"
+    ],
+    "updated": "2026-11-18T16:08:04+00:00"
+}

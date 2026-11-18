@@ -1,0 +1,41 @@
+{
+    "title": "Hide the shop, category and tag page titles",
+    "description": "Κρύβει τον τίτλο «Κατάστημα» στη σελίδα καταστήματος και, προαιρετικά, τους τίτλους στις σελίδες κατηγοριών και ετικετών. Χρήσιμο όταν η σελίδα έχει ήδη δικό της banner ή επικεφαλίδα. Ορίστε yes/no για κάθε περίπτωση. Ισχύει για τις κλασικές σελίδες καταστήματος/κατηγοριών· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_show_page_title', 'perfectpixel_hide_archive_titles' );\n\nfunction perfectpixel_hide_archive_titles( $show ) {\n\tif ( ( is_shop() && 'yes' === '{{hide_title_shop}}' )\n\t\t|| ( is_product_category() && 'yes' === '{{hide_title_categories}}' )\n\t\t|| ( is_product_tag() && 'yes' === '{{hide_title_tags}}' ) ) {\n\t\treturn false;\n\t}\n\treturn $show;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shop",
+        "titles",
+        "layout"
+    ],
+    "variables": [
+        {
+            "name": "hide_title_shop",
+            "label": "Κατάστημα (yes/no)",
+            "default": "yes",
+            "description": "yes ή no"
+        },
+        {
+            "name": "hide_title_categories",
+            "label": "Κατηγορίες (yes/no)",
+            "default": "no",
+            "description": "yes ή no"
+        },
+        {
+            "name": "hide_title_tags",
+            "label": "Ετικέτες (yes/no)",
+            "default": "no",
+            "description": "yes ή no"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-remove-shop-title-woocommerce-shop-page/"
+    ],
+    "updated": "2026-11-18T16:08:04+00:00"
+}
