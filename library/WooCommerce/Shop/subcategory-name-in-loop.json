@@ -1,0 +1,35 @@
+{
+    "title": "Show a subcategory (e.g. brand) under shop products",
+    "description": "Ξ‘Ξ½ Ο‡ΟΞ·ΟƒΞΉΞΌΞΏΟ€ΞΏΞΉΞµΞ―Ο„Ξµ ΞΌΞΉΞ± Ξ³ΞΏΞ½ΞΉΞΊΞ® ΞΊΞ±Ο„Ξ·Ξ³ΞΏΟΞ―Ξ± Ξ³ΞΉΞ± ΞΌΞ¬ΟΞΊΞµΟ‚ (Ο€.Ο‡. Β«ΞΞ¬ΟΞΊΞ±Β» ΞΌΞµ Ο…Ο€ΞΏΞΊΞ±Ο„Ξ·Ξ³ΞΏΟΞ―ΞµΟ‚ Nike, Adidas), ΟƒΟ„ΞΉΟ‚ Ξ»Ξ―ΟƒΟ„ΞµΟ‚ Ο€ΟΞΏΟΟΞ½Ο„Ο‰Ξ½ ΞµΞΌΟ†Ξ±Ξ½Ξ―Ξ¶ΞµΟ„Ξ±ΞΉ Ο€Ξ¬Ξ½Ο‰ Ξ±Ο€Ο Ο„ΞΏΞ½ Ο„Ξ―Ο„Ξ»ΞΏ ΞΊΞ¬ΞΈΞµ Ο€ΟΞΏΟΟΞ½Ο„ΞΏΟ‚ Ξ· Ο…Ο€ΞΏΞΊΞ±Ο„Ξ·Ξ³ΞΏΟΞ―Ξ± Ο„ΞΏΟ…, Ο€.Ο‡. Β«NikeΒ». ΞΟΞ―ΟƒΟ„Ξµ Ο„ΞΏ ID Ο„Ξ·Ο‚ Ξ³ΞΏΞ½ΞΉΞΊΞ®Ο‚ ΞΊΞ±Ο„Ξ·Ξ³ΞΏΟΞ―Ξ±Ο‚. Ξ™ΟƒΟ‡ΟΞµΞΉ Ξ³ΞΉΞ± Ο„ΞΉΟ‚ ΞΊΞ»Ξ±ΟƒΞΉΞΊΞ­Ο‚ ΟƒΞµΞ»Ξ―Ξ΄ΞµΟ‚ ΞΊΞ±Ο„Ξ±ΟƒΟ„Ξ®ΞΌΞ±Ο„ΞΏΟ‚/ΞΊΞ±Ο„Ξ·Ξ³ΞΏΟΞΉΟΞ½Β· Ο„Ξ± templates ΞΌΞµ blocks Ξ΄ΞµΞ½ Ο‡ΟΞ·ΟƒΞΉΞΌΞΏΟ€ΞΏΞΉΞΏΟΞ½ Ξ±Ο…Ο„Ο Ο„ΞΏ hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_shop_loop_item_title', 'perfectpixel_subcategory_name_in_loop', 5 );\n\nfunction perfectpixel_subcategory_name_in_loop() {\n\t$parent = (int) '{{brand_parent_category_id}}';\n\tif ( ! $parent ) {\n\t\treturn;\n\t}\n\t$names = array();\n\tforeach ( (array) get_the_terms( get_the_ID(), 'product_cat' ) as $term ) {\n\t\tif ( $term && ! is_wp_error( $term ) && term_is_ancestor_of( $parent, $term, 'product_cat' ) ) {\n\t\t\t$names[] = 'yes' === '{{brand_as_link}}'\n\t\t\t\t? '<a href=\"' . esc_url( get_term_link( $term ) ) . '\">' . esc_html( $term->name ) . '</a>'\n\t\t\t\t: esc_html( $term->name );\n\t\t}\n\t}\n\tif ( $names ) {\n\t\techo '<div class=\"perfectpixel-loop-brand\" style=\"font-size:.8em;text-transform:uppercase;letter-spacing:.05em;opacity:.8\">' . implode( ', ', $names ) . '</div>';\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shop",
+        "categories",
+        "brands"
+    ],
+    "variables": [
+        {
+            "name": "brand_parent_category_id",
+            "label": "ID Ξ³ΞΏΞ½ΞΉΞΊΞ®Ο‚ ΞΊΞ±Ο„Ξ·Ξ³ΞΏΟΞ―Ξ±Ο‚",
+            "default": "0",
+            "description": "ΞΟΞ½ΞΏ Ξ±ΟΞΉΞΈΞΌΟΟ‚"
+        },
+        {
+            "name": "brand_as_link",
+            "label": "Ξ©Ο‚ ΟƒΟΞ½Ξ΄ΞµΟƒΞΌΞΏΟ‚ (yes/no)",
+            "default": "yes",
+            "description": "yes = ΞΏΞ΄Ξ·Ξ³ΞµΞ― ΟƒΟ„Ξ· ΟƒΞµΞ»Ξ―Ξ΄Ξ± Ο„Ξ·Ο‚ Ο…Ο€ΞΏΞΊΞ±Ο„Ξ·Ξ³ΞΏΟΞ―Ξ±Ο‚"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-show-product-subcategories/"
+    ],
+    "updated": "2026-11-18T16:59:27+00:00"
+}

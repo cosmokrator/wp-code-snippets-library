@@ -1,0 +1,35 @@
+{
+    "title": "Show dimensions and weight under shop products",
+    "description": "Ξ£Ο„ΞΉΟ‚ Ξ»Ξ―ΟƒΟ„ΞµΟ‚ Ο€ΟΞΏΟΟΞ½Ο„Ο‰Ξ½, ΞΊΞ¬Ο„Ο‰ Ξ±Ο€Ο ΞΊΞ¬ΞΈΞµ Ο€ΟΞΏΟΟΞ½ ΞµΞΌΟ†Ξ±Ξ½Ξ―Ξ¶ΞµΞΉ Ο„ΞΉΟ‚ Ξ΄ΞΉΞ±ΟƒΟ„Ξ¬ΟƒΞµΞΉΟ‚ (Ξ Γ— Ξ  Γ— Ξ¥) ΞΊΞ±ΞΉ, Ο€ΟΞΏΞ±ΞΉΟΞµΟ„ΞΉΞΊΞ¬, Ο„ΞΏ Ξ²Ξ¬ΟΞΏΟ‚ Ο„ΞΏΟ…, ΟΟ€Ο‰Ο‚ Ξ­Ο‡ΞΏΟ…Ξ½ ΞΏΟΞΉΟƒΟ„ΞµΞ― ΟƒΟ„Ξ·Ξ½ ΞΊΞ±ΟΟ„Ξ­Ξ»Ξ± Β«Ξ‘Ο€ΞΏΟƒΟ„ΞΏΞ»Ξ®Β» Ο„ΞΏΟ… Ο€ΟΞΏΟΟΞ½Ο„ΞΏΟ‚. Ξ¤Ξ± Ο€ΟΞΏΟΟΞ½Ο„Ξ± Ο‡Ο‰ΟΞ―Ο‚ Ξ΄ΞΉΞ±ΟƒΟ„Ξ¬ΟƒΞµΞΉΟ‚ Ξ΄ΞµΞ½ Ξ΄ΞµΞ―Ο‡Ξ½ΞΏΟ…Ξ½ Ο„Ξ―Ο€ΞΏΟ„Ξ±. Ξ™ΟƒΟ‡ΟΞµΞΉ Ξ³ΞΉΞ± Ο„ΞΉΟ‚ ΞΊΞ»Ξ±ΟƒΞΉΞΊΞ­Ο‚ ΟƒΞµΞ»Ξ―Ξ΄ΞµΟ‚ ΞΊΞ±Ο„Ξ±ΟƒΟ„Ξ®ΞΌΞ±Ο„ΞΏΟ‚/ΞΊΞ±Ο„Ξ·Ξ³ΞΏΟΞΉΟΞ½Β· Ο„Ξ± templates ΞΌΞµ blocks Ξ΄ΞµΞ½ Ο‡ΟΞ·ΟƒΞΉΞΌΞΏΟ€ΞΏΞΉΞΏΟΞ½ Ξ±Ο…Ο„Ο Ο„ΞΏ hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_after_shop_loop_item', 'perfectpixel_dimensions_in_loop', 7 );\n\nfunction perfectpixel_dimensions_in_loop() {\n\tglobal $product;\n\tif ( ! $product ) {\n\t\treturn;\n\t}\n\t$lines = array();\n\tif ( $product->has_dimensions() ) {\n\t\t$lines[] = esc_html( '{{loop_dimensions_label}}' ) . ' ' . esc_html( wc_format_dimensions( $product->get_dimensions( false ) ) );\n\t}\n\t$weight_label = trim( '{{loop_weight_label}}' );\n\tif ( '' !== $weight_label && $product->has_weight() ) {\n\t\t$lines[] = esc_html( $weight_label ) . ' ' . esc_html( wc_format_weight( $product->get_weight() ) );\n\t}\n\tif ( $lines ) {\n\t\techo '<div class=\"perfectpixel-loop-dimensions\" style=\"font-size:.85em;margin:.5em 0\">' . implode( '<br>', $lines ) . '</div>';\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shop",
+        "dimensions",
+        "weight"
+    ],
+    "variables": [
+        {
+            "name": "loop_dimensions_label",
+            "label": "Ξ•Ο„ΞΉΞΊΞ­Ο„Ξ± Ξ΄ΞΉΞ±ΟƒΟ„Ξ¬ΟƒΞµΟ‰Ξ½",
+            "default": "Ξ”ΞΉΞ±ΟƒΟ„Ξ¬ΟƒΞµΞΉΟ‚:",
+            "description": "Ξ§Ο‰ΟΞ―Ο‚ Ξ±Ο€ΟΟƒΟ„ΟΞΏΟ†ΞΏ (')"
+        },
+        {
+            "name": "loop_weight_label",
+            "label": "Ξ•Ο„ΞΉΞΊΞ­Ο„Ξ± Ξ²Ξ¬ΟΞΏΟ…Ο‚",
+            "default": "Ξ’Ξ¬ΟΞΏΟ‚:",
+            "description": "Ξ§Ο‰ΟΞ―Ο‚ Ξ±Ο€ΟΟƒΟ„ΟΞΏΟ†ΞΏ ('). ΞΞµΞ½Ο = Ο‡Ο‰ΟΞ―Ο‚ Ξ²Ξ¬ΟΞΏΟ‚"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-display-product-height-length-width-shop-page/"
+    ],
+    "updated": "2026-11-18T16:59:27+00:00"
+}

@@ -1,0 +1,23 @@
+{
+    "title": "Show shop products as a list instead of a grid",
+    "description": "CSS Ο€ΞΏΟ… ΞµΞΌΟ†Ξ±Ξ½Ξ―Ξ¶ΞµΞΉ Ο„Ξ± Ο€ΟΞΏΟΟΞ½Ο„Ξ± Ο„ΞΏΟ… ΞΊΞ±Ο„Ξ±ΟƒΟ„Ξ®ΞΌΞ±Ο„ΞΏΟ‚ ΟƒΞµ Ξ»Ξ―ΟƒΟ„Ξ±, Ξ­Ξ½Ξ± Ξ±Ξ½Ξ¬ Ξ³ΟΞ±ΞΌΞΌΞ®: ΞΌΞΉΞΊΟΞ® ΞµΞΉΞΊΟΞ½Ξ± Ξ±ΟΞΉΟƒΟ„ΞµΟΞ¬, Ο„Ξ―Ο„Ξ»ΞΏΟ‚ ΞΊΞ±ΞΉ Ο„ΞΉΞΌΞ® ΟƒΟ„Ξ· ΞΌΞ­ΟƒΞ·, ΞΊΞΏΟ…ΞΌΟ€Ξ― Ξ±Ξ³ΞΏΟΞ¬Ο‚ Ξ΄ΞµΞΎΞΉΞ¬. Ξ¤Ξ±ΞΉΟΞΉΞ¬Ξ¶ΞµΞΉ ΟƒΞµ B2B ΞΊΞ±Ο„Ξ±ΟƒΟ„Ξ®ΞΌΞ±Ο„Ξ± ΞΊΞ±ΞΉ Ο€ΞµΞ»Ξ¬Ο„ΞµΟ‚ Ο€ΞΏΟ… Ο€Ξ±ΟΞ±Ξ³Ξ³Ξ­Ξ»Ξ½ΞΏΟ…Ξ½ Β«Ξ±Ο€Ο ΞΊΞ±Ο„Ξ¬Ξ»ΞΏΞ³ΞΏΒ». Ξ£Ξµ ΞΊΞΉΞ½Ξ·Ο„Ξ¬ Ο„Ξ± ΟƒΟ„ΞΏΞΉΟ‡ΞµΞ―Ξ± ΟƒΟ„ΞΏΞΉΞ²Ξ¬Ξ¶ΞΏΞ½Ο„Ξ±ΞΉ. Ξ‘Ξ½Ξ¬Ξ»ΞΏΞ³Ξ± ΞΌΞµ Ο„ΞΏ theme Ξ―ΟƒΟ‰Ο‚ Ο‡ΟΞµΞΉΞ±ΟƒΟ„ΞΏΟΞ½ Ο€ΟΞΏΟƒΞ±ΟΞΌΞΏΞ³Ξ­Ο‚.",
+    "type": "css",
+    "code": ".woocommerce ul.products {\n\tdisplay: block !important;\n}\n.woocommerce ul.products::before,\n.woocommerce ul.products::after {\n\tdisplay: none !important;\n}\n.woocommerce ul.products li.product {\n\tfloat: none !important;\n\twidth: 100% !important;\n\tmargin: 0 !important;\n\tpadding: 1em 0;\n\tborder-bottom: 1px solid rgba(0, 0, 0, .1);\n\tdisplay: grid !important;\n\tgrid-template-columns: 90px 1fr auto;\n\talign-items: center;\n\tcolumn-gap: 1.5em;\n}\n.woocommerce ul.products li.product a.woocommerce-LoopProduct-link {\n\tdisplay: contents;\n}\n.woocommerce ul.products li.product img {\n\tgrid-column: 1;\n\tgrid-row: 1 / span 3;\n\twidth: 90px !important;\n\tmargin: 0 !important;\n}\n.woocommerce ul.products li.product .woocommerce-loop-product__title,\n.woocommerce ul.products li.product .price,\n.woocommerce ul.products li.product .star-rating {\n\tgrid-column: 2;\n\tmargin: 0 !important;\n\ttext-align: left;\n}\n.woocommerce ul.products li.product .button {\n\tgrid-column: 3;\n\tgrid-row: 1 / span 3;\n\tmargin: 0 !important;\n}\n.woocommerce ul.products li.product .onsale {\n\tdisplay: none;\n}\n@media (max-width: 600px) {\n\t.woocommerce ul.products li.product {\n\t\tgrid-template-columns: 70px 1fr;\n\t}\n\t.woocommerce ul.products li.product .button {\n\t\tgrid-column: 2;\n\t\tgrid-row: auto;\n\t\tjustify-self: start;\n\t\tmargin-top: .5em !important;\n\t}\n}",
+    "location": "site_header",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shop",
+        "css",
+        "layout",
+        "b2b"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-display-products-table/"
+    ],
+    "updated": "2026-11-18T16:59:27+00:00"
+}

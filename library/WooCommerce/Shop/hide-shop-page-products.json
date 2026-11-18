@@ -1,0 +1,22 @@
+{
+    "title": "Hide the product list on the main shop page",
+    "description": "Ξ— ΞΊΞµΞ½Ο„ΟΞΉΞΊΞ® ΟƒΞµΞ»Ξ―Ξ΄Ξ± ΞΊΞ±Ο„Ξ±ΟƒΟ„Ξ®ΞΌΞ±Ο„ΞΏΟ‚ Ξ΄ΞµΞ½ ΞµΞΌΟ†Ξ±Ξ½Ξ―Ξ¶ΞµΞΉ Ο„Ξ· Ξ»Ξ―ΟƒΟ„Ξ± Ο€ΟΞΏΟΟΞ½Ο„Ο‰Ξ½, ΟΟƒΟ„Ξµ Ξ½Ξ± Ο„Ξ· ΟƒΟ„Ξ®ΟƒΞµΟ„Ξµ ΟΟ€Ο‰Ο‚ ΞΈΞ­Ξ»ΞµΟ„Ξµ ΞΌΞµ Ο„ΞΏ Ο€ΞµΟΞΉΞµΟ‡ΟΞΌΞµΞ½ΞΏ Ο„Ξ·Ο‚ ΟƒΞµΞ»Ξ―Ξ΄Ξ±Ο‚ Β«ΞΞ±Ο„Ξ¬ΟƒΟ„Ξ·ΞΌΞ±Β» (Ο€.Ο‡. shortcodes Ο€ΟΞΏΞ²ΞµΞ²Ξ»Ξ·ΞΌΞ­Ξ½Ο‰Ξ½ Ο€ΟΞΏΟΟΞ½Ο„Ο‰Ξ½ Ξ® ΞΊΞ±Ο„Ξ·Ξ³ΞΏΟΞΉΟΞ½). ΞΞΉ ΞΊΞ±Ο„Ξ·Ξ³ΞΏΟΞ―ΞµΟ‚, ΞΏΞΉ ΞµΟ„ΞΉΞΊΞ­Ο„ΞµΟ‚ ΞΊΞ±ΞΉ Ξ· Ξ±Ξ½Ξ±Ξ¶Ξ®Ο„Ξ·ΟƒΞ· Ξ΄ΞµΞ½ ΞµΟ€Ξ·ΟΞµΞ¬Ξ¶ΞΏΞ½Ο„Ξ±ΞΉ. Ξ— ΟΟΞΈΞΌΞΉΟƒΞ· Β«Ξ•ΞΌΟ†Ξ¬Ξ½ΞΉΟƒΞ· ΟƒΞµΞ»Ξ―Ξ΄Ξ±Ο‚ ΞΊΞ±Ο„Ξ±ΟƒΟ„Ξ®ΞΌΞ±Ο„ΞΏΟ‚Β» Ο€ΟΞ­Ο€ΞµΞΉ Ξ½Ξ± ΞµΞ―Ξ½Ξ±ΞΉ Β«Ξ•ΞΌΟ†Ξ¬Ξ½ΞΉΟƒΞ· Ο€ΟΞΏΟΟΞ½Ο„Ο‰Ξ½Β».",
+    "type": "php",
+    "code": "add_action( 'woocommerce_product_query', 'perfectpixel_hide_shop_page_products' );\nadd_action( 'woocommerce_no_products_found', 'perfectpixel_hide_shop_page_no_products_notice', 1 );\n\nfunction perfectpixel_hide_shop_page_products( $q ) {\n\tif ( is_shop() && ! is_search() ) {\n\t\t$q->set( 'post__in', array( 0 ) );\n\t}\n}\n\n// Also drop the \"No products were found\" notice on the shop page.\nfunction perfectpixel_hide_shop_page_no_products_notice() {\n\tif ( is_shop() && ! is_search() ) {\n\t\tremove_action( 'woocommerce_no_products_found', 'wc_no_products_found', 10 );\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shop",
+        "query",
+        "layout"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-remove-loop-shop-page/"
+    ],
+    "updated": "2026-11-18T16:59:27+00:00"
+}

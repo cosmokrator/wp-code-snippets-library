@@ -1,0 +1,29 @@
+{
+    "title": "Show only selected categories on the shop page",
+    "description": "Ξ— ΞΊΞµΞ½Ο„ΟΞΉΞΊΞ® ΟƒΞµΞ»Ξ―Ξ΄Ξ± ΞΊΞ±Ο„Ξ±ΟƒΟ„Ξ®ΞΌΞ±Ο„ΞΏΟ‚ ΞµΞΌΟ†Ξ±Ξ½Ξ―Ξ¶ΞµΞΉ ΞΌΟΞ½ΞΏ Ο„Ξ± Ο€ΟΞΏΟΟΞ½Ο„Ξ± ΟƒΟ…Ξ³ΞΊΞµΞΊΟΞΉΞΌΞ­Ξ½Ο‰Ξ½ ΞΊΞ±Ο„Ξ·Ξ³ΞΏΟΞΉΟΞ½ (Ο€.Ο‡. Ο„Ξ· ΟƒΟ…Ξ»Ξ»ΞΏΞ³Ξ® Ο„Ξ·Ο‚ ΟƒΞµΞ¶ΟΞ½). ΞΞΉ Ο…Ο€ΟΞ»ΞΏΞΉΟ€ΞµΟ‚ ΞΊΞ±Ο„Ξ·Ξ³ΞΏΟΞ―ΞµΟ‚ ΞµΞΎΞ±ΞΊΞΏΞ»ΞΏΟ…ΞΈΞΏΟΞ½ Ξ½Ξ± Ξ­Ο‡ΞΏΟ…Ξ½ Ο„ΞΉΟ‚ Ξ΄ΞΉΞΊΞ­Ο‚ Ο„ΞΏΟ…Ο‚ ΟƒΞµΞ»Ξ―Ξ΄ΞµΟ‚ ΞΊΞ±ΞΉ Ο„Ξ± Ο€ΟΞΏΟΟΞ½Ο„Ξ± Ο„ΞΏΟ…Ο‚ Ξ²ΟΞ―ΟƒΞΊΞΏΞ½Ο„Ξ±ΞΉ ΟƒΟ„Ξ·Ξ½ Ξ±Ξ½Ξ±Ξ¶Ξ®Ο„Ξ·ΟƒΞ·.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_product_query', 'perfectpixel_shop_only_categories' );\n\nfunction perfectpixel_shop_only_categories( $q ) {\n\t$ids = wp_parse_id_list( '{{shop_only_category_ids}}' );\n\tif ( ! $ids || ! is_shop() || is_search() ) {\n\t\treturn;\n\t}\n\t$tax_query   = (array) $q->get( 'tax_query' );\n\t$tax_query[] = array(\n\t\t'taxonomy' => 'product_cat',\n\t\t'field'    => 'term_id',\n\t\t'terms'    => $ids,\n\t\t'operator' => 'IN',\n\t);\n\t$q->set( 'tax_query', $tax_query );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shop",
+        "categories",
+        "query"
+    ],
+    "variables": [
+        {
+            "name": "shop_only_category_ids",
+            "label": "IDs ΞΊΞ±Ο„Ξ·Ξ³ΞΏΟΞΉΟΞ½ (ΞΌΞµ ΞΊΟΞΌΞΌΞ±)",
+            "default": "",
+            "description": "ΞΞµΞ½Ο = ΞΊΞ±ΞΌΞ―Ξ± Ξ±Ξ»Ξ»Ξ±Ξ³Ξ®"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-show-unique-category-shop-page/"
+    ],
+    "updated": "2026-11-18T16:59:27+00:00"
+}

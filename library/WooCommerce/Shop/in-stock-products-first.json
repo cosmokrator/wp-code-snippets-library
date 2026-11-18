@@ -1,0 +1,22 @@
+{
+    "title": "Show in-stock products before out-of-stock ones",
+    "description": "Ξ£Ο„ΞΏ ΞΊΞ±Ο„Ξ¬ΟƒΟ„Ξ·ΞΌΞ± ΞΊΞ±ΞΉ ΟƒΟ„ΞΉΟ‚ ΞΊΞ±Ο„Ξ·Ξ³ΞΏΟΞ―ΞµΟ‚, Ο„Ξ± ΞµΞΎΞ±Ξ½Ο„Ξ»Ξ·ΞΌΞ­Ξ½Ξ± Ο€ΟΞΏΟΟΞ½Ο„Ξ± ΞµΞΌΟ†Ξ±Ξ½Ξ―Ξ¶ΞΏΞ½Ο„Ξ±ΞΉ Ο€Ξ¬Ξ½Ο„Ξ± ΟƒΟ„ΞΏ Ο„Ξ­Ξ»ΞΏΟ‚, ΟΟ€ΞΏΞΉΞ± Ο„Ξ±ΞΎΞΉΞ½ΟΞΌΞ·ΟƒΞ· ΞΊΞΉ Ξ±Ξ½ ΞµΟ€ΞΉΞ»Ξ­ΞΎΞµΞΉ ΞΏ Ο€ΞµΞ»Ξ¬Ο„Ξ·Ο‚ (ΞΌΞ­ΟƒΞ± ΟƒΞµ ΞΊΞ¬ΞΈΞµ ΞΏΞΌΞ¬Ξ΄Ξ± ΞΉΟƒΟ‡ΟΞµΞΉ Ξ· ΞΊΞ±Ξ½ΞΏΞ½ΞΉΞΊΞ® Ο„Ξ±ΞΎΞΉΞ½ΟΞΌΞ·ΟƒΞ·). ΞΟ„ΟƒΞΉ ΞΏΞΉ Ο€ΟΟΟ„ΞµΟ‚ ΟƒΞµΞ»Ξ―Ξ΄ΞµΟ‚ Ξ΄ΞµΞ―Ο‡Ξ½ΞΏΟ…Ξ½ Ο€ΟΞΏΟΟΞ½Ο„Ξ± Ο€ΞΏΟ… Ξ±Ξ³ΞΏΟΞ¬Ξ¶ΞΏΞ½Ο„Ξ±ΞΉ. Ξ•Ο€Ξ·ΟΞµΞ¬Ξ¶ΞµΞΉ Ο„ΞΏ ΞΊΟΟΞΉΞΏ query Ο„ΞΏΟ… WooCommerce (ΞΊΞ±Ο„Ξ¬ΟƒΟ„Ξ·ΞΌΞ±, ΞΊΞ±Ο„Ξ·Ξ³ΞΏΟΞ―ΞµΟ‚, ΞµΟ„ΞΉΞΊΞ­Ο„ΞµΟ‚, Ξ±Ξ½Ξ±Ξ¶Ξ®Ο„Ξ·ΟƒΞ· Ο€ΟΞΏΟΟΞ½Ο„Ο‰Ξ½)Β· ΟΟ‡ΞΉ blocks Ξ® shortcodes ΞΌΞµ Ξ΄ΞΉΞΊΟ Ο„ΞΏΟ…Ο‚ query.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_product_query', 'perfectpixel_in_stock_first_flag' );\nadd_filter( 'posts_clauses', 'perfectpixel_in_stock_first_clauses', 30, 2 );\n\nfunction perfectpixel_in_stock_first_flag( $q ) {\n\t$q->set( 'perfectpixel_in_stock_first', 1 );\n}\n\nfunction perfectpixel_in_stock_first_clauses( $clauses, $query ) {\n\tglobal $wpdb;\n\tif ( ! $query->get( 'perfectpixel_in_stock_first' ) ) {\n\t\treturn $clauses;\n\t}\n\t$clauses['join']   .= \" LEFT JOIN {$wpdb->prefix}wc_product_meta_lookup pp_stock ON pp_stock.product_id = {$wpdb->posts}.ID\";\n\t$clauses['orderby'] = \"( pp_stock.stock_status = 'outofstock' ) ASC\" . ( $clauses['orderby'] ? ', ' . $clauses['orderby'] : '' );\n\treturn $clauses;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shop",
+        "sorting",
+        "stock"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-show-in-stock-products-first-shop/"
+    ],
+    "updated": "2026-11-18T16:59:27+00:00"
+}

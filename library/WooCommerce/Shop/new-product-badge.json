@@ -1,0 +1,41 @@
+{
+    "title": "Show a \"New\" badge on recent products",
+    "description": "Ξ£Ο„ΞΉΟ‚ Ξ»Ξ―ΟƒΟ„ΞµΟ‚ Ο€ΟΞΏΟΟΞ½Ο„Ο‰Ξ½ ΞµΞΌΟ†Ξ±Ξ½Ξ―Ξ¶ΞµΞΉ ΞµΟ„ΞΉΞΊΞ­Ο„Ξ± Β«ΞΞ­ΞΏΒ» ΟƒΟ„Ξ± Ο€ΟΞΏΟΟΞ½Ο„Ξ± Ο€ΞΏΟ… Ξ΄Ξ·ΞΌΞΏΟƒΞΉΞµΟΟ„Ξ·ΞΊΞ±Ξ½ Ο„ΞΉΟ‚ Ο„ΞµΞ»ΞµΟ…Ο„Ξ±Ξ―ΞµΟ‚ Ξ·ΞΌΞ­ΟΞµΟ‚ (ΞΏΟΞ―ΟƒΟ„Ξµ Ο€ΟΟƒΞµΟ‚), ΟΟƒΟ„Ξµ Ξ½Ξ± ΞΎΞµΟ‡Ο‰ΟΞ―Ξ¶ΞΏΟ…Ξ½ ΞΏΞΉ Ξ½Ξ­ΞµΟ‚ Ξ±Ο†Ξ―ΞΎΞµΞΉΟ‚. ΞΟΞ―ΟƒΟ„Ξµ ΞΊΞµΞ―ΞΌΞµΞ½ΞΏ ΞΊΞ±ΞΉ Ο‡ΟΟΞΌΞ± ΟƒΟ„ΞΉΟ‚ ΞΌΞµΟ„Ξ±Ξ²Ξ»Ξ·Ο„Ξ­Ο‚. Ξ™ΟƒΟ‡ΟΞµΞΉ Ξ³ΞΉΞ± Ο„ΞΉΟ‚ ΞΊΞ»Ξ±ΟƒΞΉΞΊΞ­Ο‚ ΟƒΞµΞ»Ξ―Ξ΄ΞµΟ‚ ΞΊΞ±Ο„Ξ±ΟƒΟ„Ξ®ΞΌΞ±Ο„ΞΏΟ‚/ΞΊΞ±Ο„Ξ·Ξ³ΞΏΟΞΉΟΞ½Β· Ο„Ξ± templates ΞΌΞµ blocks Ξ΄ΞµΞ½ Ο‡ΟΞ·ΟƒΞΉΞΌΞΏΟ€ΞΏΞΉΞΏΟΞ½ Ξ±Ο…Ο„Ο Ο„ΞΏ hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_before_shop_loop_item_title', 'perfectpixel_new_product_badge', 3 );\n\nfunction perfectpixel_new_product_badge() {\n\tglobal $product;\n\tif ( ! $product || ! $product->get_date_created() ) {\n\t\treturn;\n\t}\n\t$age = time() - $product->get_date_created()->getTimestamp();\n\tif ( $age > max( 1, (int) '{{new_badge_days}}' ) * DAY_IN_SECONDS ) {\n\t\treturn;\n\t}\n\t$color = sanitize_hex_color( '{{new_badge_color}}' );\n\tprintf(\n\t\t'<span class=\"perfectpixel-new-badge\" style=\"position:absolute;top:.5em;right:.5em;z-index:9;padding:.2em .6em;border-radius:3px;color:#fff;font-size:.8em;font-weight:600;background:%s\">%s</span>',\n\t\tesc_attr( $color ? $color : '#00a32a' ),\n\t\tesc_html( '{{new_badge_text}}' )\n\t);\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shop",
+        "badges",
+        "new-products"
+    ],
+    "variables": [
+        {
+            "name": "new_badge_days",
+            "label": "Ξ—ΞΌΞ­ΟΞµΟ‚",
+            "default": "30",
+            "description": "ΞΟΞ½ΞΏ Ξ±ΟΞΉΞΈΞΌΟΟ‚"
+        },
+        {
+            "name": "new_badge_text",
+            "label": "ΞΞµΞ―ΞΌΞµΞ½ΞΏ",
+            "default": "ΞΞ­ΞΏ",
+            "description": "Ξ§Ο‰ΟΞ―Ο‚ Ξ±Ο€ΟΟƒΟ„ΟΞΏΟ†ΞΏ (')"
+        },
+        {
+            "name": "new_badge_color",
+            "label": "Ξ§ΟΟΞΌΞ± Ο†ΟΞ½Ο„ΞΏΟ…",
+            "default": "#00a32a",
+            "description": "Ξ§ΟΟΞΌΞ± CSS, Ο€.Ο‡. #00a32a"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-new-badge-recent-products/"
+    ],
+    "updated": "2026-11-18T16:59:27+00:00"
+}

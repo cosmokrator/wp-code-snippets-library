@@ -1,0 +1,35 @@
+{
+    "title": "Hide products of specific categories from the shop page",
+    "description": "Ξ¤Ξ± Ο€ΟΞΏΟΟΞ½Ο„Ξ± ΟƒΟ…Ξ³ΞΊΞµΞΊΟΞΉΞΌΞ­Ξ½Ο‰Ξ½ ΞΊΞ±Ο„Ξ·Ξ³ΞΏΟΞΉΟΞ½ Ξ΄ΞµΞ½ ΞµΞΌΟ†Ξ±Ξ½Ξ―Ξ¶ΞΏΞ½Ο„Ξ±ΞΉ ΟƒΟ„Ξ·Ξ½ ΞΊΞµΞ½Ο„ΟΞΉΞΊΞ® ΟƒΞµΞ»Ξ―Ξ΄Ξ± ΞΊΞ±Ο„Ξ±ΟƒΟ„Ξ®ΞΌΞ±Ο„ΞΏΟ‚, Ξ±Ξ»Ξ»Ξ¬ ΞΌΟΞ½ΞΏ ΟƒΟ„Ξ· ΟƒΞµΞ»Ξ―Ξ΄Ξ± Ο„Ξ·Ο‚ Ξ΄ΞΉΞΊΞ®Ο‚ Ο„ΞΏΟ…Ο‚ ΞΊΞ±Ο„Ξ·Ξ³ΞΏΟΞ―Ξ±Ο‚ (Ο€.Ο‡. Ο‡ΞΏΞ½Ξ΄ΟΞΉΞΊΞ®, Ξ±Ξ½Ο„Ξ±Ξ»Ξ»Ξ±ΞΊΟ„ΞΉΞΊΞ¬). Ξ ΟΞΏΞ±ΞΉΟΞµΟ„ΞΉΞΊΞ¬ ΞΊΟΟΞ²ΞΏΞ½Ο„Ξ±ΞΉ ΞΊΞ±ΞΉ Ξ±Ο€Ο Ο„Ξ·Ξ½ Ξ±Ξ½Ξ±Ξ¶Ξ®Ο„Ξ·ΟƒΞ·.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_product_query', 'perfectpixel_hide_category_from_shop' );\n\nfunction perfectpixel_hide_category_from_shop( $q ) {\n\t$ids = wp_parse_id_list( '{{shop_hidden_category_ids}}' );\n\tif ( ! $ids ) {\n\t\treturn;\n\t}\n\t$on_shop   = is_shop() && ! is_search();\n\t$on_search = is_search() && 'yes' === '{{shop_hidden_in_search}}';\n\tif ( ! $on_shop && ! $on_search ) {\n\t\treturn;\n\t}\n\t$tax_query   = (array) $q->get( 'tax_query' );\n\t$tax_query[] = array(\n\t\t'taxonomy' => 'product_cat',\n\t\t'field'    => 'term_id',\n\t\t'terms'    => $ids,\n\t\t'operator' => 'NOT IN',\n\t);\n\t$q->set( 'tax_query', $tax_query );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shop",
+        "categories",
+        "query"
+    ],
+    "variables": [
+        {
+            "name": "shop_hidden_category_ids",
+            "label": "IDs ΞΊΞ±Ο„Ξ·Ξ³ΞΏΟΞΉΟΞ½ (ΞΌΞµ ΞΊΟΞΌΞΌΞ±)",
+            "default": "",
+            "description": "ΞΞµΞ½Ο = ΞΊΞ±ΞΌΞ―Ξ± Ξ±Ξ»Ξ»Ξ±Ξ³Ξ®"
+        },
+        {
+            "name": "shop_hidden_in_search",
+            "label": "ΞΞ±ΞΉ Ξ±Ο€Ο Ο„Ξ·Ξ½ Ξ±Ξ½Ξ±Ξ¶Ξ®Ο„Ξ·ΟƒΞ· (yes/no)",
+            "default": "no",
+            "description": "yes Ξ® no"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-remove-specific-category-shop-loop/"
+    ],
+    "updated": "2026-11-18T16:59:27+00:00"
+}

@@ -1,0 +1,21 @@
+{
+    "title": "Hide prices in the shop and category pages",
+    "description": "ΞΟΟΞ²ΞµΞΉ Ο„ΞΉΟ‚ Ο„ΞΉΞΌΞ­Ο‚ Ξ±Ο€Ο Ο„ΞΉΟ‚ Ξ»Ξ―ΟƒΟ„ΞµΟ‚ Ο€ΟΞΏΟΟΞ½Ο„Ο‰Ξ½ (ΞΊΞ±Ο„Ξ¬ΟƒΟ„Ξ·ΞΌΞ±, ΞΊΞ±Ο„Ξ·Ξ³ΞΏΟΞ―ΞµΟ‚, ΟƒΟ‡ΞµΟ„ΞΉΞΊΞ¬ Ο€ΟΞΏΟΟΞ½Ο„Ξ±), ΟΟƒΟ„Ξµ ΞΏ Ο€ΞµΞ»Ξ¬Ο„Ξ·Ο‚ Ξ½Ξ± Ξ±Ξ½ΞΏΞ―Ξ³ΞµΞΉ Ο„Ξ· ΟƒΞµΞ»Ξ―Ξ΄Ξ± Ο„ΞΏΟ… Ο€ΟΞΏΟΟΞ½Ο„ΞΏΟ‚ Ξ³ΞΉΞ± Ξ½Ξ± Ξ΄ΞµΞΉ Ο„Ξ·Ξ½ Ο„ΞΉΞΌΞ®. Ξ£Ο„Ξ· ΟƒΞµΞ»Ξ―Ξ΄Ξ± Ο€ΟΞΏΟΟΞ½Ο„ΞΏΟ‚, ΟƒΟ„ΞΏ ΞΊΞ±Ξ»Ξ¬ΞΈΞΉ ΞΊΞ±ΞΉ ΟƒΟ„ΞΏ checkout ΞΏΞΉ Ο„ΞΉΞΌΞ­Ο‚ ΞµΞΌΟ†Ξ±Ξ½Ξ―Ξ¶ΞΏΞ½Ο„Ξ±ΞΉ ΞΊΞ±Ξ½ΞΏΞ½ΞΉΞΊΞ¬. Ξ™ΟƒΟ‡ΟΞµΞΉ Ξ³ΞΉΞ± Ο„ΞΉΟ‚ ΞΊΞ»Ξ±ΟƒΞΉΞΊΞ­Ο‚ ΟƒΞµΞ»Ξ―Ξ΄ΞµΟ‚ ΞΊΞ±Ο„Ξ±ΟƒΟ„Ξ®ΞΌΞ±Ο„ΞΏΟ‚/ΞΊΞ±Ο„Ξ·Ξ³ΞΏΟΞΉΟΞ½Β· Ο„Ξ± templates ΞΌΞµ blocks Ξ΄ΞµΞ½ Ο‡ΟΞ·ΟƒΞΉΞΌΞΏΟ€ΞΏΞΉΞΏΟΞ½ Ξ±Ο…Ο„Ο Ο„ΞΏ hook.",
+    "type": "php",
+    "code": "add_action( 'init', 'perfectpixel_hide_prices_in_loop' );\n\nfunction perfectpixel_hide_prices_in_loop() {\n\tremove_action( 'woocommerce_after_shop_loop_item_title', 'woocommerce_template_loop_price', 10 );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shop",
+        "prices"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-hide-prices-shop-category-pages/"
+    ],
+    "updated": "2026-11-18T16:59:27+00:00"
+}

@@ -1,0 +1,21 @@
+{
+    "title": "Remove the links to product pages in the shop",
+    "description": "Ξ£Ο„ΞΉΟ‚ Ξ»Ξ―ΟƒΟ„ΞµΟ‚ Ο€ΟΞΏΟΟΞ½Ο„Ο‰Ξ½, Ξ· ΞµΞΉΞΊΟΞ½Ξ± ΞΊΞ±ΞΉ ΞΏ Ο„Ξ―Ο„Ξ»ΞΏΟ‚ Ξ΄ΞµΞ½ ΞµΞ―Ξ½Ξ±ΞΉ Ο€ΞΉΞ± ΟƒΟΞ½Ξ΄ΞµΟƒΞΌΞΏΞΉ Ο€ΟΞΏΟ‚ Ο„Ξ· ΟƒΞµΞ»Ξ―Ξ΄Ξ± Ο„ΞΏΟ… Ο€ΟΞΏΟΟΞ½Ο„ΞΏΟ‚. Ξ“ΞΉΞ± ΞΊΞ±Ο„Ξ±ΟƒΟ„Ξ®ΞΌΞ±Ο„Ξ± ΟΟ€ΞΏΟ… ΞΏ Ο€ΞµΞ»Ξ¬Ο„Ξ·Ο‚ Ξ±Ξ³ΞΏΟΞ¬Ξ¶ΞµΞΉ Ξ±Ο€ΞµΟ…ΞΈΞµΞ―Ξ±Ο‚ Ξ±Ο€Ο Ο„Ξ· Ξ»Ξ―ΟƒΟ„Ξ± (Ο€.Ο‡. ΞΌΞ±Ξ¶Ξ― ΞΌΞµ Ο„ΞΏ snippet Ο€ΞΏΟƒΟΟ„Ξ·Ο„Ξ±Ο‚ ΟƒΟ„Ξ· Ξ»Ξ―ΟƒΟ„Ξ±). Ξ¤Ξ± ΞΊΞΏΟ…ΞΌΟ€ΞΉΞ¬ Β«Ξ•Ο€ΞΉΞ»ΞΏΞ³Ξ­Ο‚Β» Ο„Ο‰Ξ½ ΞΌΞµΟ„Ξ±Ξ²Ξ»Ξ·Ο„ΟΞ½ ΞµΞΎΞ±ΞΊΞΏΞ»ΞΏΟ…ΞΈΞΏΟΞ½ Ξ½Ξ± ΞΏΞ΄Ξ·Ξ³ΞΏΟΞ½ ΟƒΟ„ΞΏ Ο€ΟΞΏΟΟΞ½. Ξ™ΟƒΟ‡ΟΞµΞΉ Ξ³ΞΉΞ± Ο„ΞΉΟ‚ ΞΊΞ»Ξ±ΟƒΞΉΞΊΞ­Ο‚ ΟƒΞµΞ»Ξ―Ξ΄ΞµΟ‚ ΞΊΞ±Ο„Ξ±ΟƒΟ„Ξ®ΞΌΞ±Ο„ΞΏΟ‚/ΞΊΞ±Ο„Ξ·Ξ³ΞΏΟΞΉΟΞ½Β· Ο„Ξ± templates ΞΌΞµ blocks Ξ΄ΞµΞ½ Ο‡ΟΞ·ΟƒΞΉΞΌΞΏΟ€ΞΏΞΉΞΏΟΞ½ Ξ±Ο…Ο„Ο Ο„ΞΏ hook.",
+    "type": "php",
+    "code": "add_action( 'init', 'perfectpixel_disable_product_links_in_loop' );\n\nfunction perfectpixel_disable_product_links_in_loop() {\n\tremove_action( 'woocommerce_before_shop_loop_item', 'woocommerce_template_loop_product_link_open', 10 );\n\tremove_action( 'woocommerce_after_shop_loop_item', 'woocommerce_template_loop_product_link_close', 5 );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shop",
+        "links"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-disable-link-to-product-loop/"
+    ],
+    "updated": "2026-11-18T16:59:27+00:00"
+}

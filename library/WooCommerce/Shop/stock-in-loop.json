@@ -1,0 +1,21 @@
+{
+    "title": "Show stock availability under shop products",
+    "description": "Ξ£Ο„ΞΉΟ‚ Ξ»Ξ―ΟƒΟ„ΞµΟ‚ Ο€ΟΞΏΟΟΞ½Ο„Ο‰Ξ½ ΞµΞΌΟ†Ξ±Ξ½Ξ―Ξ¶ΞµΞΉ Ο„Ξ· Ξ΄ΞΉΞ±ΞΈΞµΟƒΞΉΞΌΟΟ„Ξ·Ο„Ξ± ΞΊΞ¬ΞΈΞµ Ο€ΟΞΏΟΟΞ½Ο„ΞΏΟ‚ (Ο€.Ο‡. Β«5 ΟƒΞµ Ξ±Ο€ΟΞΈΞµΞΌΞ±Β», Β«Ξ•ΞΎΞ±Ξ½Ο„Ξ»Ξ·ΞΌΞ­Ξ½ΞΏΒ», Β«ΞΞ±Ο„ΟΟ€ΞΉΞ½ Ο€Ξ±ΟΞ±Ξ³Ξ³ΞµΞ»Ξ―Ξ±Ο‚Β»), Ξ±ΞΊΟΞΉΞ²ΟΟ‚ ΟΟ€Ο‰Ο‚ ΟƒΟ„Ξ· ΟƒΞµΞ»Ξ―Ξ΄Ξ± Ο€ΟΞΏΟΟΞ½Ο„ΞΏΟ‚, ΟƒΟΞΌΟ†Ο‰Ξ½Ξ± ΞΌΞµ Ο„Ξ· ΟΟΞΈΞΌΞΉΟƒΞ· Β«ΞΞΏΟΟ†Ξ® ΞµΞΌΟ†Ξ¬Ξ½ΞΉΟƒΞ·Ο‚ Ξ±Ο€ΞΏΞΈΞ­ΞΌΞ±Ο„ΞΏΟ‚Β» (Ξ΅Ο…ΞΈΞΌΞ―ΟƒΞµΞΉΟ‚ β†’ Ξ ΟΞΏΟΟΞ½Ο„Ξ± β†’ Ξ‘Ο€ΟΞΈΞµΞΌΞ±). Ξ™ΟƒΟ‡ΟΞµΞΉ Ξ³ΞΉΞ± Ο„ΞΉΟ‚ ΞΊΞ»Ξ±ΟƒΞΉΞΊΞ­Ο‚ ΟƒΞµΞ»Ξ―Ξ΄ΞµΟ‚ ΞΊΞ±Ο„Ξ±ΟƒΟ„Ξ®ΞΌΞ±Ο„ΞΏΟ‚/ΞΊΞ±Ο„Ξ·Ξ³ΞΏΟΞΉΟΞ½Β· Ο„Ξ± templates ΞΌΞµ blocks Ξ΄ΞµΞ½ Ο‡ΟΞ·ΟƒΞΉΞΌΞΏΟ€ΞΏΞΉΞΏΟΞ½ Ξ±Ο…Ο„Ο Ο„ΞΏ hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_after_shop_loop_item', 'perfectpixel_stock_in_loop', 8 );\n\nfunction perfectpixel_stock_in_loop() {\n\tglobal $product;\n\tif ( $product ) {\n\t\techo wc_get_stock_html( $product ); // Core template output, already escaped.\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shop",
+        "stock"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-stock-quantity-on-shop-page/"
+    ],
+    "updated": "2026-11-18T16:59:27+00:00"
+}

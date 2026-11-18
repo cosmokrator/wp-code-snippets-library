@@ -1,0 +1,21 @@
+{
+    "title": "Show empty product categories in the shop",
+    "description": "ΞΟ„Ξ±Ξ½ Ο„ΞΏ ΞΊΞ±Ο„Ξ¬ΟƒΟ„Ξ·ΞΌΞ± ΞµΞΌΟ†Ξ±Ξ½Ξ―Ξ¶ΞµΞΉ ΞΊΞ±Ο„Ξ·Ξ³ΞΏΟΞ―ΞµΟ‚, ΞµΞΌΟ†Ξ±Ξ½Ξ―Ξ¶ΞΏΞ½Ο„Ξ±ΞΉ ΞΊΞ±ΞΉ ΞΏΞΉ ΞΊΞ±Ο„Ξ·Ξ³ΞΏΟΞ―ΞµΟ‚ Ο‡Ο‰ΟΞ―Ο‚ Ξ΄Ξ·ΞΌΞΏΟƒΞΉΞµΟ…ΞΌΞ­Ξ½Ξ± Ο€ΟΞΏΟΟΞ½Ο„Ξ± (Ο€ΞΏΟ… ΞΊΞ±Ξ½ΞΏΞ½ΞΉΞΊΞ¬ ΞΊΟΟΞ²ΞΏΞ½Ο„Ξ±ΞΉ), Ο€.Ο‡. Ξ³ΞΉΞ± ΞΊΞ±Ο„Ξ·Ξ³ΞΏΟΞ―ΞµΟ‚ Β«ΞΟΟ‡ΞµΟ„Ξ±ΞΉ ΟƒΟΞ½Ο„ΞΏΞΌΞ±Β». Ξ ΞµΟΞΉΞ»Ξ±ΞΌΞ²Ξ¬Ξ½ΞµΞΉ ΞΊΞ±ΞΉ Ο„ΞΉΟ‚ ΞΊΞ±Ο„Ξ·Ξ³ΞΏΟΞ―ΞµΟ‚ Ο„Ξ·Ο‚ Ξ±ΟΟ‡ΞΉΞΊΞ®Ο‚ Ο„ΞΏΟ… theme Storefront.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_product_subcategories_hide_empty', 'perfectpixel_show_empty_categories' );\nadd_filter( 'storefront_product_categories_shortcode_args', 'perfectpixel_show_empty_categories_storefront' );\n\nfunction perfectpixel_show_empty_categories() {\n\treturn false;\n}\n\nfunction perfectpixel_show_empty_categories_storefront( $args ) {\n\t$args['hide_empty'] = 0;\n\treturn $args;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shop",
+        "categories"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-show-empty-product-categories/"
+    ],
+    "updated": "2026-11-18T16:59:27+00:00"
+}

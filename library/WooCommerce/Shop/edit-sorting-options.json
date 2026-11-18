@@ -1,0 +1,35 @@
+{
+    "title": "Remove or rename shop sorting options",
+    "description": "Ξ‘Ξ»Ξ»Ξ¬Ξ¶ΞµΞΉ Ο„Ξ· Ξ»Ξ―ΟƒΟ„Ξ± Ο„Ξ±ΞΎΞΉΞ½ΟΞΌΞ·ΟƒΞ·Ο‚ Ο„ΞΏΟ… ΞΊΞ±Ο„Ξ±ΟƒΟ„Ξ®ΞΌΞ±Ο„ΞΏΟ‚: Ξ±Ο†Ξ±ΞΉΟΞµΞ― ΞµΟ€ΞΉΞ»ΞΏΞ³Ξ­Ο‚ Ο€ΞΏΟ… Ξ΄ΞµΞ½ ΞΈΞ­Ξ»ΞµΟ„Ξµ (Ο€.Ο‡. Β«ΞΊΞ±Ο„Ξ¬ Ξ²Ξ±ΞΈΞΌΞΏΞ»ΞΏΞ³Ξ―Ξ±Β») ΞΊΞ±ΞΉ ΞΌΞµΟ„ΞΏΞ½ΞΏΞΌΞ¬Ξ¶ΞµΞΉ Ξ¬Ξ»Ξ»ΞµΟ‚ (Ο€.Ο‡. Β«Ξ¤Ξ±ΞΎΞΉΞ½ΟΞΌΞ·ΟƒΞ· ΞΊΞ±Ο„Ξ¬ Ο„ΞµΞ»ΞµΟ…Ο„Ξ±Ξ―Ξ±Β» β†’ Β«ΞΞ­ΞµΟ‚ Ξ±Ο†Ξ―ΞΎΞµΞΉΟ‚Β»). ΞΟ‰Ξ΄ΞΉΞΊΞΏΞ― ΞµΟ€ΞΉΞ»ΞΏΞ³ΟΞ½: menu_order, popularity, rating, date, price, price-desc.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_catalog_orderby', 'perfectpixel_edit_sorting_options', 50 );\n\nfunction perfectpixel_edit_sorting_options( $options ) {\n\tforeach ( array_filter( array_map( 'trim', explode( ',', '{{sorting_remove_keys}}' ) ) ) as $key ) {\n\t\tunset( $options[ $key ] );\n\t}\n\tforeach ( explode( '|', '{{sorting_renames}}' ) as $pair ) {\n\t\t$parts = array_map( 'trim', explode( '=', $pair, 2 ) );\n\t\tif ( 2 === count( $parts ) && isset( $options[ $parts[0] ] ) && '' !== $parts[1] ) {\n\t\t\t$options[ $parts[0] ] = $parts[1];\n\t\t}\n\t}\n\treturn $options;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shop",
+        "sorting",
+        "labels"
+    ],
+    "variables": [
+        {
+            "name": "sorting_remove_keys",
+            "label": "Ξ•Ο€ΞΉΞ»ΞΏΞ³Ξ­Ο‚ Ο€ΟΞΏΟ‚ Ξ±Ο†Ξ±Ξ―ΟΞµΟƒΞ· (ΞΌΞµ ΞΊΟΞΌΞΌΞ±)",
+            "default": "rating",
+            "description": "Ξ .Ο‡. rating,popularity"
+        },
+        {
+            "name": "sorting_renames",
+            "label": "ΞΞµΟ„ΞΏΞ½ΞΏΞΌΞ±ΟƒΞ―ΞµΟ‚ ΞΊΟ‰Ξ΄ΞΉΞΊΟΟ‚=ΞΊΞµΞ―ΞΌΞµΞ½ΞΏ (ΞΌΞµ |)",
+            "default": "date=ΞΞ­ΞµΟ‚ Ξ±Ο†Ξ―ΞΎΞµΞΉΟ‚",
+            "description": "Ξ§Ο‰ΟΞ―Ο‚ Ξ±Ο€ΟΟƒΟ„ΟΞΏΟ†ΞΏ ('). Ξ .Ο‡. date=ΞΞ­ΞµΟ‚ Ξ±Ο†Ξ―ΞΎΞµΞΉΟ‚|price=Ξ¦ΞΈΞ·Ξ½ΟΟ„ΞµΟΞ± Ο€ΟΟΟ„Ξ±"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-remove-rename-add-default-sorting-options-shop/"
+    ],
+    "updated": "2026-11-18T16:59:27+00:00"
+}

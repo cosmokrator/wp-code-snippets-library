@@ -1,0 +1,21 @@
+{
+    "title": "Hide the \"No products were found\" message",
+    "description": "ΞΟΟΞ²ΞµΞΉ Ο„ΞΏ ΞΌΞ®Ξ½Ο…ΞΌΞ± Β«Ξ”ΞµΞ½ Ξ²ΟΞ­ΞΈΞ·ΞΊΞ±Ξ½ Ο€ΟΞΏΟΟΞ½Ο„Ξ± Ο€ΞΏΟ… Ξ½Ξ± Ο„Ξ±ΞΉΟΞΉΞ¬Ξ¶ΞΏΟ…Ξ½ ΞΌΞµ Ο„Ξ·Ξ½ ΞµΟ€ΞΉΞ»ΞΏΞ³Ξ® ΟƒΞ±Ο‚Β» Ο€ΞΏΟ… ΞµΞΌΟ†Ξ±Ξ½Ξ―Ξ¶ΞµΟ„Ξ±ΞΉ ΟƒΞµ ΞΊΞµΞ½Ξ­Ο‚ ΞΊΞ±Ο„Ξ·Ξ³ΞΏΟΞ―ΞµΟ‚ Ξ® ΟƒΞµΞ»Ξ―Ξ΄ΞµΟ‚ ΞΊΞ±Ο„Ξ±ΟƒΟ„Ξ®ΞΌΞ±Ο„ΞΏΟ‚. Ξ§ΟΞ®ΟƒΞΉΞΌΞΏ ΟƒΞµ ΟƒΞµΞ»Ξ―Ξ΄ΞµΟ‚ ΞΌΞµ Ξ΄ΞΉΞΊΞ® Ο„ΞΏΟ…Ο‚ Ξ΄ΞΉΞ¬Ο„Ξ±ΞΎΞ· ΟΟ€ΞΏΟ… Ο„Ξ± Ο€ΟΞΏΟΟΞ½Ο„Ξ± ΞµΞΌΟ†Ξ±Ξ½Ξ―Ξ¶ΞΏΞ½Ο„Ξ±ΞΉ ΞΌΞµ Ξ¬Ξ»Ξ»ΞΏ Ο„ΟΟΟ€ΞΏ. Ξ ΟΞΏΟƒΞΏΟ‡Ξ®: ΟƒΟ„Ξ·Ξ½ Ξ±Ξ½Ξ±Ξ¶Ξ®Ο„Ξ·ΟƒΞ· Ο‡Ο‰ΟΞ―Ο‚ Ξ±Ο€ΞΏΟ„ΞµΞ»Ξ­ΟƒΞΌΞ±Ο„Ξ± ΞΏ Ο€ΞµΞ»Ξ¬Ο„Ξ·Ο‚ Ξ΄ΞµΞ½ ΞΈΞ± Ξ΄ΞµΞΉ ΞΊΞ±Ξ½Ξ­Ξ½Ξ± ΞΌΞ®Ξ½Ο…ΞΌΞ±. Ξ™ΟƒΟ‡ΟΞµΞΉ Ξ³ΞΉΞ± Ο„ΞΉΟ‚ ΞΊΞ»Ξ±ΟƒΞΉΞΊΞ­Ο‚ ΟƒΞµΞ»Ξ―Ξ΄ΞµΟ‚ ΞΊΞ±Ο„Ξ±ΟƒΟ„Ξ®ΞΌΞ±Ο„ΞΏΟ‚/ΞΊΞ±Ο„Ξ·Ξ³ΞΏΟΞΉΟΞ½Β· Ο„Ξ± templates ΞΌΞµ blocks Ξ΄ΞµΞ½ Ο‡ΟΞ·ΟƒΞΉΞΌΞΏΟ€ΞΏΞΉΞΏΟΞ½ Ξ±Ο…Ο„Ο Ο„ΞΏ hook.",
+    "type": "php",
+    "code": "add_action( 'init', 'perfectpixel_hide_no_products_found' );\n\nfunction perfectpixel_hide_no_products_found() {\n\tremove_action( 'woocommerce_no_products_found', 'wc_no_products_found', 10 );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shop",
+        "notices"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-hide-no-products-were-found-matching-your-selection/"
+    ],
+    "updated": "2026-11-18T16:59:27+00:00"
+}

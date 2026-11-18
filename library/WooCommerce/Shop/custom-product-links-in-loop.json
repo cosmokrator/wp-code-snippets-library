@@ -1,0 +1,29 @@
+{
+    "title": "Link shop products to custom landing pages",
+    "description": "Ξ£Ο„ΞΉΟ‚ Ξ»Ξ―ΟƒΟ„ΞµΟ‚ Ο€ΟΞΏΟΟΞ½Ο„Ο‰Ξ½, ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½Ξ± Ο€ΟΞΏΟΟΞ½Ο„Ξ± ΞΏΞ΄Ξ·Ξ³ΞΏΟΞ½ ΟƒΞµ Ξ΄ΞΉΞΊΞ® ΟƒΞ±Ο‚ ΟƒΞµΞ»Ξ―Ξ΄Ξ± (Ο€.Ο‡. landing page Ο€ΟΞΏΟΞΈΞ·ΟƒΞ·Ο‚) Ξ±Ξ½Ο„Ξ― Ξ³ΞΉΞ± Ο„Ξ· ΟƒΞµΞ»Ξ―Ξ΄Ξ± Ο„ΞΏΟ… Ο€ΟΞΏΟΟΞ½Ο„ΞΏΟ‚. Ξ— ΟƒΞµΞ»Ξ―Ξ΄Ξ± Ο€ΟΞΏΟΟΞ½Ο„ΞΏΟ‚ Ο€Ξ±ΟΞ±ΞΌΞ­Ξ½ΞµΞΉ Ξ΄ΞΉΞ±ΞΈΞ­ΟƒΞΉΞΌΞ·. Ξ£Ο„Ξ· ΞΌΞµΟ„Ξ±Ξ²Ξ»Ξ·Ο„Ξ® Ξ³ΟΞ¬ΟΟ„Ξµ Ξ¶ΞµΟΞ³Ξ· ID Ο€ΟΞΏΟΟΞ½Ο„ΞΏΟ‚=URL Ο‡Ο‰ΟΞΉΟƒΞΌΞ­Ξ½Ξ± ΞΌΞµ |. Ξ™ΟƒΟ‡ΟΞµΞΉ Ξ³ΞΉΞ± Ο„ΞΉΟ‚ ΞΊΞ»Ξ±ΟƒΞΉΞΊΞ­Ο‚ ΟƒΞµΞ»Ξ―Ξ΄ΞµΟ‚ ΞΊΞ±Ο„Ξ±ΟƒΟ„Ξ®ΞΌΞ±Ο„ΞΏΟ‚/ΞΊΞ±Ο„Ξ·Ξ³ΞΏΟΞΉΟΞ½Β· Ο„Ξ± templates ΞΌΞµ blocks Ξ΄ΞµΞ½ Ο‡ΟΞ·ΟƒΞΉΞΌΞΏΟ€ΞΏΞΉΞΏΟΞ½ Ξ±Ο…Ο„Ο Ο„ΞΏ hook.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_loop_product_link', 'perfectpixel_custom_product_links_in_loop', 10, 2 );\n\nfunction perfectpixel_custom_product_links_in_loop( $link, $product ) {\n\tforeach ( explode( '|', '{{loop_custom_links}}' ) as $pair ) {\n\t\t$parts = array_map( 'trim', explode( '=', $pair, 2 ) );\n\t\tif ( 2 === count( $parts ) && (int) $parts[0] === (int) $product->get_id() && '' !== $parts[1] ) {\n\t\t\treturn 0 === strpos( $parts[1], '/' ) ? home_url( $parts[1] ) : esc_url_raw( $parts[1] );\n\t\t}\n\t}\n\treturn $link;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shop",
+        "links",
+        "landing-pages"
+    ],
+    "variables": [
+        {
+            "name": "loop_custom_links",
+            "label": "ID=URL (ΞΌΞµ |)",
+            "default": "",
+            "description": "Ξ .Ο‡. 123=/prosfora-kalokairiou/|456=https://example.com/landing"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-change-product-permalinks-shop-loop-pages/"
+    ],
+    "updated": "2026-11-18T16:59:27+00:00"
+}

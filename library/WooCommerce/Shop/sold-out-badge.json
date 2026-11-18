@@ -1,0 +1,29 @@
+{
+    "title": "Show a \"Sold out\" badge on out-of-stock products",
+    "description": "Ξ£Ο„ΞΉΟ‚ Ξ»Ξ―ΟƒΟ„ΞµΟ‚ Ο€ΟΞΏΟΟΞ½Ο„Ο‰Ξ½ ΞµΞΌΟ†Ξ±Ξ½Ξ―Ξ¶ΞµΞΉ ΞµΟ„ΞΉΞΊΞ­Ο„Ξ± Β«Ξ•ΞΎΞ±Ξ½Ο„Ξ»Ξ®ΞΈΞ·ΞΊΞµΒ» Ο€Ξ¬Ξ½Ο‰ ΟƒΟ„Ξ·Ξ½ ΞµΞΉΞΊΟΞ½Ξ± Ο„Ο‰Ξ½ Ο€ΟΞΏΟΟΞ½Ο„Ο‰Ξ½ Ο€ΞΏΟ… Ξ΄ΞµΞ½ Ξ­Ο‡ΞΏΟ…Ξ½ Ξ±Ο€ΟΞΈΞµΞΌΞ±, ΟΟƒΟ„Ξµ ΞΏ Ο€ΞµΞ»Ξ¬Ο„Ξ·Ο‚ Ξ½Ξ± Ο„ΞΏ Ξ²Ξ»Ξ­Ο€ΞµΞΉ Ο‡Ο‰ΟΞ―Ο‚ Ξ½Ξ± Ξ±Ξ½ΞΏΞ―ΞΎΞµΞΉ Ο„ΞΏ Ο€ΟΞΏΟΟΞ½. Ξ‘Ξ½ Ο„ΞΏ theme ΟƒΞ±Ο‚ Ξ΄ΞµΞ―Ο‡Ξ½ΞµΞΉ Ξ®Ξ΄Ξ· Ο„Ξ­Ο„ΞΏΞΉΞ± ΞµΟ„ΞΉΞΊΞ­Ο„Ξ±, Ξ΄ΞµΞ½ Ο‡ΟΞµΞΉΞ¬Ξ¶ΞµΟƒΟ„Ξµ Ξ±Ο…Ο„Ο Ο„ΞΏ snippet. Ξ™ΟƒΟ‡ΟΞµΞΉ Ξ³ΞΉΞ± Ο„ΞΉΟ‚ ΞΊΞ»Ξ±ΟƒΞΉΞΊΞ­Ο‚ ΟƒΞµΞ»Ξ―Ξ΄ΞµΟ‚ ΞΊΞ±Ο„Ξ±ΟƒΟ„Ξ®ΞΌΞ±Ο„ΞΏΟ‚/ΞΊΞ±Ο„Ξ·Ξ³ΞΏΟΞΉΟΞ½Β· Ο„Ξ± templates ΞΌΞµ blocks Ξ΄ΞµΞ½ Ο‡ΟΞ·ΟƒΞΉΞΌΞΏΟ€ΞΏΞΉΞΏΟΞ½ Ξ±Ο…Ο„Ο Ο„ΞΏ hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_before_shop_loop_item_title', 'perfectpixel_sold_out_badge', 4 );\n\nfunction perfectpixel_sold_out_badge() {\n\tglobal $product;\n\tif ( $product && ! $product->is_in_stock() ) {\n\t\techo '<span class=\"perfectpixel-sold-out\" style=\"position:absolute;top:.5em;left:.5em;z-index:9;padding:.2em .6em;border-radius:3px;color:#fff;font-size:.8em;font-weight:600;background:#50575e\">' . esc_html( '{{sold_out_badge_text}}' ) . '</span>';\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shop",
+        "badges",
+        "stock"
+    ],
+    "variables": [
+        {
+            "name": "sold_out_badge_text",
+            "label": "ΞΞµΞ―ΞΌΞµΞ½ΞΏ",
+            "default": "Ξ•ΞΎΞ±Ξ½Ο„Ξ»Ξ®ΞΈΞ·ΞΊΞµ",
+            "description": "Ξ§Ο‰ΟΞ―Ο‚ Ξ±Ο€ΟΟƒΟ„ΟΞΏΟ†ΞΏ (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-show-sold-archiveproduct-page/"
+    ],
+    "updated": "2026-11-18T16:59:27+00:00"
+}
