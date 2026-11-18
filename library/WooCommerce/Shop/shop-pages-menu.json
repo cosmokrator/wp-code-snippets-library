@@ -1,0 +1,22 @@
+{
+    "title": "Show a WordPress menu on WooCommerce pages",
+    "description": "Δημιουργεί νέα θέση μενού «Μενού καταστήματος» (Εμφάνιση → Μενού) και εμφανίζει το μενού που της αναθέτετε στην κορυφή των σελίδων του WooCommerce (κατάστημα, κατηγορίες, προϊόντα), π.χ. οριζόντια λίστα κατηγοριών. Αν δεν αναθέσετε μενού, δεν εμφανίζεται τίποτα.",
+    "type": "php",
+    "code": "add_action( 'after_setup_theme', 'perfectpixel_register_shop_menu', 20 );\nadd_action( 'woocommerce_before_main_content', 'perfectpixel_output_shop_menu', 15 );\n\nfunction perfectpixel_register_shop_menu() {\n\tregister_nav_menu( 'perfectpixel_shop_menu', 'Μενού καταστήματος' );\n}\n\nfunction perfectpixel_output_shop_menu() {\n\tif ( has_nav_menu( 'perfectpixel_shop_menu' ) ) {\n\t\twp_nav_menu(\n\t\t\tarray(\n\t\t\t\t'theme_location'  => 'perfectpixel_shop_menu',\n\t\t\t\t'container'       => 'nav',\n\t\t\t\t'container_class' => 'perfectpixel-shop-menu',\n\t\t\t\t'menu_class'      => 'perfectpixel-shop-menu-list',\n\t\t\t\t'depth'           => 1,\n\t\t\t)\n\t\t);\n\t\techo '<style>.perfectpixel-shop-menu-list{display:flex;flex-wrap:wrap;gap:.5em 1.5em;list-style:none;margin:0 0 1.5em;padding:0}</style>';\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shop",
+        "menu",
+        "navigation"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-wp-menu-wc-pages-via-php/"
+    ],
+    "updated": "2026-11-18T18:02:30+00:00"
+}

@@ -1,0 +1,30 @@
+{
+    "title": "Search admin products by a custom field",
+    "description": "Η αναζήτηση στη λίστα Προϊόντα του διαχειριστή βρίσκει και προϊόντα με βάση την τιμή ενός προσαρμοσμένου πεδίου που ορίζετε (π.χ. GTIN/EAN, κωδικός προμηθευτή, MPN), ολόκληρη ή μέρος της. Ισχύει και για πεδία των παραλλαγών (εμφανίζεται το γονικό προϊόν).",
+    "type": "php",
+    "code": "add_filter( 'posts_search', 'perfectpixel_admin_search_products_by_meta', 20, 2 );\n\nfunction perfectpixel_admin_search_products_by_meta( $search, $query ) {\n\tglobal $wpdb, $pagenow;\n\tif ( ! is_admin() || 'edit.php' !== $pagenow || 'product' !== $query->get( 'post_type' ) || ! $query->is_main_query() || '' === $search ) {\n\t\treturn $search;\n\t}\n\t$term = trim( (string) $query->get( 's' ) );\n\t$key  = sanitize_text_field( '{{admin_search_meta_key}}' );\n\tif ( '' === $term || '' === $key ) {\n\t\treturn $search;\n\t}\n\t$ids = $wpdb->get_col(\n\t\t$wpdb->prepare(\n\t\t\t\"SELECT DISTINCT IF( p.post_parent > 0, p.post_parent, p.ID ) FROM {$wpdb->postmeta} m\n\t\t\tINNER JOIN {$wpdb->posts} p ON p.ID = m.post_id\n\t\t\tWHERE m.meta_key = %s AND m.meta_value LIKE %s LIMIT 500\",\n\t\t\t$key,\n\t\t\t'%' . $wpdb->esc_like( $term ) . '%'\n\t\t)\n\t);\n\t$ids = array_filter( array_map( 'intval', $ids ) );\n\tif ( ! $ids || 0 !== strpos( ltrim( $search ), 'AND' ) ) {\n\t\treturn $search;\n\t}\n\treturn ' AND ( ' . substr( ltrim( $search ), 3 ) . \" OR {$wpdb->posts}.ID IN (\" . implode( ',', $ids ) . ') ) ';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "admin",
+        "products",
+        "search",
+        "custom-fields"
+    ],
+    "variables": [
+        {
+            "name": "admin_search_meta_key",
+            "label": "Όνομα πεδίου (meta key)",
+            "default": "_global_unique_id",
+            "description": "Π.χ. _global_unique_id (GTIN του WooCommerce) ή δικό σας πεδίο"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-search-products-by-custom-field-backend/"
+    ],
+    "updated": "2026-11-18T18:02:30+00:00"
+}

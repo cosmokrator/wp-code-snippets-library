@@ -1,0 +1,30 @@
+{
+    "title": "Remove unused boxes from the product edit screen",
+    "description": "Κρύβει πλαίσια που δεν χρησιμοποιείτε από τη σελίδα επεξεργασίας προϊόντος, για πιο καθαρή οθόνη, π.χ. Ετικέτες προϊόντων, Σύντομη περιγραφή, Αξιολογήσεις, Προσαρμοσμένα πεδία. Γράψτε τα IDs των πλαισίων με κόμμα: tagsdiv-product_tag, postexcerpt, commentsdiv, postcustom, slugdiv, woocommerce-product-images.",
+    "type": "php",
+    "code": "add_action( 'add_meta_boxes_product', 'perfectpixel_remove_product_metaboxes', 99 );\n\nfunction perfectpixel_remove_product_metaboxes() {\n\tforeach ( array_filter( array_map( 'sanitize_key', explode( ',', '{{removed_product_metaboxes}}' ) ) ) as $id ) {\n\t\tforeach ( array( 'normal', 'side', 'advanced' ) as $context ) {\n\t\t\tremove_meta_box( $id, 'product', $context );\n\t\t}\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "admin",
+        "products",
+        "meta-boxes",
+        "ux"
+    ],
+    "variables": [
+        {
+            "name": "removed_product_metaboxes",
+            "label": "IDs πλαισίων (με κόμμα)",
+            "default": "tagsdiv-product_tag,postcustom",
+            "description": "Π.χ. tagsdiv-product_tag,postexcerpt,commentsdiv"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-remove-metaboxes-product-edit-admin-page/"
+    ],
+    "updated": "2026-11-18T18:02:30+00:00"
+}

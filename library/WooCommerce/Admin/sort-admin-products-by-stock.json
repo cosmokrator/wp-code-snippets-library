@@ -1,0 +1,23 @@
+{
+    "title": "Sort the admin products list by stock status",
+    "description": "Η λίστα Προϊόντα του διαχειριστή ανοίγει ταξινομημένη ανά κατάσταση αποθέματος: πρώτα τα διαθέσιμα, μετά τα «κατόπιν παραγγελίας» και τελευταία τα εξαντλημένα. Αν πατήσετε σε άλλη στήλη για ταξινόμηση, ισχύει εκείνη κανονικά.",
+    "type": "php",
+    "code": "add_action( 'pre_get_posts', 'perfectpixel_sort_admin_products_by_stock' );\n\nfunction perfectpixel_sort_admin_products_by_stock( $query ) {\n\tglobal $pagenow;\n\tif ( ! is_admin() || 'edit.php' !== $pagenow || ! $query->is_main_query() || 'product' !== $query->get( 'post_type' ) || ! empty( $_GET['orderby'] ) ) {\n\t\treturn;\n\t}\n\t// \"instock\" < \"onbackorder\" < \"outofstock\" alphabetically.\n\t$query->set( 'meta_key', '_stock_status' );\n\t$query->set( 'orderby', array( 'meta_value' => 'ASC', 'title' => 'ASC' ) );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "admin",
+        "products",
+        "sorting",
+        "stock"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-sort-products-admin-by-stock/"
+    ],
+    "updated": "2026-11-18T18:02:30+00:00"
+}

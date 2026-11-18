@@ -1,0 +1,30 @@
+{
+    "title": "Email the admin when a fatal error happens",
+    "description": "Όταν συμβεί fatal error (σφάλμα 500) που καταγράφει το WooCommerce, στέλνεται email στον διαχειριστή με το μήνυμα, το αρχείο και τη γραμμή του σφάλματος και τη σελίδα όπου συνέβη, ώστε να το μαθαίνετε αμέσως (και όταν συμβαίνει στον διαχειριστή, όπου το WordPress δεν στέλνει ειδοποίηση). Στέλνεται το πολύ ένα email ανά 15 λεπτά για να μη γεμίσει το inbox.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_shutdown_error', 'perfectpixel_email_on_fatal_error' );\n\nfunction perfectpixel_email_on_fatal_error( $error ) {\n\tif ( get_transient( 'perfectpixel_fatal_error_mailed' ) ) {\n\t\treturn; // Throttle: one email every 15 minutes.\n\t}\n\tset_transient( 'perfectpixel_fatal_error_mailed', 1, 15 * MINUTE_IN_SECONDS );\n\t$recipient = sanitize_email( '{{fatal_error_recipient}}' );\n\t$url       = ( is_ssl() ? 'https://' : 'http://' ) . ( $_SERVER['HTTP_HOST'] ?? '' ) . ( $_SERVER['REQUEST_URI'] ?? '' );\n\t$message   = sprintf(\n\t\t\"Fatal error στο %s\\n\\nΜήνυμα: %s\\nΑρχείο: %s\\nΓραμμή: %s\\nΣελίδα: %s\\n\\nΔείτε WooCommerce → Κατάσταση → Αρχεία καταγραφής (fatal-errors).\",\n\t\thome_url(),\n\t\t$error['message'] ?? '',\n\t\t$error['file'] ?? '',\n\t\t$error['line'] ?? '',\n\t\tesc_url_raw( $url )\n\t);\n\twp_mail( $recipient ? $recipient : get_option( 'admin_email' ), '[' . wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES ) . '] Fatal error', $message );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "admin",
+        "errors",
+        "monitoring",
+        "emails"
+    ],
+    "variables": [
+        {
+            "name": "fatal_error_recipient",
+            "label": "Email παραλήπτη",
+            "default": "",
+            "description": "Κενό = το email του διαχειριστή"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-email-fatal-error/"
+    ],
+    "updated": "2026-11-18T18:02:30+00:00"
+}

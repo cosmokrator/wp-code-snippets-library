@@ -1,0 +1,30 @@
+{
+    "title": "Add a second address (e.g. warehouse) to the store settings",
+    "description": "Στις ρυθμίσεις WooCommerce → Γενικά, κάτω από τη «Διεύθυνση καταστήματος», προσθέτει πεδία για δεύτερη διεύθυνση (π.χ. αποθήκη, σημείο παραλαβής ή έδρα). Τη χρησιμοποιείτε όπου θέλετε με το shortcode [store_second_address], π.χ. σε σελίδα επικοινωνίας ή στις οδηγίες παραλαβής.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_general_settings', 'perfectpixel_second_store_address_settings' );\nadd_shortcode( 'store_second_address', 'perfectpixel_second_store_address_shortcode' );\n\nfunction perfectpixel_second_store_address_settings( $settings ) {\n\t$fields = array(\n\t\tarray( 'title' => '{{second_address_title}}', 'type' => 'title', 'id' => 'perfectpixel_second_address' ),\n\t\tarray( 'title' => 'Διεύθυνση', 'id' => 'perfectpixel_second_address_1', 'type' => 'text', 'default' => '' ),\n\t\tarray( 'title' => 'Πόλη', 'id' => 'perfectpixel_second_address_city', 'type' => 'text', 'default' => '' ),\n\t\tarray( 'title' => 'Ταχυδρομικός κώδικας', 'id' => 'perfectpixel_second_address_postcode', 'type' => 'text', 'default' => '' ),\n\t\tarray( 'title' => 'Τηλέφωνο', 'id' => 'perfectpixel_second_address_phone', 'type' => 'text', 'default' => '' ),\n\t\tarray( 'type' => 'sectionend', 'id' => 'perfectpixel_second_address' ),\n\t);\n\t// Insert right after the \"Store Address\" section.\n\t$new = array();\n\tforeach ( $settings as $setting ) {\n\t\t$new[] = $setting;\n\t\tif ( isset( $setting['type'], $setting['id'] ) && 'sectionend' === $setting['type'] && 'store_address' === $setting['id'] ) {\n\t\t\t$new = array_merge( $new, $fields );\n\t\t}\n\t}\n\treturn count( $new ) > count( $settings ) ? $new : array_merge( $settings, $fields );\n}\n\nfunction perfectpixel_second_store_address_shortcode() {\n\t$line  = trim( get_option( 'perfectpixel_second_address_1', '' ) );\n\t$city  = trim( get_option( 'perfectpixel_second_address_postcode', '' ) . ' ' . get_option( 'perfectpixel_second_address_city', '' ) );\n\t$phone = trim( get_option( 'perfectpixel_second_address_phone', '' ) );\n\t$parts = array_filter( array( $line, $city, $phone ) );\n\treturn $parts ? '<address class=\"perfectpixel-second-address\">' . implode( '<br>', array_map( 'esc_html', $parts ) ) . '</address>' : '';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "admin",
+        "settings",
+        "addresses",
+        "shortcodes"
+    ],
+    "variables": [
+        {
+            "name": "second_address_title",
+            "label": "Τίτλος ενότητας ρυθμίσεων",
+            "default": "Διεύθυνση αποθήκης",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-additional-store-address-general-settings/"
+    ],
+    "updated": "2026-11-18T18:02:30+00:00"
+}

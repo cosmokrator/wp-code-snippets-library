@@ -1,0 +1,36 @@
+{
+    "title": "Edit a custom product field in Quick Edit",
+    "description": "Προσθέτει ένα προσαρμοσμένο πεδίο προϊόντος (π.χ. Π.Τ.Λ., κωδικός προμηθευτή, GTIN) στη «Γρήγορη επεξεργασία» της λίστας Προϊόντα, ώστε να το αλλάζετε χωρίς να ανοίγετε κάθε προϊόν. Ορίστε το όνομα (meta key) και την ετικέτα του πεδίου.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_product_quick_edit_end', 'perfectpixel_quick_edit_field' );\nadd_action( 'manage_product_posts_custom_column', 'perfectpixel_quick_edit_field_data', 99, 2 );\nadd_action( 'woocommerce_product_quick_edit_save', 'perfectpixel_quick_edit_field_save' );\nadd_action( 'admin_footer-edit.php', 'perfectpixel_quick_edit_field_script' );\n\nfunction perfectpixel_quick_edit_field() {\n\techo '<br class=\"clear\"><label class=\"alignleft\"><span class=\"title\">' . esc_html( '{{quick_edit_label}}' ) . '</span><span class=\"input-text-wrap\"><input type=\"text\" name=\"perfectpixel_quick_edit_field\" class=\"text\" value=\"\"></span></label>';\n}\n\n// The current value, hidden in the \"name\" column, for the script to read.\nfunction perfectpixel_quick_edit_field_data( $column, $post_id ) {\n\tif ( 'name' === $column ) {\n\t\techo '<div class=\"hidden perfectpixel-qe-value\">' . esc_html( (string) get_post_meta( $post_id, sanitize_key( '{{quick_edit_meta_key}}' ), true ) ) . '</div>';\n\t}\n}\n\nfunction perfectpixel_quick_edit_field_save( $product ) {\n\tif ( isset( $_REQUEST['perfectpixel_quick_edit_field'] ) && current_user_can( 'edit_product', $product->get_id() ) ) {\n\t\t$product->update_meta_data( sanitize_key( '{{quick_edit_meta_key}}' ), sanitize_text_field( wp_unslash( $_REQUEST['perfectpixel_quick_edit_field'] ) ) );\n\t\t$product->save_meta_data();\n\t}\n}\n\nfunction perfectpixel_quick_edit_field_script() {\n\tif ( 'product' !== get_current_screen()->post_type ) {\n\t\treturn;\n\t}\n\t?>\n\t<script>\n\tjQuery( function ( $ ) {\n\t\t$( '#the-list' ).on( 'click', '.editinline', function () {\n\t\t\tvar row   = $( this ).closest( 'tr' );\n\t\t\tvar value = row.find( '.perfectpixel-qe-value' ).text();\n\t\t\tsetTimeout( function () {\n\t\t\t\t$( '.inline-edit-row input[name=\"perfectpixel_quick_edit_field\"]' ).val( value );\n\t\t\t} );\n\t\t} );\n\t} );\n\t</script>\n\t<?php\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "admin",
+        "products",
+        "quick-edit",
+        "custom-fields"
+    ],
+    "variables": [
+        {
+            "name": "quick_edit_meta_key",
+            "label": "Όνομα πεδίου (meta key)",
+            "default": "_perfectpixel_rrp",
+            "description": "Π.χ. _perfectpixel_rrp (το πεδίο Π.Τ.Λ. της βιβλιοθήκης)"
+        },
+        {
+            "name": "quick_edit_label",
+            "label": "Ετικέτα",
+            "default": "Π.Τ.Λ.",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-custom-field-quick-edit/"
+    ],
+    "updated": "2026-11-18T18:02:30+00:00"
+}

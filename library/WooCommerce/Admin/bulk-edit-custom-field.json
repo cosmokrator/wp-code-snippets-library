@@ -1,0 +1,36 @@
+{
+    "title": "Edit a custom product field with Bulk Edit",
+    "description": "Στη μαζική επεξεργασία της λίστας Προϊόντα (επιλέγετε προϊόντα → Μαζικές ενέργειες → Επεξεργασία) προσθέτει ένα προσαρμοσμένο πεδίο (π.χ. Π.Τ.Λ., κωδικός προμηθευτή). Ό,τι γράψετε εκεί αποθηκεύεται σε όλα τα επιλεγμένα προϊόντα· αν το αφήσετε κενό δεν αλλάζει τίποτα.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_product_bulk_edit_end', 'perfectpixel_bulk_edit_field' );\nadd_action( 'woocommerce_product_bulk_edit_save', 'perfectpixel_bulk_edit_field_save' );\n\nfunction perfectpixel_bulk_edit_field() {\n\techo '<div class=\"inline-edit-group\"><label class=\"alignleft\"><span class=\"title\">' . esc_html( '{{bulk_edit_label}}' ) . '</span><span class=\"input-text-wrap\"><input type=\"text\" name=\"perfectpixel_bulk_edit_field\" class=\"text\" value=\"\" placeholder=\"— Χωρίς αλλαγή —\"></span></label></div>';\n}\n\nfunction perfectpixel_bulk_edit_field_save( $product ) {\n\tif ( ! isset( $_REQUEST['perfectpixel_bulk_edit_field'] ) || ! current_user_can( 'edit_product', $product->get_id() ) ) {\n\t\treturn;\n\t}\n\t$value = sanitize_text_field( wp_unslash( $_REQUEST['perfectpixel_bulk_edit_field'] ) );\n\tif ( '' !== $value ) {\n\t\t$product->update_meta_data( sanitize_key( '{{bulk_edit_meta_key}}' ), $value );\n\t\t$product->save_meta_data();\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "admin",
+        "products",
+        "bulk-edit",
+        "custom-fields"
+    ],
+    "variables": [
+        {
+            "name": "bulk_edit_meta_key",
+            "label": "Όνομα πεδίου (meta key)",
+            "default": "_perfectpixel_rrp",
+            "description": "Π.χ. _perfectpixel_rrp ή δικό σας πεδίο"
+        },
+        {
+            "name": "bulk_edit_label",
+            "label": "Ετικέτα",
+            "default": "Π.Τ.Λ.",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-custom-field-to-bulk-actions-edit/"
+    ],
+    "updated": "2026-11-18T18:02:30+00:00"
+}

@@ -1,0 +1,36 @@
+{
+    "title": "Add a custom field column to the admin products list",
+    "description": "Στη λίστα Προϊόντα του διαχειριστή προσθέτει στήλη με την τιμή ενός προσαρμοσμένου πεδίου που ορίζετε (π.χ. GTIN, κωδικός προμηθευτή, Π.Τ.Λ.). Η στήλη μπορεί να ταξινομηθεί με κλικ στον τίτλο της.",
+    "type": "php",
+    "code": "add_filter( 'manage_edit-product_columns', 'perfectpixel_products_meta_column', 20 );\nadd_action( 'manage_product_posts_custom_column', 'perfectpixel_products_meta_column_value', 10, 2 );\nadd_filter( 'manage_edit-product_sortable_columns', 'perfectpixel_products_meta_column_sortable' );\nadd_action( 'pre_get_posts', 'perfectpixel_products_meta_column_orderby' );\n\nfunction perfectpixel_products_meta_column( $columns ) {\n\t$new = array();\n\tforeach ( $columns as $key => $label ) {\n\t\t$new[ $key ] = $label;\n\t\tif ( 'sku' === $key ) {\n\t\t\t$new['perfectpixel_meta'] = '{{products_column_label}}';\n\t\t}\n\t}\n\tif ( ! isset( $new['perfectpixel_meta'] ) ) {\n\t\t$new['perfectpixel_meta'] = '{{products_column_label}}';\n\t}\n\treturn $new;\n}\n\nfunction perfectpixel_products_meta_column_value( $column, $post_id ) {\n\tif ( 'perfectpixel_meta' === $column ) {\n\t\t$value = get_post_meta( $post_id, sanitize_text_field( '{{products_column_meta_key}}' ), true );\n\t\techo '' !== (string) $value ? esc_html( is_scalar( $value ) ? $value : wp_json_encode( $value ) ) : '&ndash;';\n\t}\n}\n\nfunction perfectpixel_products_meta_column_sortable( $columns ) {\n\t$columns['perfectpixel_meta'] = 'perfectpixel_meta';\n\treturn $columns;\n}\n\nfunction perfectpixel_products_meta_column_orderby( $query ) {\n\tif ( is_admin() && $query->is_main_query() && 'perfectpixel_meta' === $query->get( 'orderby' ) ) {\n\t\t$query->set( 'meta_key', sanitize_text_field( '{{products_column_meta_key}}' ) );\n\t\t$query->set( 'orderby', 'meta_value' );\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "admin",
+        "products",
+        "columns",
+        "custom-fields"
+    ],
+    "variables": [
+        {
+            "name": "products_column_meta_key",
+            "label": "Όνομα πεδίου (meta key)",
+            "default": "_global_unique_id",
+            "description": "Π.χ. _global_unique_id (GTIN) ή δικό σας πεδίο"
+        },
+        {
+            "name": "products_column_label",
+            "label": "Τίτλος στήλης",
+            "default": "GTIN",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-additional-products-table-column-admin/"
+    ],
+    "updated": "2026-11-18T18:02:30+00:00"
+}

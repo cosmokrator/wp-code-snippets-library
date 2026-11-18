@@ -1,0 +1,24 @@
+{
+    "title": "List products that have no weight",
+    "description": "Στη λίστα Προϊόντα του διαχειριστή εμφανίζει ειδοποίηση με τα προϊόντα (και τις παραλλαγές) που αποστέλλονται αλλά δεν έχουν βάρος, με συνδέσμους επεξεργασίας, ώστε να μην υπολογίζονται λάθος τα μεταφορικά. Τα εικονικά προϊόντα παραλείπονται. Εμφανίζονται έως 30 κάθε φορά.",
+    "type": "php",
+    "code": "add_action( 'admin_notices', 'perfectpixel_products_without_weight_notice' );\n\nfunction perfectpixel_products_without_weight_notice() {\n\t$screen = get_current_screen();\n\tif ( ! $screen || 'edit-product' !== $screen->id || ! current_user_can( 'edit_products' ) ) {\n\t\treturn;\n\t}\n\t$ids = get_posts(\n\t\tarray(\n\t\t\t'post_type'      => array( 'product', 'product_variation' ),\n\t\t\t'post_status'    => 'publish',\n\t\t\t'fields'         => 'ids',\n\t\t\t'posts_per_page' => 30,\n\t\t\t'no_found_rows'  => true,\n\t\t\t'meta_query'     => array(\n\t\t\t\t'relation' => 'AND',\n\t\t\t\tarray(\n\t\t\t\t\t'relation' => 'OR',\n\t\t\t\t\tarray( 'key' => '_weight', 'compare' => 'NOT EXISTS' ),\n\t\t\t\t\tarray( 'key' => '_weight', 'value' => '' ),\n\t\t\t\t),\n\t\t\t\tarray(\n\t\t\t\t\t'relation' => 'OR',\n\t\t\t\t\tarray( 'key' => '_virtual', 'compare' => 'NOT EXISTS' ),\n\t\t\t\t\tarray( 'key' => '_virtual', 'value' => 'no' ),\n\t\t\t\t),\n\t\t\t),\n\t\t)\n\t);\n\t$links = array();\n\tforeach ( $ids as $id ) {\n\t\t$product = wc_get_product( $id );\n\t\tif ( ! $product || $product->is_type( array( 'variable', 'grouped', 'external' ) ) || ! $product->needs_shipping() || $product->get_weight() ) {\n\t\t\tcontinue;\n\t\t}\n\t\t$edit_id = $product->get_parent_id() ? $product->get_parent_id() : $product->get_id();\n\t\t$links[] = '<a href=\"' . esc_url( get_edit_post_link( $edit_id ) ) . '\">' . esc_html( $product->get_name() ) . '</a>';\n\t}\n\tif ( $links ) {\n\t\techo '<div class=\"notice notice-warning\"><p><strong>Προϊόντα χωρίς βάρος:</strong> ' . implode( ', ', $links ) . '</p></div>';\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "admin",
+        "products",
+        "weight",
+        "shipping",
+        "notices"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-find-products-with-no-weight-wp-admin/"
+    ],
+    "updated": "2026-11-18T18:02:30+00:00"
+}

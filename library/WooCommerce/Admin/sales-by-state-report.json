@@ -1,0 +1,23 @@
+{
+    "title": "Report: sales by state/region for a year",
+    "description": "Προσθέτει τη σελίδα WooCommerce → «Πωλήσεις ανά περιοχή» με πίνακα των πωλήσεων ανά χώρα και νομό/περιοχή χρέωσης για ένα έτος (πλήθος παραγγελιών και σύνολο), από ολοκληρωμένες και υπό επεξεργασία παραγγελίες. Χρήσιμο για φορολογικές δηλώσεις ή για να δείτε πού πουλάτε περισσότερο. Επιλέξτε έτος από τη λίστα.",
+    "type": "php",
+    "code": "add_action( 'admin_menu', 'perfectpixel_sales_by_state_menu', 62 );\n\nfunction perfectpixel_sales_by_state_menu() {\n\tadd_submenu_page( 'woocommerce', 'Πωλήσεις ανά περιοχή', 'Πωλήσεις ανά περιοχή', 'view_woocommerce_reports', 'perfectpixel-sales-by-state', 'perfectpixel_sales_by_state_page' );\n}\n\nfunction perfectpixel_sales_by_state_page() {\n\t$year = isset( $_GET['year'] ) ? absint( $_GET['year'] ) : (int) current_time( 'Y' );\n\t$rows = array();\n\t$page = 1;\n\tdo {\n\t\t$orders = wc_get_orders(\n\t\t\tarray(\n\t\t\t\t'status'       => array( 'completed', 'processing' ),\n\t\t\t\t'date_created' => $year . '-01-01...' . $year . '-12-31',\n\t\t\t\t'type'         => 'shop_order',\n\t\t\t\t'limit'        => 200,\n\t\t\t\t'page'         => $page,\n\t\t\t)\n\t\t);\n\t\tforeach ( $orders as $order ) {\n\t\t\t$key = $order->get_billing_country() . '|' . $order->get_billing_state();\n\t\t\tif ( ! isset( $rows[ $key ] ) ) {\n\t\t\t\t$rows[ $key ] = array( 'orders' => 0, 'total' => 0.0 );\n\t\t\t}\n\t\t\t$rows[ $key ]['orders']++;\n\t\t\t$rows[ $key ]['total'] += (float) $order->get_total();\n\t\t}\n\t\t$page++;\n\t} while ( count( $orders ) === 200 );\n\tuasort(\n\t\t$rows,\n\t\tfunction ( $a, $b ) {\n\t\t\treturn $b['total'] <=> $a['total'];\n\t\t}\n\t);\n\n\techo '<div class=\"wrap\"><h1>Πωλήσεις ανά περιοχή ' . esc_html( $year ) . '</h1><form method=\"get\"><input type=\"hidden\" name=\"page\" value=\"perfectpixel-sales-by-state\"><select name=\"year\">';\n\tfor ( $y = (int) current_time( 'Y' ); $y >= (int) current_time( 'Y' ) - 5; $y-- ) {\n\t\tprintf( '<option value=\"%1$d\"%2$s>%1$d</option>', $y, selected( $year, $y, false ) );\n\t}\n\techo '</select> <button class=\"button\">Προβολή</button></form>';\n\techo '<table class=\"widefat striped\" style=\"margin-top:1em;max-width:700px\"><thead><tr><th>Χώρα</th><th>Περιοχή</th><th>Παραγγελίες</th><th>Σύνολο</th></tr></thead><tbody>';\n\t$states = WC()->countries->get_states();\n\tforeach ( $rows as $key => $row ) {\n\t\tlist( $country, $state ) = array_pad( explode( '|', $key ), 2, '' );\n\t\t$country_name = WC()->countries->countries[ $country ] ?? $country;\n\t\t$state_name   = $states[ $country ][ $state ] ?? $state;\n\t\tprintf( '<tr><td>%s</td><td>%s</td><td>%d</td><td>%s</td></tr>', esc_html( $country_name ), esc_html( $state_name ? $state_name : '–' ), (int) $row['orders'], wp_kses_post( wc_price( $row['total'] ) ) );\n\t}\n\tif ( ! $rows ) {\n\t\techo '<tr><td colspan=\"4\">Δεν υπάρχουν παραγγελίες για αυτό το έτος.</td></tr>';\n\t}\n\techo '</tbody></table></div>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "admin",
+        "reports",
+        "sales",
+        "tax"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-calculate-sales-state/"
+    ],
+    "updated": "2026-11-18T18:02:30+00:00"
+}

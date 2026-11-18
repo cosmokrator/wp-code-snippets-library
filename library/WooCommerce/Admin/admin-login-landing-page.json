@@ -1,0 +1,29 @@
+{
+    "title": "Open the Products or Orders page after admin login",
+    "description": "Μετά τη σύνδεση στο wp-admin, οι διαχειριστές και οι διαχειριστές καταστήματος μεταφέρονται κατευθείαν σε μια σελίδα του διαχειριστή που ορίζετε (π.χ. Προϊόντα ή Παραγγελίες) αντί για τον Πίνακα ελέγχου. Αν η σύνδεση έγινε για να ανοίξει συγκεκριμένη σελίδα, αυτή έχει προτεραιότητα. Οι πελάτες δεν επηρεάζονται.",
+    "type": "php",
+    "code": "add_filter( 'login_redirect', 'perfectpixel_admin_login_landing_page', 20, 3 );\n\nfunction perfectpixel_admin_login_landing_page( $redirect_to, $requested, $user ) {\n\tif ( ! $user instanceof WP_User || ! $user->has_cap( 'edit_products' ) ) {\n\t\treturn $redirect_to;\n\t}\n\t// Only replace the default dashboard target.\n\tif ( $requested && untrailingslashit( $requested ) !== untrailingslashit( admin_url() ) ) {\n\t\treturn $redirect_to;\n\t}\n\treturn admin_url( ltrim( '{{admin_landing_path}}', '/' ) );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "admin",
+        "login",
+        "redirect"
+    ],
+    "variables": [
+        {
+            "name": "admin_landing_path",
+            "label": "Σελίδα διαχειριστή",
+            "default": "edit.php?post_type=product",
+            "description": "Μέρος του URL μετά το /wp-admin/, π.χ. admin.php?page=wc-orders"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-set-default-dashboard-login-page-to-products/"
+    ],
+    "updated": "2026-11-18T18:02:30+00:00"
+}

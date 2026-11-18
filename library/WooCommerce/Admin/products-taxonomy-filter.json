@@ -1,0 +1,31 @@
+{
+    "title": "Filter the admin products list by tag or brand",
+    "description": "Στη λίστα Προϊόντα του διαχειριστή, δίπλα στα φίλτρα κατηγορίας/τύπου/αποθέματος, προσθέτει λίστα φίλτρου για μια ταξινομία που ορίζετε: ετικέτες προϊόντων (product_tag), μάρκες του WooCommerce (product_brand) ή άλλη δική σας.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_product_filters', 'perfectpixel_products_taxonomy_filter' );\n\nfunction perfectpixel_products_taxonomy_filter( $output ) {\n\t$taxonomy = sanitize_key( '{{admin_filter_taxonomy}}' );\n\t$tax      = get_taxonomy( $taxonomy );\n\tif ( ! $tax ) {\n\t\treturn $output;\n\t}\n\t// Taxonomies registered with query_var filter the list through their own query var.\n\t$output .= wp_dropdown_categories(\n\t\tarray(\n\t\t\t'taxonomy'        => $taxonomy,\n\t\t\t'name'            => $tax->query_var ? $tax->query_var : $taxonomy,\n\t\t\t'value_field'     => 'slug',\n\t\t\t'show_option_all' => $tax->labels->all_items,\n\t\t\t'selected'        => isset( $_GET[ $tax->query_var ? $tax->query_var : $taxonomy ] ) ? sanitize_title( wp_unslash( $_GET[ $tax->query_var ? $tax->query_var : $taxonomy ] ) ) : '',\n\t\t\t'hide_empty'      => true,\n\t\t\t'hierarchical'    => $tax->hierarchical,\n\t\t\t'show_count'      => true,\n\t\t\t'echo'            => false,\n\t\t)\n\t);\n\treturn $output;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "admin",
+        "products",
+        "filters",
+        "tags",
+        "brands"
+    ],
+    "variables": [
+        {
+            "name": "admin_filter_taxonomy",
+            "label": "Ταξινομία",
+            "default": "product_tag",
+            "description": "Π.χ. product_tag ή product_brand"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-display-custom-filters-wp-dashboard-products/"
+    ],
+    "updated": "2026-11-18T18:02:30+00:00"
+}
