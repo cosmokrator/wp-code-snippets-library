@@ -1,0 +1,22 @@
+{
+    "title": "Hide the \"View cart\" link after ajax add to cart",
+    "description": "CSS που κρύβει τον σύνδεσμο «Προβολή καλαθιού» που εμφανίζεται δίπλα στο κουμπί μετά την προσθήκη στο καλάθι με ajax στις λίστες προϊόντων, ώστε να μη χαλάει η διάταξη του πλέγματος.",
+    "type": "css",
+    "code": ".woocommerce ul.products a.added_to_cart,\n.wc-block-grid__products a.added_to_cart {\n\tdisplay: none !important;\n}",
+    "location": "site_header",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "add-to-cart",
+        "css",
+        "ajax"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-hide-view-cart-button-upon-ajax-add-to-cart/"
+    ],
+    "updated": "2026-11-18T13:27:09+00:00"
+}

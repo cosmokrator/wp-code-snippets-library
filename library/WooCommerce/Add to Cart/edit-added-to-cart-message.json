@@ -1,0 +1,28 @@
+{
+    "title": "Edit or remove the \"added to your cart\" message",
+    "description": "Αλλάζει το μήνυμα «Το προϊόν προστέθηκε στο καλάθι σας» που εμφανίζεται μετά την προσθήκη στο καλάθι. Το {product} αντικαθίσταται με το όνομα του προϊόντος. Αφήστε το κείμενο κενό για να μην εμφανίζεται καθόλου μήνυμα. Το κουμπί «Προβολή καλαθιού» παραμένει (εκτός αν έχετε ενεργή την ανακατεύθυνση στο καλάθι).",
+    "type": "php",
+    "code": "add_filter( 'wc_add_to_cart_message_html', 'perfectpixel_edit_added_to_cart_message', 10, 2 );\n\nfunction perfectpixel_edit_added_to_cart_message( $message, $products ) {\n\t$text = '{{added_to_cart_text}}';\n\tif ( '' === trim( $text ) ) {\n\t\treturn ''; // Empty notices are not stored by WooCommerce.\n\t}\n\t$names = array();\n\tforeach ( (array) $products as $product_id => $qty ) {\n\t\t$names[] = ( $qty > 1 ? absint( $qty ) . ' &times; ' : '' ) . '&ldquo;' . esc_html( wp_strip_all_tags( get_the_title( $product_id ) ) ) . '&rdquo;';\n\t}\n\t$out = str_replace( '{product}', implode( ', ', $names ), esc_html( $text ) );\n\n\tif ( 'yes' !== get_option( 'woocommerce_cart_redirect_after_add' ) ) {\n\t\t$out = sprintf( '<a href=\"%s\" class=\"button wc-forward\">%s</a> %s', esc_url( wc_get_cart_url() ), esc_html__( 'View cart', 'woocommerce' ), $out );\n\t}\n\treturn $out;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "add-to-cart",
+        "notices"
+    ],
+    "variables": [
+        {
+            "name": "added_to_cart_text",
+            "label": "Κείμενο μηνύματος",
+            "default": "Το {product} μπήκε στο καλάθι σας!",
+            "description": "Χωρίς απόστροφο ('). Κενό = χωρίς μήνυμα"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-remove-product-successfully-added-cart-message/"
+    ],
+    "updated": "2026-11-18T13:27:09+00:00"
+}

@@ -1,0 +1,35 @@
+{
+    "title": "Rename the \"Add to cart\" button",
+    "description": "Αλλάζει το κείμενο του κουμπιού «Προσθήκη στο καλάθι» (π.χ. «Αγορά τώρα») στη σελίδα προϊόντος και στις λίστες προϊόντων. Στις λίστες αλλάζει μόνο σε απλά προϊόντα που αγοράζονται άμεσα, ώστε τα «Επιλογές» / «Διαβάστε περισσότερα» να μένουν όπως είναι.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_product_single_add_to_cart_text', 'perfectpixel_rename_atc_single', 20, 2 );\nadd_filter( 'woocommerce_product_add_to_cart_text', 'perfectpixel_rename_atc_loop', 20, 2 );\n\nfunction perfectpixel_rename_atc_single( $text, $product ) {\n\treturn ( $product && $product->is_type( 'external' ) ) ? $text : '{{atc_single_label}}';\n}\n\nfunction perfectpixel_rename_atc_loop( $text, $product ) {\n\tif ( $product && $product->is_type( 'simple' ) && $product->is_purchasable() && $product->is_in_stock() ) {\n\t\treturn '{{atc_loop_label}}';\n\t}\n\treturn $text;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "add-to-cart",
+        "labels",
+        "buttons"
+    ],
+    "variables": [
+        {
+            "name": "atc_single_label",
+            "label": "Κείμενο στη σελίδα προϊόντος",
+            "default": "Αγορά τώρα",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "atc_loop_label",
+            "label": "Κείμενο στις λίστες προϊόντων",
+            "default": "Στο καλάθι",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-rename-add-to-cart-button-label/"
+    ],
+    "updated": "2026-11-18T13:27:09+00:00"
+}

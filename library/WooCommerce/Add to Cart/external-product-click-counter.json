@@ -1,0 +1,24 @@
+{
+    "title": "Count clicks on external product buttons",
+    "description": "Μετρά πόσες φορές πατήθηκε το κουμπί αγοράς των εξωτερικών/affiliate προϊόντων (στη σελίδα προϊόντος και στις λίστες) και εμφανίζει τον αριθμό σε στήλη «Κλικ εξωτερικού» στη λίστα προϊόντων του διαχειριστή. Με τις προβολές δίνει το ποσοστό κλικ (CTR) κάθε προϊόντος.",
+    "type": "php",
+    "code": "add_action( 'wp_footer', 'perfectpixel_external_clicks_script' );\nadd_action( 'wp_ajax_perfectpixel_external_click', 'perfectpixel_external_clicks_record' );\nadd_action( 'wp_ajax_nopriv_perfectpixel_external_click', 'perfectpixel_external_clicks_record' );\nadd_filter( 'manage_edit-product_columns', 'perfectpixel_external_clicks_column' );\nadd_action( 'manage_product_posts_custom_column', 'perfectpixel_external_clicks_column_value', 10, 2 );\n\nfunction perfectpixel_external_clicks_script() {\n\tif ( ! function_exists( 'is_woocommerce' ) || ! is_woocommerce() ) {\n\t\treturn;\n\t}\n\t$single = 0;\n\tif ( is_product() ) {\n\t\t$product = wc_get_product( get_queried_object_id() );\n\t\t$single  = ( $product && $product->is_type( 'external' ) ) ? $product->get_id() : 0;\n\t}\n\t$data = array(\n\t\t'url'    => admin_url( 'admin-ajax.php' ),\n\t\t'single' => $single,\n\t);\n\t?>\n\t<script>\n\t( function () {\n\t\tvar cfg = <?php echo wp_json_encode( $data ); ?>;\n\t\tvar send = function ( id ) {\n\t\t\tvar body = new FormData();\n\t\t\tbody.append( 'action', 'perfectpixel_external_click' );\n\t\t\tbody.append( 'product_id', id );\n\t\t\tnavigator.sendBeacon ? navigator.sendBeacon( cfg.url, body ) : fetch( cfg.url, { method: 'POST', body: body, keepalive: true } );\n\t\t};\n\t\tdocument.addEventListener( 'click', function ( e ) {\n\t\t\tvar loop = e.target.closest( 'a.product_type_external[data-product_id]' );\n\t\t\tif ( loop ) {\n\t\t\t\tsend( loop.getAttribute( 'data-product_id' ) );\n\t\t\t} else if ( cfg.single && e.target.closest( 'form.cart .single_add_to_cart_button' ) ) {\n\t\t\t\tsend( cfg.single );\n\t\t\t}\n\t\t} );\n\t} )();\n\t</script>\n\t<?php\n}\n\nfunction perfectpixel_external_clicks_record() {\n\t$product = wc_get_product( isset( $_POST['product_id'] ) ? absint( $_POST['product_id'] ) : 0 );\n\tif ( $product && $product->is_type( 'external' ) ) {\n\t\t$id = $product->get_id();\n\t\tupdate_post_meta( $id, '_perfectpixel_external_clicks', (int) get_post_meta( $id, '_perfectpixel_external_clicks', true ) + 1 );\n\t}\n\twp_die();\n}\n\nfunction perfectpixel_external_clicks_column( $columns ) {\n\t$columns['perfectpixel_external_clicks'] = 'Κλικ εξωτερικού';\n\treturn $columns;\n}\n\nfunction perfectpixel_external_clicks_column_value( $column, $post_id ) {\n\tif ( 'perfectpixel_external_clicks' === $column ) {\n\t\t$product = wc_get_product( $post_id );\n\t\techo ( $product && $product->is_type( 'external' ) ) ? (int) get_post_meta( $post_id, '_perfectpixel_external_clicks', true ) : '&ndash;';\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "add-to-cart",
+        "external",
+        "analytics",
+        "admin",
+        "ajax"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-count-external-product-clicks/"
+    ],
+    "updated": "2026-11-18T13:27:16+00:00"
+}

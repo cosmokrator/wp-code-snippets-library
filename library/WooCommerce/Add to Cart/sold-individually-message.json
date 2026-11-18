@@ -1,0 +1,29 @@
+{
+    "title": "Change or hide the \"You cannot add another\" message",
+    "description": "Για προϊόντα «Πωλείται μεμονωμένα», όταν ο πελάτης προσπαθεί να τα ξαναβάλει στο καλάθι αλλάζει το μήνυμα σφάλματος «Δεν μπορείτε να προσθέσετε άλλο…». Αφήστε το κείμενο κενό για να μην εμφανίζεται καθόλου μήνυμα (το προϊόν απλώς δεν προστίθεται ξανά).",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_add_to_cart_sold_individually_found_in_cart', 'perfectpixel_sold_individually_message', 10 );\n\nfunction perfectpixel_sold_individually_message( $found ) {\n\tif ( $found ) {\n\t\t// WooCommerce shows the exception message as an error; an empty message shows nothing.\n\t\tthrow new Exception( esc_html( '{{sold_individually_text}}' ) );\n\t}\n\treturn $found;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "add-to-cart",
+        "notices",
+        "sold-individually"
+    ],
+    "variables": [
+        {
+            "name": "sold_individually_text",
+            "label": "Μήνυμα",
+            "default": "Το προϊόν είναι ήδη στο καλάθι σας.",
+            "description": "Χωρίς απόστροφο ('). Κενό = χωρίς μήνυμα"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-disable-you-cannot-add-another-to-your-cart-message/"
+    ],
+    "updated": "2026-11-18T13:27:09+00:00"
+}

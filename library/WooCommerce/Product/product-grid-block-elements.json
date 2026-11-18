@@ -1,0 +1,40 @@
+{
+    "title": "Hide image, sale badge or link in product grid blocks",
+    "description": "Στα παλαιότερα blocks πλέγματος προϊόντων (Best Selling, Newest, On Sale, Top Rated, Products by Category) κρύβει την εικόνα, την ετικέτα «Προσφορά» ή/και τον σύνδεσμο προς το προϊόν, που δεν ρυθμίζονται από τις επιλογές του block. Τίτλος, τιμή, βαθμολογία και κουμπί ρυθμίζονται ήδη από το block. Δεν επηρεάζει το νεότερο block «Product Collection».",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_blocks_product_grid_item_html', 'perfectpixel_product_grid_item_html', 10, 3 );\n\nfunction perfectpixel_product_grid_item_html( $html, $data, $product ) {\n\t$image = 'yes' === '{{grid_hide_image}}' ? '' : $data->image;\n\t$badge = 'yes' === '{{grid_hide_badge}}' ? '' : $data->badge;\n\t$inner = $image . $data->title;\n\n\tif ( 'yes' !== '{{grid_remove_link}}' ) {\n\t\t$inner = '<a href=\"' . esc_url( $data->permalink ) . '\" class=\"wc-block-grid__product-link\">' . $inner . '</a>';\n\t}\n\treturn '<li class=\"wc-block-grid__product\">' . $inner . $badge . $data->price . $data->rating . $data->button . '</li>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "blocks",
+        "product-grid"
+    ],
+    "variables": [
+        {
+            "name": "grid_hide_image",
+            "label": "Απόκρυψη εικόνας (yes/no)",
+            "default": "yes",
+            "description": "yes ή no"
+        },
+        {
+            "name": "grid_hide_badge",
+            "label": "Απόκρυψη ετικέτας προσφοράς (yes/no)",
+            "default": "no",
+            "description": "yes ή no"
+        },
+        {
+            "name": "grid_remove_link",
+            "label": "Αφαίρεση συνδέσμου προϊόντος (yes/no)",
+            "default": "no",
+            "description": "yes ή no"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-blocks-hide-images-etc-from-product-grid-block/"
+    ],
+    "updated": "2026-11-18T13:27:09+00:00"
+}

@@ -1,0 +1,23 @@
+{
+    "title": "Add a quantity input to ajax add to cart buttons",
+    "description": "Στις λίστες προϊόντων, δίπλα στο κουμπί «Προσθήκη στο καλάθι» των απλών προϊόντων εμφανίζεται πεδίο ποσότητας, ώστε ο πελάτης να προσθέτει πολλά τεμάχια χωρίς να ανοίξει το προϊόν. Χρειάζεται ενεργή την επιλογή «Ενεργοποίηση AJAX κουμπιών προσθήκης στο καλάθι» (Ρυθμίσεις → Προϊόντα). Τα μεταβλητά προϊόντα κρατούν το «Επιλογές». Ισχύει για το κλασικό template σελίδας προϊόντος/καταστήματος· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_loop_add_to_cart_link', 'perfectpixel_loop_quantity_input', 10, 2 );\nadd_action( 'wp_footer', 'perfectpixel_loop_quantity_script' );\n\nfunction perfectpixel_loop_quantity_input( $html, $product ) {\n\tif ( ! $product || ! $product->is_type( 'simple' ) || ! $product->is_purchasable() || ! $product->is_in_stock() || $product->is_sold_individually() ) {\n\t\treturn $html;\n\t}\n\t$input = woocommerce_quantity_input(\n\t\tarray(\n\t\t\t'min_value'   => $product->get_min_purchase_quantity(),\n\t\t\t'max_value'   => $product->get_max_purchase_quantity(),\n\t\t\t'input_value' => $product->get_min_purchase_quantity(),\n\t\t),\n\t\t$product,\n\t\tfalse\n\t);\n\treturn '<div class=\"perfectpixel-loop-qty\" style=\"display:flex;gap:.5em;align-items:center;justify-content:center\">' . $input . $html . '</div>';\n}\n\n// Copy the typed quantity to the button's data-quantity, which ajax add to cart sends.\nfunction perfectpixel_loop_quantity_script() {\n\tif ( ! function_exists( 'is_woocommerce' ) ) {\n\t\treturn;\n\t}\n\t?>\n\t<script>\n\tdocument.addEventListener( 'input', function ( e ) {\n\t\tvar input = e.target.closest( '.perfectpixel-loop-qty input.qty' );\n\t\tif ( ! input ) {\n\t\t\treturn;\n\t\t}\n\t\tvar button = input.closest( '.perfectpixel-loop-qty' ).querySelector( '.add_to_cart_button' );\n\t\tif ( button ) {\n\t\t\tbutton.setAttribute( 'data-quantity', input.value );\n\t\t\tif ( window.jQuery ) {\n\t\t\t\twindow.jQuery( button ).data( 'quantity', input.value );\n\t\t\t}\n\t\t}\n\t} );\n\t</script>\n\t<?php\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "add-to-cart",
+        "ajax",
+        "quantity",
+        "shop"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-ajax-add-to-cart-quantity/"
+    ],
+    "updated": "2026-11-18T13:27:09+00:00"
+}

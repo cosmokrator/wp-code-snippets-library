@@ -1,0 +1,35 @@
+{
+    "title": "Replace the add to cart form with fixed quantity buttons",
+    "description": "Σε απλά προϊόντα, στη θέση της φόρμας (ποσότητα + κουμπί) εμφανίζονται κουμπιά για προκαθορισμένες ποσότητες, π.χ. «Προσθήκη 1 στο καλάθι», «Προσθήκη 2 στο καλάθι», «Προσθήκη 3 στο καλάθι». Ταιριάζει με εκπτώσεις ποσότητας. Το {qty} αντικαθίσταται με την ποσότητα. Ποσότητες πάνω από το επιτρεπτό μέγιστο (π.χ. απόθεμα) παραλείπονται. Ισχύει για το κλασικό template σελίδας προϊόντος/καταστήματος· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_before_single_product', 'perfectpixel_fixed_qty_setup' );\n\nfunction perfectpixel_fixed_qty_setup() {\n\tglobal $product;\n\tif ( ! $product || ! $product->is_type( 'simple' ) || ! $product->is_purchasable() || ! $product->is_in_stock() ) {\n\t\treturn;\n\t}\n\tremove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_add_to_cart', 30 );\n\tadd_action( 'woocommerce_single_product_summary', 'perfectpixel_fixed_qty_buttons', 30 );\n}\n\nfunction perfectpixel_fixed_qty_buttons() {\n\tglobal $product;\n\t$max = (int) $product->get_max_purchase_quantity(); // -1 = unlimited.\n\techo '<div class=\"perfectpixel-fixed-qty\" style=\"display:flex;flex-wrap:wrap;gap:.5em;margin-bottom:1.5em\">';\n\tforeach ( wp_parse_id_list( '{{fixed_qty_values}}' ) as $qty ) {\n\t\tif ( $qty < 1 || ( $max > 0 && $qty > $max ) ) {\n\t\t\tcontinue;\n\t\t}\n\t\tprintf(\n\t\t\t'<form method=\"post\" action=\"%1$s\" enctype=\"multipart/form-data\"><input type=\"hidden\" name=\"add-to-cart\" value=\"%2$d\"><input type=\"hidden\" name=\"quantity\" value=\"%3$d\"><button type=\"submit\" class=\"single_add_to_cart_button button alt\">%4$s</button></form>',\n\t\t\tesc_url( $product->get_permalink() ),\n\t\t\t(int) $product->get_id(),\n\t\t\t(int) $qty,\n\t\t\tesc_html( str_replace( '{qty}', $qty, '{{fixed_qty_label}}' ) )\n\t\t);\n\t}\n\techo '</div>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "add-to-cart",
+        "quantity",
+        "buttons"
+    ],
+    "variables": [
+        {
+            "name": "fixed_qty_values",
+            "label": "Ποσότητες (με κόμμα)",
+            "default": "1,2,3",
+            "description": "Μόνο ακέραιοι"
+        },
+        {
+            "name": "fixed_qty_label",
+            "label": "Κείμενο κουμπιού",
+            "default": "Προσθήκη {qty} στο καλάθι",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-to-cart-quantity-selectors/"
+    ],
+    "updated": "2026-11-18T13:27:09+00:00"
+}

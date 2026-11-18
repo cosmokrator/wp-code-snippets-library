@@ -1,0 +1,42 @@
+{
+    "title": "Show how much is left for free shipping",
+    "description": "Στο καλάθι και στο checkout εμφανίζει μήνυμα με το ποσό που λείπει για δωρεάν μεταφορικά (π.χ. «Προσθέστε ακόμη 12,50 € για δωρεάν αποστολή»), με κουμπί επιστροφής στο κατάστημα. Το {amount} αντικαθίσταται με το ποσό. Ορίστε το όριο ίδιο με αυτό της μεθόδου «Δωρεάν αποστολή». Ελέγχεται το υποσύνολο προϊόντων (με ΦΠΑ αν οι τιμές εμφανίζονται με ΦΠΑ), πριν τα κουπόνια. Ισχύει για το κλασικό καλάθι (shortcode)· το καλάθι με blocks δεν χρησιμοποιεί αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_before_cart', 'perfectpixel_free_shipping_remaining_notice' );\nadd_action( 'woocommerce_before_checkout_form', 'perfectpixel_free_shipping_remaining_notice', 5 );\n\nfunction perfectpixel_free_shipping_remaining_notice() {\n\tif ( ! WC()->cart || WC()->cart->is_empty() || ! WC()->cart->needs_shipping() ) {\n\t\treturn;\n\t}\n\t$threshold = (float) '{{free_shipping_threshold}}';\n\t$remaining = $threshold - (float) WC()->cart->get_displayed_subtotal();\n\tif ( $threshold <= 0 || $remaining <= 0 ) {\n\t\treturn;\n\t}\n\t$text = str_replace( '{amount}', wc_price( $remaining ), esc_html( '{{free_shipping_remaining_text}}' ) );\n\t$link = sprintf( '<a href=\"%s\" class=\"button wc-forward\">%s</a> ', esc_url( wc_get_page_permalink( 'shop' ) ), esc_html( '{{free_shipping_button_text}}' ) );\n\twc_print_notice( $link . $text, 'notice' );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "cart",
+        "shipping",
+        "notices",
+        "free-shipping"
+    ],
+    "variables": [
+        {
+            "name": "free_shipping_threshold",
+            "label": "Όριο δωρεάν αποστολής",
+            "default": "50",
+            "description": "Μόνο αριθμός"
+        },
+        {
+            "name": "free_shipping_remaining_text",
+            "label": "Μήνυμα",
+            "default": "Προσθέστε ακόμη {amount} για δωρεάν αποστολή!",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "free_shipping_button_text",
+            "label": "Κουμπί",
+            "default": "Συνέχεια αγορών",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-need-spend-x-get-free-shipping-cart-page/"
+    ],
+    "updated": "2026-11-18T13:27:09+00:00"
+}

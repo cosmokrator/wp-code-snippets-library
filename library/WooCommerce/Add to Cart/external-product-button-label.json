@@ -1,0 +1,29 @@
+{
+    "title": "Change the button label of external products",
+    "description": "Αλλάζει το κείμενο του κουμπιού «Αγορά προϊόντος» σε όλα τα εξωτερικά/affiliate προϊόντα ταυτόχρονα (σελίδα προϊόντος και λίστες), χωρίς να το αλλάζετε ένα-ένα. Υπερισχύει του κειμένου που έχει οριστεί στο κάθε προϊόν.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_product_single_add_to_cart_text', 'perfectpixel_external_button_label', 30, 2 );\nadd_filter( 'woocommerce_product_add_to_cart_text', 'perfectpixel_external_button_label', 30, 2 );\n\nfunction perfectpixel_external_button_label( $text, $product ) {\n\treturn ( $product && $product->is_type( 'external' ) ) ? '{{external_button_label}}' : $text;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "add-to-cart",
+        "external",
+        "labels"
+    ],
+    "variables": [
+        {
+            "name": "external_button_label",
+            "label": "Κείμενο κουμπιού",
+            "default": "Αγορά από το κατάστημα →",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-rename-buy-product-external-products/"
+    ],
+    "updated": "2026-11-18T13:27:09+00:00"
+}

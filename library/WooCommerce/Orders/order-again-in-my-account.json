@@ -1,0 +1,29 @@
+{
+    "title": "Add an \"Order again\" button to My Account > Orders",
+    "description": "Στη λίστα παραγγελιών του «Ο λογαριασμός μου» προσθέτει κουμπί «Παραγγελία ξανά» στις ολοκληρωμένες παραγγελίες. Με ένα κλικ τα ίδια προϊόντα μπαίνουν στο καλάθι, όπως με το αντίστοιχο κουμπί του WooCommerce στη σελίδα της παραγγελίας.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_my_account_my_orders_actions', 'perfectpixel_order_again_action', 50, 2 );\n\nfunction perfectpixel_order_again_action( $actions, $order ) {\n\t$statuses = apply_filters( 'woocommerce_valid_order_statuses_for_order_again', array( 'completed' ) );\n\tif ( $order && $order->has_status( $statuses ) && $order->get_item_count() > 0 ) {\n\t\t$actions['order-again'] = array(\n\t\t\t// Same URL as the core \"Order again\" button, so WooCommerce's own handler fills the cart.\n\t\t\t'url'  => wp_nonce_url( add_query_arg( 'order_again', $order->get_id(), wc_get_cart_url() ), 'woocommerce-order_again' ),\n\t\t\t'name' => '{{order_again_label}}',\n\t\t);\n\t}\n\treturn $actions;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "my-account",
+        "orders",
+        "reorder"
+    ],
+    "variables": [
+        {
+            "name": "order_again_label",
+            "label": "Κείμενο κουμπιού",
+            "default": "Παραγγελία ξανά",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-order-again-my-account-orders/"
+    ],
+    "updated": "2026-11-18T13:27:09+00:00"
+}

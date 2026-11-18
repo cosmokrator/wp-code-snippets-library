@@ -1,0 +1,23 @@
+{
+    "title": "Show the full add to cart form on shop pages",
+    "description": "Στις λίστες προϊόντων (κατάστημα, κατηγορίες) εμφανίζει κάτω από κάθε προϊόν την ίδια φόρμα με τη σελίδα προϊόντος: ποσότητα και, για μεταβλητά προϊόντα, τις επιλογές παραλλαγών. Έτσι ο πελάτης αγοράζει χωρίς να ανοίξει το προϊόν. Ισχύει για το κλασικό template σελίδας προϊόντος/καταστήματος· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'init', 'perfectpixel_shop_atc_form_setup' );\nadd_action( 'wp_enqueue_scripts', 'perfectpixel_shop_atc_form_scripts' );\n\nfunction perfectpixel_shop_atc_form_setup() {\n\tremove_action( 'woocommerce_after_shop_loop_item', 'woocommerce_template_loop_add_to_cart', 10 );\n\tadd_action( 'woocommerce_after_shop_loop_item', 'perfectpixel_shop_atc_form', 10 );\n}\n\nfunction perfectpixel_shop_atc_form() {\n\tglobal $product;\n\tif ( ! $product ) {\n\t\treturn;\n\t}\n\tif ( $product->is_purchasable() && $product->is_in_stock() ) {\n\t\twoocommerce_template_single_add_to_cart();\n\t} else {\n\t\twoocommerce_template_loop_add_to_cart(); // \"Read more\" etc.\n\t}\n}\n\nfunction perfectpixel_shop_atc_form_scripts() {\n\tif ( function_exists( 'is_shop' ) && ( is_shop() || is_product_taxonomy() ) ) {\n\t\twp_enqueue_script( 'wc-add-to-cart-variation' );\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "add-to-cart",
+        "shop",
+        "variations",
+        "quantity"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-to-cart-form-shop-page/"
+    ],
+    "updated": "2026-11-18T13:27:09+00:00"
+}

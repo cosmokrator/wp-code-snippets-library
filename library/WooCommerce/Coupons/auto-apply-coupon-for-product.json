@@ -1,0 +1,35 @@
+{
+    "title": "Auto-apply a coupon when a product is in the cart",
+    "description": "Εφαρμόζει αυτόματα ένα κουπόνι όταν ο πελάτης προσθέτει συγκεκριμένο προϊόν στο καλάθι, και το αφαιρεί όταν το προϊόν βγει από το καλάθι. Αν αφήσετε κενά τα IDs, το κουπόνι εφαρμόζεται με την πρώτη προσθήκη οποιουδήποτε προϊόντος. Δημιουργήστε πρώτα το κουπόνι (Marketing → Κουπόνια) και ορίστε τον κωδικό του στη μεταβλητή. Λειτουργεί και με το καλάθι με blocks.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_add_to_cart', 'perfectpixel_auto_coupon_sync', 20 );\nadd_action( 'woocommerce_cart_item_removed', 'perfectpixel_auto_coupon_sync', 20 );\n\nfunction perfectpixel_auto_coupon_cart_qualifies() {\n\t$ids = wp_parse_id_list( '{{auto_coupon_product_ids}}' );\n\tforeach ( WC()->cart->get_cart() as $item ) {\n\t\tif ( ! $ids || in_array( (int) $item['product_id'], $ids, true ) || in_array( (int) $item['variation_id'], $ids, true ) ) {\n\t\t\treturn true;\n\t\t}\n\t}\n\treturn false;\n}\n\nfunction perfectpixel_auto_coupon_sync() {\n\tstatic $running = false;\n\t$code = wc_format_coupon_code( '{{auto_coupon_code}}' );\n\tif ( $running || '' === $code || ! WC()->cart ) {\n\t\treturn;\n\t}\n\t$running    = true;\n\t$has_coupon = WC()->cart->has_discount( $code );\n\t$qualifies  = perfectpixel_auto_coupon_cart_qualifies();\n\n\tif ( $qualifies && ! $has_coupon ) {\n\t\tWC()->cart->apply_coupon( $code );\n\t} elseif ( ! $qualifies && $has_coupon ) {\n\t\tWC()->cart->remove_coupon( $code );\n\t\tWC()->cart->calculate_totals();\n\t}\n\t$running = false;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "coupons",
+        "cart",
+        "discounts"
+    ],
+    "variables": [
+        {
+            "name": "auto_coupon_code",
+            "label": "Κωδικός κουπονιού",
+            "default": "welcome10",
+            "description": "Ο κωδικός όπως είναι στο WooCommerce"
+        },
+        {
+            "name": "auto_coupon_product_ids",
+            "label": "IDs προϊόντων (με κόμμα)",
+            "default": "",
+            "description": "Κενό = οποιοδήποτε προϊόν"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-apply-coupon-programmatically-product-cart/"
+    ],
+    "updated": "2026-11-18T13:27:09+00:00"
+}

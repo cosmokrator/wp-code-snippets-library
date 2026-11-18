@@ -1,0 +1,41 @@
+{
+    "title": "Show a unit next to the quantity input",
+    "description": "Στη σελίδα προϊόντος εμφανίζει μια μονάδα δίπλα στο πεδίο ποσότητας (π.χ. «λίτρα», «κιλά», «μέτρα»), ώστε ο πελάτης να καταλαβαίνει τι αγοράζει. Ορίστε τη μονάδα και, προαιρετικά, τα IDs των προϊόντων ή κατηγοριών στα οποία ισχύει.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_after_quantity_input_field', 'perfectpixel_quantity_unit_suffix' );\n\nfunction perfectpixel_quantity_unit_suffix() {\n\tglobal $product;\n\tif ( ! is_product() || ! $product ) {\n\t\treturn;\n\t}\n\t$product_ids  = wp_parse_id_list( '{{qty_suffix_product_ids}}' );\n\t$category_ids = wp_parse_id_list( '{{qty_suffix_category_ids}}' );\n\t$id           = $product->get_parent_id() ? $product->get_parent_id() : $product->get_id();\n\n\t$applies = ! $product_ids && ! $category_ids;\n\tif ( $product_ids && in_array( $id, $product_ids, true ) ) {\n\t\t$applies = true;\n\t}\n\tif ( $category_ids && has_term( $category_ids, 'product_cat', $id ) ) {\n\t\t$applies = true;\n\t}\n\tif ( $applies ) {\n\t\techo '<span class=\"perfectpixel-qty-suffix\" style=\"margin:0 .75em 0 .4em;align-self:center\">' . esc_html( '{{qty_suffix_text}}' ) . '</span>';\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "add-to-cart",
+        "quantity",
+        "single-product"
+    ],
+    "variables": [
+        {
+            "name": "qty_suffix_text",
+            "label": "Μονάδα",
+            "default": "λίτρα",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "qty_suffix_product_ids",
+            "label": "IDs προϊόντων (με κόμμα)",
+            "default": "",
+            "description": "Κενό = δεν περιορίζεται σε προϊόντα"
+        },
+        {
+            "name": "qty_suffix_category_ids",
+            "label": "IDs κατηγοριών (με κόμμα)",
+            "default": "",
+            "description": "Κενό = δεν περιορίζεται σε κατηγορίες. Αν και τα δύο είναι κενά, ισχύει για όλα"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-to-cart-quantity-suffix/"
+    ],
+    "updated": "2026-11-18T13:27:09+00:00"
+}

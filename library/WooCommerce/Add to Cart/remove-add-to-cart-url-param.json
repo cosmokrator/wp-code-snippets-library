@@ -1,0 +1,22 @@
+{
+    "title": "Remove the \"add-to-cart\" URL parameter after adding",
+    "description": "Όταν ένα προϊόν μπαίνει στο καλάθι μέσω συνδέσμου ?add-to-cart=123 (ή με υποβολή φόρμας χωρίς ajax), μετά την προσθήκη γίνεται ανακατεύθυνση στην ίδια σελίδα χωρίς την παράμετρο. Έτσι η ανανέωση της σελίδας δεν ξαναπροσθέτει το προϊόν. Δεν αλλάζει τίποτα αν έχετε ενεργή την ανακατεύθυνση στο καλάθι.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_add_to_cart_redirect', 'perfectpixel_remove_add_to_cart_param', 20 );\n\nfunction perfectpixel_remove_add_to_cart_param( $url ) {\n\tif ( $url || wp_doing_ajax() || ! isset( $_REQUEST['add-to-cart'] ) ) {\n\t\treturn $url; // Another redirect is already set, or nothing to clean.\n\t}\n\t$current = home_url( wp_unslash( $_SERVER['REQUEST_URI'] ?? '/' ) );\n\treturn remove_query_arg( array( 'add-to-cart', 'quantity', 'variation_id' ), $current );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "add-to-cart",
+        "redirect",
+        "url"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-remove-add-to-cart-url-parameter/"
+    ],
+    "updated": "2026-11-18T13:27:09+00:00"
+}

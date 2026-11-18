@@ -1,0 +1,21 @@
+{
+    "title": "Add a second add to cart form at the bottom of the product page",
+    "description": "Σε μεγάλες σελίδες προϊόντος, εμφανίζει ξανά τη φόρμα «Προσθήκη στο καλάθι» στο τέλος της σελίδας (κάτω από καρτέλες, upsells και σχετικά προϊόντα), ώστε ο πελάτης να μη χρειάζεται να ανέβει. Αλλάξτε την προτεραιότητα στο add_action για άλλη θέση (π.χ. 11 = αμέσως μετά τις καρτέλες). Ισχύει για το κλασικό template σελίδας προϊόντος/καταστήματος· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_after_single_product_summary', 'perfectpixel_second_atc_form', 9999 );\n\nfunction perfectpixel_second_atc_form() {\n\tglobal $product;\n\tif ( ! $product || ! $product->is_purchasable() || ! $product->is_in_stock() ) {\n\t\treturn;\n\t}\n\techo '<div class=\"perfectpixel-second-atc\" style=\"clear:both;padding-top:1.5em\">';\n\twoocommerce_template_single_add_to_cart();\n\techo '</div>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "add-to-cart",
+        "single-product"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-duplicate-add-to-cart-button-single-product-page/"
+    ],
+    "updated": "2026-11-18T13:27:09+00:00"
+}

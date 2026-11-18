@@ -1,0 +1,29 @@
+{
+    "title": "Allow only one product in the cart",
+    "description": "Το καλάθι κρατά πάντα ένα μόνο προϊόν: όταν ο πελάτης προσθέτει νέο προϊόν, το προηγούμενο αφαιρείται αυτόματα (π.χ. για συνδρομές ή υπηρεσίες που πληρώνονται ξεχωριστά). Προαιρετικά εμφανίζεται μήνυμα· αφήστε το κενό για καθόλου μήνυμα.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_add_to_cart_validation', 'perfectpixel_only_one_product_in_cart', 9999, 2 );\n\nfunction perfectpixel_only_one_product_in_cart( $passed, $product_id ) {\n\tif ( ! $passed || ! WC()->cart || WC()->cart->is_empty() ) {\n\t\treturn $passed;\n\t}\n\t// Adding the same product again: let WooCommerce handle the quantity.\n\tforeach ( WC()->cart->get_cart() as $item ) {\n\t\tif ( (int) $item['product_id'] === (int) $product_id && 1 === count( WC()->cart->get_cart() ) ) {\n\t\t\treturn $passed;\n\t\t}\n\t}\n\tWC()->cart->empty_cart();\n\t$notice = '{{one_product_notice}}';\n\tif ( '' !== trim( $notice ) ) {\n\t\twc_add_notice( $notice, 'notice' );\n\t}\n\treturn $passed;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "cart",
+        "add-to-cart",
+        "restrictions"
+    ],
+    "variables": [
+        {
+            "name": "one_product_notice",
+            "label": "Μήνυμα αντικατάστασης",
+            "default": "Το καλάθι δέχεται ένα προϊόν τη φορά· το προηγούμενο αφαιρέθηκε.",
+            "description": "Χωρίς απόστροφο ('). Κενό = χωρίς μήνυμα"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-allow-1-product-cart/"
+    ],
+    "updated": "2026-11-18T13:27:09+00:00"
+}

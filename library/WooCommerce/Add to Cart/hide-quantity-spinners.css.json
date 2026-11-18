@@ -1,0 +1,22 @@
+{
+    "title": "Hide the arrows of the quantity input",
+    "description": "CSS που κρύβει τα βελάκια πάνω/κάτω που βάζει ο browser στο πεδίο ποσότητας (σε σελίδα προϊόντος και καλάθι). Χρήσιμο όταν έχετε κουμπιά +/− ή όταν τα βελάκια χαλάνε την εμφάνιση.",
+    "type": "css",
+    "code": ".quantity input[type=\"number\"]::-webkit-outer-spin-button,\n.quantity input[type=\"number\"]::-webkit-inner-spin-button {\n\t-webkit-appearance: none;\n\tmargin: 0;\n}\n.quantity input[type=\"number\"] {\n\t-moz-appearance: textfield;\n\tappearance: textfield;\n}",
+    "location": "site_header",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "add-to-cart",
+        "css",
+        "quantity"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-hide-add-to-cart-quantity-arrows/"
+    ],
+    "updated": "2026-11-18T13:27:09+00:00"
+}

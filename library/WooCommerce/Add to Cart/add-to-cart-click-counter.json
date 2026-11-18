@@ -1,0 +1,23 @@
+{
+    "title": "Count \"Add to cart\" clicks per product",
+    "description": "Μετρά πόσες φορές πατήθηκε το κουμπί «Προσθήκη στο καλάθι» στη σελίδα κάθε προϊόντος και εμφανίζει τον αριθμό σε στήλη «Κλικ καλαθιού» στη λίστα προϊόντων του διαχειριστή. Μαζί με τις πωλήσεις δείχνει πόσο καλά «πουλάει» η σελίδα του προϊόντος. Αν το theme σας αλλάζει το κουμπί, προσαρμόστε τον selector στο JS.",
+    "type": "php",
+    "code": "add_action( 'wp_footer', 'perfectpixel_atc_clicks_script' );\nadd_action( 'wp_ajax_perfectpixel_atc_click', 'perfectpixel_atc_clicks_record' );\nadd_action( 'wp_ajax_nopriv_perfectpixel_atc_click', 'perfectpixel_atc_clicks_record' );\nadd_filter( 'manage_edit-product_columns', 'perfectpixel_atc_clicks_column' );\nadd_action( 'manage_product_posts_custom_column', 'perfectpixel_atc_clicks_column_value', 10, 2 );\n\nfunction perfectpixel_atc_clicks_script() {\n\tif ( ! function_exists( 'is_product' ) || ! is_product() ) {\n\t\treturn;\n\t}\n\t$data = array(\n\t\t'url' => admin_url( 'admin-ajax.php' ),\n\t\t'id'  => get_queried_object_id(),\n\t);\n\t?>\n\t<script>\n\t( function () {\n\t\tvar cfg = <?php echo wp_json_encode( $data ); ?>;\n\t\tdocument.addEventListener( 'click', function ( e ) {\n\t\t\tif ( ! e.target.closest( '.single_add_to_cart_button' ) ) {\n\t\t\t\treturn;\n\t\t\t}\n\t\t\tvar body = new FormData();\n\t\t\tbody.append( 'action', 'perfectpixel_atc_click' );\n\t\t\tbody.append( 'product_id', cfg.id );\n\t\t\tnavigator.sendBeacon ? navigator.sendBeacon( cfg.url, body ) : fetch( cfg.url, { method: 'POST', body: body, keepalive: true } );\n\t\t} );\n\t} )();\n\t</script>\n\t<?php\n}\n\nfunction perfectpixel_atc_clicks_record() {\n\t$product_id = isset( $_POST['product_id'] ) ? absint( $_POST['product_id'] ) : 0;\n\tif ( $product_id && 'product' === get_post_type( $product_id ) ) {\n\t\tupdate_post_meta( $product_id, '_perfectpixel_atc_clicks', (int) get_post_meta( $product_id, '_perfectpixel_atc_clicks', true ) + 1 );\n\t}\n\twp_die();\n}\n\nfunction perfectpixel_atc_clicks_column( $columns ) {\n\t$columns['perfectpixel_atc_clicks'] = 'Κλικ καλαθιού';\n\treturn $columns;\n}\n\nfunction perfectpixel_atc_clicks_column_value( $column, $post_id ) {\n\tif ( 'perfectpixel_atc_clicks' === $column ) {\n\t\techo (int) get_post_meta( $post_id, '_perfectpixel_atc_clicks', true );\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "add-to-cart",
+        "analytics",
+        "admin",
+        "ajax"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-to-cart-click-counter/"
+    ],
+    "updated": "2026-11-18T13:27:09+00:00"
+}
