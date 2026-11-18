@@ -1,0 +1,35 @@
+{
+    "title": "\"Empty cart\" button on the cart page",
+    "description": "Προσθέτει κουμπί «Άδειασμα καλαθιού» δίπλα στο «Ενημέρωση καλαθιού», ώστε ο πελάτης να αφαιρεί όλα τα προϊόντα με ένα κλικ (χρήσιμο σε B2B με πολλά προϊόντα). Ζητά επιβεβαίωση και είναι προστατευμένο από αιτήματα τρίτων (nonce). Ορίστε κείμενο και ερώτηση επιβεβαίωσης στις μεταβλητές. Ισχύει για το κλασικό καλάθι.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_cart_actions', 'perfectpixel_empty_cart_button' );\nadd_action( 'wp_loaded', 'perfectpixel_empty_cart_handle', 20 );\n\nfunction perfectpixel_empty_cart_button() {\n\t$url = wp_nonce_url( add_query_arg( 'perfectpixel_empty_cart', '1', wc_get_cart_url() ), 'perfectpixel_empty_cart' );\n\tprintf(\n\t\t'<a href=\"%1$s\" class=\"button perfectpixel-empty-cart\" onclick=\"return confirm(%2$s);\">%3$s</a>',\n\t\tesc_url( $url ),\n\t\tesc_attr( wp_json_encode( '{{empty_cart_confirm}}' ) ),\n\t\tesc_html( '{{empty_cart_label}}' )\n\t);\n}\n\nfunction perfectpixel_empty_cart_handle() {\n\tif ( empty( $_GET['perfectpixel_empty_cart'] ) || ! function_exists( 'WC' ) || ! WC()->cart ) { // phpcs:ignore WordPress.Security.NonceVerification\n\t\treturn;\n\t}\n\tif ( isset( $_GET['_wpnonce'] ) && wp_verify_nonce( sanitize_key( $_GET['_wpnonce'] ), 'perfectpixel_empty_cart' ) ) {\n\t\tWC()->cart->empty_cart();\n\t}\n\twp_safe_redirect( wc_get_cart_url() );\n\texit;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "cart",
+        "ux",
+        "b2b"
+    ],
+    "variables": [
+        {
+            "name": "empty_cart_label",
+            "label": "Κείμενο κουμπιού",
+            "default": "Άδειασμα καλαθιού",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "empty_cart_confirm",
+            "label": "Ερώτηση επιβεβαίωσης",
+            "default": "Να αφαιρεθούν όλα τα προϊόντα από το καλάθι;",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-custom-empty-cart-button/"
+    ],
+    "updated": "2026-11-18T12:34:23+00:00"
+}

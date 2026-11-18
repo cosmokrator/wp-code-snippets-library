@@ -1,0 +1,28 @@
+{
+    "title": "Redirect the empty cart page to the shop (or another page)",
+    "description": "Όταν το καλάθι είναι άδειο, η σελίδα καλαθιού ανακατευθύνει στο κατάστημα ή σε άλλη σελίδα (π.χ. προσφορές), αντί να δείχνει το μήνυμα «Το καλάθι σας είναι άδειο». Δουλεύει και όταν ο πελάτης αφαιρεί το τελευταίο προϊόν από το καλάθι. Ορίστε τη διεύθυνση στη μεταβλητή (κενό = σελίδα καταστήματος).",
+    "type": "php",
+    "code": "add_action( 'template_redirect', 'perfectpixel_empty_cart_redirect' );\nadd_action( 'wp_footer', 'perfectpixel_empty_cart_redirect_script' );\n\nfunction perfectpixel_empty_cart_redirect_url() {\n\t$url = trim( '{{empty_cart_redirect_url}}' );\n\tif ( '' === $url ) {\n\t\treturn wc_get_page_permalink( 'shop' );\n\t}\n\treturn 0 === strpos( $url, '/' ) ? home_url( $url ) : $url;\n}\n\nfunction perfectpixel_empty_cart_redirect() {\n\tif ( function_exists( 'is_cart' ) && is_cart() && WC()->cart && WC()->cart->is_empty() ) {\n\t\twp_safe_redirect( perfectpixel_empty_cart_redirect_url() );\n\t\texit;\n\t}\n}\n\n// When the last item is removed on the cart page (AJAX), reload so the redirect happens.\nfunction perfectpixel_empty_cart_redirect_script() {\n\tif ( ! function_exists( 'is_cart' ) || ! is_cart() ) {\n\t\treturn;\n\t}\n\techo '<script>jQuery( document.body ).on( \"wc_cart_emptied\", function () { window.location.href = ' . wp_json_encode( perfectpixel_empty_cart_redirect_url() ) . '; } );</script>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "cart",
+        "redirect"
+    ],
+    "variables": [
+        {
+            "name": "empty_cart_redirect_url",
+            "label": "Διεύθυνση ανακατεύθυνσης",
+            "default": "",
+            "description": "Κενό = σελίδα καταστήματος. Σχετικό (/prosfores/) ή πλήρες URL"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-empty-cart-redirect/"
+    ],
+    "updated": "2026-11-18T12:34:23+00:00"
+}

@@ -1,0 +1,36 @@
+{
+    "title": "Show a message to customers who spent more than X",
+    "description": "Εμφανίζει ένα μήνυμα στο καλάθι μόνο σε συνδεδεμένους πελάτες που έχουν ξοδέψει συνολικά πάνω από ένα ποσό (π.χ. κωδικός VIP έκπτωσης ή δωρεάν αποστολή για πιστούς πελάτες). Χρησιμοποιεί τα στατιστικά του WooCommerce. Επιτρέπεται απλό HTML. Ορίστε ποσό και μήνυμα στις μεταβλητές.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_before_cart', 'perfectpixel_message_for_top_customers' );\n\nfunction perfectpixel_message_for_top_customers() {\n\t$user_id = get_current_user_id();\n\tif ( ! $user_id ) {\n\t\treturn;\n\t}\n\tif ( (float) wc_get_customer_total_spent( $user_id ) >= (float) '{{top_customer_amount}}' ) {\n\t\techo '<div class=\"woocommerce-info perfectpixel-top-customer\">' . wp_kses_post( '{{top_customer_message}}' ) . '</div>';\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "cart",
+        "customers",
+        "loyalty",
+        "marketing"
+    ],
+    "variables": [
+        {
+            "name": "top_customer_amount",
+            "label": "Ελάχιστο σύνολο αγορών",
+            "default": "500",
+            "description": "Μόνο αριθμός"
+        },
+        {
+            "name": "top_customer_message",
+            "label": "Μήνυμα",
+            "default": "Ως VIP πελάτης έχετε 15% έκπτωση με τον κωδικό <strong>VIP15</strong>.",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-get-total-spent-by-customer/"
+    ],
+    "updated": "2026-11-18T12:34:23+00:00"
+}

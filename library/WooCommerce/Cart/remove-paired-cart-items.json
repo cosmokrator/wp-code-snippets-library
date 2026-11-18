@@ -1,0 +1,22 @@
+{
+    "title": "Remove a linked product when its pair is removed from the cart",
+    "description": "Για ζευγάρια προϊόντων που πάνε μαζί (π.χ. προσφορά «αγόρασε Α, πάρε Β» ή συσκευή + υποχρεωτικό αξεσουάρ), όταν ο πελάτης αφαιρεί το ένα από το καλάθι αφαιρείται αυτόματα και το άλλο. Ορίστε τα ζευγάρια IDs στο $pairs (λειτουργεί και προς τις δύο κατευθύνσεις).",
+    "type": "php",
+    "code": "add_action( 'woocommerce_remove_cart_item', 'perfectpixel_remove_paired_cart_item', 10, 2 );\n\nfunction perfectpixel_remove_paired_cart_item( $removed_key, $cart ) {\n\tstatic $running = false;\n\tif ( $running ) {\n\t\treturn; // Our own removal triggers this hook again.\n\t}\n\n\t// Pairs of product IDs that must stay together.\n\t$pairs = array(\n\t\tarray( 101, 202 ),\n\t);\n\n\t$removed = $cart->get_cart_item( $removed_key );\n\tif ( ! $removed ) {\n\t\treturn;\n\t}\n\t$removed_id = (int) $removed['product_id'];\n\n\t$partners = array();\n\tforeach ( $pairs as $pair ) {\n\t\tif ( in_array( $removed_id, $pair, true ) ) {\n\t\t\t$partners = array_merge( $partners, array_diff( $pair, array( $removed_id ) ) );\n\t\t}\n\t}\n\tif ( ! $partners ) {\n\t\treturn;\n\t}\n\n\t$running = true;\n\tforeach ( $cart->get_cart() as $key => $item ) {\n\t\tif ( $key !== $removed_key && in_array( (int) $item['product_id'], $partners, true ) ) {\n\t\t\t$cart->remove_cart_item( $key );\n\t\t}\n\t}\n\t$running = false;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "cart",
+        "bundles",
+        "promotions"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-remove-second-item-when-item-removed-from-cart/"
+    ],
+    "updated": "2026-11-18T12:34:23+00:00"
+}

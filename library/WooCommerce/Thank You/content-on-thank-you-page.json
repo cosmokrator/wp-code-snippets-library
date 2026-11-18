@@ -1,0 +1,29 @@
+{
+    "title": "Add content to the thank you page (e.g. a coupon for the next order)",
+    "description": "Εμφανίζει ένα μήνυμα στην κορυφή της σελίδας ευχαριστίας, π.χ. κουπόνι για την επόμενη αγορά ή οδηγίες. Δεν εμφανίζεται σε αποτυχημένες πληρωμές. Επιτρέπεται απλό HTML. Ορίστε το κείμενο στη μεταβλητή.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_before_thankyou', 'perfectpixel_content_on_thank_you_page' );\n\nfunction perfectpixel_content_on_thank_you_page( $order_id ) {\n\t$order = wc_get_order( $order_id );\n\tif ( ! $order || $order->has_status( 'failed' ) ) {\n\t\treturn;\n\t}\n\techo '<div class=\"woocommerce-message perfectpixel-thankyou-message\">' . wp_kses_post( '{{thankyou_message}}' ) . '</div>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "thank-you",
+        "content",
+        "coupons"
+    ],
+    "variables": [
+        {
+            "name": "thankyou_message",
+            "label": "Μήνυμα",
+            "default": "Ευχαριστούμε για την αγορά! Με τον κωδικό <strong>EPOMENI10</strong> έχετε 10% έκπτωση στην επόμενη παραγγελία σας.",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-text-thank-page/"
+    ],
+    "updated": "2026-11-18T12:34:23+00:00"
+}

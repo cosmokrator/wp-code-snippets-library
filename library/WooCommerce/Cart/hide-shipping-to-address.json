@@ -1,0 +1,22 @@
+{
+    "title": "Hide the \"Shipping to …\" address in cart totals",
+    "description": "Κρύβει το κείμενο «Αποστολή σε [διεύθυνση]» κάτω από τους τρόπους αποστολής στα σύνολα του καλαθιού, που μπερδεύει πελάτες όταν προέρχεται από γεωεντοπισμό ή παλιά διεύθυνση. Ο υπολογισμός μεταφορικών (αν είναι ενεργός) παραμένει. Ισχύει για το κλασικό καλάθι.",
+    "type": "php",
+    "code": "add_filter( 'gettext', 'perfectpixel_hide_shipping_to_text', 10, 3 );\n\nfunction perfectpixel_hide_shipping_to_text( $translation, $text, $domain ) {\n\tif ( 'woocommerce' === $domain && 'Shipping to %s.' === $text && function_exists( 'is_cart' ) && is_cart() ) {\n\t\treturn '';\n\t}\n\treturn $translation;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "cart",
+        "shipping",
+        "texts"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-hide-shipping-to-cart/"
+    ],
+    "updated": "2026-11-18T12:34:23+00:00"
+}

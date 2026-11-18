@@ -1,0 +1,29 @@
+{
+    "title": "\"Share cart\" link: copy the current cart as a URL",
+    "description": "Για διαχειριστές/διαχειριστές καταστήματος προσθέτει στη γραμμή διαχείρισης το «Αντιγραφή συνδέσμου καλαθιού»: αντιγράφει έναν σύνδεσμο που, όταν τον ανοίξει κάποιος, γεμίζει το καλάθι του με τα ίδια προϊόντα, ποσότητες (και παραλλαγές) και κουπόνια και τον πηγαίνει στο checkout. Χρήσιμο για υποστήριξη πελατών, προσφορές και δοκιμές. Ο σύνδεσμος αντικαθιστά το τρέχον καλάθι του παραλήπτη.",
+    "type": "php",
+    "code": "add_action( 'admin_bar_menu', 'perfectpixel_share_cart_admin_bar', 100 );\nadd_action( 'wp_loaded', 'perfectpixel_share_cart_load', 20 );\n\nfunction perfectpixel_share_cart_url() {\n\tif ( ! function_exists( 'WC' ) || ! WC()->cart || WC()->cart->is_empty() ) {\n\t\treturn '';\n\t}\n\t$items = array();\n\tforeach ( WC()->cart->get_cart() as $item ) {\n\t\t$id      = $item['variation_id'] ? $item['variation_id'] : $item['product_id'];\n\t\t$items[] = $id . ':' . (int) $item['quantity'];\n\t}\n\t$args = array( 'perfectpixel_cart' => implode( ',', $items ) );\n\tif ( WC()->cart->get_applied_coupons() ) {\n\t\t$args['perfectpixel_coupons'] = implode( ',', WC()->cart->get_applied_coupons() );\n\t}\n\treturn add_query_arg( $args, home_url( '/' ) );\n}\n\nfunction perfectpixel_share_cart_admin_bar( $bar ) {\n\tif ( is_admin() || ! current_user_can( 'manage_woocommerce' ) ) {\n\t\treturn;\n\t}\n\t$url = perfectpixel_share_cart_url();\n\tif ( ! $url ) {\n\t\treturn;\n\t}\n\t$bar->add_node(\n\t\tarray(\n\t\t\t'id'    => 'perfectpixel-share-cart',\n\t\t\t'title' => esc_html( '{{share_cart_label}}' ),\n\t\t\t'href'  => esc_url( $url ),\n\t\t\t'meta'  => array( 'onclick' => 'navigator.clipboard.writeText(this.href);this.textContent=\"✓\";return false;' ),\n\t\t)\n\t);\n}\n\nfunction perfectpixel_share_cart_load() {\n\tif ( empty( $_GET['perfectpixel_cart'] ) || ! function_exists( 'WC' ) || ! WC()->cart ) { // phpcs:ignore WordPress.Security.NonceVerification\n\t\treturn;\n\t}\n\tWC()->cart->empty_cart();\n\tforeach ( explode( ',', sanitize_text_field( wp_unslash( $_GET['perfectpixel_cart'] ) ) ) as $pair ) { // phpcs:ignore WordPress.Security.NonceVerification\n\t\tlist( $id, $qty ) = array_pad( array_map( 'absint', explode( ':', $pair ) ), 2, 1 );\n\t\t$product = $id ? wc_get_product( $id ) : false;\n\t\tif ( ! $product ) {\n\t\t\tcontinue;\n\t\t}\n\t\tif ( $product->is_type( 'variation' ) ) {\n\t\t\tWC()->cart->add_to_cart( $product->get_parent_id(), max( 1, $qty ), $id, $product->get_variation_attributes() );\n\t\t} else {\n\t\t\tWC()->cart->add_to_cart( $id, max( 1, $qty ) );\n\t\t}\n\t}\n\tif ( ! empty( $_GET['perfectpixel_coupons'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification\n\t\tforeach ( explode( ',', sanitize_text_field( wp_unslash( $_GET['perfectpixel_coupons'] ) ) ) as $code ) { // phpcs:ignore WordPress.Security.NonceVerification\n\t\t\tWC()->cart->apply_coupon( wc_format_coupon_code( $code ) );\n\t\t}\n\t}\n\twp_safe_redirect( wc_get_checkout_url() );\n\texit;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "cart",
+        "sharing",
+        "admin"
+    ],
+    "variables": [
+        {
+            "name": "share_cart_label",
+            "label": "Κείμενο στη γραμμή διαχείρισης",
+            "default": "Αντιγραφή συνδέσμου καλαθιού",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-share-cart-link-generator/"
+    ],
+    "updated": "2026-11-18T12:34:23+00:00"
+}

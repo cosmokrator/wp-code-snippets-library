@@ -1,0 +1,29 @@
+{
+    "title": "Split the cart into shipping packages by shipping class",
+    "description": "Χωρίζει το καλάθι σε ξεχωριστά πακέτα αποστολής ανάλογα με την κλάση αποστολής (π.χ. «μόνο παραλαβή» και «αποστολή με courier»), ώστε ο πελάτης να διαλέγει διαφορετικό τρόπο αποστολής για κάθε πακέτο. Τα προϊόντα χωρίς κλάση πάνε στο κύριο πακέτο. Ορίστε τις κλάσεις (slugs) στη μεταβλητή.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_cart_shipping_packages', 'perfectpixel_split_cart_packages' );\n\nfunction perfectpixel_split_cart_packages( $packages ) {\n\tif ( empty( $packages[0]['contents'] ) ) {\n\t\treturn $packages;\n\t}\n\t$classes = array_filter( array_map( 'trim', explode( ',', '{{split_shipping_classes}}' ) ) );\n\t$base    = $packages[0];\n\t$groups  = array( '' => array() );\n\n\tforeach ( $base['contents'] as $key => $item ) {\n\t\t$class = $item['data']->get_shipping_class();\n\t\t$group = in_array( $class, $classes, true ) ? $class : '';\n\t\t$groups[ $group ][ $key ] = $item;\n\t}\n\n\t$split = array();\n\tforeach ( $groups as $contents ) {\n\t\tif ( ! $contents ) {\n\t\t\tcontinue;\n\t\t}\n\t\t$package                  = $base;\n\t\t$package['contents']      = $contents;\n\t\t$package['contents_cost'] = array_sum( wp_list_pluck( $contents, 'line_total' ) );\n\t\t$split[]                  = $package;\n\t}\n\treturn $split ? $split : $packages;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shipping",
+        "shipping-classes",
+        "packages"
+    ],
+    "variables": [
+        {
+            "name": "split_shipping_classes",
+            "label": "Κλάσεις αποστολής με δικό τους πακέτο (slugs, με κόμμα)",
+            "default": "pickup-only",
+            "description": ""
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-split-cart-into-packages/"
+    ],
+    "updated": "2026-11-18T12:34:23+00:00"
+}

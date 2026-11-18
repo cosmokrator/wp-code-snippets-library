@@ -1,0 +1,42 @@
+{
+    "title": "Discount the cheapest item in the cart (e.g. \"buy 2, get one 50% off\")",
+    "description": "Όταν το καλάθι έχει τουλάχιστον Χ τεμάχια, το φθηνότερο τεμάχιο παίρνει έκπτωση (π.χ. 50%, ή 100% για «3 στην τιμή των 2»). Η έκπτωση εμφανίζεται ως ξεχωριστή γραμμή στα σύνολα και αφορά ένα μόνο τεμάχιο. Λειτουργεί και με το καλάθι/checkout με blocks. Ορίστε ελάχιστα τεμάχια, ποσοστό και όνομα στις μεταβλητές.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_cart_calculate_fees', 'perfectpixel_discount_cheapest_item' );\n\nfunction perfectpixel_discount_cheapest_item( $cart ) {\n\tif ( is_admin() && ! defined( 'DOING_AJAX' ) ) {\n\t\treturn;\n\t}\n\tif ( $cart->get_cart_contents_count() < max( 1, (int) '{{cheapest_min_items}}' ) ) {\n\t\treturn;\n\t}\n\t$cheapest = null;\n\tforeach ( $cart->get_cart() as $item ) {\n\t\tif ( $item['quantity'] < 1 ) {\n\t\t\tcontinue;\n\t\t}\n\t\t$unit = $item['line_subtotal'] / $item['quantity'];\n\t\tif ( null === $cheapest || $unit < $cheapest ) {\n\t\t\t$cheapest = $unit;\n\t\t}\n\t}\n\t$discount = (float) $cheapest * min( 100, max( 0, (float) '{{cheapest_percent}}' ) ) / 100;\n\tif ( $discount > 0 ) {\n\t\t$cart->add_fee( '{{cheapest_label}}', -$discount, true );\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "cart",
+        "discounts",
+        "promotions",
+        "bogo"
+    ],
+    "variables": [
+        {
+            "name": "cheapest_min_items",
+            "label": "Ελάχιστα τεμάχια στο καλάθι",
+            "default": "2",
+            "description": "Μόνο αριθμός"
+        },
+        {
+            "name": "cheapest_percent",
+            "label": "Ποσοστό έκπτωσης στο φθηνότερο",
+            "default": "50",
+            "description": "100 = δώρο"
+        },
+        {
+            "name": "cheapest_label",
+            "label": "Όνομα έκπτωσης",
+            "default": "Προσφορά: έκπτωση στο φθηνότερο προϊόν",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-discount-cheapest-cart-item-bogo50/"
+    ],
+    "updated": "2026-11-18T12:34:23+00:00"
+}
