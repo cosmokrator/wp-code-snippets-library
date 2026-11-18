@@ -1,0 +1,22 @@
+{
+    "title": "Disable payment methods by product type in the cart",
+    "description": "Κρύβει τρόπους πληρωμής όταν το καλάθι περιέχει συγκεκριμένο τύπο προϊόντος (π.χ. καμία αντικαταβολή για συνδρομές ή ψηφιακά). Ορίστε τους κανόνες στο $rules: τύπος προϊόντος => IDs τρόπων πληρωμής (π.χ. cod, bacs, paypal, stripe).",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_available_payment_gateways', 'perfectpixel_gateways_by_product_type' );\n\nfunction perfectpixel_gateways_by_product_type( $gateways ) {\n\tif ( is_admin() || ! function_exists( 'WC' ) || ! WC()->cart ) {\n\t\treturn $gateways;\n\t}\n\n\t// Product type => gateway IDs to hide. Types: simple, variable, grouped, subscription, variable-subscription…\n\t$rules = array(\n\t\t'subscription'          => array( 'cod', 'bacs' ),\n\t\t'variable-subscription' => array( 'cod', 'bacs' ),\n\t);\n\n\tforeach ( WC()->cart->get_cart() as $item ) {\n\t\t$product = $item['data'] ?? null;\n\t\tif ( ! $product ) {\n\t\t\tcontinue;\n\t\t}\n\t\t// Variations report \"variation\"; use the parent type.\n\t\t$type = $product->is_type( 'variation' ) ? WC_Product_Factory::get_product_type( $product->get_parent_id() ) : $product->get_type();\n\t\tforeach ( $rules[ $type ] ?? array() as $gateway_id ) {\n\t\t\tunset( $gateways[ $gateway_id ] );\n\t\t}\n\t}\n\n\treturn $gateways;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "payment",
+        "conditional"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-disable-payment-gateway-by-product-type/"
+    ],
+    "updated": "2026-11-18T05:54:08+00:00"
+}

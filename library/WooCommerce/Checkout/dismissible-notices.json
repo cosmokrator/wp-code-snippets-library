@@ -1,0 +1,29 @@
+{
+    "title": "Close button on WooCommerce notices",
+    "description": "Προσθέτει κουμπί «×» στα μηνύματα και τα σφάλματα του WooCommerce (checkout, καλάθι, προϊόν, λογαριασμός), ώστε ο πελάτης να τα κλείνει και να ελευθερώνεται χώρος. Δουλεύει και με μηνύματα που εμφανίζονται χωρίς ανανέωση σελίδας (AJAX).",
+    "type": "php",
+    "code": "add_action( 'wp_footer', 'perfectpixel_dismissible_notices' );\n\nfunction perfectpixel_dismissible_notices() {\n\tif ( ! function_exists( 'is_woocommerce' ) || ! ( is_woocommerce() || is_cart() || is_checkout() || is_account_page() ) ) {\n\t\treturn;\n\t}\n\t?>\n\t<style>\n\t.perfectpixel-notice-close{position:absolute;top:.5em;right:.75em;background:none;border:0;font-size:1.4em;line-height:1;cursor:pointer;color:inherit;opacity:.6}\n\t.perfectpixel-notice-close:hover,.perfectpixel-notice-close:focus{opacity:1}\n\t.perfectpixel-has-close{position:relative;padding-right:2.5em!important}\n\t</style>\n\t<script>\n\t( function () {\n\t\tvar label = <?php echo wp_json_encode( '{{close_label}}' ); ?>;\n\t\tvar selector = '.woocommerce-error, .woocommerce-message, .woocommerce-info';\n\t\tvar addButtons = function () {\n\t\t\tdocument.querySelectorAll( selector ).forEach( function ( notice ) {\n\t\t\t\tif ( notice.classList.contains( 'perfectpixel-has-close' ) ) {\n\t\t\t\t\treturn;\n\t\t\t\t}\n\t\t\t\tvar button = document.createElement( 'button' );\n\t\t\t\tbutton.type = 'button';\n\t\t\t\tbutton.className = 'perfectpixel-notice-close';\n\t\t\t\tbutton.setAttribute( 'aria-label', label );\n\t\t\t\tbutton.innerHTML = '&times;';\n\t\t\t\tbutton.addEventListener( 'click', function () {\n\t\t\t\t\tnotice.style.display = 'none';\n\t\t\t\t} );\n\t\t\t\tnotice.classList.add( 'perfectpixel-has-close' );\n\t\t\t\tnotice.appendChild( button );\n\t\t\t} );\n\t\t};\n\t\taddButtons();\n\t\tnew MutationObserver( addButtons ).observe( document.body, { childList: true, subtree: true } );\n\t} )();\n\t</script>\n\t<?php\n}",
+    "location": "frontend_only",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "notices",
+        "ux"
+    ],
+    "variables": [
+        {
+            "name": "close_label",
+            "label": "Κείμενο για αναγνώστες οθόνης",
+            "default": "Κλείσιμο μηνύματος",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-close-button-woocommerce-checkout-notices/"
+    ],
+    "updated": "2026-11-18T05:54:08+00:00"
+}

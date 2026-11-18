@@ -1,0 +1,29 @@
+{
+    "title": "Anti-spam honeypot field at checkout",
+    "description": "Προσθέτει ένα κρυφό πεδίο που οι πελάτες δεν βλέπουν αλλά τα spam bots συμπληρώνουν. Αν έρθει συμπληρωμένο, η παραγγελία απορρίπτεται. Βοηθά απέναντι σε ψεύτικες παραγγελίες και δοκιμές καρτών χωρίς captcha, αλλά δεν σταματά τα πιο «έξυπνα» bots. Λειτουργεί με το κλασικό checkout (shortcode)· το checkout με blocks δεν χρησιμοποιεί αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_after_checkout_billing_form', 'perfectpixel_checkout_honeypot_field' );\nadd_action( 'woocommerce_after_checkout_validation', 'perfectpixel_checkout_honeypot_check', 10, 2 );\n\nfunction perfectpixel_checkout_honeypot_field() {\n\techo '<div style=\"position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden\" aria-hidden=\"true\">';\n\techo '<label for=\"perfectpixel_hp_website\">Website</label>';\n\techo '<input type=\"text\" id=\"perfectpixel_hp_website\" name=\"perfectpixel_hp_website\" value=\"\" tabindex=\"-1\" autocomplete=\"off\">';\n\techo '</div>';\n}\n\nfunction perfectpixel_checkout_honeypot_check( $data, $errors ) {\n\tif ( ! empty( $_POST['perfectpixel_hp_website'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification\n\t\t$errors->add( 'perfectpixel_honeypot', esc_html( '{{honeypot_message}}' ) );\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "spam",
+        "security"
+    ],
+    "variables": [
+        {
+            "name": "honeypot_message",
+            "label": "Μήνυμα απόρριψης",
+            "default": "Η παραγγελία δεν μπορεί να ολοκληρωθεί. Ανανεώστε τη σελίδα και δοκιμάστε ξανά.",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-checkout-anti-spam-honeypot/"
+    ],
+    "updated": "2026-11-18T05:54:08+00:00"
+}

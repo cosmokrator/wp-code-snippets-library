@@ -1,0 +1,35 @@
+{
+    "title": "Add a link next to shipping method labels",
+    "description": "Προσθέτει έναν σύνδεσμο δίπλα σε κάθε τρόπο αποστολής στο καλάθι και στο checkout (π.χ. «Πληροφορίες αποστολής»), αφού οι ρυθμίσεις του WooCommerce αφαιρούν κάθε HTML από τα ονόματα των μεθόδων. Ορίστε κείμενο και URL στις μεταβλητές.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_cart_shipping_method_full_label', 'perfectpixel_shipping_label_link', 10, 2 );\n\nfunction perfectpixel_shipping_label_link( $label, $method ) {\n\t$url = '{{shipping_link_url}}';\n\tif ( 0 === strpos( $url, '/' ) ) {\n\t\t$url = home_url( $url );\n\t}\n\treturn $label . sprintf(\n\t\t' <a href=\"%1$s\" class=\"perfectpixel-shipping-link\" target=\"_blank\" rel=\"noopener\">%2$s</a>',\n\t\tesc_url( $url ),\n\t\tesc_html( '{{shipping_link_text}}' )\n\t);\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "shipping",
+        "cart"
+    ],
+    "variables": [
+        {
+            "name": "shipping_link_text",
+            "label": "Κείμενο συνδέσμου",
+            "default": "Πληροφορίες αποστολής",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "shipping_link_url",
+            "label": "URL",
+            "default": "/shipping/",
+            "description": "Σχετικό (/shipping/) ή πλήρες URL"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-hyperlink-shipping-method-label/"
+    ],
+    "updated": "2026-11-18T05:54:08+00:00"
+}

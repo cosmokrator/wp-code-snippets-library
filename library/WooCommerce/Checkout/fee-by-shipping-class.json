@@ -1,0 +1,41 @@
+{
+    "title": "Add a checkout fee when a shipping class is in the cart",
+    "description": "Προσθέτει χρέωση στο καλάθι/checkout όταν υπάρχει προϊόν με συγκεκριμένη κλάση αποστολής (π.χ. ογκώδη ή εύθραυστα). Η χρέωση μπαίνει μία φορά ανά παραγγελία. Λειτουργεί και με το checkout με blocks. Ορίστε κλάση (slug), ποσό και όνομα χρέωσης στις μεταβλητές.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_cart_calculate_fees', 'perfectpixel_fee_by_shipping_class' );\n\nfunction perfectpixel_fee_by_shipping_class( $cart ) {\n\tif ( is_admin() && ! defined( 'DOING_AJAX' ) ) {\n\t\treturn;\n\t}\n\t$class   = '{{fee_shipping_class}}';\n\t$amount  = (float) '{{fee_amount}}';\n\t$taxable = true;\n\n\tforeach ( $cart->get_cart() as $item ) {\n\t\tif ( ! empty( $item['data'] ) && $item['data']->get_shipping_class() === $class ) {\n\t\t\t$cart->add_fee( '{{fee_label}}', $amount, $taxable );\n\t\t\treturn;\n\t\t}\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "fees",
+        "shipping"
+    ],
+    "variables": [
+        {
+            "name": "fee_shipping_class",
+            "label": "Κλάση αποστολής (slug)",
+            "default": "bulky",
+            "description": "Προϊόντα → Κλάσεις αποστολής → Slug"
+        },
+        {
+            "name": "fee_amount",
+            "label": "Ποσό χρέωσης",
+            "default": "5",
+            "description": "Μόνο αριθμός, π.χ. 5 ή 4.50"
+        },
+        {
+            "name": "fee_label",
+            "label": "Όνομα χρέωσης",
+            "default": "Χρέωση ογκώδους αποστολής",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-checkout-fee-based-on-shipping-class/"
+    ],
+    "updated": "2026-11-18T05:54:08+00:00"
+}

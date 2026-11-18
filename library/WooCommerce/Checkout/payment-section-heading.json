@@ -1,0 +1,29 @@
+{
+    "title": "Add a heading above the payment methods",
+    "description": "Προσθέτει τίτλο (π.χ. «Τρόπος πληρωμής») ακριβώς πάνω από τους τρόπους πληρωμής στο checkout, για πιο καθαρό διαχωρισμό των ενοτήτων. Ορίστε το κείμενο στη μεταβλητή. Λειτουργεί με το κλασικό checkout (shortcode)· το checkout με blocks δεν χρησιμοποιεί αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_review_order_before_payment', 'perfectpixel_payment_section_heading' );\n\nfunction perfectpixel_payment_section_heading() {\n\techo '<h3 id=\"perfectpixel-payment-heading\">' . esc_html( '{{payment_heading}}' ) . '</h3>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "payment",
+        "ux"
+    ],
+    "variables": [
+        {
+            "name": "payment_heading",
+            "label": "Τίτλος",
+            "default": "Τρόπος πληρωμής",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-checkout-payment-section-heading/"
+    ],
+    "updated": "2026-11-18T05:54:08+00:00"
+}

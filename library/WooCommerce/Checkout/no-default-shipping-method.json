@@ -1,0 +1,21 @@
+{
+    "title": "No pre-selected shipping method",
+    "description": "Όταν υπάρχουν δύο ή περισσότεροι τρόποι αποστολής, κανένας δεν είναι προεπιλεγμένος: ο πελάτης πρέπει να διαλέξει ρητά, αλλιώς η παραγγελία δεν ολοκληρώνεται. Μειώνει τις λάθος επιλογές αποστολής. Αν υπάρχει μόνο ένας τρόπος, επιλέγεται κανονικά.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_shipping_chosen_method', 'perfectpixel_no_default_shipping_method', 10, 2 );\n\nfunction perfectpixel_no_default_shipping_method( $default, $rates ) {\n\treturn count( (array) $rates ) > 1 ? '' : $default;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "shipping"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-no-default-shipping-checkout-page/"
+    ],
+    "updated": "2026-11-18T05:54:08+00:00"
+}
