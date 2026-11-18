@@ -1,0 +1,36 @@
+{
+    "title": "Turn the sale badge into a countdown timer",
+    "description": "Στη σελίδα προϊόντος, αν η προσφορά έχει ημερομηνία λήξης, η ετικέτα «Προσφορά!» γίνεται αντίστροφη μέτρηση (ημέρες, ώρες, λεπτά, δευτερόλεπτα) μέχρι τη λήξη. Χωρίς ημερομηνία λήξης η ετικέτα μένει ως έχει. Στα μεταβλητά προϊόντα η λήξη ορίζεται ανά παραλλαγή, οπότε μένει η κανονική ετικέτα.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_sale_flash', 'perfectpixel_sale_countdown_badge', 20, 3 );\n\nfunction perfectpixel_sale_countdown_badge( $html, $post, $product ) {\n\tif ( ! is_product() || ! $product || get_queried_object_id() !== $product->get_id() ) {\n\t\treturn $html;\n\t}\n\t$end = $product->get_date_on_sale_to();\n\tif ( ! $end || $end->getTimestamp() <= time() ) {\n\t\treturn $html;\n\t}\n\tob_start();\n\t?>\n\t<span class=\"onsale perfectpixel-sale-countdown\" data-end=\"<?php echo esc_attr( $end->getTimestamp() ); ?>\" style=\"min-width:auto;padding:.25em .75em;white-space:nowrap\"><?php echo esc_html( '{{countdown_prefix}}' ); ?> <span class=\"perfectpixel-countdown-time\"></span></span>\n\t<script>\n\t( function ( badge ) {\n\t\tvar end  = parseInt( badge.getAttribute( 'data-end' ), 10 ) * 1000;\n\t\tvar out  = badge.querySelector( '.perfectpixel-countdown-time' );\n\t\tvar days = <?php echo wp_json_encode( '{{countdown_days}}' ); ?>;\n\t\tvar pad  = function ( n ) { return ( n < 10 ? '0' : '' ) + n; };\n\t\tvar tick = function () {\n\t\t\tvar left = Math.max( 0, Math.floor( ( end - Date.now() ) / 1000 ) );\n\t\t\tvar d = Math.floor( left / 86400 ), h = Math.floor( left % 86400 / 3600 ), m = Math.floor( left % 3600 / 60 ), s = left % 60;\n\t\t\tout.textContent = ( d ? d + ' ' + days + ' ' : '' ) + pad( h ) + ':' + pad( m ) + ':' + pad( s );\n\t\t\tif ( left > 0 ) {\n\t\t\t\tsetTimeout( tick, 1000 );\n\t\t\t}\n\t\t};\n\t\ttick();\n\t} )( document.currentScript.previousElementSibling );\n\t</script>\n\t<?php\n\treturn ob_get_clean();\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "sale",
+        "countdown",
+        "urgency"
+    ],
+    "variables": [
+        {
+            "name": "countdown_prefix",
+            "label": "Κείμενο πριν τη μέτρηση",
+            "default": "Λήγει σε",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "countdown_days",
+            "label": "Συντομογραφία ημερών",
+            "default": "ημ.",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-sale-end-date-countdown-timer/"
+    ],
+    "updated": "2026-11-18T14:36:18+00:00"
+}

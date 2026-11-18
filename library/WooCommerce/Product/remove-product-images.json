@@ -1,0 +1,23 @@
+{
+    "title": "Remove product images from shop and product pages",
+    "description": "Αφαιρεί τελείως τις εικόνες προϊόντων (και την εικόνα placeholder) από τις λίστες προϊόντων και τη σελίδα προϊόντος. Για καταστήματα B2B ή καταλόγους χωρίς φωτογραφίες. Μπορεί να χρειαστεί λίγο CSS για να πιάσει η περιγραφή όλο το πλάτος. Ισχύει για το κλασικό template σελίδας προϊόντος/καταστήματος· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'init', 'perfectpixel_remove_product_images' );\n\nfunction perfectpixel_remove_product_images() {\n\tremove_action( 'woocommerce_before_single_product_summary', 'woocommerce_show_product_images', 20 );\n\tremove_action( 'woocommerce_before_shop_loop_item_title', 'woocommerce_template_loop_product_thumbnail', 10 );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "images",
+        "shop",
+        "b2b"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-without-product-images/"
+    ],
+    "updated": "2026-11-18T14:36:18+00:00"
+}

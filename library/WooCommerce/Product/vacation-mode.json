@@ -1,0 +1,41 @@
+{
+    "title": "Vacation mode: pause sales between two dates",
+    "description": "Κατάσταση διακοπών: για όσο διάστημα ορίσετε, κανένα προϊόν δεν αγοράζεται (τα κουμπιά αγοράς κρύβονται) και σε όλες τις σελίδες εμφανίζεται μια μπάρα με μήνυμα. Αφήστε κενές τις ημερομηνίες για να ισχύει μόνιμα όσο είναι ενεργό το snippet. Προϊόντα που είναι ήδη σε καλάθια αφαιρούνται, γιατί δεν μπορούν πια να αγοραστούν.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_is_purchasable', 'perfectpixel_vacation_purchasable', 999 );\nadd_filter( 'woocommerce_variation_is_purchasable', 'perfectpixel_vacation_purchasable', 999 );\nadd_action( 'wp_body_open', 'perfectpixel_vacation_notice' );\n\nfunction perfectpixel_vacation_active() {\n\t$today = current_time( 'Y-m-d' );\n\t$from  = trim( '{{vacation_from}}' );\n\t$to    = trim( '{{vacation_to}}' );\n\treturn ( '' === $from || $today >= $from ) && ( '' === $to || $today <= $to );\n}\n\nfunction perfectpixel_vacation_purchasable( $purchasable ) {\n\treturn perfectpixel_vacation_active() ? false : $purchasable;\n}\n\nfunction perfectpixel_vacation_notice() {\n\tif ( perfectpixel_vacation_active() ) {\n\t\techo '<div class=\"perfectpixel-vacation-notice\" role=\"status\" style=\"background:#1d2327;color:#fff;text-align:center;padding:.75em 1em;font-size:.95em\">' . esc_html( '{{vacation_message}}' ) . '</div>';\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "store",
+        "vacation",
+        "catalog-mode"
+    ],
+    "variables": [
+        {
+            "name": "vacation_from",
+            "label": "Από (ΕΕΕΕ-ΜΜ-ΗΗ)",
+            "default": "",
+            "description": "Κενό = από τώρα"
+        },
+        {
+            "name": "vacation_to",
+            "label": "Έως και (ΕΕΕΕ-ΜΜ-ΗΗ)",
+            "default": "",
+            "description": "Κενό = χωρίς λήξη"
+        },
+        {
+            "name": "vacation_message",
+            "label": "Μήνυμα",
+            "default": "Το κατάστημα είναι κλειστό για διακοπές. Οι παραγγελίες ξεκινούν ξανά σύντομα!",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-holidaypauseclosed-mode/"
+    ],
+    "updated": "2026-11-18T14:36:18+00:00"
+}

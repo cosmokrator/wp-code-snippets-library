@@ -1,0 +1,29 @@
+{
+    "title": "Set default upsells for all products",
+    "description": "Ορίζει τα ίδια upsells («Μπορεί επίσης να σας αρέσουν…») σε όλα τα προϊόντα που δεν έχουν δικά τους, χωρίς να τα συμπληρώνετε ένα-ένα. Τα προϊόντα με upsells ορισμένα στη σελίδα επεξεργασίας κρατούν τα δικά τους. Το ίδιο το προϊόν δεν προτείνεται ποτέ στον εαυτό του.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_product_get_upsell_ids', 'perfectpixel_default_upsells', 10, 2 );\n\nfunction perfectpixel_default_upsells( $ids, $product ) {\n\tif ( ! empty( $ids ) || ! $product ) {\n\t\treturn $ids;\n\t}\n\treturn array_values( array_diff( wp_parse_id_list( '{{default_upsell_ids}}' ), array( $product->get_id() ) ) );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "upsells",
+        "cross-selling"
+    ],
+    "variables": [
+        {
+            "name": "default_upsell_ids",
+            "label": "IDs προϊόντων upsell (με κόμμα)",
+            "default": "",
+            "description": "Μόνο αριθμοί, με κόμμα"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-programmatically-set-product-upsells/"
+    ],
+    "updated": "2026-11-18T14:36:18+00:00"
+}

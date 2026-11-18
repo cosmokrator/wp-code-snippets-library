@@ -1,0 +1,35 @@
+{
+    "title": "Let customers pick a coupon on the product page",
+    "description": "Στη σελίδα προϊόντος, δίπλα στο κουμπί αγοράς, εμφανίζεται λίστα με κουπόνια που επιλέγετε εσείς. Ο πελάτης διαλέγει ένα και αυτό εφαρμόζεται μαζί με την προσθήκη στο καλάθι. Γίνονται δεκτοί μόνο οι κωδικοί της μεταβλητής, και ισχύουν κανονικά οι περιορισμοί κάθε κουπονιού. Ισχύει για το κλασικό template σελίδας προϊόντος/καταστήματος· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_after_add_to_cart_button', 'perfectpixel_product_coupon_select' );\nadd_action( 'woocommerce_add_to_cart', 'perfectpixel_product_coupon_apply', 20 );\n\nfunction perfectpixel_product_coupon_codes() {\n\treturn array_filter( array_map( 'wc_format_coupon_code', explode( ',', '{{product_page_coupons}}' ) ) );\n}\n\nfunction perfectpixel_product_coupon_select() {\n\t$codes = perfectpixel_product_coupon_codes();\n\tif ( ! $codes ) {\n\t\treturn;\n\t}\n\techo '<p class=\"perfectpixel-coupon-select\" style=\"margin-top:1em;width:100%\"><select name=\"perfectpixel_coupon\">';\n\techo '<option value=\"\">' . esc_html( '{{product_page_coupon_label}}' ) . '</option>';\n\tforeach ( $codes as $code ) {\n\t\techo '<option value=\"' . esc_attr( $code ) . '\">' . esc_html( strtoupper( $code ) ) . '</option>';\n\t}\n\techo '</select></p>';\n}\n\nfunction perfectpixel_product_coupon_apply() {\n\t$code = isset( $_POST['perfectpixel_coupon'] ) ? wc_format_coupon_code( wp_unslash( $_POST['perfectpixel_coupon'] ) ) : '';\n\tif ( $code && in_array( $code, perfectpixel_product_coupon_codes(), true ) && ! WC()->cart->has_discount( $code ) ) {\n\t\tWC()->cart->apply_coupon( $code );\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "coupons",
+        "single-product",
+        "add-to-cart"
+    ],
+    "variables": [
+        {
+            "name": "product_page_coupons",
+            "label": "Κωδικοί κουπονιών (με κόμμα)",
+            "default": "welcome10,summer15",
+            "description": "Οι κωδικοί όπως είναι στο WooCommerce"
+        },
+        {
+            "name": "product_page_coupon_label",
+            "label": "Επιλογή «χωρίς κουπόνι»",
+            "default": "Επιλέξτε κουπόνι έκπτωσης",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-apply-coupon-single-product-page/"
+    ],
+    "updated": "2026-11-18T14:36:18+00:00"
+}

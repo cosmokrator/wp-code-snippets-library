@@ -1,0 +1,36 @@
+{
+    "title": "Force quantity 1 by stock level or category",
+    "description": "Ενεργοποιεί αυτόματα το «Πωλείται μεμονωμένα» (μέγιστο 1 τεμάχιο ανά παραγγελία) χωρίς να αλλάξετε τα προϊόντα ένα-ένα: όταν το απόθεμα πέσει κάτω από ένα όριο ή όταν το προϊόν ανήκει σε συγκεκριμένες κατηγορίες. Το όριο αποθέματος ισχύει μόνο σε προϊόντα με διαχείριση αποθέματος.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_is_sold_individually', 'perfectpixel_conditional_sold_individually', 20, 2 );\n\nfunction perfectpixel_conditional_sold_individually( $sold_individually, $product ) {\n\tif ( $sold_individually || ! $product ) {\n\t\treturn $sold_individually;\n\t}\n\t$limit = (int) '{{force_qty1_stock_below}}';\n\tif ( $limit > 0 && $product->managing_stock() && (int) $product->get_stock_quantity() <= $limit ) {\n\t\treturn true;\n\t}\n\t$categories = wp_parse_id_list( '{{force_qty1_category_ids}}' );\n\t$id         = $product->get_parent_id() ? $product->get_parent_id() : $product->get_id();\n\tif ( $categories && has_term( $categories, 'product_cat', $id ) ) {\n\t\treturn true;\n\t}\n\treturn $sold_individually;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "add-to-cart",
+        "quantity",
+        "stock",
+        "sold-individually"
+    ],
+    "variables": [
+        {
+            "name": "force_qty1_stock_below",
+            "label": "Όριο αποθέματος",
+            "default": "3",
+            "description": "Μόνο αριθμός. Απόθεμα ίσο ή μικρότερο → μόνο 1 τεμάχιο. 0 = ανενεργό"
+        },
+        {
+            "name": "force_qty1_category_ids",
+            "label": "IDs κατηγοριών (με κόμμα)",
+            "default": "",
+            "description": "Κενό = καμία κατηγορία"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-force-product-quantity-1-cart/"
+    ],
+    "updated": "2026-11-18T14:36:18+00:00"
+}

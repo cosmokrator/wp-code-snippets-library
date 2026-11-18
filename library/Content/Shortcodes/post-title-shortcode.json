@@ -1,0 +1,28 @@
+{
+    "title": "Shortcode for the current post or product title",
+    "description": "Shortcode που εμφανίζει τον τίτλο του τρέχοντος προϊόντος, σελίδας ή άρθρου, π.χ. μέσα στην περιγραφή ή σε σύνδεσμο φόρμας επικοινωνίας, ώστε να μη γράφετε το όνομα ξανά και ξανά. Χρήση: [post_title] (ή όποιο όνομα ορίσετε στη μεταβλητή).",
+    "type": "php",
+    "code": "add_shortcode( '{{post_title_shortcode}}', 'perfectpixel_post_title_shortcode' );\n\nfunction perfectpixel_post_title_shortcode() {\n\treturn esc_html( get_the_title() );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "shortcodes",
+        "woocommerce"
+    ],
+    "variables": [
+        {
+            "name": "post_title_shortcode",
+            "label": "Όνομα shortcode",
+            "default": "post_title",
+            "description": "Μόνο λατινικά, αριθμοί και _"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-product-title-shortcode/"
+    ],
+    "updated": "2026-11-18T14:36:30+00:00"
+}

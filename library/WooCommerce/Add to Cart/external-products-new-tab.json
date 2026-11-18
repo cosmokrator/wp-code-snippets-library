@@ -1,0 +1,22 @@
+{
+    "title": "Open external product links in a new tab",
+    "description": "Τα κουμπιά αγοράς των εξωτερικών/affiliate προϊόντων ανοίγουν τον σύνδεσμο σε νέα καρτέλα (στις λίστες προϊόντων και στη σελίδα προϊόντος), ώστε ο πελάτης να μη φεύγει από το κατάστημά σας.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_loop_add_to_cart_link', 'perfectpixel_external_loop_new_tab', 20, 2 );\nadd_action( 'woocommerce_after_add_to_cart_button', 'perfectpixel_external_single_new_tab' );\n\nfunction perfectpixel_external_loop_new_tab( $html, $product ) {\n\tif ( $product && $product->is_type( 'external' ) && false === strpos( $html, 'target=' ) ) {\n\t\t$html = preg_replace( '/^<a /', '<a target=\"_blank\" rel=\"noopener noreferrer\" ', $html );\n\t}\n\treturn $html;\n}\n\n// The single external button is a GET form; make the form open in a new tab.\nfunction perfectpixel_external_single_new_tab() {\n\tglobal $product;\n\tif ( $product && $product->is_type( 'external' ) ) {\n\t\techo '<script>( function ( s ) { var f = s.closest( \"form\" ); if ( f ) { f.target = \"_blank\"; f.rel = \"noopener\"; } } )( document.currentScript );</script>';\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "add-to-cart",
+        "external",
+        "links"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-cart-url-open-new-tab/"
+    ],
+    "updated": "2026-11-18T14:36:18+00:00"
+}

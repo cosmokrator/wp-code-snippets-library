@@ -1,0 +1,29 @@
+{
+    "title": "Change the add to cart label by product category",
+    "description": "Διαφορετικό κείμενο στο κουμπί «Προσθήκη στο καλάθι» ανά κατηγορία προϊόντος, π.χ. «Κράτηση» για υπηρεσίες και «Αγορά τώρα» για βιβλία. Στη μεταβλητή γράψτε ζεύγη ID κατηγορίας=κείμενο, χωρισμένα με |. Αν ένα προϊόν ανήκει σε πολλές, ισχύει το πρώτο ζεύγος που ταιριάζει. Στις λίστες αλλάζει μόνο σε απλά προϊόντα που αγοράζονται άμεσα.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_product_single_add_to_cart_text', 'perfectpixel_atc_label_by_category', 30, 2 );\nadd_filter( 'woocommerce_product_add_to_cart_text', 'perfectpixel_atc_label_by_category', 30, 2 );\n\nfunction perfectpixel_atc_label_by_category( $text, $product ) {\n\tif ( ! $product || $product->is_type( 'external' ) ) {\n\t\treturn $text;\n\t}\n\tif ( 'woocommerce_product_add_to_cart_text' === current_filter() && ! ( $product->is_type( 'simple' ) && $product->is_purchasable() && $product->is_in_stock() ) ) {\n\t\treturn $text;\n\t}\n\tforeach ( explode( '|', '{{atc_labels_by_category}}' ) as $pair ) {\n\t\t$parts = array_map( 'trim', explode( '=', $pair, 2 ) );\n\t\tif ( 2 === count( $parts ) && absint( $parts[0] ) && '' !== $parts[1] && has_term( absint( $parts[0] ), 'product_cat', $product->get_id() ) ) {\n\t\t\treturn $parts[1];\n\t\t}\n\t}\n\treturn $text;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "add-to-cart",
+        "labels",
+        "categories"
+    ],
+    "variables": [
+        {
+            "name": "atc_labels_by_category",
+            "label": "Κατηγορία=Κείμενο (με |)",
+            "default": "15=Κράτηση|22=Αγορά τώρα",
+            "description": "Χωρίς απόστροφο ('). Π.χ. 15=Κράτηση|22=Αγορά τώρα"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-edit-add-to-cart-text-by-product-category/"
+    ],
+    "updated": "2026-11-18T14:36:18+00:00"
+}

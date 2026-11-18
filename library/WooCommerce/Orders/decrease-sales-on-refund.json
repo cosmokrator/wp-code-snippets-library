@@ -1,0 +1,22 @@
+{
+    "title": "Decrease product total sales on cancel or refund",
+    "description": "Το WooCommerce αυξάνει τον μετρητή πωλήσεων κάθε προϊόντος (total_sales) με κάθε παραγγελία, αλλά δεν τον μειώνει όταν η παραγγελία ακυρώνεται ή επιστρέφονται τα χρήματα. Το snippet τον μειώνει σε αυτές τις περιπτώσεις, ώστε να είναι σωστά τα «Πιο δημοφιλή» και όποιος αριθμός πωλήσεων εμφανίζετε. Αν η παραγγελία επανέλθει σε επεξεργασία, το WooCommerce τον ξαναυξάνει.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_order_status_cancelled', 'perfectpixel_decrease_total_sales' );\nadd_action( 'woocommerce_order_status_refunded', 'perfectpixel_decrease_total_sales' );\n\nfunction perfectpixel_decrease_total_sales( $order_id ) {\n\t$order = wc_get_order( $order_id );\n\tif ( ! $order ) {\n\t\treturn;\n\t}\n\t$order_store = $order->get_data_store();\n\t// Only orders whose sales were counted by WooCommerce, and only once.\n\tif ( ! $order_store->get_recorded_sales( $order ) ) {\n\t\treturn;\n\t}\n\t$product_store = WC_Data_Store::load( 'product' );\n\tforeach ( $order->get_items() as $item ) {\n\t\t$product_id = $item->get_product_id();\n\t\tif ( $product_id && $item->get_quantity() > 0 ) {\n\t\t\t$product_store->update_product_sales( $product_id, absint( $item->get_quantity() ), 'decrease' );\n\t\t}\n\t}\n\t// Lets WooCommerce count them again if the order goes back to processing/completed.\n\t$order_store->set_recorded_sales( $order, false );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "orders",
+        "refunds",
+        "sales"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-decrease-product-total-sales-upon-refund/"
+    ],
+    "updated": "2026-11-18T14:36:18+00:00"
+}

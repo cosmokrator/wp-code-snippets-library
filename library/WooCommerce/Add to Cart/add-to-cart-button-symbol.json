@@ -1,0 +1,35 @@
+{
+    "title": "Add a symbol to the add to cart buttons",
+    "description": "Προσθέτει ένα σύμβολο (π.χ. →, », 🛒) πριν ή μετά το κείμενο των κουμπιών «Προσθήκη στο καλάθι», στη σελίδα προϊόντος και στις λίστες. Γράψτε το ίδιο το σύμβολο στη μεταβλητή (όχι HTML entity, γιατί το κείμενο του κουμπιού γίνεται escape).",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_product_single_add_to_cart_text', 'perfectpixel_add_to_cart_symbol', 90 );\nadd_filter( 'woocommerce_product_add_to_cart_text', 'perfectpixel_add_to_cart_symbol', 90 );\n\nfunction perfectpixel_add_to_cart_symbol( $text ) {\n\t$symbol = trim( '{{atc_symbol}}' );\n\tif ( '' === $symbol ) {\n\t\treturn $text;\n\t}\n\treturn 'before' === '{{atc_symbol_position}}' ? $symbol . ' ' . $text : $text . ' ' . $symbol;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "add-to-cart",
+        "labels",
+        "design"
+    ],
+    "variables": [
+        {
+            "name": "atc_symbol",
+            "label": "Σύμβολο",
+            "default": "→",
+            "description": "Ένα χαρακτήρας ή emoji"
+        },
+        {
+            "name": "atc_symbol_position",
+            "label": "Θέση (before/after)",
+            "default": "after",
+            "description": "before = πριν το κείμενο, after = μετά"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-icon-add-cart-buttons/"
+    ],
+    "updated": "2026-11-18T14:36:18+00:00"
+}

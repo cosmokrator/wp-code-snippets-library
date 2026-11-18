@@ -1,0 +1,30 @@
+{
+    "title": "Hide prices and add to cart for logged out visitors",
+    "description": "Οι επισκέπτες που δεν έχουν συνδεθεί δεν βλέπουν τιμές (στη θέση τους εμφανίζεται σύνδεσμος «Συνδεθείτε για να δείτε τιμές») και δεν μπορούν να αγοράσουν. Κατάλληλο για χονδρική/B2B. Οι συνδεδεμένοι πελάτες βλέπουν και αγοράζουν κανονικά.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_get_price_html', 'perfectpixel_logged_out_price_html', 999 );\nadd_filter( 'woocommerce_is_purchasable', 'perfectpixel_logged_out_purchasable', 999 );\nadd_filter( 'woocommerce_variation_is_purchasable', 'perfectpixel_logged_out_purchasable', 999 );\nadd_action( 'init', 'perfectpixel_logged_out_remove_forms' );\n\nfunction perfectpixel_logged_out_price_html( $html ) {\n\tif ( is_user_logged_in() || is_admin() ) {\n\t\treturn $html;\n\t}\n\treturn '<a class=\"perfectpixel-login-for-price\" href=\"' . esc_url( wc_get_page_permalink( 'myaccount' ) ) . '\">' . esc_html( '{{login_price_text}}' ) . '</a>';\n}\n\nfunction perfectpixel_logged_out_purchasable( $purchasable ) {\n\treturn is_user_logged_in() ? $purchasable : false;\n}\n\n// Variable products would still show their dropdowns; remove the forms entirely.\nfunction perfectpixel_logged_out_remove_forms() {\n\tif ( ! is_user_logged_in() ) {\n\t\tremove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_add_to_cart', 30 );\n\t\tremove_action( 'woocommerce_after_shop_loop_item', 'woocommerce_template_loop_add_to_cart', 10 );\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "b2b",
+        "prices",
+        "login",
+        "catalog-mode"
+    ],
+    "variables": [
+        {
+            "name": "login_price_text",
+            "label": "Κείμενο αντί για τιμή",
+            "default": "Συνδεθείτε για να δείτε τιμές",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-hide-price-add-cart-logged-users/"
+    ],
+    "updated": "2026-11-18T14:36:18+00:00"
+}

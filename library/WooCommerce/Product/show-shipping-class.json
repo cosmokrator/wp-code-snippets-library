@@ -1,0 +1,29 @@
+{
+    "title": "Show the shipping class on the product page",
+    "description": "Στη σελίδα προϊόντος, κάτω από κωδικό (SKU) και κατηγορίες, προσθέτει τη γραμμή «Κλάση αποστολής: …» με το όνομα της κλάσης του προϊόντος (π.χ. «Ογκώδη»), αν έχει. Χρήσιμο όταν τα ονόματα των κλάσεων λένε κάτι στον πελάτη. Ισχύει για το κλασικό template σελίδας προϊόντος/καταστήματος· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_product_meta_end', 'perfectpixel_show_shipping_class' );\n\nfunction perfectpixel_show_shipping_class() {\n\tglobal $product;\n\tif ( ! $product || ! $product->get_shipping_class_id() ) {\n\t\treturn;\n\t}\n\t$term = get_term( $product->get_shipping_class_id(), 'product_shipping_class' );\n\tif ( $term && ! is_wp_error( $term ) ) {\n\t\techo '<span class=\"shipping_class_wrapper\">' . esc_html( '{{shipping_class_label}}' ) . ' <span class=\"shipping_class\">' . esc_html( $term->name ) . '</span></span>';\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "shipping-classes",
+        "product-meta"
+    ],
+    "variables": [
+        {
+            "name": "shipping_class_label",
+            "label": "Ετικέτα",
+            "default": "Κλάση αποστολής:",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-display-shipping-class-single-product-page/"
+    ],
+    "updated": "2026-11-18T14:36:18+00:00"
+}

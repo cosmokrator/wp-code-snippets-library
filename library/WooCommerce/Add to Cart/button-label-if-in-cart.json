@@ -1,0 +1,29 @@
+{
+    "title": "Change the add to cart label when the product is already in the cart",
+    "description": "Αν το προϊόν βρίσκεται ήδη στο καλάθι, το κουμπί «Προσθήκη στο καλάθι» αλλάζει κείμενο (π.χ. «Ήδη στο καλάθι – προσθήκη ξανά»), στη σελίδα προϊόντος και στις λίστες, ώστε ο πελάτης να μην το προσθέτει κατά λάθος δεύτερη φορά. Στις λίστες το κείμενο ενημερώνεται μετά από ανανέωση της σελίδας.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_product_single_add_to_cart_text', 'perfectpixel_label_if_in_cart', 40, 2 );\nadd_filter( 'woocommerce_product_add_to_cart_text', 'perfectpixel_label_if_in_cart', 40, 2 );\n\nfunction perfectpixel_label_if_in_cart( $text, $product ) {\n\tif ( ! $product || ! function_exists( 'WC' ) || ! WC()->cart || ! $product->is_purchasable() || ! $product->is_in_stock() ) {\n\t\treturn $text;\n\t}\n\t// In loops, only simple products have a real add to cart button.\n\tif ( 'woocommerce_product_add_to_cart_text' === current_filter() && ! $product->is_type( 'simple' ) ) {\n\t\treturn $text;\n\t}\n\tforeach ( WC()->cart->get_cart() as $item ) {\n\t\tif ( (int) $item['product_id'] === (int) $product->get_id() ) {\n\t\t\treturn '{{in_cart_label}}';\n\t\t}\n\t}\n\treturn $text;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "add-to-cart",
+        "labels",
+        "conditional"
+    ],
+    "variables": [
+        {
+            "name": "in_cart_label",
+            "label": "Κείμενο κουμπιού",
+            "default": "Ήδη στο καλάθι – προσθήκη ξανά",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-rename-add-to-cart-button-if-product-already-cart/"
+    ],
+    "updated": "2026-11-18T14:36:18+00:00"
+}

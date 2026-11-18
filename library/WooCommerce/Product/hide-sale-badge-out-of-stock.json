@@ -1,0 +1,22 @@
+{
+    "title": "Hide the sale badge on out of stock products",
+    "description": "Κρύβει την ετικέτα «Προσφορά!» από προϊόντα που έχουν εξαντληθεί, στη σελίδα προϊόντος και στις λίστες, ώστε να μην τραβούν την προσοχή σε κάτι που δεν αγοράζεται.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_sale_flash', 'perfectpixel_hide_sale_badge_out_of_stock', 99, 3 );\n\nfunction perfectpixel_hide_sale_badge_out_of_stock( $html, $post, $product ) {\n\treturn ( $product && ! $product->is_in_stock() ) ? '' : $html;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "sale",
+        "stock",
+        "badges"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-hide-sale-badge-if-product-is-out-of-stock/"
+    ],
+    "updated": "2026-11-18T14:36:18+00:00"
+}

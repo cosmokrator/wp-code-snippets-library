@@ -1,0 +1,28 @@
+{
+    "title": "Set a default shipping class for products without one",
+    "description": "Όσα προϊόντα (και παραλλαγές) δεν έχουν κλάση αποστολής παίρνουν αυτόματα την κλάση που ορίζετε, και με αυτήν υπολογίζονται τα μεταφορικά. Τα προϊόντα με δική τους κλάση δεν επηρεάζονται. Το ID της κλάσης το βρίσκετε στο URL όταν επεξεργάζεστε την κλάση ή με το εργαλείο επιθεώρησης του browser στη σελίδα Κλάσεις αποστολής.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_product_get_shipping_class_id', 'perfectpixel_default_shipping_class', 10, 2 );\nadd_filter( 'woocommerce_product_variation_get_shipping_class_id', 'perfectpixel_default_shipping_class', 10, 2 );\n\nfunction perfectpixel_default_shipping_class( $class_id, $product ) {\n\t$default = (int) '{{default_shipping_class_id}}';\n\tif ( $class_id || ! $default ) {\n\t\treturn $class_id;\n\t}\n\t// A variation without its own class inherits the parent's, if the parent has one.\n\tif ( $product && $product->get_parent_id() ) {\n\t\t$parent = wc_get_product( $product->get_parent_id() );\n\t\tif ( $parent && $parent->get_shipping_class_id( 'edit' ) ) {\n\t\t\treturn $parent->get_shipping_class_id( 'edit' );\n\t\t}\n\t}\n\treturn $default;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shipping",
+        "shipping-classes"
+    ],
+    "variables": [
+        {
+            "name": "default_shipping_class_id",
+            "label": "ID κλάσης αποστολής",
+            "default": "0",
+            "description": "Μόνο αριθμός"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-set-default-shipping-class-for-all-products/"
+    ],
+    "updated": "2026-11-18T14:36:18+00:00"
+}

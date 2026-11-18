@@ -1,0 +1,29 @@
+{
+    "title": "Replace add to cart with a \"View product\" button on shop pages",
+    "description": "Στις λίστες προϊόντων (κατάστημα, κατηγορίες) αντικαθιστά το κουμπί «Προσθήκη στο καλάθι» με κουμπί «Δείτε το προϊόν» που οδηγεί στη σελίδα του, ώστε ο πελάτης να δει λεπτομέρειες πριν αγοράσει. Ισχύει για το κλασικό template σελίδας προϊόντος/καταστήματος· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'init', 'perfectpixel_view_product_button_setup' );\n\nfunction perfectpixel_view_product_button_setup() {\n\tremove_action( 'woocommerce_after_shop_loop_item', 'woocommerce_template_loop_add_to_cart', 10 );\n\tadd_action( 'woocommerce_after_shop_loop_item', 'perfectpixel_view_product_button', 10 );\n}\n\nfunction perfectpixel_view_product_button() {\n\tglobal $product;\n\tif ( $product ) {\n\t\tprintf( '<a href=\"%s\" class=\"button\">%s</a>', esc_url( $product->get_permalink() ), esc_html( '{{view_product_label}}' ) );\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "add-to-cart",
+        "shop",
+        "buttons"
+    ],
+    "variables": [
+        {
+            "name": "view_product_label",
+            "label": "Κείμενο κουμπιού",
+            "default": "Δείτε το προϊόν",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-remove-add-cart-add-view-product-loop/"
+    ],
+    "updated": "2026-11-18T14:36:18+00:00"
+}

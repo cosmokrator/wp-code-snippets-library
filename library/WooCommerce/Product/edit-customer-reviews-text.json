@@ -1,0 +1,36 @@
+{
+    "title": "Change the \"x customer reviews\" text",
+    "description": "Αλλάζει το κείμενο «(x αξιολογήσεις πελατών)» δίπλα στα αστεράκια της σελίδας προϊόντος, π.χ. σε «12 κριτικές». Το %s αντικαθίσταται με τον αριθμό των αξιολογήσεων. Ορίστε ενικό και πληθυντικό.",
+    "type": "php",
+    "code": "add_filter( 'ngettext_woocommerce', 'perfectpixel_customer_reviews_text', 10, 4 );\n\nfunction perfectpixel_customer_reviews_text( $translation, $single, $plural, $number ) {\n\tif ( '%s customer review' === $single && '%s customer reviews' === $plural ) {\n\t\treturn 1 === (int) $number ? '{{reviews_text_single}}' : '{{reviews_text_plural}}';\n\t}\n\treturn $translation;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "reviews",
+        "labels",
+        "translation"
+    ],
+    "variables": [
+        {
+            "name": "reviews_text_single",
+            "label": "Ενικός",
+            "default": "%s κριτική",
+            "description": "Χωρίς απόστροφο ('). Το %s είναι ο αριθμός"
+        },
+        {
+            "name": "reviews_text_plural",
+            "label": "Πληθυντικός",
+            "default": "%s κριτικές",
+            "description": "Χωρίς απόστροφο ('). Το %s είναι ο αριθμός"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-edit-x-customer-reviews-string-single-product-page/"
+    ],
+    "updated": "2026-11-18T14:36:18+00:00"
+}

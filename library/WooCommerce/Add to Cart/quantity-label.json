@@ -1,0 +1,29 @@
+{
+    "title": "Add a \"Quantity\" label before the quantity input",
+    "description": "Στη σελίδα προϊόντος εμφανίζει την ετικέτα «Ποσότητα:» πριν από το πεδίο ποσότητας, για πιο σαφή φόρμα αγοράς. Δεν εμφανίζεται σε προϊόντα «Πωλείται μεμονωμένα», όπου δεν υπάρχει πεδίο ποσότητας. Ισχύει για το κλασικό template σελίδας προϊόντος/καταστήματος· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_before_add_to_cart_quantity', 'perfectpixel_quantity_label' );\n\nfunction perfectpixel_quantity_label() {\n\tglobal $product;\n\tif ( ! $product || $product->is_sold_individually() ) {\n\t\treturn;\n\t}\n\techo '<span class=\"perfectpixel-qty-label\" style=\"display:inline-block;margin-right:.5em;vertical-align:middle;line-height:2.5\">' . esc_html( '{{quantity_label_text}}' ) . '</span>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "add-to-cart",
+        "quantity",
+        "labels"
+    ],
+    "variables": [
+        {
+            "name": "quantity_label_text",
+            "label": "Ετικέτα",
+            "default": "Ποσότητα:",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-quantity-label-front-add-cart-button/"
+    ],
+    "updated": "2026-11-18T14:36:18+00:00"
+}
