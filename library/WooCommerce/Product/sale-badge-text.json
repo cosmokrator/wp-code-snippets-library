@@ -1,0 +1,29 @@
+{
+    "title": "Rename or remove the \"Sale!\" badge",
+    "description": "Αλλάζει το κείμενο της ετικέτας «Προσφορά!» σε όλο το κατάστημα (λίστες και σελίδα προϊόντος), π.χ. σε «Έκπτωση -20%», ή την αφαιρεί τελείως. Στο κείμενο μπορείτε να βάλετε {percent} για το ποσοστό έκπτωσης (μόνο σε απλά προϊόντα· στα υπόλοιπα αφαιρείται).",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_sale_flash', 'perfectpixel_sale_badge_text', 10, 3 );\n\nfunction perfectpixel_sale_badge_text( $html, $post, $product ) {\n\t$text = trim( '{{sale_badge_text}}' );\n\tif ( '' === $text ) {\n\t\treturn '';\n\t}\n\t$percent = '';\n\tif ( $product && $product->is_type( 'simple' ) && (float) $product->get_regular_price() > 0 ) {\n\t\t$percent = '-' . round( 100 - (float) $product->get_sale_price() / (float) $product->get_regular_price() * 100 ) . '%';\n\t}\n\treturn '<span class=\"onsale\">' . esc_html( trim( str_replace( '{percent}', $percent, $text ) ) ) . '</span>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "sale",
+        "badges",
+        "labels"
+    ],
+    "variables": [
+        {
+            "name": "sale_badge_text",
+            "label": "Κείμενο ετικέτας",
+            "default": "Έκπτωση {percent}",
+            "description": "Χωρίς απόστροφο ('). Κενό = αφαίρεση ετικέτας"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-remove-sale-badge-everywhere/"
+    ],
+    "updated": "2026-11-18T15:34:49+00:00"
+}

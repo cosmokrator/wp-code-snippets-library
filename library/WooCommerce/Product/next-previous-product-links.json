@@ -1,0 +1,35 @@
+{
+    "title": "Add previous / next product links in the same category",
+    "description": "Πάνω από το προϊόν εμφανίζει συνδέσμους «← Προηγούμενο» και «Επόμενο →» προς τα γειτονικά προϊόντα της ίδιας κατηγορίας (με σειρά ημερομηνίας δημοσίευσης), ώστε ο πελάτης να περιηγείται χωρίς να επιστρέφει στη λίστα. Ισχύει για το κλασικό template σελίδας προϊόντος· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_before_single_product', 'perfectpixel_prev_next_product_links', 20 );\n\nfunction perfectpixel_prev_next_product_links() {\n\t$prev = get_adjacent_post( true, '', true, 'product_cat' );\n\t$next = get_adjacent_post( true, '', false, 'product_cat' );\n\tif ( ! $prev && ! $next ) {\n\t\treturn;\n\t}\n\techo '<nav class=\"perfectpixel-product-nav\" style=\"display:flex;justify-content:space-between;margin-bottom:1.5em\">';\n\techo $prev ? '<a href=\"' . esc_url( get_permalink( $prev ) ) . '\" title=\"' . esc_attr( get_the_title( $prev ) ) . '\">' . esc_html( '{{prev_product_text}}' ) . '</a>' : '<span></span>';\n\techo $next ? '<a href=\"' . esc_url( get_permalink( $next ) ) . '\" title=\"' . esc_attr( get_the_title( $next ) ) . '\">' . esc_html( '{{next_product_text}}' ) . '</a>' : '<span></span>';\n\techo '</nav>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "navigation",
+        "categories"
+    ],
+    "variables": [
+        {
+            "name": "prev_product_text",
+            "label": "Κείμενο «προηγούμενο»",
+            "default": "← Προηγούμενο",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "next_product_text",
+            "label": "Κείμενο «επόμενο»",
+            "default": "Επόμενο →",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-nextprevious-single-product-page/"
+    ],
+    "updated": "2026-11-18T15:34:49+00:00"
+}

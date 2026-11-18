@@ -1,0 +1,29 @@
+{
+    "title": "Rewrite the \"X in stock\" text",
+    "description": "Αντικαθιστά το μήνυμα «12 σε απόθεμα» της σελίδας προϊόντος με δικό σας κείμενο, π.χ. «Διαθέσιμη ποσότητα: 12». Το {qty} αντικαθίσταται με την ποσότητα. Ισχύει για προϊόντα με διαχείριση αποθέματος· τα «Εξαντλημένο» και «Κατόπιν παραγγελίας» δεν αλλάζουν.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_get_availability_text', 'perfectpixel_stock_quantity_text', 20, 2 );\n\nfunction perfectpixel_stock_quantity_text( $text, $product ) {\n\tif ( $product && $product->managing_stock() && $product->is_in_stock() && ! $product->is_on_backorder( 1 ) && $product->get_stock_quantity() > 0 ) {\n\t\treturn str_replace( '{qty}', wc_stock_amount( $product->get_stock_quantity() ), '{{stock_qty_text}}' );\n\t}\n\treturn $text;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "stock",
+        "labels"
+    ],
+    "variables": [
+        {
+            "name": "stock_qty_text",
+            "label": "Κείμενο",
+            "default": "Διαθέσιμη ποσότητα: {qty}",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-edit-stock-single-product-page/"
+    ],
+    "updated": "2026-11-18T15:34:49+00:00"
+}

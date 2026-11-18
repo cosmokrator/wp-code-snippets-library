@@ -1,0 +1,23 @@
+{
+    "title": "Show Jetpack sharing buttons on product pages",
+    "description": "Αν έχετε ενεργοποιήσει τα κουμπιά κοινοποίησης του Jetpack για προϊόντα αλλά δεν εμφανίζονται (επειδή το theme δεν τα τυπώνει στη σελίδα προϊόντος), τα εμφανίζει στη θέση κοινοποίησης του WooCommerce, κάτω από κατηγορίες και ετικέτες. Ισχύει για το κλασικό template σελίδας προϊόντος· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_share', 'perfectpixel_jetpack_sharing_on_products' );\n\nfunction perfectpixel_jetpack_sharing_on_products() {\n\tif ( function_exists( 'sharing_display' ) ) {\n\t\techo sharing_display( '', false ); // Jetpack returns its own escaped markup.\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "jetpack",
+        "social",
+        "sharing"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/resolved-woocommerce-jetpack-sharing-showing/"
+    ],
+    "updated": "2026-11-18T15:34:49+00:00"
+}

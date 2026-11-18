@@ -1,0 +1,29 @@
+{
+    "title": "Move related products into a product tab",
+    "description": "Τα «Σχετικά προϊόντα» φεύγουν από το κάτω μέρος της σελίδας προϊόντος και εμφανίζονται σε δική τους καρτέλα (π.χ. «Δείτε επίσης») μαζί με Περιγραφή και Αξιολογήσεις. Η καρτέλα εμφανίζεται μόνο όταν υπάρχουν σχετικά προϊόντα. Ισχύει για το κλασικό template σελίδας προϊόντος· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'init', 'perfectpixel_related_tab_setup' );\nadd_filter( 'woocommerce_product_tabs', 'perfectpixel_related_tab' );\n\nfunction perfectpixel_related_tab_setup() {\n\tremove_action( 'woocommerce_after_single_product_summary', 'woocommerce_output_related_products', 20 );\n}\n\nfunction perfectpixel_related_tab( $tabs ) {\n\tglobal $product;\n\tif ( $product && wc_get_related_products( $product->get_id(), 1 ) ) {\n\t\t$tabs['perfectpixel_related'] = array(\n\t\t\t'title'    => '{{related_tab_title}}',\n\t\t\t'priority' => 40,\n\t\t\t'callback' => 'woocommerce_output_related_products',\n\t\t);\n\t}\n\treturn $tabs;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "related-products",
+        "tabs"
+    ],
+    "variables": [
+        {
+            "name": "related_tab_title",
+            "label": "Τίτλος καρτέλας",
+            "default": "Δείτε επίσης",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-related-products-tab/"
+    ],
+    "updated": "2026-11-18T15:34:49+00:00"
+}

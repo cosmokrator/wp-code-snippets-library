@@ -1,0 +1,29 @@
+{
+    "title": "Add a recommended retail price (RRP) field",
+    "description": "Προσθέτει πεδίο «Προτεινόμενη τιμή λιανικής» στις τιμές του προϊόντος (καρτέλα «Γενικά»). Αν συμπληρωθεί, στη σελίδα προϊόντος κάτω από την τιμή εμφανίζεται π.χ. «Π.Τ.Λ.: 49,90 €», ώστε ο πελάτης να βλέπει τη διαφορά με τη δική σας τιμή. Για απλά και εξωτερικά προϊόντα. Ισχύει για το κλασικό template σελίδας προϊόντος· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_product_options_pricing', 'perfectpixel_rrp_field' );\nadd_action( 'woocommerce_admin_process_product_object', 'perfectpixel_rrp_save' );\nadd_action( 'woocommerce_single_product_summary', 'perfectpixel_rrp_output', 11 );\n\nfunction perfectpixel_rrp_field() {\n\twoocommerce_wp_text_input(\n\t\tarray(\n\t\t\t'id'        => '_perfectpixel_rrp',\n\t\t\t'label'     => 'Προτεινόμενη τιμή λιανικής (' . get_woocommerce_currency_symbol() . ')',\n\t\t\t'data_type' => 'price',\n\t\t)\n\t);\n}\n\nfunction perfectpixel_rrp_save( $product ) {\n\tif ( isset( $_POST['_perfectpixel_rrp'] ) ) {\n\t\t$product->update_meta_data( '_perfectpixel_rrp', wc_format_decimal( wp_unslash( $_POST['_perfectpixel_rrp'] ) ) );\n\t}\n}\n\nfunction perfectpixel_rrp_output() {\n\tglobal $product;\n\tif ( ! $product || $product->is_type( 'variable' ) ) {\n\t\treturn;\n\t}\n\t$rrp = (float) $product->get_meta( '_perfectpixel_rrp' );\n\tif ( $rrp > 0 ) {\n\t\techo '<p class=\"perfectpixel-rrp\" style=\"opacity:.75\">' . esc_html( '{{rrp_label}}' ) . ' <del>' . wp_kses_post( wc_price( $rrp ) ) . '</del></p>';\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "prices",
+        "custom-fields",
+        "admin"
+    ],
+    "variables": [
+        {
+            "name": "rrp_label",
+            "label": "Ετικέτα",
+            "default": "Π.Τ.Λ.:",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-display-rrp-msrp-manufacturer-price/"
+    ],
+    "updated": "2026-11-18T15:34:49+00:00"
+}

@@ -1,0 +1,22 @@
+{
+    "title": "Move the product tabs next to the product image",
+    "description": "Μετακινεί την ενότητα καρτελών (Περιγραφή, Επιπρόσθετες πληροφορίες, Αξιολογήσεις) από το κάτω μέρος της σελίδας προϊόντος δίπλα στην εικόνα, κάτω από το κουμπί αγοράς. Ταιριάζει όταν οι περιγραφές είναι σύντομες και μένει κενός χώρος δίπλα στην εικόνα. Ισχύει για το κλασικό template σελίδας προϊόντος· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'init', 'perfectpixel_tabs_beside_image_setup' );\n\nfunction perfectpixel_tabs_beside_image_setup() {\n\tremove_action( 'woocommerce_after_single_product_summary', 'woocommerce_output_product_data_tabs', 10 );\n\tadd_action( 'woocommerce_single_product_summary', 'woocommerce_output_product_data_tabs', 60 );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "tabs",
+        "layout"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-move-product-tabs-short-description/"
+    ],
+    "updated": "2026-11-18T15:34:49+00:00"
+}

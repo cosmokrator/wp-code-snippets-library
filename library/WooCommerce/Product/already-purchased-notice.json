@@ -1,0 +1,29 @@
+{
+    "title": "Mark products the customer has already bought",
+    "description": "Για συνδεδεμένους πελάτες, κάτω από κάθε προϊόν στις λίστες (κατάστημα, κατηγορίες) και στη σελίδα προϊόντος εμφανίζει μήνυμα όπως «✓ Το έχετε αγοράσει», για προϊόντα που έχουν ήδη αγοράσει. Χρήσιμο για επαναλαμβανόμενες αγορές ή για να αποφεύγονται διπλές αγορές. Ισχύει για το κλασικό template σελίδας προϊόντος· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_after_shop_loop_item', 'perfectpixel_already_purchased_notice', 15 );\nadd_action( 'woocommerce_single_product_summary', 'perfectpixel_already_purchased_notice', 11 );\n\nfunction perfectpixel_already_purchased_notice() {\n\tglobal $product;\n\tif ( ! $product || ! is_user_logged_in() ) {\n\t\treturn;\n\t}\n\t$user = wp_get_current_user();\n\tif ( wc_customer_bought_product( $user->user_email, $user->ID, $product->get_id() ) ) {\n\t\techo '<p class=\"perfectpixel-already-bought\" style=\"margin:.5em 0;font-size:.9em;color:#00a32a\">' . esc_html( '{{already_bought_text}}' ) . '</p>';\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "customers",
+        "shop",
+        "notices"
+    ],
+    "variables": [
+        {
+            "name": "already_bought_text",
+            "label": "Μήνυμα",
+            "default": "✓ Το έχετε αγοράσει",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-check-current-user-already-purchased-product/"
+    ],
+    "updated": "2026-11-18T15:34:49+00:00"
+}

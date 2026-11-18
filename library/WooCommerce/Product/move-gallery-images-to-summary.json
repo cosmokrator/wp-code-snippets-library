@@ -1,0 +1,30 @@
+{
+    "title": "Move the gallery images next to the product details",
+    "description": "Οι πρόσθετες εικόνες της γκαλερί βγαίνουν από τον slider κάτω από την κύρια εικόνα και εμφανίζονται ως μικρογραφίες δίπλα, κάτω από τη σύντομη περιγραφή. Κάθε μικρογραφία ανοίγει τη μεγάλη εικόνα. Η κύρια εικόνα μένει στη θέση της. Ισχύει για το κλασικό template σελίδας προϊόντος· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'init', 'perfectpixel_move_gallery_setup' );\n\nfunction perfectpixel_move_gallery_setup() {\n\tremove_action( 'woocommerce_product_thumbnails', 'woocommerce_show_product_thumbnails', 20 );\n\tadd_action( 'woocommerce_single_product_summary', 'perfectpixel_moved_gallery_output', 25 );\n}\n\nfunction perfectpixel_moved_gallery_output() {\n\tglobal $product;\n\tif ( ! $product || ! $product->get_gallery_image_ids() ) {\n\t\treturn;\n\t}\n\t$columns = max( 1, (int) '{{moved_gallery_columns}}' );\n\techo '<div class=\"perfectpixel-moved-gallery\" style=\"display:grid;grid-template-columns:repeat(' . (int) $columns . ',1fr);gap:.5em;margin-bottom:1.5em\">';\n\tforeach ( $product->get_gallery_image_ids() as $image_id ) {\n\t\tprintf(\n\t\t\t'<a href=\"%s\" target=\"_blank\" rel=\"noopener\">%s</a>',\n\t\t\tesc_url( wp_get_attachment_image_url( $image_id, 'full' ) ),\n\t\t\twp_get_attachment_image( $image_id, 'woocommerce_thumbnail' )\n\t\t);\n\t}\n\techo '</div>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "gallery",
+        "images",
+        "layout"
+    ],
+    "variables": [
+        {
+            "name": "moved_gallery_columns",
+            "label": "Μικρογραφίες ανά σειρά",
+            "default": "4",
+            "description": "Μόνο αριθμός"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-move-product-gallery-thumbnails/"
+    ],
+    "updated": "2026-11-18T15:34:49+00:00"
+}

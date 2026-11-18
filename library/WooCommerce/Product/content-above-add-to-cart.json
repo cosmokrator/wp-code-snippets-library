@@ -1,0 +1,35 @@
+{
+    "title": "Show a message above the add to cart button",
+    "description": "Εμφανίζει ένα σύντομο μήνυμα ακριβώς πάνω από τη φόρμα αγοράς σε όλες τις σελίδες προϊόντων, π.χ. «Δωρεάν επιστροφή σε 30 ημέρες». Επιτρέπεται απλό HTML. Μπορείτε να το περιορίσετε σε συγκεκριμένες κατηγορίες. Ισχύει για το κλασικό template σελίδας προϊόντος· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_single_product_summary', 'perfectpixel_content_above_add_to_cart', 29 );\n\nfunction perfectpixel_content_above_add_to_cart() {\n\t$categories = wp_parse_id_list( '{{above_atc_category_ids}}' );\n\tif ( $categories && ! has_term( $categories, 'product_cat', get_the_ID() ) ) {\n\t\treturn;\n\t}\n\techo '<p class=\"perfectpixel-above-atc\" style=\"margin-bottom:1em;font-weight:600\">' . wp_kses_post( '{{above_atc_text}}' ) . '</p>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "notices",
+        "content"
+    ],
+    "variables": [
+        {
+            "name": "above_atc_text",
+            "label": "Μήνυμα",
+            "default": "↩ Δωρεάν επιστροφή σε 30 ημέρες",
+            "description": "Χωρίς απόστροφο ('). Επιτρέπεται απλό HTML"
+        },
+        {
+            "name": "above_atc_category_ids",
+            "label": "IDs κατηγοριών (με κόμμα)",
+            "default": "",
+            "description": "Κενό = όλα τα προϊόντα"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-text-add-cart-single-product-page/"
+    ],
+    "updated": "2026-11-18T15:34:49+00:00"
+}

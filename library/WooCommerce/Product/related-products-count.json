@@ -1,0 +1,34 @@
+{
+    "title": "Change the number of related products",
+    "description": "Αλλάζει πόσα «Σχετικά προϊόντα» εμφανίζονται στη σελίδα προϊόντος και σε πόσες στήλες (προεπιλογή του WooCommerce: 4 σε 4 στήλες). Κάποια themes (π.χ. Storefront) ορίζουν δικές τους τιμές· τότε ίσως χρειαστεί και CSS για το πλάτος των στηλών.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_output_related_products_args', 'perfectpixel_related_products_count', 99 );\n\nfunction perfectpixel_related_products_count( $args ) {\n\t$args['posts_per_page'] = max( 1, (int) '{{related_products_count}}' );\n\t$args['columns']        = max( 1, (int) '{{related_products_columns}}' );\n\treturn $args;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "related-products"
+    ],
+    "variables": [
+        {
+            "name": "related_products_count",
+            "label": "Πλήθος προϊόντων",
+            "default": "6",
+            "description": "Μόνο αριθμός"
+        },
+        {
+            "name": "related_products_columns",
+            "label": "Στήλες",
+            "default": "3",
+            "description": "Μόνο αριθμός"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/change-number-of-related-products-woocommerce/"
+    ],
+    "updated": "2026-11-18T15:34:49+00:00"
+}

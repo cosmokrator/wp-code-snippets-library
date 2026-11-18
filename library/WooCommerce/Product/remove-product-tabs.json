@@ -1,0 +1,40 @@
+{
+    "title": "Remove individual product tabs",
+    "description": "Αφαιρεί επιλεγμένες καρτέλες από τη σελίδα προϊόντος: «Περιγραφή», «Επιπρόσθετες πληροφορίες» ή/και «Αξιολογήσεις». Ορίστε yes σε όσες θέλετε να κρυφτούν. Αν κρυφτούν όλες, εξαφανίζεται όλη η ενότητα καρτελών.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_product_tabs', 'perfectpixel_remove_product_tabs', 98 );\n\nfunction perfectpixel_remove_product_tabs( $tabs ) {\n\t$remove = array(\n\t\t'description'            => '{{remove_tab_description}}',\n\t\t'additional_information' => '{{remove_tab_additional}}',\n\t\t'reviews'                => '{{remove_tab_reviews}}',\n\t);\n\tforeach ( $remove as $key => $flag ) {\n\t\tif ( 'yes' === $flag ) {\n\t\t\tunset( $tabs[ $key ] );\n\t\t}\n\t}\n\treturn $tabs;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "tabs"
+    ],
+    "variables": [
+        {
+            "name": "remove_tab_description",
+            "label": "Απόκρυψη «Περιγραφή» (yes/no)",
+            "default": "no",
+            "description": "yes ή no"
+        },
+        {
+            "name": "remove_tab_additional",
+            "label": "Απόκρυψη «Επιπρόσθετες πληροφορίες» (yes/no)",
+            "default": "yes",
+            "description": "yes ή no"
+        },
+        {
+            "name": "remove_tab_reviews",
+            "label": "Απόκρυψη «Αξιολογήσεις» (yes/no)",
+            "default": "no",
+            "description": "yes ή no"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-remove-additional-info-tab-products/"
+    ],
+    "updated": "2026-11-18T15:34:49+00:00"
+}

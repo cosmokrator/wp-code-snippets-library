@@ -1,0 +1,29 @@
+{
+    "title": "Show the date a product was added",
+    "description": "Στη σελίδα προϊόντος, κάτω από την τιμή, εμφανίζει πότε δημοσιεύτηκε το προϊόν (π.χ. «Προστέθηκε: 12 Μαρτίου 2026»), με τη μορφή ημερομηνίας του site. Χρήσιμο για νέες αφίξεις ή συλλογές. Ισχύει για το κλασικό template σελίδας προϊόντος· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_single_product_summary', 'perfectpixel_product_published_date', 12 );\n\nfunction perfectpixel_product_published_date() {\n\techo '<p class=\"perfectpixel-published-date\" style=\"font-size:.9em;opacity:.8\">' . esc_html( '{{published_date_label}}' ) . ' ' . esc_html( get_the_date() ) . '</p>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "dates",
+        "product-meta"
+    ],
+    "variables": [
+        {
+            "name": "published_date_label",
+            "label": "Ετικέτα",
+            "default": "Προστέθηκε:",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-show-product-published-date/"
+    ],
+    "updated": "2026-11-18T15:34:49+00:00"
+}
