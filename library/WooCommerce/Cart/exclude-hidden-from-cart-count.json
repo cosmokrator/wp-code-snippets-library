@@ -1,0 +1,21 @@
+{
+    "title": "Exclude hidden products from the cart counter",
+    "description": "Ο μετρητής του καλαθιού (εικονίδιο/mini cart) δεν μετρά τα κρυφά προϊόντα (ορατότητα καταλόγου «Κρυφό»), π.χ. δώρα ή χρεώσεις που μπαίνουν αυτόματα στο καλάθι.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_cart_contents_count', 'perfectpixel_exclude_hidden_from_cart_count' );\n\nfunction perfectpixel_exclude_hidden_from_cart_count( $count ) {\n\tif ( ! WC()->cart ) {\n\t\treturn $count;\n\t}\n\tforeach ( WC()->cart->get_cart() as $item ) {\n\t\t$product = wc_get_product( $item['product_id'] );\n\t\tif ( $product && 'hidden' === $product->get_catalog_visibility() ) {\n\t\t\t$count -= (int) $item['quantity'];\n\t\t}\n\t}\n\treturn max( 0, $count );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "cart",
+        "mini-cart"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-exclude-hidden-products-from-mini-cart-counter/"
+    ],
+    "updated": "2026-11-18T12:38:03+00:00"
+}

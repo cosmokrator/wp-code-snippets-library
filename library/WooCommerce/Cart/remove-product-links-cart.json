@@ -1,0 +1,20 @@
+{
+    "title": "Remove product links in the cart",
+    "description": "Τα ονόματα και οι εικόνες των προϊόντων στο καλάθι δεν είναι πια σύνδεσμοι, ώστε ο πελάτης να μένει στη ροή αγοράς αντί να γυρίζει στις σελίδες προϊόντων. Ισχύει για το κλασικό καλάθι (shortcode)· το καλάθι με blocks δεν χρησιμοποιεί αυτό το hook.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_cart_item_permalink', '__return_false' );",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "cart"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-remove-cart-product-link-cart-page/"
+    ],
+    "updated": "2026-11-18T12:38:03+00:00"
+}

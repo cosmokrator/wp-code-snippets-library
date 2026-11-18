@@ -1,0 +1,22 @@
+{
+    "title": "Count distinct products (not quantities) in the cart counter",
+    "description": "Ο μετρητής του καλαθιού (εικονίδιο/mini cart) δείχνει πόσα διαφορετικά προϊόντα υπάρχουν, αντί για το άθροισμα των ποσοτήτων (π.χ. 2 προϊόντα × 3 τεμάχια = «2» αντί για «6»). Χρήσιμο σε B2B/χονδρική.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_cart_contents_count', 'perfectpixel_count_distinct_cart_items' );\n\nfunction perfectpixel_count_distinct_cart_items( $count ) {\n\treturn WC()->cart ? count( WC()->cart->get_cart() ) : $count;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "cart",
+        "mini-cart",
+        "b2b"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-how-to-alter-cart-items-count/"
+    ],
+    "updated": "2026-11-18T12:38:03+00:00"
+}

@@ -1,0 +1,36 @@
+{
+    "title": "Show a message when a product category is in the cart",
+    "description": "Βοηθητική συνάρτηση perfectpixel_cart_has_category() που ελέγχει αν το καλάθι περιέχει προϊόντα από κατηγορίες (μαζί με υποκατηγορίες), για χρήση σε άλλα snippets. Ως παράδειγμα εμφανίζει μήνυμα στο καλάθι (π.χ. «Τα ψυγεία παραδίδονται σε 5-7 ημέρες»). Ορίστε κατηγορίες και μήνυμα στις μεταβλητές.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_before_cart', 'perfectpixel_message_if_category_in_cart' );\n\n/**\n * Whether the cart contains a product from any of the given category slugs (sub-categories included).\n */\nfunction perfectpixel_cart_has_category( $slugs ) {\n\tif ( ! WC()->cart ) {\n\t\treturn false;\n\t}\n\t$term_ids = array();\n\tforeach ( (array) $slugs as $slug ) {\n\t\t$term = get_term_by( 'slug', $slug, 'product_cat' );\n\t\tif ( $term ) {\n\t\t\t$term_ids[] = $term->term_id;\n\t\t\t$term_ids   = array_merge( $term_ids, get_term_children( $term->term_id, 'product_cat' ) );\n\t\t}\n\t}\n\tforeach ( WC()->cart->get_cart() as $item ) {\n\t\tif ( $term_ids && has_term( $term_ids, 'product_cat', $item['product_id'] ) ) {\n\t\t\treturn true;\n\t\t}\n\t}\n\treturn false;\n}\n\nfunction perfectpixel_message_if_category_in_cart() {\n\t$slugs = array_filter( array_map( 'trim', explode( ',', '{{cart_category_slugs}}' ) ) );\n\tif ( perfectpixel_cart_has_category( $slugs ) ) {\n\t\techo '<div class=\"woocommerce-info\">' . wp_kses_post( '{{cart_category_message}}' ) . '</div>';\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "cart",
+        "categories",
+        "conditional",
+        "notices"
+    ],
+    "variables": [
+        {
+            "name": "cart_category_slugs",
+            "label": "Κατηγορίες (slugs, με κόμμα)",
+            "default": "appliances",
+            "description": ""
+        },
+        {
+            "name": "cart_category_message",
+            "label": "Μήνυμα",
+            "default": "Οι μεγάλες συσκευές παραδίδονται σε 5-7 εργάσιμες.",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-check-product-category-cart/"
+    ],
+    "updated": "2026-11-18T12:38:03+00:00"
+}

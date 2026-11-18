@@ -1,0 +1,23 @@
+{
+    "title": "Quantity-based bulk pricing tiers",
+    "description": "Κλιμακωτές τιμές ανάλογα με την ποσότητα κάθε προϊόντος στο καλάθι, π.χ. 10+ τεμάχια −5%, 50+ −10%, 100+ −15%. Η έκπτωση εφαρμόζεται στην τιμή ανά τεμάχιο στο καλάθι. Ορίστε τις κλίμακες στο $tiers (ελάχιστη ποσότητα => % έκπτωσης) και, προαιρετικά, μόνο για συγκεκριμένα IDs στο $only_products.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_before_calculate_totals', 'perfectpixel_bulk_quantity_pricing', 20 );\n\nfunction perfectpixel_bulk_quantity_pricing( $cart ) {\n\tif ( is_admin() && ! wp_doing_ajax() ) {\n\t\treturn;\n\t}\n\t// Minimum quantity => discount %. Highest matching tier wins.\n\t$tiers = array(\n\t\t10  => 5,\n\t\t50  => 10,\n\t\t100 => 15,\n\t);\n\t$only_products = array(); // Empty = all products.\n\tkrsort( $tiers );\n\n\tforeach ( $cart->get_cart() as $item ) {\n\t\tif ( $only_products && ! in_array( (int) $item['product_id'], $only_products, true ) ) {\n\t\t\tcontinue;\n\t\t}\n\t\tforeach ( $tiers as $min_qty => $percent ) {\n\t\t\tif ( $item['quantity'] >= $min_qty ) {\n\t\t\t\t$base = (float) $item['data']->get_price( 'edit' );\n\t\t\t\t$item['data']->set_price( $base * ( 100 - $percent ) / 100 );\n\t\t\t\tbreak;\n\t\t\t}\n\t\t}\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "pricing",
+        "cart",
+        "b2b",
+        "discounts"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-bulk-dynamic-pricing-without-a-plugin/"
+    ],
+    "updated": "2026-11-18T12:38:03+00:00"
+}

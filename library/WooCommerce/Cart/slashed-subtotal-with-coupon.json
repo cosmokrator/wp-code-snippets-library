@@ -1,0 +1,22 @@
+{
+    "title": "Slashed cart subtotal when a coupon is applied",
+    "description": "Όταν υπάρχει έκπτωση από κουπόνι, η γραμμή «Μερικό σύνολο» στα σύνολα του καλαθιού δείχνει το αρχικό ποσό διαγραμμένο και το ποσό μετά την έκπτωση δίπλα. Ισχύει για το κλασικό καλάθι (shortcode)· το καλάθι με blocks δεν χρησιμοποιεί αυτό το hook.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_cart_subtotal', 'perfectpixel_slashed_subtotal_with_coupon', 99, 3 );\n\nfunction perfectpixel_slashed_subtotal_with_coupon( $subtotal_html, $compound, $cart ) {\n\t$discount = (float) $cart->get_discount_total();\n\tif ( $discount <= 0 || $compound ) {\n\t\treturn $subtotal_html;\n\t}\n\t$before = (float) $cart->get_subtotal();\n\tif ( $cart->display_prices_including_tax() ) {\n\t\t$before   += (float) $cart->get_subtotal_tax();\n\t\t$discount += (float) $cart->get_discount_tax();\n\t}\n\treturn '<del>' . wc_price( $before ) . '</del> <ins>' . wc_price( $before - $discount ) . '</ins>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "cart",
+        "coupons",
+        "discounts"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-slashed-cart-subtotal-coupon-cart/"
+    ],
+    "updated": "2026-11-18T12:38:03+00:00"
+}

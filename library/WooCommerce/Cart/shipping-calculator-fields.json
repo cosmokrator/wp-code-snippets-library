@@ -1,0 +1,41 @@
+{
+    "title": "Choose which fields the cart shipping calculator shows",
+    "description": "Κρύβει πεδία του «Υπολογισμού μεταφορικών» στο καλάθι που δεν χρειάζεστε, π.χ. αν χρεώνετε μόνο ανά χώρα ή μόνο ανά ΤΚ. Ορίστε yes/no για νομό, πόλη και ΤΚ στις μεταβλητές. Ισχύει για το κλασικό καλάθι (shortcode)· το καλάθι με blocks δεν χρησιμοποιεί αυτό το hook.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_shipping_calculator_enable_state', 'perfectpixel_calc_show_state' );\nadd_filter( 'woocommerce_shipping_calculator_enable_city', 'perfectpixel_calc_show_city' );\nadd_filter( 'woocommerce_shipping_calculator_enable_postcode', 'perfectpixel_calc_show_postcode' );\n\nfunction perfectpixel_calc_show_state() {\n\treturn 'yes' === '{{calc_show_state}}';\n}\n\nfunction perfectpixel_calc_show_city() {\n\treturn 'yes' === '{{calc_show_city}}';\n}\n\nfunction perfectpixel_calc_show_postcode() {\n\treturn 'yes' === '{{calc_show_postcode}}';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "cart",
+        "shipping",
+        "shipping-calculator"
+    ],
+    "variables": [
+        {
+            "name": "calc_show_state",
+            "label": "Εμφάνιση νομού (yes/no)",
+            "default": "no",
+            "description": ""
+        },
+        {
+            "name": "calc_show_city",
+            "label": "Εμφάνιση πόλης (yes/no)",
+            "default": "no",
+            "description": ""
+        },
+        {
+            "name": "calc_show_postcode",
+            "label": "Εμφάνιση ΤΚ (yes/no)",
+            "default": "yes",
+            "description": ""
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-how-to-hide-shipping-calculator-fields-cart/"
+    ],
+    "updated": "2026-11-18T12:38:03+00:00"
+}

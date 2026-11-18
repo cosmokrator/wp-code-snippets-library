@@ -1,0 +1,29 @@
+{
+    "title": "Quantity as a dropdown on the product page",
+    "description": "Στη σελίδα προϊόντος το πεδίο ποσότητας γίνεται λίστα επιλογής (1, 2, 3 … έως το μέγιστο διαθέσιμο ή ένα όριο). Σέβεται ελάχιστο, μέγιστο και βήμα ποσότητας. Υλοποιημένο με JavaScript ώστε να μην αντικαθιστά συναρτήσεις του WooCommerce. Ορίστε το μέγιστο πλήθος επιλογών στη μεταβλητή.",
+    "type": "php",
+    "code": "add_action( 'wp_footer', 'perfectpixel_quantity_dropdown_script' );\n\nfunction perfectpixel_quantity_dropdown_script() {\n\tif ( ! function_exists( 'is_product' ) || ! is_product() ) {\n\t\treturn;\n\t}\n\t?>\n\t<script>\n\tdocument.querySelectorAll( 'form.cart input.qty' ).forEach( function ( input ) {\n\t\tif ( input.type === 'hidden' ) {\n\t\t\treturn;\n\t\t}\n\t\tvar limit = parseInt( <?php echo wp_json_encode( '{{qty_dropdown_max}}' ); ?>, 10 ) || 20;\n\t\tvar min = parseFloat( input.min ) || 1;\n\t\tvar step = parseFloat( input.step ) || 1;\n\t\tvar max = input.max !== '' ? Math.min( parseFloat( input.max ), min + step * ( limit - 1 ) ) : min + step * ( limit - 1 );\n\t\tvar select = document.createElement( 'select' );\n\t\tselect.name = input.name;\n\t\tselect.className = input.className;\n\t\tselect.id = input.id;\n\t\tfor ( var v = min; v <= max; v += step ) {\n\t\t\tvar option = document.createElement( 'option' );\n\t\t\toption.value = option.textContent = v;\n\t\t\tif ( v === parseFloat( input.value ) ) {\n\t\t\t\toption.selected = true;\n\t\t\t}\n\t\t\tselect.appendChild( option );\n\t\t}\n\t\tinput.parentNode.replaceChild( select, input );\n\t} );\n\t</script>\n\t<?php\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "product",
+        "quantity",
+        "ux"
+    ],
+    "variables": [
+        {
+            "name": "qty_dropdown_max",
+            "label": "Μέγιστο πλήθος επιλογών",
+            "default": "20",
+            "description": "Μόνο αριθμός"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-change-add-cart-quantity-drop/"
+    ],
+    "updated": "2026-11-18T12:38:03+00:00"
+}

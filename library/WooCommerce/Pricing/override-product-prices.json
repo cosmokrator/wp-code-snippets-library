@@ -1,0 +1,21 @@
+{
+    "title": "Override product prices programmatically",
+    "description": "Ορίζει τιμές για συγκεκριμένα προϊόντα από κώδικα (π.χ. για προσωρινή προσφορά ή τιμή μόνο για συνδεδεμένους πελάτες), χωρίς να αλλάξετε τις τιμές στη βάση. Η τιμή αλλάζει τόσο στην εμφάνιση (λίστες, σελίδα προϊόντος) όσο και στο καλάθι. Ορίστε στο $prices ID προϊόντος => τιμή και, αν θέλετε, ενεργοποιήστε το μόνο για συνδεδεμένους.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_product_get_price', 'perfectpixel_override_price', 99, 2 );\nadd_filter( 'woocommerce_product_variation_get_price', 'perfectpixel_override_price', 99, 2 );\nadd_filter( 'woocommerce_product_get_sale_price', 'perfectpixel_override_price', 99, 2 );\nadd_filter( 'woocommerce_product_variation_get_sale_price', 'perfectpixel_override_price', 99, 2 );\n\nfunction perfectpixel_override_price( $price, $product ) {\n\t// Product or variation ID => price.\n\t$prices          = array(\n\t\t// 123 => 19.90,\n\t);\n\t$logged_in_only = false;\n\n\tif ( ( $logged_in_only && ! is_user_logged_in() ) || is_admin() && ! wp_doing_ajax() ) {\n\t\treturn $price;\n\t}\n\t$id = $product->get_id();\n\treturn isset( $prices[ $id ] ) ? (string) $prices[ $id ] : $price;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "pricing",
+        "products"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-set-override-product-price-programmatically/"
+    ],
+    "updated": "2026-11-18T12:38:03+00:00"
+}

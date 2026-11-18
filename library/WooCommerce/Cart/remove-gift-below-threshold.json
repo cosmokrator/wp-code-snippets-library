@@ -1,0 +1,35 @@
+{
+    "title": "Remove a product from the cart when a condition is no longer met",
+    "description": "Αφαιρεί αυτόματα ένα προϊόν από το καλάθι όταν δεν ισχύει πια μια συνθήκη. Παράδειγμα: ένα προϊόν-δώρο αφαιρείται αν το μερικό σύνολο πέσει κάτω από ένα ποσό. Ορίστε ID προϊόντος και ποσό στις μεταβλητές· για άλλες συνθήκες αλλάξτε τη συνάρτηση perfectpixel_remove_product_condition().",
+    "type": "php",
+    "code": "add_action( 'woocommerce_after_calculate_totals', 'perfectpixel_remove_product_when_condition_fails' );\n\nfunction perfectpixel_remove_product_condition( $cart, $product_id ) {\n\t// Remove when the subtotal of the OTHER products is below the threshold.\n\t$subtotal = 0;\n\tforeach ( $cart->get_cart() as $item ) {\n\t\tif ( (int) $item['product_id'] !== $product_id ) {\n\t\t\t$subtotal += $item['line_subtotal'];\n\t\t}\n\t}\n\treturn $subtotal < (float) '{{remove_below_amount}}';\n}\n\nfunction perfectpixel_remove_product_when_condition_fails( $cart ) {\n\tstatic $running = false;\n\t$product_id = (int) '{{remove_product_id}}';\n\tif ( $running || ! $product_id ) {\n\t\treturn;\n\t}\n\tforeach ( $cart->get_cart() as $key => $item ) {\n\t\tif ( (int) $item['product_id'] === $product_id && perfectpixel_remove_product_condition( $cart, $product_id ) ) {\n\t\t\t$running = true;\n\t\t\t$cart->remove_cart_item( $key );\n\t\t\t$running = false;\n\t\t\tbreak;\n\t\t}\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "cart",
+        "promotions",
+        "gifts"
+    ],
+    "variables": [
+        {
+            "name": "remove_product_id",
+            "label": "ID προϊόντος προς αφαίρεση",
+            "default": "0",
+            "description": "Μόνο αριθμός"
+        },
+        {
+            "name": "remove_below_amount",
+            "label": "Αφαίρεση όταν το μερικό σύνολο είναι κάτω από",
+            "default": "50",
+            "description": "Μόνο αριθμός"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-remove-product-from-cart-programmatically/"
+    ],
+    "updated": "2026-11-18T12:38:03+00:00"
+}

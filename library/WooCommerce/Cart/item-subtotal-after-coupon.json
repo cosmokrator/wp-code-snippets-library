@@ -1,0 +1,22 @@
+{
+    "title": "Show item subtotals after coupon discount in the cart",
+    "description": "Όταν ένα κουπόνι μειώνει την τιμή ενός προϊόντος, το μερικό σύνολο της γραμμής του στο καλάθι δείχνει την αρχική τιμή διαγραμμένη και τη νέα δίπλα, ώστε ο πελάτης να βλέπει πού εφαρμόστηκε η έκπτωση. Ισχύει για το κλασικό καλάθι (shortcode)· το καλάθι με blocks δεν χρησιμοποιεί αυτό το hook.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_cart_item_subtotal', 'perfectpixel_item_subtotal_after_coupon', 99, 3 );\n\nfunction perfectpixel_item_subtotal_after_coupon( $subtotal, $cart_item, $cart_item_key ) {\n\t$before = (float) $cart_item['line_subtotal'];\n\t$after  = (float) $cart_item['line_total'];\n\tif ( WC()->cart->display_prices_including_tax() ) {\n\t\t$before += (float) $cart_item['line_subtotal_tax'];\n\t\t$after  += (float) $cart_item['line_tax'];\n\t}\n\tif ( $after < $before ) {\n\t\treturn '<del>' . wc_price( $before ) . '</del> <ins>' . wc_price( $after ) . '</ins>';\n\t}\n\treturn $subtotal;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "cart",
+        "coupons",
+        "discounts"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-display-cart-item-subtotal-coupon-discount/"
+    ],
+    "updated": "2026-11-18T12:38:03+00:00"
+}

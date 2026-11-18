@@ -1,0 +1,21 @@
+{
+    "title": "Show stock status under items in the cart",
+    "description": "Εμφανίζει τη διαθεσιμότητα (π.χ. «12 σε απόθεμα», «Διαθέσιμο κατόπιν παραγγελίας») κάτω από κάθε προϊόν στο καλάθι, για προϊόντα με διαχείριση αποθέματος. Χρησιμοποιεί τα κείμενα και τις ρυθμίσεις εμφάνισης αποθέματος του WooCommerce. Ισχύει για το κλασικό καλάθι (shortcode)· το καλάθι με blocks δεν χρησιμοποιεί αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_after_cart_item_name', 'perfectpixel_stock_in_cart', 10, 2 );\n\nfunction perfectpixel_stock_in_cart( $cart_item, $cart_item_key ) {\n\t$product = $cart_item['data'] ?? null;\n\tif ( $product && $product->managing_stock() ) {\n\t\techo wc_get_stock_html( $product ); // phpcs:ignore WordPress.Security.EscapeOutput\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "cart",
+        "stock"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-show-stock-cart-page/"
+    ],
+    "updated": "2026-11-18T12:38:03+00:00"
+}

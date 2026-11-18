@@ -1,0 +1,23 @@
+{
+    "title": "Plus & minus buttons around the quantity field",
+    "description": "Προσθέτει κουμπιά «−» και «+» δεξιά/αριστερά από το πεδίο ποσότητας (σελίδα προϊόντος και καλάθι). Σέβονται το ελάχιστο, το μέγιστο και το βήμα της ποσότητας, και στο καλάθι ενεργοποιούν το «Ενημέρωση καλαθιού». Μπορεί να χρειαστεί λίγο CSS για να ταιριάξει με το theme.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_before_quantity_input_field', 'perfectpixel_qty_minus_button' );\nadd_action( 'woocommerce_after_quantity_input_field', 'perfectpixel_qty_plus_button' );\nadd_action( 'wp_footer', 'perfectpixel_qty_buttons_script' );\n\nfunction perfectpixel_qty_minus_button() {\n\techo '<button type=\"button\" class=\"perfectpixel-qty-btn minus\" aria-label=\"−\">−</button>';\n}\n\nfunction perfectpixel_qty_plus_button() {\n\techo '<button type=\"button\" class=\"perfectpixel-qty-btn plus\" aria-label=\"+\">+</button>';\n}\n\nfunction perfectpixel_qty_buttons_script() {\n\tif ( ! function_exists( 'is_woocommerce' ) || ! ( is_product() || is_cart() ) ) {\n\t\treturn;\n\t}\n\t?>\n\t<style>.perfectpixel-qty-btn{min-width:2.2em;cursor:pointer}.quantity{display:inline-flex;align-items:center;gap:.25em}</style>\n\t<script>\n\tdocument.addEventListener( 'click', function ( e ) {\n\t\tvar btn = e.target.closest( '.perfectpixel-qty-btn' );\n\t\tif ( ! btn ) {\n\t\t\treturn;\n\t\t}\n\t\tvar input = btn.parentNode.querySelector( 'input.qty' );\n\t\tif ( ! input ) {\n\t\t\treturn;\n\t\t}\n\t\tvar step = parseFloat( input.step ) || 1;\n\t\tvar min = input.min !== '' ? parseFloat( input.min ) : 0;\n\t\tvar max = input.max !== '' ? parseFloat( input.max ) : Infinity;\n\t\tvar val = parseFloat( input.value ) || 0;\n\t\tval = btn.classList.contains( 'plus' ) ? Math.min( max, val + step ) : Math.max( min, val - step );\n\t\tinput.value = val;\n\t\tinput.dispatchEvent( new Event( 'change', { bubbles: true } ) );\n\t\tvar update = document.querySelector( 'button[name=\"update_cart\"]' );\n\t\tif ( update ) {\n\t\t\tupdate.disabled = false;\n\t\t}\n\t} );\n\t</script>\n\t<?php\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "product",
+        "cart",
+        "quantity",
+        "ux"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-plus-minus-buttons-to-add-to-cart-quantity-input/"
+    ],
+    "updated": "2026-11-18T12:38:03+00:00"
+}

@@ -1,0 +1,28 @@
+{
+    "title": "Change where \"Continue shopping\" goes",
+    "description": "Ο σύνδεσμος «Συνέχεια αγορών» (εμφανίζεται όταν η προσθήκη στο καλάθι μεταφέρει στο καλάθι) οδηγεί στη σελίδα καταστήματος ή σε όποια σελίδα ορίσετε, αντί για την προηγούμενη σελίδα. Ορίστε τη διεύθυνση στη μεταβλητή (κενό = κατάστημα).",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_continue_shopping_redirect', 'perfectpixel_continue_shopping_redirect' );\n\nfunction perfectpixel_continue_shopping_redirect( $url ) {\n\t$custom = trim( '{{continue_shopping_url}}' );\n\tif ( '' === $custom ) {\n\t\treturn wc_get_page_permalink( 'shop' );\n\t}\n\treturn 0 === strpos( $custom, '/' ) ? home_url( $custom ) : $custom;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "cart",
+        "redirect"
+    ],
+    "variables": [
+        {
+            "name": "continue_shopping_url",
+            "label": "Διεύθυνση",
+            "default": "",
+            "description": "Κενό = σελίδα καταστήματος. Σχετικό (/prosfores/) ή πλήρες URL"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-edit-continue-shopping-link-redirect/"
+    ],
+    "updated": "2026-11-18T12:38:03+00:00"
+}

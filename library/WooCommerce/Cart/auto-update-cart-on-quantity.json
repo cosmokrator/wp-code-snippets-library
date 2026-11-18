@@ -1,0 +1,22 @@
+{
+    "title": "Update the cart automatically when quantities change",
+    "description": "Το καλάθι ενημερώνεται μόνο του λίγο μετά την αλλαγή ποσότητας και το κουμπί «Ενημέρωση καλαθιού» κρύβεται. Ισχύει για το κλασικό καλάθι (shortcode)· το καλάθι με blocks δεν χρησιμοποιεί αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'wp_footer', 'perfectpixel_auto_update_cart_on_quantity' );\n\nfunction perfectpixel_auto_update_cart_on_quantity() {\n\tif ( ! function_exists( 'is_cart' ) || ! is_cart() ) {\n\t\treturn;\n\t}\n\t?>\n\t<style>.woocommerce-cart-form button[name=\"update_cart\"]{display:none!important}</style>\n\t<script>\n\tjQuery( function ( $ ) {\n\t\tvar timer;\n\t\t$( document.body ).on( 'change input', '.woocommerce-cart-form input.qty', function () {\n\t\t\tclearTimeout( timer );\n\t\t\ttimer = setTimeout( function () {\n\t\t\t\t$( 'button[name=\"update_cart\"]' ).prop( 'disabled', false ).trigger( 'click' );\n\t\t\t}, 600 );\n\t\t} );\n\t} );\n\t</script>\n\t<?php\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "cart",
+        "quantity",
+        "ux"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-automatically-update-cart-quantity-change/"
+    ],
+    "updated": "2026-11-18T12:38:03+00:00"
+}

@@ -1,0 +1,41 @@
+{
+    "title": "Minimum purchase amount for specific products",
+    "description": "Για συγκεκριμένα προϊόντα ορίζει ελάχιστο ποσό αγοράς (π.χ. 50 €): η ελάχιστη ποσότητα υπολογίζεται αυτόματα από την τιμή (π.χ. τιμή 10 € → ελάχιστη ποσότητα 5) στη σελίδα προϊόντος και στο καλάθι, και η παραγγελία δεν ολοκληρώνεται κάτω από το όριο. Ορίστε IDs και ποσό στις μεταβλητές.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_quantity_input_args', 'perfectpixel_min_amount_quantity_args', 10, 2 );\nadd_action( 'woocommerce_check_cart_items', 'perfectpixel_min_amount_check_cart' );\n\nfunction perfectpixel_min_amount_min_qty( $product ) {\n\t$ids   = wp_parse_id_list( '{{min_amount_product_ids}}' );\n\t$id    = $product->get_parent_id() ? $product->get_parent_id() : $product->get_id();\n\t$price = (float) $product->get_price();\n\tif ( ! in_array( $id, $ids, true ) || $price <= 0 ) {\n\t\treturn 0;\n\t}\n\treturn (int) ceil( (float) '{{min_amount_value}}' / $price );\n}\n\nfunction perfectpixel_min_amount_quantity_args( $args, $product ) {\n\t$min = perfectpixel_min_amount_min_qty( $product );\n\tif ( $min > 1 ) {\n\t\t$args['min_value'] = $min;\n\t\tif ( ! is_cart() ) {\n\t\t\t$args['input_value'] = max( $min, (int) ( $args['input_value'] ?? 1 ) );\n\t\t}\n\t}\n\treturn $args;\n}\n\nfunction perfectpixel_min_amount_check_cart() {\n\tforeach ( WC()->cart->get_cart() as $item ) {\n\t\t$product = $item['data'];\n\t\t$min     = perfectpixel_min_amount_min_qty( $product );\n\t\tif ( $min > 1 && $item['quantity'] < $min ) {\n\t\t\twc_add_notice( sprintf( esc_html( '{{min_amount_message}}' ), esc_html( $product->get_name() ), wc_price( (float) '{{min_amount_value}}' ) ), 'error' );\n\t\t}\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "product",
+        "quantity",
+        "minimum"
+    ],
+    "variables": [
+        {
+            "name": "min_amount_product_ids",
+            "label": "IDs προϊόντων (με κόμμα)",
+            "default": "",
+            "description": ""
+        },
+        {
+            "name": "min_amount_value",
+            "label": "Ελάχιστο ποσό ανά προϊόν",
+            "default": "50",
+            "description": "Μόνο αριθμός"
+        },
+        {
+            "name": "min_amount_message",
+            "label": "Μήνυμα",
+            "default": "Για το προϊόν «%1$s» η ελάχιστη αγορά είναι %2$s.",
+            "description": "%1$s = προϊόν, %2$s = ποσό. Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-set-min-purchase-amount-for-specific-product/"
+    ],
+    "updated": "2026-11-18T12:38:03+00:00"
+}

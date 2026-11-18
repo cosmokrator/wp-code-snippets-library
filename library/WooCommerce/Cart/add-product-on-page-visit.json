@@ -1,0 +1,35 @@
+{
+    "title": "Add a product to the cart when a specific page is visited",
+    "description": "Όταν ο επισκέπτης ανοίγει μια συγκεκριμένη σελίδα (π.χ. landing page με ενσωματωμένο checkout), ένα προϊόν μπαίνει αυτόματα στο καλάθι, αν δεν υπάρχει ήδη. Ορίστε ID σελίδας και ID προϊόντος στις μεταβλητές.",
+    "type": "php",
+    "code": "add_action( 'template_redirect', 'perfectpixel_add_product_on_page_visit' );\n\nfunction perfectpixel_add_product_on_page_visit() {\n\t$page_id    = (int) '{{visit_page_id}}';\n\t$product_id = (int) '{{visit_product_id}}';\n\tif ( ! $page_id || ! $product_id || ! is_page( $page_id ) || ! function_exists( 'WC' ) || ! WC()->cart ) {\n\t\treturn;\n\t}\n\tforeach ( WC()->cart->get_cart() as $item ) {\n\t\tif ( (int) $item['product_id'] === $product_id ) {\n\t\t\treturn;\n\t\t}\n\t}\n\tWC()->cart->add_to_cart( $product_id );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "cart",
+        "landing-pages",
+        "add-to-cart"
+    ],
+    "variables": [
+        {
+            "name": "visit_page_id",
+            "label": "ID σελίδας",
+            "default": "0",
+            "description": "Μόνο αριθμός"
+        },
+        {
+            "name": "visit_product_id",
+            "label": "ID προϊόντος",
+            "default": "0",
+            "description": "Μόνο αριθμός"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-product-to-cart-when-visiting-a-specific-page/"
+    ],
+    "updated": "2026-11-18T12:38:03+00:00"
+}

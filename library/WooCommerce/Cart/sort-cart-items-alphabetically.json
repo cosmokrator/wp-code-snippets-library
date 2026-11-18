@@ -1,0 +1,20 @@
+{
+    "title": "Sort cart items alphabetically (A to Z)",
+    "description": "Ταξινομεί τα προϊόντα του καλαθιού αλφαβητικά με βάση το όνομα (Α-Ω), για πιο τακτοποιημένο καλάθι όταν έχει πολλά προϊόντα. Η σειρά ισχύει σε καλάθι, checkout και παραγγελία.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_cart_loaded_from_session', 'perfectpixel_sort_cart_items_alphabetically' );\n\nfunction perfectpixel_sort_cart_items_alphabetically( $cart ) {\n\tif ( count( $cart->cart_contents ) < 2 ) {\n\t\treturn;\n\t}\n\tuasort(\n\t\t$cart->cart_contents,\n\t\tstatic function ( $a, $b ) {\n\t\t\treturn strcasecmp( $a['data']->get_name(), $b['data']->get_name() );\n\t\t}\n\t);\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "cart"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-sort-cart-items-alphabetically-az/"
+    ],
+    "updated": "2026-11-18T12:38:03+00:00"
+}
