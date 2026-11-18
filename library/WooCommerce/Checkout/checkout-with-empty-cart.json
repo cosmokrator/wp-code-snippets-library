@@ -1,0 +1,20 @@
+{
+    "title": "Show the checkout page even when the cart is empty",
+    "description": "Το checkout δεν ανακατευθύνει πια στο (άδειο) καλάθι όταν δεν υπάρχουν προϊόντα, π.χ. για σελίδες checkout με ενσωματωμένη επιλογή προϊόντων ή φόρμες. Λειτουργεί με το κλασικό checkout (shortcode)· το checkout με blocks δεν χρησιμοποιεί αυτό το hook.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_checkout_redirect_empty_cart', '__return_false' );\nadd_filter( 'woocommerce_checkout_update_order_review_expired', '__return_false' );",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-show-checkout-even-if-cart-is-empty/"
+    ],
+    "updated": "2026-11-18T09:31:34+00:00"
+}

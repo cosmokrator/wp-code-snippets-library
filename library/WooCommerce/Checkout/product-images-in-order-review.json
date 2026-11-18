@@ -1,0 +1,22 @@
+{
+    "title": "Show product images in the checkout order review",
+    "description": "Εμφανίζει μικρή εικόνα του προϊόντος (50×50) δίπλα στο όνομά του στη σύνοψη της παραγγελίας στο checkout, ώστε ο πελάτης να αναγνωρίζει εύκολα τι αγοράζει (ιδίως παραλλαγές). Αλλάξτε το $size για άλλο μέγεθος. Λειτουργεί με το κλασικό checkout (shortcode)· το checkout με blocks δεν χρησιμοποιεί αυτό το hook.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_cart_item_name', 'perfectpixel_checkout_review_image', 10, 3 );\n\nfunction perfectpixel_checkout_review_image( $name, $cart_item, $cart_item_key ) {\n\tif ( ! is_checkout() || empty( $cart_item['data'] ) ) {\n\t\treturn $name;\n\t}\n\t$size  = array( 50, 50 );\n\t$image = $cart_item['data']->get_image( $size, array( 'style' => 'float:left;margin:0 .75em .5em 0;border-radius:4px' ) );\n\treturn $image . $name;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "images",
+        "ux"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-show-product-images-checkout-page/"
+    ],
+    "updated": "2026-11-18T09:31:34+00:00"
+}

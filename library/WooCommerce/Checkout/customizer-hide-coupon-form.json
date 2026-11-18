@@ -1,0 +1,29 @@
+{
+    "title": "Customizer setting example: hide coupon form at checkout",
+    "description": "Προσθέτει δική σας ρύθμιση στο Εμφάνιση → Προσαρμογή → WooCommerce → Checkout: ένα checkbox «Απόκρυψη φόρμας κουπονιού στο checkout». Όταν είναι τσεκαρισμένο, η φόρμα κουπονιού δεν εμφανίζεται στο checkout (μένει στο καλάθι). Χρήσιμο και ως πρότυπο για δικές σας ρυθμίσεις στον Customizer. Λειτουργεί με το κλασικό checkout (shortcode)· το checkout με blocks δεν χρησιμοποιεί αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'customize_register', 'perfectpixel_customizer_coupon_setting' );\nadd_action( 'wp', 'perfectpixel_customizer_coupon_apply' );\n\nfunction perfectpixel_customizer_coupon_setting( $wp_customize ) {\n\t$wp_customize->add_setting(\n\t\t'perfectpixel_hide_checkout_coupon',\n\t\tarray(\n\t\t\t'type'              => 'option',\n\t\t\t'default'           => 'no',\n\t\t\t'capability'        => 'manage_woocommerce',\n\t\t\t'sanitize_callback' => function ( $value ) {\n\t\t\t\treturn 'yes' === $value || true === $value || '1' === (string) $value ? 'yes' : 'no';\n\t\t\t},\n\t\t)\n\t);\n\t$wp_customize->add_control(\n\t\t'perfectpixel_hide_checkout_coupon',\n\t\tarray(\n\t\t\t'label'    => '{{customizer_label}}',\n\t\t\t'section'  => 'woocommerce_checkout',\n\t\t\t'settings' => 'perfectpixel_hide_checkout_coupon',\n\t\t\t'type'     => 'checkbox',\n\t\t)\n\t);\n}\n\nfunction perfectpixel_customizer_coupon_apply() {\n\tif ( 'yes' === get_option( 'perfectpixel_hide_checkout_coupon', 'no' ) ) {\n\t\tremove_action( 'woocommerce_before_checkout_form', 'woocommerce_checkout_coupon_form', 10 );\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "customizer",
+        "coupons"
+    ],
+    "variables": [
+        {
+            "name": "customizer_label",
+            "label": "Ετικέτα ρύθμισης",
+            "default": "Απόκρυψη φόρμας κουπονιού στο checkout",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-wordpress-customizer-setting/"
+    ],
+    "updated": "2026-11-18T09:31:34+00:00"
+}

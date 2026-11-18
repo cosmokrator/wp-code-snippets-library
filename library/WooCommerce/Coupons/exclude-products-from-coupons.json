@@ -1,0 +1,28 @@
+{
+    "title": "Exclude products from all discount coupons",
+    "description": "Τα προϊόντα που ορίζετε δεν παίρνουν ποτέ έκπτωση από κουπόνια, όποιο κουπόνι κι αν χρησιμοποιηθεί (χωρίς να αλλάξετε τις ρυθμίσεις κάθε κουπονιού). Ισχύει για κουπόνια ποσοστού και σταθερής έκπτωσης ανά προϊόν· σε κουπόνια σταθερού ποσού καλαθιού το WooCommerce μοιράζει την έκπτωση στα υπόλοιπα προϊόντα. Ορίστε τα IDs στη μεταβλητή.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_coupon_is_valid_for_product', 'perfectpixel_exclude_products_from_coupons', 9999, 2 );\n\nfunction perfectpixel_exclude_products_from_coupons( $valid, $product ) {\n\t$excluded = wp_parse_id_list( '{{no_coupon_product_ids}}' );\n\tif ( ! $excluded || ! $product ) {\n\t\treturn $valid;\n\t}\n\t$id = $product->get_parent_id() ? $product->get_parent_id() : $product->get_id();\n\treturn in_array( $id, $excluded, true ) ? false : $valid;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "coupons",
+        "discounts"
+    ],
+    "variables": [
+        {
+            "name": "no_coupon_product_ids",
+            "label": "IDs προϊόντων (με κόμμα)",
+            "default": "",
+            "description": "Για μεταβλητά προϊόντα δώστε το ID του γονικού προϊόντος"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-exclude-product-from-discount-coupons/"
+    ],
+    "updated": "2026-11-18T09:31:34+00:00"
+}

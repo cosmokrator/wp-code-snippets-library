@@ -1,0 +1,28 @@
+{
+    "title": "Automatically complete paid orders",
+    "description": "Οι παραγγελίες που πληρώνονται online (κάρτα, PayPal κ.λπ.) περνούν κατευθείαν σε «Ολοκληρωμένη» αντί για «Σε επεξεργασία». Χρήσιμο για ψηφιακά προϊόντα/υπηρεσίες χωρίς αποστολή. Δεν επηρεάζει αντικαταβολή, τραπεζική κατάθεση και επιταγή, που περιμένουν επιβεβαίωση πληρωμής. Στη μεταβλητή μπορείτε να το περιορίσετε μόνο σε παραγγελίες με εικονικά προϊόντα.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_payment_complete_order_status', 'perfectpixel_autocomplete_paid_orders', 10, 3 );\n\nfunction perfectpixel_autocomplete_paid_orders( $status, $order_id, $order = null ) {\n\tif ( 'processing' !== $status ) {\n\t\treturn $status;\n\t}\n\t$order = $order instanceof WC_Order ? $order : wc_get_order( $order_id );\n\tif ( ! $order ) {\n\t\treturn $status;\n\t}\n\tif ( 'yes' === '{{autocomplete_virtual_only}}' ) {\n\t\tforeach ( $order->get_items() as $item ) {\n\t\t\t$product = $item->get_product();\n\t\t\tif ( ! $product || ! $product->is_virtual() ) {\n\t\t\t\treturn $status;\n\t\t\t}\n\t\t}\n\t}\n\treturn 'completed';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "orders",
+        "order-status"
+    ],
+    "variables": [
+        {
+            "name": "autocomplete_virtual_only",
+            "label": "Μόνο για παραγγελίες με εικονικά προϊόντα (yes/no)",
+            "default": "yes",
+            "description": "yes = μόνο όταν όλα τα προϊόντα είναι εικονικά"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-automatically-complete-processing-orders/"
+    ],
+    "updated": "2026-11-18T09:31:34+00:00"
+}

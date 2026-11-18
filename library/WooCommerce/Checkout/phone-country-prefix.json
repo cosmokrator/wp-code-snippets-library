@@ -1,0 +1,22 @@
+{
+    "title": "Add the country calling code to phone numbers on new orders",
+    "description": "Όταν δημιουργείται η παραγγελία, προσθέτει τον κωδικό χώρας στο τηλέφωνο χρέωσης (π.χ. +30 για Ελλάδα) αν ο πελάτης δεν τον έγραψε, και αφαιρεί κενά/παύλες. Βοηθά τις courier και τα SMS. Ο κωδικός βγαίνει αυτόματα από τη χώρα χρέωσης.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_checkout_create_order', 'perfectpixel_phone_country_prefix', 10, 2 );\n\nfunction perfectpixel_phone_country_prefix( $order, $data ) {\n\t$phone   = preg_replace( '/[^\\d+]/', '', (string) $order->get_billing_phone() );\n\t$country = $order->get_billing_country();\n\tif ( '' === $phone || '' === $country || 0 === strpos( $phone, '+' ) || 0 === strpos( $phone, '00' ) ) {\n\t\t$order->set_billing_phone( $phone );\n\t\treturn;\n\t}\n\t$code = WC()->countries->get_country_calling_code( $country );\n\tif ( is_array( $code ) ) {\n\t\t$code = reset( $code );\n\t}\n\tif ( ! $code ) {\n\t\t$order->set_billing_phone( $phone );\n\t\treturn;\n\t}\n\t// The national trunk \"0\" is dropped after the country code (e.g. UK 07… → +447…), except in Italy/San Marino/Vatican.\n\t$national = ( '0' === $phone[0] && ! in_array( $country, array( 'IT', 'SM', 'VA' ), true ) ) ? substr( $phone, 1 ) : $phone;\n\t$order->set_billing_phone( $code . $national );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "phone",
+        "orders"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-update-checkout-field-value-after-order/"
+    ],
+    "updated": "2026-11-18T09:31:34+00:00"
+}

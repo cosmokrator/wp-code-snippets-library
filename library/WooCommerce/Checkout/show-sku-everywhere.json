@@ -1,0 +1,31 @@
+{
+    "title": "Show SKU under item names in cart, checkout, orders & emails",
+    "description": "Εμφανίζει τον κωδικό (SKU) κάτω από το όνομα κάθε προϊόντος στο καλάθι, στο checkout, στη σελίδα ευχαριστίας, στις παραγγελίες του «Ο λογαριασμός μου» και στα emails. Χρήσιμο για B2B. Στις παραλλαγές εμφανίζεται ο κωδικός της παραλλαγής. Ορίστε την ετικέτα στη μεταβλητή. Το κομμάτι καλαθιού/checkout ισχύει για το κλασικό καλάθι/checkout· παραγγελίες και emails δουλεύουν πάντα.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_cart_item_name', 'perfectpixel_sku_in_cart', 20, 3 );\nadd_action( 'woocommerce_order_item_meta_start', 'perfectpixel_sku_in_order', 10, 3 );\n\nfunction perfectpixel_sku_html( $product ) {\n\tif ( ! $product instanceof WC_Product || '' === (string) $product->get_sku() ) {\n\t\treturn '';\n\t}\n\treturn '<div class=\"perfectpixel-sku\" style=\"font-size:.85em;opacity:.8\">' . esc_html( '{{sku_label}}' ) . ' ' . esc_html( $product->get_sku() ) . '</div>';\n}\n\nfunction perfectpixel_sku_in_cart( $name, $cart_item, $cart_item_key ) {\n\treturn $name . perfectpixel_sku_html( $cart_item['data'] ?? null );\n}\n\nfunction perfectpixel_sku_in_order( $item_id, $item, $order ) {\n\tif ( is_callable( array( $item, 'get_product' ) ) ) {\n\t\techo perfectpixel_sku_html( $item->get_product() ); // phpcs:ignore WordPress.Security.EscapeOutput -- Escaped in the helper.\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "cart",
+        "checkout",
+        "orders",
+        "emails",
+        "sku"
+    ],
+    "variables": [
+        {
+            "name": "sku_label",
+            "label": "Ετικέτα",
+            "default": "Κωδικός:",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-show-sku-cart-page/"
+    ],
+    "updated": "2026-11-18T09:31:34+00:00"
+}
