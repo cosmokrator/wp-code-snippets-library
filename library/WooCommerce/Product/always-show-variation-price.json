@@ -1,0 +1,22 @@
+{
+    "title": "Always show the price of the selected variation",
+    "description": "Όταν όλες οι παραλλαγές έχουν την ίδια τιμή, το WooCommerce δεν εμφανίζει τιμή πάνω από το κουμπί αγοράς μετά την επιλογή παραλλαγής. Με το snippet η τιμή της επιλεγμένης παραλλαγής εμφανίζεται πάντα, για ομοιόμορφη εμφάνιση σε όλα τα προϊόντα.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_show_variation_price', 'perfectpixel_always_show_variation_price' );\n\nfunction perfectpixel_always_show_variation_price() {\n\treturn true;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "variations",
+        "prices",
+        "single-product"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-always-display-single-variation-price/"
+    ],
+    "updated": "2026-11-18T15:39:08+00:00"
+}

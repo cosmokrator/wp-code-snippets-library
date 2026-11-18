@@ -1,0 +1,28 @@
+{
+    "title": "Show the total stock of all variations",
+    "description": "Σε μεταβλητά προϊόντα όπου το απόθεμα ορίζεται ανά παραλλαγή, πάνω από τη φόρμα αγοράς εμφανίζει το συνολικό απόθεμα όλων των παραλλαγών (π.χ. «Συνολικά διαθέσιμα: 20 τεμάχια»). Εμφανίζεται μόνο όταν όλες οι παραλλαγές έχουν διαχείριση αποθέματος. Ισχύει για το κλασικό template σελίδας προϊόντος· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_before_add_to_cart_form', 'perfectpixel_variable_total_stock' );\n\nfunction perfectpixel_variable_total_stock() {\n\tglobal $product;\n\tif ( ! $product || ! $product->is_type( 'variable' ) ) {\n\t\treturn;\n\t}\n\t$total = 0;\n\tforeach ( $product->get_children() as $child_id ) {\n\t\t$variation = wc_get_product( $child_id );\n\t\tif ( ! $variation || ! $variation->managing_stock() || $variation->get_manage_stock() === 'parent' ) {\n\t\t\treturn; // Mixed or parent-level stock: nothing meaningful to sum.\n\t\t}\n\t\t$total += max( 0, (int) $variation->get_stock_quantity() );\n\t}\n\tif ( $total > 0 ) {\n\t\techo '<p class=\"stock in-stock perfectpixel-total-stock\">' . esc_html( str_replace( '{qty}', wc_stock_amount( $total ), '{{total_stock_text}}' ) ) . '</p>';\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "variations",
+        "stock"
+    ],
+    "variables": [
+        {
+            "name": "total_stock_text",
+            "label": "Μήνυμα",
+            "default": "Συνολικά διαθέσιμα: {qty} τεμάχια",
+            "description": "Χωρίς απόστροφο ('). Το {qty} είναι η ποσότητα"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-variable-product-cumulative-stock-quantity/"
+    ],
+    "updated": "2026-11-18T15:39:08+00:00"
+}

@@ -1,0 +1,21 @@
+{
+    "title": "Remove the \"Clear\" link from variation dropdowns",
+    "description": "Αφαιρεί τον σύνδεσμο «Καθαρισμός» που εμφανίζεται δίπλα στις λίστες επιλογής παραλλαγών όταν ο πελάτης έχει επιλέξει κάτι. Ο πελάτης μπορεί ακόμη να αλλάξει επιλογή από τις ίδιες τις λίστες.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_reset_variations_link', 'perfectpixel_remove_clear_variations_link' );\n\nfunction perfectpixel_remove_clear_variations_link() {\n\treturn '';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "variations",
+        "single-product"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-remove-clear-button-variable-product-page/"
+    ],
+    "updated": "2026-11-18T15:39:08+00:00"
+}

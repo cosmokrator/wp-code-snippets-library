@@ -1,0 +1,35 @@
+{
+    "title": "Show the total number of sales on the product page",
+    "description": "Στη σελίδα προϊόντος, κάτω από την τιμή, εμφανίζει πόσες φορές έχει πουληθεί το προϊόν (π.χ. «Έχει αγοραστεί 128 φορές»), από τον μετρητή πωλήσεων του WooCommerce. Εμφανίζεται μόνο από ένα ελάχιστο πλήθος και πάνω, ώστε να μη φαίνονται μικροί αριθμοί. Ισχύει για το κλασικό template σελίδας προϊόντος· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_single_product_summary', 'perfectpixel_show_total_sales', 11 );\n\nfunction perfectpixel_show_total_sales() {\n\tglobal $product;\n\tif ( ! $product ) {\n\t\treturn;\n\t}\n\t$sales = (int) $product->get_total_sales();\n\tif ( $sales >= max( 1, (int) '{{total_sales_min}}' ) ) {\n\t\techo '<p class=\"perfectpixel-total-sales\">' . esc_html( str_replace( '{count}', number_format_i18n( $sales ), '{{total_sales_text}}' ) ) . '</p>';\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "sales",
+        "social-proof"
+    ],
+    "variables": [
+        {
+            "name": "total_sales_text",
+            "label": "Μήνυμα",
+            "default": "Έχει αγοραστεί {count} φορές",
+            "description": "Χωρίς απόστροφο ('). Το {count} είναι το πλήθος"
+        },
+        {
+            "name": "total_sales_min",
+            "label": "Ελάχιστο πλήθος για εμφάνιση",
+            "default": "10",
+            "description": "Μόνο αριθμός"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-show-number-products-sold-product-page/"
+    ],
+    "updated": "2026-11-18T15:39:08+00:00"
+}

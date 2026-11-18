@@ -1,0 +1,35 @@
+{
+    "title": "Change the image background by selected color",
+    "description": "Με μία εικόνα PNG με διάφανο φόντο, όταν ο πελάτης επιλέγει χρώμα παραλλαγής αλλάζει το χρώμα φόντου πίσω από την κύρια εικόνα, αντί να ανεβάσετε μία εικόνα ανά χρώμα. Ορίστε το χαρακτηριστικό χρώματος και τα ζεύγη slug=χρώμα CSS. Αν ένα slug δεν υπάρχει στη λίστα, δοκιμάζεται ως όνομα χρώματος CSS (π.χ. red). Ισχύει για το κλασικό template σελίδας προϊόντος· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_after_variations_form', 'perfectpixel_image_background_by_color' );\n\nfunction perfectpixel_image_background_by_color() {\n\t$map = array();\n\tforeach ( explode( '|', '{{bg_color_map}}' ) as $pair ) {\n\t\t$parts = array_map( 'trim', explode( '=', $pair, 2 ) );\n\t\tif ( 2 === count( $parts ) && preg_match( '/^(#[0-9a-f]{3,8}|[a-z]+)$/i', $parts[1] ) ) {\n\t\t\t$map[ sanitize_title( $parts[0] ) ] = $parts[1];\n\t\t}\n\t}\n\t$cfg = array(\n\t\t'field' => 'attribute_' . sanitize_title( '{{bg_color_attribute}}' ),\n\t\t'map'   => $map,\n\t);\n\t?>\n\t<script>\n\tjQuery( function ( $ ) {\n\t\tvar cfg   = <?php echo wp_json_encode( $cfg ); ?>;\n\t\tvar image = $( '.woocommerce-product-gallery__image' ).first();\n\t\tvar apply = function () {\n\t\t\tvar slug  = $( 'form.variations_form [name=\"' + cfg.field + '\"]' ).val() || '';\n\t\t\tvar color = cfg.map[ slug ] || ( /^[a-z]+$/i.test( slug ) ? slug : '' );\n\t\t\timage.css( { backgroundColor: color, transition: 'background-color .3s' } );\n\t\t};\n\t\t$( 'form.variations_form' ).on( 'change', '[name=\"' + cfg.field + '\"]', apply ).on( 'reset_data', apply );\n\t\tapply();\n\t} );\n\t</script>\n\t<?php\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "variations",
+        "images",
+        "colors"
+    ],
+    "variables": [
+        {
+            "name": "bg_color_attribute",
+            "label": "Χαρακτηριστικό χρώματος",
+            "default": "pa_color",
+            "description": "Το slug του χαρακτηριστικού, π.χ. pa_color"
+        },
+        {
+            "name": "bg_color_map",
+            "label": "slug=χρώμα (με |)",
+            "default": "kokkino=#d63638|mple=#2271b1|prasino=#00a32a",
+            "description": "Π.χ. kokkino=#d63638|mple=#2271b1"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-switch-image-background-on-color-variation-selection/"
+    ],
+    "updated": "2026-11-18T15:39:08+00:00"
+}

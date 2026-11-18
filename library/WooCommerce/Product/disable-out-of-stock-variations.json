@@ -1,0 +1,21 @@
+{
+    "title": "Grey out out-of-stock variations in the dropdowns",
+    "description": "Οι παραλλαγές που έχουν εξαντληθεί εμφανίζονται απενεργοποιημένες (γκρι) στις λίστες επιλογής της σελίδας προϊόντος, ώστε ο πελάτης να μην τις επιλέγει για να μάθει μετά ότι δεν διατίθενται. Σε προϊόντα με πάρα πολλές παραλλαγές (πάνω από 30, όπου το WooCommerce τις φορτώνει με ajax) οι λίστες δεν γκριζάρουν, αλλά η παραλλαγή δεν μπορεί να επιλεγεί.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_variation_is_active', 'perfectpixel_disable_out_of_stock_variations', 10, 2 );\n\nfunction perfectpixel_disable_out_of_stock_variations( $active, $variation ) {\n\treturn ( $variation && ! $variation->is_in_stock() ) ? false : $active;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "variations",
+        "stock"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-disable-out-of-stock-variations-variable-product-dropdown/"
+    ],
+    "updated": "2026-11-18T15:39:08+00:00"
+}

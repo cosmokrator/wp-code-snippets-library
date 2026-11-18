@@ -1,0 +1,22 @@
+{
+    "title": "Show variation SKUs in the admin products list",
+    "description": "Στη λίστα Προϊόντα του διαχειριστή, η στήλη «Κωδικός» των μεταβλητών προϊόντων δείχνει και τους κωδικούς όλων των παραλλαγών (ή [ ] όπου λείπει), ώστε να βρίσκετε εύκολα παραλλαγές χωρίς SKU.",
+    "type": "php",
+    "code": "add_action( 'manage_product_posts_custom_column', 'perfectpixel_variation_skus_column', 20, 2 );\n\nfunction perfectpixel_variation_skus_column( $column, $post_id ) {\n\tif ( 'sku' !== $column ) {\n\t\treturn;\n\t}\n\t$product = wc_get_product( $post_id );\n\tif ( ! $product || ! $product->is_type( 'variable' ) ) {\n\t\treturn;\n\t}\n\t$skus = array();\n\tforeach ( $product->get_children() as $child_id ) {\n\t\t$variation = wc_get_product( $child_id );\n\t\tif ( $variation ) {\n\t\t\t$sku    = $variation->get_sku( 'edit' );\n\t\t\t$skus[] = '' !== $sku ? esc_html( $sku ) : '[ ]';\n\t\t}\n\t}\n\tif ( $skus ) {\n\t\techo '<br><small style=\"color:#646970\">' . implode( ', ', $skus ) . '</small>';\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "variations",
+        "admin",
+        "sku"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-display-variations-sku-product-admin/"
+    ],
+    "updated": "2026-11-18T15:39:08+00:00"
+}

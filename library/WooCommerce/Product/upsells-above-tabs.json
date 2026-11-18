@@ -1,0 +1,35 @@
+{
+    "title": "Move upsells above the product tabs",
+    "description": "Μετακινεί τα upsells («Μπορεί επίσης να σας αρέσουν…») πάνω από τις καρτέλες της σελίδας προϊόντος (αντί για κάτω από αυτές) και αλλάζει πόσα εμφανίζονται και σε πόσες στήλες. Κάποια themes (π.χ. Storefront) ορίζουν δική τους θέση· τότε ίσως χρειαστεί προσαρμογή. Ισχύει για το κλασικό template σελίδας προϊόντος· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'init', 'perfectpixel_upsells_above_tabs_setup' );\nadd_filter( 'woocommerce_upsell_display_args', 'perfectpixel_upsells_above_tabs_args', 20 );\n\nfunction perfectpixel_upsells_above_tabs_setup() {\n\tremove_action( 'woocommerce_after_single_product_summary', 'woocommerce_upsell_display', 15 );\n\tadd_action( 'woocommerce_after_single_product_summary', 'woocommerce_upsell_display', 5 ); // Tabs are at 10.\n}\n\nfunction perfectpixel_upsells_above_tabs_args( $args ) {\n\t$args['posts_per_page'] = max( 1, (int) '{{upsells_above_count}}' );\n\t$args['columns']        = max( 1, (int) '{{upsells_above_columns}}' );\n\treturn $args;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "upsells",
+        "layout"
+    ],
+    "variables": [
+        {
+            "name": "upsells_above_count",
+            "label": "Πλήθος",
+            "default": "3",
+            "description": "Μόνο αριθμός"
+        },
+        {
+            "name": "upsells_above_columns",
+            "label": "Στήλες",
+            "default": "3",
+            "description": "Μόνο αριθμός"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-change-number-upsells-move-product-tabs/"
+    ],
+    "updated": "2026-11-18T15:39:08+00:00"
+}

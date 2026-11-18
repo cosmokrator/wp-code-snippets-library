@@ -1,0 +1,28 @@
+{
+    "title": "Show \"From\" instead of a price range",
+    "description": "Στα μεταβλητά (και ομαδοποιημένα) προϊόντα με διαφορετικές τιμές, αντί για εύρος «10,00 € – 25,00 €» εμφανίζει «Από 10,00 €» σε όλο το κατάστημα. Τα προϊόντα όπου όλες οι παραλλαγές έχουν την ίδια τιμή δεν αλλάζουν.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_format_price_range', 'perfectpixel_price_range_from', 10, 3 );\n\nfunction perfectpixel_price_range_from( $price, $from, $to ) {\n\treturn esc_html( '{{price_range_prefix}}' ) . ' ' . ( is_numeric( $from ) ? wc_price( $from ) : $from );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "prices",
+        "variations"
+    ],
+    "variables": [
+        {
+            "name": "price_range_prefix",
+            "label": "Πρόθεμα",
+            "default": "Από",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/disable-variable-product-price-range-woocommerce/"
+    ],
+    "updated": "2026-11-18T15:39:08+00:00"
+}

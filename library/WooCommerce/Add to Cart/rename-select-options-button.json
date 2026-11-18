@@ -1,0 +1,29 @@
+{
+    "title": "Rename the \"Select options\" button",
+    "description": "Αλλάζει το κείμενο «Επιλογές» στο κουμπί των μεταβλητών προϊόντων στις λίστες προϊόντων (κατάστημα, κατηγορίες), π.χ. σε «Δείτε το προϊόν» ή «Επιλέξτε μέγεθος».",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_product_add_to_cart_text', 'perfectpixel_rename_select_options', 20, 2 );\n\nfunction perfectpixel_rename_select_options( $text, $product ) {\n\treturn ( $product && $product->is_type( 'variable' ) && $product->is_purchasable() ) ? '{{select_options_label}}' : $text;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "add-to-cart",
+        "variations",
+        "labels"
+    ],
+    "variables": [
+        {
+            "name": "select_options_label",
+            "label": "Κείμενο κουμπιού",
+            "default": "Δείτε το προϊόν",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-rename-select-options-button-shop-page/"
+    ],
+    "updated": "2026-11-18T15:39:08+00:00"
+}

@@ -1,0 +1,22 @@
+{
+    "title": "Replace the price range with the selected variation price",
+    "description": "Στα μεταβλητά προϊόντα με εύρος τιμών, όταν ο πελάτης επιλέξει παραλλαγή, η τιμή στο πάνω μέρος (π.χ. «10,00 € – 25,00 €») αντικαθίσταται με την τιμή της παραλλαγής, και η δεύτερη τιμή πάνω από το κουμπί κρύβεται. Έτσι εμφανίζεται πάντα μία τιμή. Με καθάρισμα της επιλογής επανέρχεται το εύρος. Ισχύει για το κλασικό template σελίδας προϊόντος· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_after_add_to_cart_form', 'perfectpixel_variation_price_replaces_range' );\n\nfunction perfectpixel_variation_price_replaces_range() {\n\tglobal $product;\n\tif ( ! $product || ! $product->is_type( 'variable' ) ) {\n\t\treturn;\n\t}\n\t?>\n\t<style>.single-product .woocommerce-variation-price{display:none}</style>\n\t<script>\n\tjQuery( function ( $ ) {\n\t\tvar top      = $( '.summary p.price, .summary .wp-block-woocommerce-product-price' ).first();\n\t\tvar original = top.html();\n\t\t$( 'form.variations_form' ).on( 'found_variation', function ( e, v ) {\n\t\t\tif ( v.price_html ) {\n\t\t\t\ttop.html( $( '<div>' ).html( v.price_html ).find( '.price' ).html() || v.price_html );\n\t\t\t}\n\t\t} ).on( 'reset_data', function () {\n\t\t\ttop.html( original );\n\t\t} );\n\t} );\n\t</script>\n\t<?php\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "variations",
+        "prices",
+        "single-product"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-replace-variable-price-with-variation-price/"
+    ],
+    "updated": "2026-11-18T15:39:08+00:00"
+}

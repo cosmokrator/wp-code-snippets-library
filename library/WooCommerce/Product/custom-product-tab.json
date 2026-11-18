@@ -1,0 +1,47 @@
+{
+    "title": "Add a custom product tab",
+    "description": "Προσθέτει νέα καρτέλα στη σελίδα προϊόντος (π.χ. «Αποστολή & Επιστροφές» ή «Οδηγός μεγεθών») με κοινό περιεχόμενο για όλα τα προϊόντα ή μόνο για κάποιες κατηγορίες. Επιτρέπεται απλό HTML και shortcodes. Οι σύνδεσμοι #tab-perfectpixel_custom ανοίγουν απευθείας την καρτέλα.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_product_tabs', 'perfectpixel_custom_product_tab' );\n\nfunction perfectpixel_custom_product_tab( $tabs ) {\n\t$categories = wp_parse_id_list( '{{custom_tab_category_ids}}' );\n\tif ( $categories && ! has_term( $categories, 'product_cat', get_the_ID() ) ) {\n\t\treturn $tabs;\n\t}\n\t$tabs['perfectpixel_custom'] = array(\n\t\t'title'    => '{{custom_tab_title}}',\n\t\t'priority' => (int) '{{custom_tab_priority}}',\n\t\t'callback' => 'perfectpixel_custom_product_tab_content',\n\t);\n\treturn $tabs;\n}\n\nfunction perfectpixel_custom_product_tab_content() {\n\techo '<h2>' . esc_html( '{{custom_tab_title}}' ) . '</h2>';\n\techo wp_kses_post( do_shortcode( '{{custom_tab_content}}' ) );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "tabs",
+        "content"
+    ],
+    "variables": [
+        {
+            "name": "custom_tab_title",
+            "label": "Τίτλος καρτέλας",
+            "default": "Αποστολή & Επιστροφές",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "custom_tab_content",
+            "label": "Περιεχόμενο",
+            "default": "<p>Αποστολή σε 1-3 εργάσιμες. Δωρεάν επιστροφή εντός 14 ημερών.</p>",
+            "description": "Χωρίς απόστροφο ('). Επιτρέπεται απλό HTML και shortcodes"
+        },
+        {
+            "name": "custom_tab_category_ids",
+            "label": "IDs κατηγοριών (με κόμμα)",
+            "default": "",
+            "description": "Κενό = όλα τα προϊόντα"
+        },
+        {
+            "name": "custom_tab_priority",
+            "label": "Θέση (προτεραιότητα)",
+            "default": "25",
+            "description": "Περιγραφή = 10, Πληροφορίες = 20, Αξιολογήσεις = 30"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-tab-single-product-page/"
+    ],
+    "updated": "2026-11-18T15:39:08+00:00"
+}

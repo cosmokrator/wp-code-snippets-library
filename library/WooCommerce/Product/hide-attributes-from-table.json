@@ -1,0 +1,29 @@
+{
+    "title": "Hide specific attributes from the Additional information tab",
+    "description": "Κρύβει συγκεκριμένες γραμμές από τον πίνακα της καρτέλας «Επιπρόσθετες πληροφορίες» (π.χ. το «Χρώμα» που επιλέγεται ήδη από τη λίστα παραλλαγών), αφήνοντας τις υπόλοιπες. Γράψτε τα slugs των χαρακτηριστικών με κόμμα: pa_color για καθολικά χαρακτηριστικά, το όνομα σε πεζά για τοπικά, weight / dimensions για βάρος και διαστάσεις.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_display_product_attributes', 'perfectpixel_hide_attributes_from_table', 10, 2 );\n\nfunction perfectpixel_hide_attributes_from_table( $attributes, $product ) {\n\tforeach ( array_filter( array_map( 'trim', explode( ',', '{{hidden_attribute_slugs}}' ) ) ) as $slug ) {\n\t\t$slug = sanitize_title( $slug );\n\t\tunset( $attributes[ 'attribute_' . $slug ], $attributes[ $slug ] );\n\t}\n\treturn $attributes;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "attributes",
+        "tabs"
+    ],
+    "variables": [
+        {
+            "name": "hidden_attribute_slugs",
+            "label": "Slugs χαρακτηριστικών (με κόμμα)",
+            "default": "pa_color",
+            "description": "Π.χ. pa_color,pa_size,weight"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-hide-attribute-single-product/"
+    ],
+    "updated": "2026-11-18T15:39:08+00:00"
+}

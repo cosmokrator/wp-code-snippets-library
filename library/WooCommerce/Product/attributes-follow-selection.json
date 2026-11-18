@@ -1,0 +1,22 @@
+{
+    "title": "Update the attributes table when a variation is selected",
+    "description": "Στα μεταβλητά προϊόντα, ο πίνακας «Επιπρόσθετες πληροφορίες» δείχνει όλες τις επιλογές (π.χ. «Χρώμα: Κόκκινο, Μπλε, Πράσινο»). Με το snippet, όταν ο πελάτης επιλέξει παραλλαγή, ο πίνακας δείχνει μόνο τις επιλεγμένες τιμές (π.χ. «Χρώμα: Μπλε») και επανέρχεται όταν καθαρίσει η επιλογή. Ισχύει για το κλασικό template σελίδας προϊόντος· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_after_add_to_cart_form', 'perfectpixel_attributes_follow_selection' );\n\nfunction perfectpixel_attributes_follow_selection() {\n\tglobal $product;\n\tif ( ! $product || ! $product->is_type( 'variable' ) ) {\n\t\treturn;\n\t}\n\t?>\n\t<script>\n\tjQuery( function ( $ ) {\n\t\tvar form = $( 'form.variations_form' );\n\t\tvar cell = function ( name ) {\n\t\t\t// \"attribute_pa_color\" -> table row \".woocommerce-product-attributes-item--attribute_pa_color\".\n\t\t\treturn $( '.woocommerce-product-attributes-item--' + name + ' .woocommerce-product-attributes-item__value' );\n\t\t};\n\t\tform.find( 'table.variations select' ).each( function () {\n\t\t\tvar td = cell( $( this ).attr( 'name' ) );\n\t\t\ttd.data( 'perfectpixel-original', td.html() );\n\t\t} );\n\t\tform.on( 'found_variation', function () {\n\t\t\tform.find( 'table.variations select' ).each( function () {\n\t\t\t\tvar select = $( this );\n\t\t\t\tif ( select.val() ) {\n\t\t\t\t\tcell( select.attr( 'name' ) ).text( select.find( 'option:selected' ).text() );\n\t\t\t\t}\n\t\t\t} );\n\t\t} ).on( 'reset_data', function () {\n\t\t\tform.find( 'table.variations select' ).each( function () {\n\t\t\t\tvar td = cell( $( this ).attr( 'name' ) );\n\t\t\t\tif ( undefined !== td.data( 'perfectpixel-original' ) ) {\n\t\t\t\t\ttd.html( td.data( 'perfectpixel-original' ) );\n\t\t\t\t}\n\t\t\t} );\n\t\t} );\n\t} );\n\t</script>\n\t<?php\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "variations",
+        "attributes",
+        "single-product"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-dynamic-variable-product-attributes/"
+    ],
+    "updated": "2026-11-18T15:39:08+00:00"
+}

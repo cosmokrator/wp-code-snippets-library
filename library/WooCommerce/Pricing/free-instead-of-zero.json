@@ -1,0 +1,28 @@
+{
+    "title": "Show \"Free\" instead of a zero price",
+    "description": "Τα προϊόντα με τιμή 0 εμφανίζουν «Δωρεάν» αντί για «0,00 €» σε όλο το κατάστημα. Αν το προϊόν είναι σε προσφορά από κάποια τιμή στο 0, η αρχική τιμή εμφανίζεται διαγραμμένη δίπλα. Τα μεταβλητά προϊόντα με εύρος τιμών δεν αλλάζουν.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_get_price_html', 'perfectpixel_free_instead_of_zero', 20, 2 );\n\nfunction perfectpixel_free_instead_of_zero( $html, $product ) {\n\tif ( ! $product || $product->is_type( array( 'variable', 'grouped' ) ) || '' === $product->get_price() || 0.0 !== (float) $product->get_price() ) {\n\t\treturn $html;\n\t}\n\t$free = '<span class=\"amount perfectpixel-free\">' . esc_html( '{{free_price_label}}' ) . '</span>';\n\tif ( $product->is_on_sale() && (float) $product->get_regular_price() > 0 ) {\n\t\treturn '<del aria-hidden=\"true\">' . wc_price( wc_get_price_to_display( $product, array( 'price' => $product->get_regular_price() ) ) ) . '</del> <ins>' . $free . '</ins>';\n\t}\n\treturn $free;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "prices",
+        "labels"
+    ],
+    "variables": [
+        {
+            "name": "free_price_label",
+            "label": "Κείμενο",
+            "default": "Δωρεάν",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-display-free-instead-0-00-empty-price/"
+    ],
+    "updated": "2026-11-18T15:39:08+00:00"
+}

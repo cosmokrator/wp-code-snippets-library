@@ -1,0 +1,23 @@
+{
+    "title": "Move Jetpack sharing buttons under add to cart",
+    "description": "Τα κουμπιά κοινοποίησης του Jetpack στις σελίδες προϊόντων φεύγουν από το τέλος της κύριας περιγραφής (μέσα στην καρτέλα) και εμφανίζονται κάτω από το κουμπί αγοράς, όπου τα βλέπει ο πελάτης. Μη το χρησιμοποιείτε μαζί με το «Show Jetpack sharing buttons on product pages» (θα εμφανίζονται δύο φορές). Ισχύει για το κλασικό template σελίδας προϊόντος· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'wp', 'perfectpixel_move_jetpack_sharing_setup' );\n\nfunction perfectpixel_move_jetpack_sharing_setup() {\n\tif ( ! function_exists( 'sharing_display' ) || ! function_exists( 'is_product' ) || ! is_product() ) {\n\t\treturn;\n\t}\n\tremove_filter( 'the_content', 'sharing_display', 19 );\n\tremove_filter( 'the_excerpt', 'sharing_display', 19 );\n\tadd_action( 'woocommerce_single_product_summary', 'perfectpixel_move_jetpack_sharing_output', 35 );\n}\n\nfunction perfectpixel_move_jetpack_sharing_output() {\n\techo sharing_display( '', false ); // Jetpack returns its own escaped markup.\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "jetpack",
+        "social",
+        "sharing"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-move-jetpack-social-sharing-single-product-page-tabs/"
+    ],
+    "updated": "2026-11-18T15:39:08+00:00"
+}
