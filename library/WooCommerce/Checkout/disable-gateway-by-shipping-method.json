@@ -1,0 +1,36 @@
+{
+    "title": "Disable payment methods for a specific shipping method",
+    "description": "Κρύβει τρόπους πληρωμής όταν ο πελάτης επιλέγει συγκεκριμένο τρόπο αποστολής, π.χ. καμία αντικαταβολή με παραλαβή από το κατάστημα. Η λίστα ενημερώνεται μόλις αλλάξει η αποστολή. Ορίστε μεθόδους αποστολής και τρόπους πληρωμής στις μεταβλητές.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_available_payment_gateways', 'perfectpixel_disable_gateway_by_shipping' );\n\nfunction perfectpixel_disable_gateway_by_shipping( $gateways ) {\n\tif ( is_admin() || ! WC()->session ) {\n\t\treturn $gateways;\n\t}\n\t$chosen  = (array) WC()->session->get( 'chosen_shipping_methods', array() );\n\t$targets = array_filter( array_map( 'trim', explode( ',', '{{gateway_shipping_methods}}' ) ) );\n\n\tforeach ( $chosen as $rate_id ) {\n\t\t$method_id = strtok( (string) $rate_id, ':' );\n\t\tif ( in_array( $rate_id, $targets, true ) || in_array( $method_id, $targets, true ) ) {\n\t\t\tforeach ( array_filter( array_map( 'trim', explode( ',', '{{gateway_shipping_disable}}' ) ) ) as $id ) {\n\t\t\t\tunset( $gateways[ $id ] );\n\t\t\t}\n\t\t\tbreak;\n\t\t}\n\t}\n\treturn $gateways;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "payment",
+        "shipping",
+        "conditional"
+    ],
+    "variables": [
+        {
+            "name": "gateway_shipping_methods",
+            "label": "Μέθοδοι αποστολής (με κόμμα)",
+            "default": "local_pickup",
+            "description": "ID μεθόδου (π.χ. local_pickup) ή συγκεκριμένης χρέωσης (π.χ. flat_rate:3)"
+        },
+        {
+            "name": "gateway_shipping_disable",
+            "label": "Τρόποι πληρωμής προς απόκρυψη (IDs, με κόμμα)",
+            "default": "cod",
+            "description": ""
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-disable-payment-gateway-for-specific-shipping-method/"
+    ],
+    "updated": "2026-11-18T10:03:07+00:00"
+}

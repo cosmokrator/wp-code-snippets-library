@@ -1,0 +1,36 @@
+{
+    "title": "Minimum order amount",
+    "description": "Ορίζει ελάχιστο ποσό παραγγελίας (μερικό σύνολο προϊόντων, χωρίς μεταφορικά). Αν το καλάθι είναι κάτω από το όριο, εμφανίζεται μήνυμα στο καλάθι και η παραγγελία δεν ολοκληρώνεται. Ορίστε ποσό και μήνυμα στις μεταβλητές.",
+    "type": "php",
+    "code": "// woocommerce_check_cart_items runs on the cart page and again when the order is submitted.\nadd_action( 'woocommerce_check_cart_items', 'perfectpixel_minimum_order_amount' );\n\nfunction perfectpixel_minimum_order_amount() {\n\tif ( ! WC()->cart || WC()->cart->is_empty() ) {\n\t\treturn;\n\t}\n\t$minimum = (float) '{{minimum_amount}}';\n\t$current = (float) WC()->cart->get_subtotal() + ( WC()->cart->display_prices_including_tax() ? (float) WC()->cart->get_subtotal_tax() : 0 );\n\n\tif ( $minimum > 0 && $current < $minimum ) {\n\t\twc_add_notice(\n\t\t\tsprintf( esc_html( '{{minimum_message}}' ), wc_price( $minimum ), wc_price( $current ) ),\n\t\t\t'error'\n\t\t);\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "cart",
+        "checkout",
+        "minimum",
+        "validation"
+    ],
+    "variables": [
+        {
+            "name": "minimum_amount",
+            "label": "Ελάχιστο ποσό",
+            "default": "20",
+            "description": "Μόνο αριθμός"
+        },
+        {
+            "name": "minimum_message",
+            "label": "Μήνυμα",
+            "default": "Η ελάχιστη παραγγελία είναι %1$s. Το καλάθι σας είναι %2$s.",
+            "description": "%1$s = ελάχιστο ποσό, %2$s = τρέχον ποσό. Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-define-a-minimum-order-amount/"
+    ],
+    "updated": "2026-11-18T10:03:07+00:00"
+}

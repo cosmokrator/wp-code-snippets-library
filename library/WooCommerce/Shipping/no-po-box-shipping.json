@@ -1,0 +1,30 @@
+{
+    "title": "Disallow shipping to PO Box addresses",
+    "description": "Η παραγγελία σταματά με μήνυμα αν η διεύθυνση αποστολής (ή χρέωσης, όταν δεν δίνεται ξεχωριστή) είναι ταχυδρομική θυρίδα. Αναγνωρίζει ελληνικές και αγγλικές μορφές: «Τ.Θ.», «ΤΘ», «Ταχυδρομική Θυρίδα», «PO Box», «P.O. Box», «Post Office Box». Ορίστε το μήνυμα στη μεταβλητή. Λειτουργεί με το κλασικό checkout (shortcode)· το checkout με blocks δεν χρησιμοποιεί αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_after_checkout_validation', 'perfectpixel_no_po_box_shipping', 10, 2 );\n\nfunction perfectpixel_no_po_box_shipping( $data, $errors ) {\n\tif ( ! WC()->cart || ! WC()->cart->needs_shipping() ) {\n\t\treturn;\n\t}\n\t$prefix  = ! empty( $data['ship_to_different_address'] ) ? 'shipping_' : 'billing_';\n\t$address = ( $data[ $prefix . 'address_1' ] ?? '' ) . ' ' . ( $data[ $prefix . 'address_2' ] ?? '' );\n\n\t$pattern = '/\\b(p\\.?\\s*o\\.?\\s*box|post\\s+office\\s+box)\\b|(^|[\\s,])(τ\\.?\\s*θ\\.?|ταχ(υδρομική|\\.)?\\s*θυρίδα)([\\s,.\\d]|$)/iu';\n\tif ( preg_match( $pattern, $address ) ) {\n\t\t$errors->add( 'perfectpixel_po_box', esc_html( '{{po_box_message}}' ) );\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "shipping",
+        "validation",
+        "address"
+    ],
+    "variables": [
+        {
+            "name": "po_box_message",
+            "label": "Μήνυμα",
+            "default": "Δεν κάνουμε αποστολές σε ταχυδρομικές θυρίδες. Δώστε μια διεύθυνση κατοικίας ή εργασίας.",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-disallow-shipping-to-po-box/"
+    ],
+    "updated": "2026-11-18T10:03:07+00:00"
+}

@@ -1,0 +1,35 @@
+{
+    "title": "Privacy policy checkbox on the classic checkout",
+    "description": "Προσθέτει υποχρεωτικό checkbox αποδοχής πολιτικής απορρήτου (με σύνδεσμο στη σελίδα απορρήτου του WordPress) πάνω από το κουμπί ολοκλήρωσης. Χωρίς τσεκάρισμα η παραγγελία δεν ολοκληρώνεται. Για το checkout με blocks χρησιμοποιήστε το snippet «Privacy policy checkbox on the block checkout». Ορίστε κείμενα στις μεταβλητές. Λειτουργεί με το κλασικό checkout (shortcode)· το checkout με blocks δεν χρησιμοποιεί αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_review_order_before_submit', 'perfectpixel_privacy_checkbox_classic', 9 );\nadd_action( 'woocommerce_checkout_process', 'perfectpixel_privacy_checkbox_classic_validate' );\n\nfunction perfectpixel_privacy_checkbox_classic() {\n\t$text = esc_html( '{{privacy_checkbox_text}}' );\n\t$url  = get_privacy_policy_url();\n\tif ( $url ) {\n\t\t$text = '<a href=\"' . esc_url( $url ) . '\" target=\"_blank\" rel=\"noopener\">' . $text . '</a>';\n\t}\n\techo '<p class=\"form-row validate-required perfectpixel-privacy\"><label class=\"woocommerce-form__label woocommerce-form__label-for-checkbox checkbox\">';\n\techo '<input type=\"checkbox\" class=\"woocommerce-form__input woocommerce-form__input-checkbox input-checkbox\" name=\"perfectpixel_privacy\" value=\"1\"> ';\n\techo '<span>' . $text . '</span>&nbsp;<abbr class=\"required\">*</abbr></label></p>'; // phpcs:ignore WordPress.Security.EscapeOutput -- Escaped above.\n}\n\nfunction perfectpixel_privacy_checkbox_classic_validate() {\n\tif ( empty( $_POST['perfectpixel_privacy'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification\n\t\twc_add_notice( esc_html( '{{privacy_checkbox_error}}' ), 'error' );\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "gdpr",
+        "legal"
+    ],
+    "variables": [
+        {
+            "name": "privacy_checkbox_text",
+            "label": "Κείμενο checkbox",
+            "default": "Έχω διαβάσει και αποδέχομαι την πολιτική απορρήτου",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "privacy_checkbox_error",
+            "label": "Μήνυμα όταν δεν τσεκαριστεί",
+            "default": "Για να συνεχίσετε, αποδεχτείτε την πολιτική απορρήτου.",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-additional-acceptance-checkbox-checkout/"
+    ],
+    "updated": "2026-11-18T10:03:07+00:00"
+}

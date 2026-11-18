@@ -1,0 +1,35 @@
+{
+    "title": "Limit the state/region dropdown to specific states",
+    "description": "Κρατά μόνο τους νομούς/περιοχές που εξυπηρετείτε στη λίστα για μια χώρα (χρέωση, αποστολή και υπολογισμός μεταφορικών στο καλάθι), π.χ. μόνο Αττική για καταστήματα με τοπική διανομή. Ορίστε χώρα και κωδικούς περιοχών στις μεταβλητές (για την Ελλάδα: I = Αττική, A = Ανατολική Μακεδονία και Θράκη, B = Κεντρική Μακεδονία κ.λπ.).",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_states', 'perfectpixel_limit_states' );\n\nfunction perfectpixel_limit_states( $states ) {\n\t$country = strtoupper( '{{limit_states_country}}' );\n\t$keep    = array_filter( array_map( 'trim', explode( ',', strtoupper( '{{limit_states_codes}}' ) ) ) );\n\tif ( isset( $states[ $country ] ) && $keep && ! is_admin() ) {\n\t\t$states[ $country ] = array_intersect_key( $states[ $country ], array_flip( $keep ) );\n\t}\n\treturn $states;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "shipping",
+        "address"
+    ],
+    "variables": [
+        {
+            "name": "limit_states_country",
+            "label": "Χώρα (ISO)",
+            "default": "GR",
+            "description": ""
+        },
+        {
+            "name": "limit_states_codes",
+            "label": "Κωδικοί περιοχών (με κόμμα)",
+            "default": "I",
+            "description": "Οι κωδικοί του WooCommerce για τη χώρα"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-limit-state-dropdowns-one-state/"
+    ],
+    "updated": "2026-11-18T10:03:07+00:00"
+}

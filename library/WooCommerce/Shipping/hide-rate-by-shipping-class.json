@@ -1,0 +1,34 @@
+{
+    "title": "Hide a shipping method when a shipping class is in the cart",
+    "description": "Κρύβει συγκεκριμένους τρόπους αποστολής (π.χ. δωρεάν αποστολή) όταν στο καλάθι υπάρχει προϊόν με συγκεκριμένη κλάση αποστολής (π.χ. ογκώδη). Λειτουργεί και με το checkout με blocks. Αν δεν δείτε αλλαγή, αλλάξτε κάτι στο καλάθι (τα μεταφορικά κρατιούνται σε cache). Ορίστε κλάση και IDs μεθόδων στις μεταβλητές.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_package_rates', 'perfectpixel_hide_rate_by_shipping_class', 10, 2 );\n\nfunction perfectpixel_hide_rate_by_shipping_class( $rates, $package ) {\n\t$class = '{{hide_rate_class}}';\n\t$found = false;\n\tforeach ( $package['contents'] as $item ) {\n\t\tif ( ! empty( $item['data'] ) && $item['data']->get_shipping_class() === $class ) {\n\t\t\t$found = true;\n\t\t\tbreak;\n\t\t}\n\t}\n\tif ( ! $found ) {\n\t\treturn $rates;\n\t}\n\t$targets = array_filter( array_map( 'trim', explode( ',', '{{hide_rate_methods}}' ) ) );\n\tforeach ( $rates as $rate_id => $rate ) {\n\t\tif ( in_array( $rate_id, $targets, true ) || in_array( $rate->get_method_id(), $targets, true ) ) {\n\t\t\tunset( $rates[ $rate_id ] );\n\t\t}\n\t}\n\treturn $rates;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shipping",
+        "shipping-classes"
+    ],
+    "variables": [
+        {
+            "name": "hide_rate_class",
+            "label": "Κλάση αποστολής (slug)",
+            "default": "bulky",
+            "description": ""
+        },
+        {
+            "name": "hide_rate_methods",
+            "label": "Μέθοδοι προς απόκρυψη (με κόμμα)",
+            "default": "free_shipping",
+            "description": "ID μεθόδου (free_shipping, flat_rate, local_pickup) ή συγκεκριμένης χρέωσης (π.χ. flat_rate:3)"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-disable-free-shipping-if-cart-has-shipping-class/"
+    ],
+    "updated": "2026-11-18T10:03:07+00:00"
+}

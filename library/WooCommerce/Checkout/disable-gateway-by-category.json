@@ -1,0 +1,36 @@
+{
+    "title": "Disable payment methods when a product category is in the cart",
+    "description": "Κρύβει τρόπους πληρωμής όταν στο καλάθι υπάρχει προϊόν από συγκεκριμένες κατηγορίες (π.χ. καμία αντικαταβολή για προϊόντα «Προσφορές»). Λαμβάνονται υπόψη και οι υποκατηγορίες. Ορίστε κατηγορίες (slugs) και τρόπους πληρωμής (IDs) στις μεταβλητές.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_available_payment_gateways', 'perfectpixel_disable_gateway_by_category' );\n\nfunction perfectpixel_disable_gateway_by_category( $gateways ) {\n\tif ( is_admin() || ! WC()->cart ) {\n\t\treturn $gateways;\n\t}\n\t$slugs = array_filter( array_map( 'trim', explode( ',', '{{gateway_category_slugs}}' ) ) );\n\t$found = false;\n\tforeach ( WC()->cart->get_cart() as $item ) {\n\t\tif ( has_term( $slugs, 'product_cat', $item['product_id'] ) ) {\n\t\t\t$found = true;\n\t\t\tbreak;\n\t\t}\n\t\t// Sub-categories of the chosen categories count too.\n\t\tforeach ( wp_get_post_terms( $item['product_id'], 'product_cat', array( 'fields' => 'ids' ) ) as $term_id ) {\n\t\t\tforeach ( get_ancestors( $term_id, 'product_cat', 'taxonomy' ) as $ancestor ) {\n\t\t\t\t$term = get_term( $ancestor, 'product_cat' );\n\t\t\t\tif ( $term && in_array( $term->slug, $slugs, true ) ) {\n\t\t\t\t\t$found = true;\n\t\t\t\t\tbreak 3;\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n\tif ( $found ) {\n\t\tforeach ( array_filter( array_map( 'trim', explode( ',', '{{gateway_category_disable}}' ) ) ) as $id ) {\n\t\t\tunset( $gateways[ $id ] );\n\t\t}\n\t}\n\treturn $gateways;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "payment",
+        "categories",
+        "conditional"
+    ],
+    "variables": [
+        {
+            "name": "gateway_category_slugs",
+            "label": "Κατηγορίες (slugs, με κόμμα)",
+            "default": "sale",
+            "description": ""
+        },
+        {
+            "name": "gateway_category_disable",
+            "label": "Τρόποι πληρωμής προς απόκρυψη (IDs, με κόμμα)",
+            "default": "cod",
+            "description": "π.χ. cod, bacs, paypal"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-disable-payment-method-for-specific-category/"
+    ],
+    "updated": "2026-11-18T10:03:07+00:00"
+}

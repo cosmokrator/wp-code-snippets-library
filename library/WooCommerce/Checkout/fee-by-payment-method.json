@@ -1,0 +1,47 @@
+{
+    "title": "Add a fee for a specific payment method",
+    "description": "Προσθέτει χρέωση όταν ο πελάτης επιλέγει συγκεκριμένο τρόπο πληρωμής (π.χ. αντικαταβολή +2€), σταθερό ποσό ή ποσοστό επί του καλαθιού. Τα σύνολα ενημερώνονται αμέσως μόλις αλλάξει ο τρόπος πληρωμής. Ορίστε τρόπο πληρωμής, ποσό, τύπο και όνομα χρέωσης στις μεταβλητές.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_cart_calculate_fees', 'perfectpixel_fee_by_payment_method' );\nadd_action( 'woocommerce_after_checkout_form', 'perfectpixel_fee_by_payment_method_script' );\n\nfunction perfectpixel_fee_by_payment_method( $cart ) {\n\tif ( is_admin() && ! defined( 'DOING_AJAX' ) ) {\n\t\treturn;\n\t}\n\t$chosen = WC()->session ? WC()->session->get( 'chosen_payment_method' ) : '';\n\tif ( '{{fee_gateway}}' !== $chosen ) {\n\t\treturn;\n\t}\n\t$amount = (float) '{{fee_gateway_amount}}';\n\tif ( 'percent' === '{{fee_gateway_type}}' ) {\n\t\t$amount = $cart->get_subtotal() * $amount / 100;\n\t}\n\tif ( $amount > 0 ) {\n\t\t$cart->add_fee( '{{fee_gateway_label}}', $amount, true );\n\t}\n}\n\n// Classic checkout: recalculate totals when the payment method changes.\nfunction perfectpixel_fee_by_payment_method_script() {\n\t?>\n\t<script>\n\tjQuery( function ( $ ) {\n\t\t$( 'form.checkout' ).on( 'change', 'input[name=\"payment_method\"]', function () {\n\t\t\t$( document.body ).trigger( 'update_checkout' );\n\t\t} );\n\t} );\n\t</script>\n\t<?php\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "fees",
+        "payment"
+    ],
+    "variables": [
+        {
+            "name": "fee_gateway",
+            "label": "Τρόπος πληρωμής (ID)",
+            "default": "cod",
+            "description": "π.χ. cod"
+        },
+        {
+            "name": "fee_gateway_amount",
+            "label": "Ποσό ή ποσοστό",
+            "default": "2",
+            "description": "Μόνο αριθμός"
+        },
+        {
+            "name": "fee_gateway_type",
+            "label": "Τύπος (fixed/percent)",
+            "default": "fixed",
+            "description": "fixed = σταθερό ποσό, percent = % επί του μερικού συνόλου"
+        },
+        {
+            "name": "fee_gateway_label",
+            "label": "Όνομα χρέωσης",
+            "default": "Έξοδα αντικαταβολής",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-fee-to-cart/"
+    ],
+    "updated": "2026-11-18T10:03:07+00:00"
+}

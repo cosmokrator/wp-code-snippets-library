@@ -1,0 +1,22 @@
+{
+    "title": "Remove the order notes field (\"Additional information\")",
+    "description": "Αφαιρεί το πεδίο «Σημειώσεις παραγγελίας» και τον τίτλο «Πρόσθετες πληροφορίες» από το checkout, για πιο σύντομη φόρμα. Λειτουργεί με το κλασικό checkout (shortcode)· το checkout με blocks δεν χρησιμοποιεί αυτό το hook.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_enable_order_notes_field', '__return_false', 9999 );",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "checkout-fields",
+        "order-notes"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-remove-order-notes-checkout-page/"
+    ],
+    "updated": "2026-11-18T10:03:07+00:00"
+}
