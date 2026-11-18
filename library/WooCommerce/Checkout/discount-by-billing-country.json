@@ -1,0 +1,29 @@
+{
+    "title": "Discount by billing country (purchasing power parity)",
+    "description": "Εφαρμόζει ποσοστιαία έκπτωση ανάλογα με τη χώρα χρέωσης του πελάτη, π.χ. για να κάνετε ψηφιακά προϊόντα προσιτά σε χώρες με χαμηλότερη αγοραστική δύναμη. Η έκπτωση ενημερώνεται μόλις ο πελάτης αλλάξει χώρα και λειτουργεί και με το checkout με blocks. Ορίστε τα ποσοστά ανά χώρα στο $discounts.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_cart_calculate_fees', 'perfectpixel_discount_by_country' );\n\nfunction perfectpixel_discount_by_country( $cart ) {\n\tif ( is_admin() && ! defined( 'DOING_AJAX' ) ) {\n\t\treturn;\n\t}\n\n\t// Billing country (ISO code) => discount percentage.\n\t$discounts = array(\n\t\t'IN' => 50,\n\t\t'BR' => 40,\n\t\t'EG' => 50,\n\t);\n\n\t$country = WC()->customer ? WC()->customer->get_billing_country() : '';\n\tif ( empty( $discounts[ $country ] ) ) {\n\t\treturn;\n\t}\n\n\t$discount = $cart->get_subtotal() * $discounts[ $country ] / 100;\n\tif ( $discount > 0 ) {\n\t\t$cart->add_fee( '{{ppp_label}} (' . $discounts[ $country ] . '%)', -$discount, true );\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "discounts",
+        "countries"
+    ],
+    "variables": [
+        {
+            "name": "ppp_label",
+            "label": "Όνομα έκπτωσης",
+            "default": "Έκπτωση χώρας",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-purchasing-power-parity-discounts/"
+    ],
+    "updated": "2026-11-18T05:56:47+00:00"
+}

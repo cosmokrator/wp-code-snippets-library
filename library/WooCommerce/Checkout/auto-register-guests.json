@@ -1,0 +1,22 @@
+{
+    "title": "Automatically create accounts for guest customers",
+    "description": "Μετά από παραγγελία ως επισκέπτης, δημιουργεί αυτόματα λογαριασμό πελάτη με το email της παραγγελίας (αν δεν υπάρχει ήδη) και του αντιστοιχίζει και τις παλιότερες παραγγελίες του ως επισκέπτης. Ο πελάτης λαμβάνει το email νέου λογαριασμού του WooCommerce. Πρέπει να επιτρέπονται οι αγορές ως επισκέπτης.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_thankyou', 'perfectpixel_auto_register_guest', 20 );\n\nfunction perfectpixel_auto_register_guest( $order_id ) {\n\t$order = wc_get_order( $order_id );\n\tif ( ! $order || $order->get_customer_id() || $order->get_meta( '_perfectpixel_auto_registered' ) ) {\n\t\treturn;\n\t}\n\t$email = $order->get_billing_email();\n\tif ( ! is_email( $email ) || email_exists( $email ) ) {\n\t\treturn;\n\t}\n\n\t$user_id = wc_create_new_customer(\n\t\t$email,\n\t\t'',\n\t\t'',\n\t\tarray(\n\t\t\t'first_name' => $order->get_billing_first_name(),\n\t\t\t'last_name'  => $order->get_billing_last_name(),\n\t\t)\n\t);\n\tif ( is_wp_error( $user_id ) ) {\n\t\treturn;\n\t}\n\n\t$order->set_customer_id( $user_id );\n\t$order->update_meta_data( '_perfectpixel_auto_registered', 1 );\n\t$order->save();\n\n\t// Link earlier guest orders with the same email and copy the addresses to the new account.\n\twc_update_new_customer_past_orders( $user_id );\n\t$customer = new WC_Customer( $user_id );\n\tforeach ( array( 'first_name', 'last_name', 'company', 'address_1', 'address_2', 'city', 'state', 'postcode', 'country', 'phone' ) as $field ) {\n\t\t$getter = 'get_billing_' . $field;\n\t\t$setter = 'set_billing_' . $field;\n\t\t$customer->$setter( $order->$getter() );\n\t}\n\t$customer->save();\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "account",
+        "guest-checkout"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-automatically-register-guest-checkouts/"
+    ],
+    "updated": "2026-11-18T05:56:47+00:00"
+}

@@ -1,0 +1,21 @@
+{
+    "title": "Hide the \"View cart\" button in the mini cart",
+    "description": "Αφαιρεί το κουμπί «Προβολή καλαθιού» από το mini cart (widget καλαθιού), ώστε να μένει μόνο το «Ολοκλήρωση αγοράς» και ο πελάτης να πηγαίνει κατευθείαν στο checkout. Αν δεν δείτε αλλαγή, αλλάξτε κάτι στο καλάθι (το mini cart κρατιέται σε cache του browser).",
+    "type": "php",
+    "code": "// WooCommerce registers its template hooks after snippets load, so remove it on \"init\".\nadd_action( 'init', 'perfectpixel_mini_cart_hide_view_cart' );\n\nfunction perfectpixel_mini_cart_hide_view_cart() {\n\tremove_action( 'woocommerce_widget_shopping_cart_buttons', 'woocommerce_widget_shopping_cart_button_view_cart', 10 );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "cart",
+        "mini-cart"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-hide-view-cart-button-mini-cart/"
+    ],
+    "updated": "2026-11-18T05:56:47+00:00"
+}

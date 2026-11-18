@@ -1,0 +1,22 @@
+{
+    "title": "Show customer addresses on the \"Pay for order\" page",
+    "description": "Στη σελίδα «Πληρωμή παραγγελίας» (το link που στέλνετε για χειροκίνητες παραγγελίες) εμφανίζει τις διευθύνσεις χρέωσης και αποστολής, ώστε ο πελάτης να επιβεβαιώσει ότι πληρώνει τη σωστή παραγγελία. Εμφανίζονται μόνο με έγκυρο κλειδί παραγγελίας και, αν η παραγγελία ανήκει σε λογαριασμό, μόνο στον ίδιο πελάτη.",
+    "type": "php",
+    "code": "add_action( 'before_woocommerce_pay', 'perfectpixel_order_pay_addresses' );\n\nfunction perfectpixel_order_pay_addresses() {\n\t$order_id = absint( get_query_var( 'order-pay' ) );\n\t$order    = $order_id ? wc_get_order( $order_id ) : false;\n\t$key      = isset( $_GET['key'] ) ? wc_clean( wp_unslash( $_GET['key'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification\n\n\tif ( ! $order || ! hash_equals( $order->get_order_key(), $key ) ) {\n\t\treturn;\n\t}\n\tif ( $order->get_customer_id() && get_current_user_id() !== $order->get_customer_id() ) {\n\t\treturn;\n\t}\n\n\techo '<section class=\"woocommerce-customer-details\"><div class=\"woocommerce-columns woocommerce-columns--2 col2-set addresses\">';\n\techo '<div class=\"woocommerce-column col-1\"><h2>' . esc_html__( 'Billing address', 'woocommerce' ) . '</h2><address>' . wp_kses_post( $order->get_formatted_billing_address( esc_html__( 'N/A', 'woocommerce' ) ) ) . '</address></div>';\n\tif ( $order->needs_shipping_address() ) {\n\t\techo '<div class=\"woocommerce-column col-2\"><h2>' . esc_html__( 'Shipping address', 'woocommerce' ) . '</h2><address>' . wp_kses_post( $order->get_formatted_shipping_address( esc_html__( 'N/A', 'woocommerce' ) ) ) . '</address></div>';\n\t}\n\techo '</div></section>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "order-pay",
+        "orders"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-billing-address-order-pay/"
+    ],
+    "updated": "2026-11-18T05:56:47+00:00"
+}

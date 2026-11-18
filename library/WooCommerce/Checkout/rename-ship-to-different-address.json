@@ -1,0 +1,29 @@
+{
+    "title": "Rename \"Ship to a different address?\"",
+    "description": "Αλλάζει το κείμενο του checkbox «Αποστολή σε διαφορετική διεύθυνση;» με κάτι πιο σαφές για τους πελάτες σας. Δουλεύει ανεξάρτητα από τη γλώσσα του site (συγκρίνει το αρχικό κείμενο του WooCommerce). Ορίστε το νέο κείμενο στη μεταβλητή. Λειτουργεί με το κλασικό checkout (shortcode)· το checkout με blocks δεν χρησιμοποιεί αυτό το hook.",
+    "type": "php",
+    "code": "add_filter( 'gettext', 'perfectpixel_rename_ship_to_different_address', 10, 3 );\n\nfunction perfectpixel_rename_ship_to_different_address( $translation, $text, $domain ) {\n\tif ( 'woocommerce' === $domain && 'Ship to a different address?' === $text ) {\n\t\treturn '{{ship_different_text}}';\n\t}\n\treturn $translation;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "shipping",
+        "texts"
+    ],
+    "variables": [
+        {
+            "name": "ship_different_text",
+            "label": "Νέο κείμενο",
+            "default": "Η αποστολή να γίνει σε άλλη διεύθυνση",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-edit-ship-to-a-different-address/"
+    ],
+    "updated": "2026-11-18T05:56:47+00:00"
+}

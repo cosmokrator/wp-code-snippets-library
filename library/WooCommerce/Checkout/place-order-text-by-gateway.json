@@ -1,0 +1,22 @@
+{
+    "title": "Change \"Place order\" text per payment method",
+    "description": "Το κείμενο του κουμπιού «Ολοκλήρωση παραγγελίας» αλλάζει ανάλογα με τον τρόπο πληρωμής που επιλέγει ο πελάτης (π.χ. «Προβολή στοιχείων τράπεζας» για τραπεζική κατάθεση). Ορίστε τα κείμενα στο $texts με κλειδί το ID του τρόπου πληρωμής (bacs, cod, cheque, paypal…). Λειτουργεί με το κλασικό checkout (shortcode)· το checkout με blocks δεν χρησιμοποιεί αυτό το hook.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_available_payment_gateways', 'perfectpixel_place_order_text_by_gateway' );\n\nfunction perfectpixel_place_order_text_by_gateway( $gateways ) {\n\tif ( is_admin() ) {\n\t\treturn $gateways;\n\t}\n\t// Payment method ID => button text.\n\t$texts = array(\n\t\t'bacs' => 'Προβολή στοιχείων τράπεζας',\n\t\t'cod'  => 'Ολοκλήρωση με αντικαταβολή',\n\t);\n\tforeach ( $texts as $id => $text ) {\n\t\tif ( isset( $gateways[ $id ] ) ) {\n\t\t\t$gateways[ $id ]->order_button_text = $text;\n\t\t}\n\t}\n\treturn $gateways;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "payment",
+        "texts"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-place-order-by-payment-gateway/"
+    ],
+    "updated": "2026-11-18T05:56:47+00:00"
+}

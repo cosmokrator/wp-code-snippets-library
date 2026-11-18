@@ -1,0 +1,35 @@
+{
+    "title": "Show subscription renewal and end dates in cart & checkout",
+    "description": "Για προϊόντα συνδρομής (WooCommerce Subscriptions) δείχνει κάτω από το όνομα του προϊόντος στο καλάθι και στο checkout πότε γίνεται η πρώτη ανανέωση και πότε λήγει η συνδρομή, ώστε ο πελάτης να ξέρει τι αγοράζει. Ορίστε τα κείμενα στις μεταβλητές.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_after_cart_item_name', 'perfectpixel_subscription_dates_cart', 10, 2 );\nadd_filter( 'woocommerce_checkout_cart_item_quantity', 'perfectpixel_subscription_dates_checkout', 10, 3 );\n\nfunction perfectpixel_subscription_dates_html( $product ) {\n\tif ( ! class_exists( 'WC_Subscriptions_Product' ) || ! WC_Subscriptions_Product::is_subscription( $product ) ) {\n\t\treturn '';\n\t}\n\t$format  = get_option( 'date_format' );\n\t$renewal = WC_Subscriptions_Product::get_first_renewal_payment_date( $product );\n\t$end     = WC_Subscriptions_Product::get_expiration_date( $product );\n\n\t$lines = array();\n\tif ( $renewal ) {\n\t\t$lines[] = esc_html( '{{renewal_label}}' ) . ' ' . esc_html( date_i18n( $format, strtotime( $renewal ) ) );\n\t}\n\tif ( $end ) {\n\t\t$lines[] = esc_html( '{{end_label}}' ) . ' ' . esc_html( date_i18n( $format, strtotime( $end ) ) );\n\t}\n\treturn $lines ? '<div class=\"perfectpixel-subscription-dates\" style=\"font-size:.85em;opacity:.8\">' . implode( '<br>', $lines ) . '</div>' : '';\n}\n\nfunction perfectpixel_subscription_dates_cart( $cart_item, $cart_item_key ) {\n\techo perfectpixel_subscription_dates_html( $cart_item['data'] ); // phpcs:ignore WordPress.Security.EscapeOutput -- Escaped in the helper.\n}\n\nfunction perfectpixel_subscription_dates_checkout( $quantity_html, $cart_item, $cart_item_key ) {\n\treturn $quantity_html . perfectpixel_subscription_dates_html( $cart_item['data'] );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "subscriptions",
+        "cart",
+        "checkout"
+    ],
+    "variables": [
+        {
+            "name": "renewal_label",
+            "label": "Κείμενο ανανέωσης",
+            "default": "Πρώτη ανανέωση:",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "end_label",
+            "label": "Κείμενο λήξης",
+            "default": "Λήξη:",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-subscriptions-dates-cart-checkout/"
+    ],
+    "updated": "2026-11-18T05:56:47+00:00"
+}

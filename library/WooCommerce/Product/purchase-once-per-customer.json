@@ -1,0 +1,28 @@
+{
+    "title": "Customers can buy a product only once",
+    "description": "Ένας συνδεδεμένος πελάτης που έχει ήδη αγοράσει ένα προϊόν δεν μπορεί να το ξαναγοράσει (το κουμπί αγοράς κρύβεται). Χρήσιμο για δοκιμαστικά πακέτα, δωρεάν προσφορές κ.λπ. Ορίστε στη μεταβλητή τα IDs των προϊόντων (με κόμμα) ή αφήστε την κενή για όλα. Ισχύει μόνο για συνδεδεμένους πελάτες.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_is_purchasable', 'perfectpixel_purchase_once', 10, 2 );\nadd_filter( 'woocommerce_variation_is_purchasable', 'perfectpixel_purchase_once', 10, 2 );\n\nfunction perfectpixel_purchase_once( $purchasable, $product ) {\n\tif ( ! $purchasable || ! is_user_logged_in() ) {\n\t\treturn $purchasable;\n\t}\n\t$product_id = $product->get_parent_id() ? $product->get_parent_id() : $product->get_id();\n\t$limited    = wp_parse_id_list( '{{once_product_ids}}' );\n\tif ( $limited && ! in_array( $product_id, $limited, true ) ) {\n\t\treturn $purchasable;\n\t}\n\t$user = wp_get_current_user();\n\tif ( wc_customer_bought_product( $user->user_email, $user->ID, $product_id ) ) {\n\t\treturn false;\n\t}\n\treturn $purchasable;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "product",
+        "limits"
+    ],
+    "variables": [
+        {
+            "name": "once_product_ids",
+            "label": "IDs προϊόντων (με κόμμα)",
+            "default": "",
+            "description": "Κενό = όλα τα προϊόντα"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-one-product-purchase/"
+    ],
+    "updated": "2026-11-18T05:56:47+00:00"
+}

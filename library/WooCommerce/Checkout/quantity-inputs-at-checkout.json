@@ -1,0 +1,22 @@
+{
+    "title": "Change product quantities on the checkout page",
+    "description": "Προσθέτει πεδίο ποσότητας δίπλα σε κάθε προϊόν στη σύνοψη της παραγγελίας στο checkout. Όταν ο πελάτης αλλάξει ποσότητα, τα σύνολα ενημερώνονται αμέσως. Χρήσιμο όταν πηγαίνετε τους πελάτες κατευθείαν στο checkout χωρίς σελίδα καλαθιού. Λειτουργεί με το κλασικό checkout (shortcode)· το checkout με blocks δεν χρησιμοποιεί αυτό το hook.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_checkout_cart_item_quantity', 'perfectpixel_checkout_quantity_input', 10, 3 );\nadd_action( 'woocommerce_checkout_update_order_review', 'perfectpixel_checkout_quantity_update' );\nadd_action( 'woocommerce_after_checkout_form', 'perfectpixel_checkout_quantity_script' );\n\nfunction perfectpixel_checkout_quantity_input( $quantity_html, $cart_item, $cart_item_key ) {\n\t$product = $cart_item['data'];\n\tif ( ! $product || $product->is_sold_individually() ) {\n\t\treturn $quantity_html;\n\t}\n\treturn woocommerce_quantity_input(\n\t\tarray(\n\t\t\t'input_name'  => 'perfectpixel_qty[' . $cart_item_key . ']',\n\t\t\t'input_value' => $cart_item['quantity'],\n\t\t\t'min_value'   => 0,\n\t\t\t'max_value'   => $product->get_max_purchase_quantity(),\n\t\t),\n\t\t$product,\n\t\tfalse\n\t);\n}\n\nfunction perfectpixel_checkout_quantity_update( $posted ) {\n\tparse_str( (string) $posted, $data );\n\tif ( empty( $data['perfectpixel_qty'] ) || ! is_array( $data['perfectpixel_qty'] ) ) {\n\t\treturn;\n\t}\n\tforeach ( $data['perfectpixel_qty'] as $key => $qty ) {\n\t\t$key = sanitize_text_field( $key );\n\t\t$qty = max( 0, (int) $qty );\n\t\t$item = WC()->cart->get_cart_item( $key );\n\t\tif ( $item && (int) $item['quantity'] !== $qty ) {\n\t\t\tWC()->cart->set_quantity( $key, $qty, false );\n\t\t}\n\t}\n\tWC()->cart->calculate_totals();\n}\n\nfunction perfectpixel_checkout_quantity_script() {\n\t?>\n\t<script>\n\tjQuery( function ( $ ) {\n\t\tvar timer;\n\t\t$( 'form.checkout' ).on( 'change', 'input[name^=\"perfectpixel_qty\"]', function () {\n\t\t\tclearTimeout( timer );\n\t\t\ttimer = setTimeout( function () {\n\t\t\t\t$( document.body ).trigger( 'update_checkout' );\n\t\t\t}, 400 );\n\t\t} );\n\t} );\n\t</script>\n\t<?php\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "quantity",
+        "ux"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-change-product-quantity-checkout/"
+    ],
+    "updated": "2026-11-18T05:56:47+00:00"
+}

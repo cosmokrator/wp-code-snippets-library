@@ -1,0 +1,36 @@
+{
+    "title": "Turn checkout into a quote request",
+    "description": "Μετατρέπει το checkout σε αίτημα προσφοράς: ο πελάτης στέλνει την «παραγγελία» χωρίς να πληρώσει (μόνο ο τρόπος «Επιταγή», μετονομασμένος σε «Πληρωμή μετά την προσφορά»). Ο διαχειριστής την αναθεωρεί και στέλνει στον πελάτη το link πληρωμής της παραγγελίας· εκεί εμφανίζονται κανονικά όλοι οι τρόποι πληρωμής. Ορίστε τα κείμενα στις μεταβλητές.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_available_payment_gateways', 'perfectpixel_quote_only_cheque' );\nadd_filter( 'woocommerce_order_button_text', 'perfectpixel_quote_button_text' );\nadd_filter( 'woocommerce_gateway_title', 'perfectpixel_quote_gateway_title', 10, 2 );\n\nfunction perfectpixel_quote_is_checkout_page() {\n\t// Not on the \"pay for order\" page: there the customer pays the revised order normally.\n\treturn function_exists( 'is_checkout' ) && is_checkout() && ! is_wc_endpoint_url( 'order-pay' );\n}\n\nfunction perfectpixel_quote_only_cheque( $gateways ) {\n\tif ( is_admin() || ! perfectpixel_quote_is_checkout_page() || ! isset( $gateways['cheque'] ) ) {\n\t\treturn $gateways;\n\t}\n\treturn array( 'cheque' => $gateways['cheque'] );\n}\n\nfunction perfectpixel_quote_button_text( $text ) {\n\treturn perfectpixel_quote_is_checkout_page() ? '{{quote_button_text}}' : $text;\n}\n\nfunction perfectpixel_quote_gateway_title( $title, $gateway_id ) {\n\treturn 'cheque' === $gateway_id && perfectpixel_quote_is_checkout_page() ? '{{quote_gateway_title}}' : $title;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "quotes",
+        "b2b",
+        "payment"
+    ],
+    "variables": [
+        {
+            "name": "quote_button_text",
+            "label": "Κείμενο κουμπιού",
+            "default": "Αποστολή αιτήματος προσφοράς",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "quote_gateway_title",
+            "label": "Όνομα τρόπου πληρωμής",
+            "default": "Πληρωμή μετά την προσφορά",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-checkout-quote-system/"
+    ],
+    "updated": "2026-11-18T05:56:47+00:00"
+}
