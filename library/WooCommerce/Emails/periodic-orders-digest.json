@@ -1,0 +1,36 @@
+{
+    "title": "Email the admin a periodic orders summary",
+    "description": "Κάθε λίγες ώρες (ορίστε πόσες) στέλνει στον διαχειριστή email με σύνοψη των νέων παραγγελιών του διαστήματος: πλήθος, σύνολο και λίστα με αριθμό, κατάσταση και ποσό. Χρήσιμο αν έχετε απενεργοποιήσει το email «Νέα παραγγελία» για να μη λαμβάνετε ένα για κάθε παραγγελία. Χρησιμοποιεί το WP-Cron· αν διαγράψετε το snippet, το προγραμματισμένο συμβάν δεν κάνει τίποτα.",
+    "type": "php",
+    "code": "add_filter( 'cron_schedules', 'perfectpixel_digest_schedule' );\nadd_action( 'init', 'perfectpixel_digest_schedule_event' );\nadd_action( 'perfectpixel_orders_digest', 'perfectpixel_send_orders_digest' );\n\nfunction perfectpixel_digest_interval() {\n\treturn max( 1, (int) '{{digest_hours}}' ) * HOUR_IN_SECONDS;\n}\n\nfunction perfectpixel_digest_schedule( $schedules ) {\n\t$schedules['perfectpixel_digest'] = array(\n\t\t'interval' => perfectpixel_digest_interval(),\n\t\t'display'  => 'Σύνοψη παραγγελιών',\n\t);\n\treturn $schedules;\n}\n\nfunction perfectpixel_digest_schedule_event() {\n\tif ( ! wp_next_scheduled( 'perfectpixel_orders_digest' ) ) {\n\t\twp_schedule_event( time() + perfectpixel_digest_interval(), 'perfectpixel_digest', 'perfectpixel_orders_digest' );\n\t}\n}\n\nfunction perfectpixel_send_orders_digest() {\n\t$orders = wc_get_orders(\n\t\tarray(\n\t\t\t'date_created' => '>' . ( time() - perfectpixel_digest_interval() ),\n\t\t\t'status'       => array_keys( wc_get_is_paid_statuses() ) ? wc_get_is_paid_statuses() : array( 'processing', 'completed' ),\n\t\t\t'limit'        => 200,\n\t\t\t'type'         => 'shop_order',\n\t\t)\n\t);\n\tif ( ! $orders ) {\n\t\treturn;\n\t}\n\t$total = 0.0;\n\t$rows  = '';\n\tforeach ( $orders as $order ) {\n\t\t$total += (float) $order->get_total();\n\t\t$rows  .= sprintf(\n\t\t\t'<tr><td><a href=\"%s\">#%s</a></td><td>%s</td><td>%s</td></tr>',\n\t\t\tesc_url( $order->get_edit_order_url() ),\n\t\t\tesc_html( $order->get_order_number() ),\n\t\t\tesc_html( wc_get_order_status_name( $order->get_status() ) ),\n\t\t\twp_kses_post( $order->get_formatted_order_total() )\n\t\t);\n\t}\n\t$subject   = sprintf( 'Σύνοψη: %d νέες παραγγελίες, %s', count( $orders ), wp_strip_all_tags( wc_price( $total ) ) );\n\t$body      = '<table cellpadding=\"6\" style=\"border-collapse:collapse;width:100%\"><tr><th align=\"left\">Παραγγελία</th><th align=\"left\">Κατάσταση</th><th align=\"left\">Σύνολο</th></tr>' . $rows . '</table>';\n\t$recipient = sanitize_email( '{{digest_recipient}}' );\n\t$mailer    = WC()->mailer();\n\t$mailer->send( $recipient ? $recipient : get_option( 'admin_email' ), $subject, $mailer->wrap_message( $subject, $body ) );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "emails",
+        "admin",
+        "cron",
+        "reports"
+    ],
+    "variables": [
+        {
+            "name": "digest_hours",
+            "label": "Κάθε πόσες ώρες",
+            "default": "3",
+            "description": "Μόνο αριθμός"
+        },
+        {
+            "name": "digest_recipient",
+            "label": "Email παραλήπτη",
+            "default": "",
+            "description": "Κενό = το email του διαχειριστή"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-custom-cron-job/"
+    ],
+    "updated": "2026-11-18T17:42:29+00:00"
+}

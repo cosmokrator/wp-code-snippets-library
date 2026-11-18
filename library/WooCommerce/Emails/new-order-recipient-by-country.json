@@ -1,0 +1,35 @@
+{
+    "title": "Send \"New order\" emails to different people by country",
+    "description": "Το email «Νέα παραγγελία» στέλνεται σε διαφορετικό παραλήπτη ανάλογα με τη χώρα χρέωσης, π.χ. οι παραγγελίες από Κύπρο στον υπεύθυνο Κύπρου. Γράψτε ζεύγη χώρα=email χωρισμένα με |. Για χώρες εκτός λίστας ισχύει ο παραλήπτης των ρυθμίσεων. Προαιρετικά ο προκαθορισμένος παραλήπτης λαμβάνει πάντα αντίγραφο.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_email_recipient_new_order', 'perfectpixel_new_order_recipient_by_country', 20, 2 );\n\nfunction perfectpixel_new_order_recipient_by_country( $recipient, $order ) {\n\tif ( ! $order instanceof WC_Order ) {\n\t\treturn $recipient;\n\t}\n\tforeach ( explode( '|', '{{new_order_country_recipients}}' ) as $pair ) {\n\t\t$parts = array_map( 'trim', explode( '=', $pair, 2 ) );\n\t\tif ( 2 === count( $parts ) && strtoupper( $parts[0] ) === $order->get_billing_country() && is_email( $parts[1] ) ) {\n\t\t\treturn 'yes' === '{{new_order_keep_default}}' ? $recipient . ',' . $parts[1] : $parts[1];\n\t\t}\n\t}\n\treturn $recipient;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "emails",
+        "admin",
+        "countries"
+    ],
+    "variables": [
+        {
+            "name": "new_order_country_recipients",
+            "label": "Χώρα=email (με |)",
+            "default": "CY=cyprus@example.com",
+            "description": "Π.χ. CY=cyprus@example.com|DE=germany@example.com"
+        },
+        {
+            "name": "new_order_keep_default",
+            "label": "Αντίγραφο και στον κανονικό παραλήπτη (yes/no)",
+            "default": "no",
+            "description": "yes ή no"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-new-order-email-recipient-based-on-billing-country/"
+    ],
+    "updated": "2026-11-18T17:42:29+00:00"
+}

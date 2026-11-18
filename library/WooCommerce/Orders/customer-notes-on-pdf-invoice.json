@@ -1,0 +1,29 @@
+{
+    "title": "Print customer notes on PDF invoices",
+    "description": "Για όσους χρησιμοποιούν το plugin «PDF Invoices & Packing Slips for WooCommerce»: οι σημειώσεις παραγγελίας «προς τον πελάτη» που προσθέτετε στον διαχειριστή (π.χ. ΑΦΜ ή στοιχεία τιμολόγησης) τυπώνονται στο PDF του τιμολογίου κάτω από τα στοιχεία της παραγγελίας. Χωρίς το plugin δεν κάνει τίποτα.",
+    "type": "php",
+    "code": "add_action( 'wpo_wcpdf_after_order_details', 'perfectpixel_customer_notes_on_pdf_invoice', 10, 2 );\n\nfunction perfectpixel_customer_notes_on_pdf_invoice( $document_type, $order ) {\n\tif ( 'invoice' !== $document_type || ! $order instanceof WC_Order ) {\n\t\treturn;\n\t}\n\t$notes = $order->get_customer_order_notes();\n\tif ( ! $notes ) {\n\t\treturn;\n\t}\n\techo '<div class=\"perfectpixel-pdf-notes\"><h3>' . esc_html( '{{pdf_notes_heading}}' ) . '</h3>';\n\tforeach ( $notes as $note ) {\n\t\techo '<p>' . wp_kses_post( wpautop( wptexturize( $note->comment_content ) ) ) . '</p>';\n\t}\n\techo '</div>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "orders",
+        "invoices",
+        "pdf"
+    ],
+    "variables": [
+        {
+            "name": "pdf_notes_heading",
+            "label": "Τίτλος",
+            "default": "Σημειώσεις",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-order-notes-woocommerce-pdf-invoices/"
+    ],
+    "updated": "2026-11-18T17:42:29+00:00"
+}

@@ -1,0 +1,29 @@
+{
+    "title": "Add a \"Products\" column to the admin orders list",
+    "description": "Στη λίστα παραγγελιών του διαχειριστή προσθέτει στήλη «Προϊόντα» με τα προϊόντα και τις ποσότητες κάθε παραγγελίας (π.χ. «2 × Μπλουζάκι, 1 × Καπέλο»), ώστε να βλέπετε τι περιέχει χωρίς να την ανοίξετε. Λειτουργεί με την κλασική αποθήκευση και με HPOS.",
+    "type": "php",
+    "code": "add_filter( 'manage_edit-shop_order_columns', 'perfectpixel_orders_products_column' );\nadd_filter( 'manage_woocommerce_page_wc-orders_columns', 'perfectpixel_orders_products_column' );\nadd_action( 'manage_shop_order_posts_custom_column', 'perfectpixel_orders_products_column_value', 10, 2 );\nadd_action( 'manage_woocommerce_page_wc-orders_custom_column', 'perfectpixel_orders_products_column_value', 10, 2 );\n\nfunction perfectpixel_orders_products_column( $columns ) {\n\t$new = array();\n\tforeach ( $columns as $key => $label ) {\n\t\t$new[ $key ] = $label;\n\t\tif ( 'order_number' === $key ) {\n\t\t\t$new['perfectpixel_products'] = '{{orders_products_column_title}}';\n\t\t}\n\t}\n\treturn $new;\n}\n\nfunction perfectpixel_orders_products_column_value( $column, $post_or_order ) {\n\tif ( 'perfectpixel_products' !== $column ) {\n\t\treturn;\n\t}\n\t$order = $post_or_order instanceof WC_Order ? $post_or_order : wc_get_order( $post_or_order );\n\tif ( ! $order ) {\n\t\treturn;\n\t}\n\t$lines = array();\n\tforeach ( $order->get_items() as $item ) {\n\t\t$lines[] = esc_html( $item->get_quantity() . ' × ' . $item->get_name() );\n\t}\n\techo '<small>' . implode( '<br>', $lines ) . '</small>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "orders",
+        "admin",
+        "columns"
+    ],
+    "variables": [
+        {
+            "name": "orders_products_column_title",
+            "label": "Τίτλος στήλης",
+            "default": "Προϊόντα",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-column-to-orders-table-wp-dashboard/"
+    ],
+    "updated": "2026-11-18T17:42:29+00:00"
+}

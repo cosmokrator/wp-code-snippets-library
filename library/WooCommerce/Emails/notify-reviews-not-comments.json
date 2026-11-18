@@ -1,0 +1,22 @@
+{
+    "title": "Get email notifications for product reviews only",
+    "description": "Οι ειδοποιήσεις email του WordPress για νέα σχόλια (προς διαχειριστή και συντάκτη) στέλνονται μόνο για αξιολογήσεις προϊόντων, όχι για σχόλια σε άρθρα και σελίδες, που συχνά είναι spam. Οι ρυθμίσεις ειδοποιήσεων (Ρυθμίσεις → Συζήτηση) πρέπει να είναι ενεργές.",
+    "type": "php",
+    "code": "add_filter( 'notify_moderator', 'perfectpixel_notify_reviews_only', 20, 2 );\nadd_filter( 'notify_post_author', 'perfectpixel_notify_reviews_only', 20, 2 );\n\nfunction perfectpixel_notify_reviews_only( $notify, $comment_id ) {\n\t$comment = get_comment( $comment_id );\n\treturn ( $comment && 'product' === get_post_type( $comment->comment_post_ID ) ) ? $notify : false;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "emails",
+        "reviews",
+        "comments"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-notify-admin-product-reviews-not-wordpress-comments/"
+    ],
+    "updated": "2026-11-18T17:42:29+00:00"
+}

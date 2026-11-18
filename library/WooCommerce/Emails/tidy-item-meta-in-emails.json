@@ -1,0 +1,22 @@
+{
+    "title": "Tidy up product options (item meta) in order emails",
+    "description": "Στα emails παραγγελίας, οι επιλογές κάθε προϊόντος (π.χ. Χρώμα, Μέγεθος, πεδία εξατομίκευσης) εμφανίζονται ως μικρές, γκρι γραμμές «Ετικέτα: τιμή» κάτω από το όνομα, αντί για τη λίστα με κουκκίδες που συχνά φαίνεται ακατάστατη (ειδικά με το νέο design emails του WooCommerce). Η σελίδα ευχαριστίας και ο λογαριασμός δεν αλλάζουν.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_email_before_order_table', 'perfectpixel_email_item_meta_on', 1 );\nadd_action( 'woocommerce_email_after_order_table', 'perfectpixel_email_item_meta_off', 99 );\n\nfunction perfectpixel_email_item_meta_on() {\n\tadd_filter( 'woocommerce_display_item_meta', 'perfectpixel_tidy_email_item_meta', 10, 2 );\n}\n\nfunction perfectpixel_email_item_meta_off() {\n\tremove_filter( 'woocommerce_display_item_meta', 'perfectpixel_tidy_email_item_meta', 10 );\n}\n\nfunction perfectpixel_tidy_email_item_meta( $html, $item ) {\n\t$lines = array();\n\tforeach ( $item->get_all_formatted_meta_data() as $meta ) {\n\t\t$lines[] = '<span style=\"display:block\">' . wp_kses_post( $meta->display_key ) . ': ' . wp_kses_post( wp_strip_all_tags( $meta->display_value ) ) . '</span>';\n\t}\n\treturn $lines ? '<div class=\"perfectpixel-item-meta\" style=\"margin-top:4px;font-size:12px;line-height:1.5;color:#646970\">' . implode( '', $lines ) . '</div>' : '';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "emails",
+        "design",
+        "order-items"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-beautify-item-meta-in-order-emails/"
+    ],
+    "updated": "2026-11-18T17:42:29+00:00"
+}

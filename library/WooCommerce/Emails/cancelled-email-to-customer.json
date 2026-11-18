@@ -1,0 +1,22 @@
+{
+    "title": "Send the \"Cancelled order\" email to customers too",
+    "description": "Το email «Ακυρωμένη παραγγελία» του WooCommerce στέλνεται κανονικά μόνο στον διαχειριστή. Με το snippet στέλνεται και στον πελάτη (στο email χρέωσης), ώστε να ενημερώνεται όταν ακυρώνεται η παραγγελία του. Το κείμενο του email είναι γραμμένο για διαχειριστή· προσαρμόστε θέμα/επικεφαλίδα στις ρυθμίσεις emails αν χρειάζεται.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_email_recipient_cancelled_order', 'perfectpixel_cancelled_email_to_customer', 20, 2 );\n\nfunction perfectpixel_cancelled_email_to_customer( $recipient, $order ) {\n\tif ( $order instanceof WC_Order && $order->get_billing_email() ) {\n\t\t$recipient = trim( $recipient . ',' . $order->get_billing_email(), ',' );\n\t}\n\treturn $recipient;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "emails",
+        "orders",
+        "cancelled"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-send-cancelled-order-email-to-customer/"
+    ],
+    "updated": "2026-11-18T17:42:29+00:00"
+}

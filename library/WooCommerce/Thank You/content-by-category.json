@@ -1,0 +1,35 @@
+{
+    "title": "Show thank you content when a category was purchased",
+    "description": "Στη σελίδα ευχαριστίας εμφανίζει δικό σας περιεχόμενο μόνο όταν η παραγγελία περιέχει προϊόν από συγκεκριμένες κατηγορίες, π.χ. «Καλώς ήρθατε στη συνδρομή!» με οδηγίες πρόσβασης για την κατηγορία «Συνδρομές». Επιτρέπεται απλό HTML και shortcodes. Δεν εμφανίζεται σε αποτυχημένες πληρωμές.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_thankyou', 'perfectpixel_thankyou_content_by_category', 5 );\n\nfunction perfectpixel_thankyou_content_by_category( $order_id ) {\n\t$order      = wc_get_order( $order_id );\n\t$categories = wp_parse_id_list( '{{thankyou_category_ids}}' );\n\tif ( ! $order || ! $categories || $order->has_status( 'failed' ) ) {\n\t\treturn;\n\t}\n\tforeach ( $order->get_items() as $item ) {\n\t\tif ( has_term( $categories, 'product_cat', $item->get_product_id() ) ) {\n\t\t\techo '<div class=\"woocommerce-info perfectpixel-thankyou-category\">' . wp_kses_post( do_shortcode( '{{thankyou_category_content}}' ) ) . '</div>';\n\t\t\treturn;\n\t\t}\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "thank-you",
+        "categories",
+        "conditional"
+    ],
+    "variables": [
+        {
+            "name": "thankyou_category_ids",
+            "label": "IDs κατηγοριών (με κόμμα)",
+            "default": "",
+            "description": "Υποχρεωτικό"
+        },
+        {
+            "name": "thankyou_category_content",
+            "label": "Περιεχόμενο",
+            "default": "<p><strong>Καλώς ήρθατε στη συνδρομή!</strong> Θα βρείτε το περιεχόμενο στον λογαριασμό σας.</p>",
+            "description": "Χωρίς απόστροφο ('). Επιτρέπεται απλό HTML και shortcodes"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-check-product-category-order/"
+    ],
+    "updated": "2026-11-18T17:42:29+00:00"
+}

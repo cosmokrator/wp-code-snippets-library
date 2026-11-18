@@ -1,0 +1,23 @@
+{
+    "title": "Search admin orders by product SKU",
+    "description": "Η αναζήτηση στη λίστα παραγγελιών του διαχειριστή βρίσκει και τις παραγγελίες που περιέχουν προϊόν (ή παραλλαγή) με τον κωδικό SKU που γράφετε, ολόκληρο ή μέρος του. Χρήσιμο για ανακλήσεις προϊόντων, επιστροφές ή εύρεση πελατών ενός προϊόντος. Λειτουργεί και με HPOS.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_shop_order_search_results', 'perfectpixel_search_orders_by_sku', 10, 2 );\nadd_filter( 'woocommerce_cot_shop_order_search_results', 'perfectpixel_search_orders_by_sku', 10, 2 );\n\nfunction perfectpixel_search_orders_by_sku( $order_ids, $term ) {\n\tglobal $wpdb;\n\t$term = trim( wc_clean( (string) $term ) );\n\tif ( mb_strlen( $term ) < 2 ) {\n\t\treturn $order_ids;\n\t}\n\t$product_ids = $wpdb->get_col(\n\t\t$wpdb->prepare( \"SELECT product_id FROM {$wpdb->prefix}wc_product_meta_lookup WHERE sku LIKE %s LIMIT 200\", '%' . $wpdb->esc_like( $term ) . '%' )\n\t);\n\tif ( ! $product_ids ) {\n\t\treturn $order_ids;\n\t}\n\t$in    = implode( ',', array_map( 'intval', $product_ids ) );\n\t$found = $wpdb->get_col(\n\t\t\"SELECT DISTINCT i.order_id FROM {$wpdb->prefix}woocommerce_order_items i\n\t\tINNER JOIN {$wpdb->prefix}woocommerce_order_itemmeta m ON m.order_item_id = i.order_item_id\n\t\tWHERE i.order_item_type = 'line_item' AND m.meta_key IN ('_product_id','_variation_id') AND m.meta_value IN ({$in})\"\n\t);\n\treturn array_values( array_unique( array_merge( array_map( 'intval', (array) $order_ids ), array_map( 'intval', $found ) ) ) );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "orders",
+        "admin",
+        "search",
+        "sku"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-search-orders-by-sku/"
+    ],
+    "updated": "2026-11-18T17:42:29+00:00"
+}

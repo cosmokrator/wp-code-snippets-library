@@ -1,0 +1,29 @@
+{
+    "title": "Add content to the \"New account\" welcome email",
+    "description": "Προσθέτει δικό σας περιεχόμενο στο email καλωσορίσματος που λαμβάνει ο πελάτης όταν δημιουργεί λογαριασμό, πάνω από το υποσέλιδο: π.χ. κουπόνι πρώτης αγοράς, συνδέσμους προς δημοφιλείς κατηγορίες ή τα στοιχεία επικοινωνίας σας. Επιτρέπεται απλό HTML. Τα υπόλοιπα emails δεν αλλάζουν.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_email_footer', 'perfectpixel_new_account_email_content', 5 );\n\nfunction perfectpixel_new_account_email_content( $email ) {\n\tif ( $email instanceof WC_Email && 'customer_new_account' === $email->id ) {\n\t\techo '<div class=\"perfectpixel-welcome-extra\" style=\"margin-top:16px\">' . wp_kses_post( '{{new_account_extra_content}}' ) . '</div>';\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "emails",
+        "accounts",
+        "welcome"
+    ],
+    "variables": [
+        {
+            "name": "new_account_extra_content",
+            "label": "Περιεχόμενο",
+            "default": "<p>Ως καλωσόρισμα, έχετε <strong>10% έκπτωση</strong> στην πρώτη σας αγορά με τον κωδικό <strong>WELCOME10</strong>.</p>",
+            "description": "Χωρίς απόστροφο ('). Επιτρέπεται απλό HTML"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-content-to-new-account-email/"
+    ],
+    "updated": "2026-11-18T17:42:29+00:00"
+}

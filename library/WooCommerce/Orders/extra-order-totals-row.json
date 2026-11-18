@@ -1,0 +1,35 @@
+{
+    "title": "Add a row to the order totals table",
+    "description": "Προσθέτει μια επιπλέον γραμμή στον πίνακα συνόλων της παραγγελίας (σελίδα ευχαριστίας, emails, προβολή παραγγελίας στον λογαριασμό), πριν από το «Σύνολο», π.χ. «Χρόνος αποστολής: 1-3 εργάσιμες». Αν βάλετε {savings} στο κείμενο, εμφανίζεται η συνολική έκπτωση της παραγγελίας (και η γραμμή κρύβεται όταν δεν υπάρχει έκπτωση).",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_get_order_item_totals', 'perfectpixel_extra_order_totals_row', 20, 2 );\n\nfunction perfectpixel_extra_order_totals_row( $rows, $order ) {\n\t$value = '{{totals_row_value}}';\n\tif ( false !== strpos( $value, '{savings}' ) ) {\n\t\t$discount = (float) $order->get_discount_total() + (float) $order->get_discount_tax();\n\t\tif ( $discount <= 0 ) {\n\t\t\treturn $rows;\n\t\t}\n\t\t$value = str_replace( '{savings}', wp_strip_all_tags( wc_price( $discount, array( 'currency' => $order->get_currency() ) ) ), $value );\n\t}\n\t$row = array(\n\t\t'perfectpixel_extra' => array(\n\t\t\t'label' => '{{totals_row_label}}',\n\t\t\t'value' => esc_html( $value ),\n\t\t),\n\t);\n\t// Insert before the grand total when present.\n\t$pos = array_search( 'order_total', array_keys( $rows ), true );\n\treturn false === $pos ? $rows + $row : array_slice( $rows, 0, $pos, true ) + $row + array_slice( $rows, $pos, null, true );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "orders",
+        "thank-you",
+        "emails"
+    ],
+    "variables": [
+        {
+            "name": "totals_row_label",
+            "label": "Ετικέτα γραμμής",
+            "default": "Χρόνος αποστολής:",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "totals_row_value",
+            "label": "Τιμή γραμμής",
+            "default": "1-3 εργάσιμες",
+            "description": "Χωρίς απόστροφο ('). Π.χ. {savings} για την έκπτωση"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-new-row-order-totals-email-thank-page/"
+    ],
+    "updated": "2026-11-18T17:42:29+00:00"
+}

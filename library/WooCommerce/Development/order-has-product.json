@@ -1,0 +1,22 @@
+{
+    "title": "Helper: check if an order contains a product or variation",
+    "description": "Βοηθητική συνάρτηση για developers: perfectpixel_order_has_product( $order, $product_ids ) επιστρέφει true αν η παραγγελία περιέχει κάποιο από τα προϊόντα ή τις παραλλαγές που δίνετε. Χρήσιμη για σελίδες ευχαριστίας υπό συνθήκη, ανακατευθύνσεις ή tracking. Δεν εμφανίζει τίποτα μόνο του.",
+    "type": "php",
+    "code": "/**\n * Whether an order contains any of the given product or variation IDs.\n *\n * @param WC_Order|int $order       Order object or ID.\n * @param int|int[]    $product_ids Product and/or variation IDs.\n * @return bool\n */\nfunction perfectpixel_order_has_product( $order, $product_ids ) {\n\t$order = $order instanceof WC_Order ? $order : wc_get_order( $order );\n\t$ids   = array_map( 'intval', (array) $product_ids );\n\tif ( ! $order || ! $ids ) {\n\t\treturn false;\n\t}\n\tforeach ( $order->get_items() as $item ) {\n\t\tif ( in_array( (int) $item->get_product_id(), $ids, true ) || in_array( (int) $item->get_variation_id(), $ids, true ) ) {\n\t\t\treturn true;\n\t\t}\n\t}\n\treturn false;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "development",
+        "orders",
+        "helpers"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-check-product-id-order/"
+    ],
+    "updated": "2026-11-18T17:42:29+00:00"
+}

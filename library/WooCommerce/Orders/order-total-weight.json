@@ -1,0 +1,23 @@
+{
+    "title": "Save and show the total weight of each order",
+    "description": "Αποθηκεύει το συνολικό βάρος των προϊόντων κάθε παραγγελίας τη στιγμή της αγοράς και το εμφανίζει στη σελίδα επεξεργασίας της παραγγελίας (κάτω από τη διεύθυνση αποστολής), π.χ. για να διαλέξετε μεταφορική ή να εκτυπώσετε voucher. Για παλιές παραγγελίες το υπολογίζει από τα τρέχοντα βάρη των προϊόντων. Λειτουργεί και με το checkout με blocks.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_checkout_order_created', 'perfectpixel_save_order_weight' );\nadd_action( 'woocommerce_store_api_checkout_order_processed', 'perfectpixel_save_order_weight' );\nadd_action( 'woocommerce_admin_order_data_after_shipping_address', 'perfectpixel_show_order_weight' );\n\nfunction perfectpixel_calculate_order_weight( $order ) {\n\t$weight = 0.0;\n\tforeach ( $order->get_items() as $item ) {\n\t\t$product = $item->get_product();\n\t\tif ( $product && ! $product->is_virtual() ) {\n\t\t\t$weight += (float) $product->get_weight() * (float) $item->get_quantity();\n\t\t}\n\t}\n\treturn $weight;\n}\n\nfunction perfectpixel_save_order_weight( $order ) {\n\t$order->update_meta_data( '_perfectpixel_order_weight', perfectpixel_calculate_order_weight( $order ) );\n\t$order->save();\n}\n\nfunction perfectpixel_show_order_weight( $order ) {\n\t$weight = $order->get_meta( '_perfectpixel_order_weight' );\n\tif ( '' === $weight ) {\n\t\t$weight = perfectpixel_calculate_order_weight( $order );\n\t}\n\tif ( (float) $weight > 0 ) {\n\t\techo '<p><strong>Συνολικό βάρος:</strong> ' . esc_html( wc_format_weight( $weight ) ) . '</p>';\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "orders",
+        "admin",
+        "weight",
+        "shipping"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-save-display-order-total-weight/"
+    ],
+    "updated": "2026-11-18T17:42:29+00:00"
+}
