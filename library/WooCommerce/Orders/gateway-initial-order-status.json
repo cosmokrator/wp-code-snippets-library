@@ -1,0 +1,41 @@
+{
+    "title": "Change the initial order status of offline payments",
+    "description": "Αλλάζει την κατάσταση με την οποία δημιουργούνται οι παραγγελίες με τραπεζική κατάθεση, επιταγή ή αντικαταβολή (προεπιλογή: «Σε αναμονή» / «Σε επεξεργασία»). Π.χ. αντικαταβολή → «Σε αναμονή» μέχρι να επιβεβαιώσετε τηλεφωνικά. Αφήστε κενό όποιον τρόπο δεν θέλετε να αλλάξει. Κωδικοί: pending, on-hold, processing, completed ή δική σας κατάσταση (χωρίς wc-).",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_bacs_process_payment_order_status', 'perfectpixel_bacs_initial_status' );\nadd_filter( 'woocommerce_cheque_process_payment_order_status', 'perfectpixel_cheque_initial_status' );\nadd_filter( 'woocommerce_cod_process_payment_order_status', 'perfectpixel_cod_initial_status' );\n\nfunction perfectpixel_valid_initial_status( $status, $default ) {\n\t$status = sanitize_key( $status );\n\treturn ( '' !== $status && array_key_exists( 'wc-' . $status, wc_get_order_statuses() ) ) ? $status : $default;\n}\n\nfunction perfectpixel_bacs_initial_status( $status ) {\n\treturn perfectpixel_valid_initial_status( '{{bacs_initial_status}}', $status );\n}\n\nfunction perfectpixel_cheque_initial_status( $status ) {\n\treturn perfectpixel_valid_initial_status( '{{cheque_initial_status}}', $status );\n}\n\nfunction perfectpixel_cod_initial_status( $status ) {\n\treturn perfectpixel_valid_initial_status( '{{cod_initial_status}}', $status );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "orders",
+        "order-status",
+        "payment-gateways"
+    ],
+    "variables": [
+        {
+            "name": "bacs_initial_status",
+            "label": "Τραπεζική κατάθεση",
+            "default": "",
+            "description": "Κενό = χωρίς αλλαγή (on-hold)"
+        },
+        {
+            "name": "cheque_initial_status",
+            "label": "Επιταγή",
+            "default": "",
+            "description": "Κενό = χωρίς αλλαγή (on-hold)"
+        },
+        {
+            "name": "cod_initial_status",
+            "label": "Αντικαταβολή",
+            "default": "on-hold",
+            "description": "Κενό = χωρίς αλλαγή (processing)"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-payment-gateway-order-status/"
+    ],
+    "updated": "2026-11-18T17:21:44+00:00"
+}

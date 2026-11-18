@@ -1,0 +1,21 @@
+{
+    "title": "Do not restore stock when an order is cancelled",
+    "description": "Όταν μια παραγγελία ακυρώνεται ή επιστρέφει σε «Εκκρεμεί πληρωμή», το WooCommerce επαναφέρει αυτόματα το απόθεμα των προϊόντων της. Το snippet το απενεργοποιεί, για καταστήματα όπου το απόθεμα διαχειρίζεται εξωτερικό σύστημα ή όπου τα ακυρωμένα προϊόντα δεν επιστρέφουν στο ράφι.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_can_restore_order_stock', 'perfectpixel_disable_restock_on_cancel' );\n\nfunction perfectpixel_disable_restock_on_cancel() {\n\treturn false;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "stock",
+        "orders"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-disable-restocking-order-cancelled/"
+    ],
+    "updated": "2026-11-18T17:21:44+00:00"
+}

@@ -1,0 +1,35 @@
+{
+    "title": "Prefill country and state for users created in the admin",
+    "description": "Όταν δημιουργείτε νέο χρήστη από τον διαχειριστή (Χρήστες → Προσθήκη νέου), συμπληρώνονται αυτόματα η χώρα και ο νομός/περιοχή χρέωσης και αποστολής, για B2B καταστήματα όπου ανοίγετε εσείς τους λογαριασμούς και οι πελάτες είναι στην ίδια περιοχή. Οι εγγραφές από το site δεν επηρεάζονται.",
+    "type": "php",
+    "code": "add_action( 'user_register', 'perfectpixel_default_address_new_users' );\n\nfunction perfectpixel_default_address_new_users( $user_id ) {\n\tif ( ! is_admin() || ! current_user_can( 'create_users' ) ) {\n\t\treturn;\n\t}\n\t$country = strtoupper( sanitize_text_field( '{{new_user_country}}' ) );\n\t$state   = strtoupper( sanitize_text_field( '{{new_user_state}}' ) );\n\tforeach ( array( 'billing', 'shipping' ) as $type ) {\n\t\tif ( $country && ! get_user_meta( $user_id, $type . '_country', true ) ) {\n\t\t\tupdate_user_meta( $user_id, $type . '_country', $country );\n\t\t}\n\t\tif ( $state && ! get_user_meta( $user_id, $type . '_state', true ) ) {\n\t\t\tupdate_user_meta( $user_id, $type . '_state', $state );\n\t\t}\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "customers",
+        "admin",
+        "b2b"
+    ],
+    "variables": [
+        {
+            "name": "new_user_country",
+            "label": "Χώρα (κωδικός)",
+            "default": "GR",
+            "description": "Κωδικός 2 γραμμάτων, π.χ. GR"
+        },
+        {
+            "name": "new_user_state",
+            "label": "Νομός/περιοχή (κωδικός)",
+            "default": "I",
+            "description": "Π.χ. I = Αττική. Κενό = χωρίς περιοχή"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-populate-billing-shipping-when-adding-new-user/"
+    ],
+    "updated": "2026-11-18T17:21:44+00:00"
+}

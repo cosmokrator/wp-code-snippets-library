@@ -1,0 +1,29 @@
+{
+    "title": "Apply a coupon automatically from a URL",
+    "description": "Οποιοσδήποτε σύνδεσμος του site με ?coupon=ΚΩΔΙΚΟΣ (π.χ. σε newsletter ή διαφήμιση) εφαρμόζει αυτόματα το κουπόνι. Αν το καλάθι είναι άδειο, ο κωδικός θυμάται και εφαρμόζεται μόλις ο πελάτης προσθέσει προϊόν. Ιδανικό αν κρύβετε τη φόρμα κουπονιού στο καλάθι/checkout. Ορίστε το όνομα της παραμέτρου στη μεταβλητή.",
+    "type": "php",
+    "code": "add_action( 'wp_loaded', 'perfectpixel_coupon_from_url_capture', 30 );\nadd_action( 'woocommerce_add_to_cart', 'perfectpixel_coupon_from_url_apply', 30 );\n\nfunction perfectpixel_coupon_from_url_capture() {\n\t$param = sanitize_key( '{{coupon_url_param}}' );\n\tif ( is_admin() || wp_doing_ajax() || ! function_exists( 'WC' ) || ! WC()->session || empty( $_GET[ $param ] ) ) {\n\t\treturn;\n\t}\n\t$code = wc_format_coupon_code( wp_unslash( $_GET[ $param ] ) );\n\tif ( $code && wc_get_coupon_id_by_code( $code ) ) {\n\t\tif ( ! WC()->session->has_session() ) {\n\t\t\tWC()->session->set_customer_session_cookie( true );\n\t\t}\n\t\tWC()->session->set( 'perfectpixel_url_coupon', $code );\n\t\tperfectpixel_coupon_from_url_apply();\n\t}\n}\n\nfunction perfectpixel_coupon_from_url_apply() {\n\tif ( ! WC()->session || ! WC()->cart || WC()->cart->is_empty() ) {\n\t\treturn;\n\t}\n\t$code = WC()->session->get( 'perfectpixel_url_coupon' );\n\tif ( $code && ! WC()->cart->has_discount( $code ) ) {\n\t\tWC()->cart->apply_coupon( $code );\n\t\tWC()->session->set( 'perfectpixel_url_coupon', null );\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "coupons",
+        "marketing",
+        "url"
+    ],
+    "variables": [
+        {
+            "name": "coupon_url_param",
+            "label": "Όνομα παραμέτρου URL",
+            "default": "coupon",
+            "description": "Μόνο λατινικά πεζά, π.χ. coupon"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-automatically-apply-coupon-via-url/"
+    ],
+    "updated": "2026-11-18T17:21:44+00:00"
+}

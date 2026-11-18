@@ -1,0 +1,29 @@
+{
+    "title": "Show remaining stock in admin order emails",
+    "description": "Στα emails παραγγελίας που λαμβάνει ο διαχειριστής (π.χ. «Νέα παραγγελία»), δίπλα στην ποσότητα κάθε προϊόντος εμφανίζεται το απόθεμα που απέμεινε, π.χ. «1 (απομένουν 3)», ώστε να βλέπετε αμέσως τι χρειάζεται αναπλήρωση. Τα emails των πελατών δεν αλλάζουν. Ισχύει για προϊόντα με διαχείριση αποθέματος.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_email_before_order_table', 'perfectpixel_email_remaining_stock_start', 1, 2 );\nadd_action( 'woocommerce_email_after_order_table', 'perfectpixel_email_remaining_stock_stop', 99 );\nadd_filter( 'woocommerce_email_order_item_quantity', 'perfectpixel_email_remaining_stock', 10, 2 );\n\nfunction perfectpixel_email_remaining_stock_flag( $set = null ) {\n\tstatic $admin = false;\n\tif ( null !== $set ) {\n\t\t$admin = (bool) $set;\n\t}\n\treturn $admin;\n}\n\nfunction perfectpixel_email_remaining_stock_start( $order, $sent_to_admin ) {\n\tperfectpixel_email_remaining_stock_flag( $sent_to_admin );\n}\n\nfunction perfectpixel_email_remaining_stock_stop() {\n\tperfectpixel_email_remaining_stock_flag( false );\n}\n\nfunction perfectpixel_email_remaining_stock( $qty_display, $item ) {\n\tif ( ! perfectpixel_email_remaining_stock_flag() || ! is_callable( array( $item, 'get_product' ) ) ) {\n\t\treturn $qty_display;\n\t}\n\t$product = $item->get_product();\n\tif ( $product && $product->managing_stock() ) {\n\t\t$qty_display .= ' (' . esc_html( str_replace( '{qty}', wc_stock_amount( $product->get_stock_quantity() ), '{{email_remaining_text}}' ) ) . ')';\n\t}\n\treturn $qty_display;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "emails",
+        "stock",
+        "admin"
+    ],
+    "variables": [
+        {
+            "name": "email_remaining_text",
+            "label": "Κείμενο",
+            "default": "απομένουν {qty}",
+            "description": "Χωρίς απόστροφο ('). Το {qty} είναι η ποσότητα"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-remaining-stock-order-emails/"
+    ],
+    "updated": "2026-11-18T17:21:44+00:00"
+}

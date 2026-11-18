@@ -1,0 +1,29 @@
+{
+    "title": "Show out-of-stock products in selected categories only",
+    "description": "Αν έχετε ενεργή τη ρύθμιση «Απόκρυψη εξαντλημένων προϊόντων», το snippet κάνει εξαίρεση για συγκεκριμένες κατηγορίες, όπου τα εξαντλημένα προϊόντα εμφανίζονται κανονικά (π.χ. συλλογή έργων «Πουλήθηκαν» ή προϊόντα που ξαναέρχονται). Σε όλο το υπόλοιπο κατάστημα παραμένουν κρυφά.",
+    "type": "php",
+    "code": "add_filter( 'pre_option_woocommerce_hide_out_of_stock_items', 'perfectpixel_show_out_of_stock_in_categories' );\n\nfunction perfectpixel_show_out_of_stock_in_categories( $value ) {\n\t$ids = wp_parse_id_list( '{{show_oos_category_ids}}' );\n\t// The product query reads this option during pre_get_posts, after the main query was parsed.\n\tif ( $ids && ! is_admin() && isset( $GLOBALS['wp_query'] ) && $GLOBALS['wp_query']->is_tax( 'product_cat', $ids ) ) {\n\t\treturn 'no';\n\t}\n\treturn $value; // false = use the saved setting.\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shop",
+        "stock",
+        "categories"
+    ],
+    "variables": [
+        {
+            "name": "show_oos_category_ids",
+            "label": "IDs κατηγοριών (με κόμμα)",
+            "default": "",
+            "description": "Κενό = καμία εξαίρεση"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-hide-out-of-stock-items-exception/"
+    ],
+    "updated": "2026-11-18T17:21:44+00:00"
+}

@@ -1,0 +1,35 @@
+{
+    "title": "Let customers switch prices between incl. and excl. tax",
+    "description": "Shortcode [tax_display_switcher] που εμφανίζει δύο συνδέσμους «Με ΦΠΑ / Χωρίς ΦΠΑ». Ο πελάτης επιλέγει πώς θέλει να βλέπει τις τιμές σε κατάστημα, καλάθι και checkout, και η επιλογή του θυμάται για 30 ημέρες. Για καταστήματα με ιδιώτες και επαγγελματίες. Βάλτε το shortcode σε header, widget ή μενού.",
+    "type": "php",
+    "code": "add_action( 'init', 'perfectpixel_tax_display_switch_handle' );\nadd_filter( 'pre_option_woocommerce_tax_display_shop', 'perfectpixel_tax_display_choice' );\nadd_filter( 'pre_option_woocommerce_tax_display_cart', 'perfectpixel_tax_display_choice' );\nadd_shortcode( 'tax_display_switcher', 'perfectpixel_tax_display_switcher' );\n\nfunction perfectpixel_tax_display_switch_handle() {\n\tif ( isset( $_GET['tax_display'] ) && in_array( $_GET['tax_display'], array( 'incl', 'excl' ), true ) && ! is_admin() ) {\n\t\t$value = sanitize_key( $_GET['tax_display'] );\n\t\tsetcookie( 'perfectpixel_tax_display', $value, time() + 30 * DAY_IN_SECONDS, COOKIEPATH, COOKIE_DOMAIN, is_ssl(), true );\n\t\t$_COOKIE['perfectpixel_tax_display'] = $value;\n\t\twp_safe_redirect( remove_query_arg( 'tax_display' ) );\n\t\texit;\n\t}\n}\n\nfunction perfectpixel_tax_display_choice( $value ) {\n\tif ( is_admin() && ! wp_doing_ajax() ) {\n\t\treturn $value;\n\t}\n\t$choice = isset( $_COOKIE['perfectpixel_tax_display'] ) ? sanitize_key( $_COOKIE['perfectpixel_tax_display'] ) : '';\n\treturn in_array( $choice, array( 'incl', 'excl' ), true ) ? $choice : $value;\n}\n\nfunction perfectpixel_tax_display_switcher() {\n\t$current = get_option( 'woocommerce_tax_display_shop' );\n\t$links   = array();\n\tforeach ( array( 'incl' => '{{tax_switch_incl_label}}', 'excl' => '{{tax_switch_excl_label}}' ) as $key => $label ) {\n\t\t$links[] = $key === $current\n\t\t\t? '<strong>' . esc_html( $label ) . '</strong>'\n\t\t\t: '<a href=\"' . esc_url( add_query_arg( 'tax_display', $key ) ) . '\" rel=\"nofollow\">' . esc_html( $label ) . '</a>';\n\t}\n\treturn '<span class=\"perfectpixel-tax-switcher\">' . implode( ' | ', $links ) . '</span>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "tax",
+        "prices",
+        "b2b"
+    ],
+    "variables": [
+        {
+            "name": "tax_switch_incl_label",
+            "label": "Κείμενο «με ΦΠΑ»",
+            "default": "Με ΦΠΑ",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "tax_switch_excl_label",
+            "label": "Κείμενο «χωρίς ΦΠΑ»",
+            "default": "Χωρίς ΦΠΑ",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-simple-price-including-excluding-tax-switcher/"
+    ],
+    "updated": "2026-11-18T17:21:44+00:00"
+}

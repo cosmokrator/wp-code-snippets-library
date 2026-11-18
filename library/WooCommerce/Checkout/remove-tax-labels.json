@@ -1,0 +1,22 @@
+{
+    "title": "Remove the \"incl. tax\" / \"ex. tax\" labels from totals",
+    "description": "Αφαιρεί τις ετικέτες «(συμπ. ΦΠΑ)» και «(χωρίς ΦΠΑ)» που εμφανίζονται δίπλα σε υποσύνολα και σύνολα στο καλάθι, στο checkout, στις παραγγελίες και στα emails, για πιο καθαρή εμφάνιση. Το ποσό του ΦΠΑ εξακολουθεί να εμφανίζεται στη γραμμή του φόρου (αν τη δείχνετε).",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_countries_inc_tax_or_vat', 'perfectpixel_remove_tax_label' );\nadd_filter( 'woocommerce_countries_ex_tax_or_vat', 'perfectpixel_remove_tax_label' );\n\nfunction perfectpixel_remove_tax_label() {\n\treturn '';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "tax",
+        "cart",
+        "checkout"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-remove-incl-ex-tax-labels-cart-checkout-order/"
+    ],
+    "updated": "2026-11-18T17:21:44+00:00"
+}

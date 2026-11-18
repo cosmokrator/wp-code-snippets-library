@@ -1,0 +1,53 @@
+{
+    "title": "Add a shipping surcharge for specific regions",
+    "description": "Προσθέτει επιπλέον χρέωση στο καλάθι και στο checkout όταν η αποστολή γίνεται σε συγκεκριμένους νομούς/περιοχές, π.χ. «Επιβάρυνση νησιών 4 €». Ορίστε χώρα, κωδικούς περιοχών, ποσό και κείμενο. Λειτουργεί και με το checkout με blocks.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_cart_calculate_fees', 'perfectpixel_surcharge_by_state' );\n\nfunction perfectpixel_surcharge_by_state( $cart ) {\n\tif ( ( is_admin() && ! wp_doing_ajax() ) || ! $cart->needs_shipping() ) {\n\t\treturn;\n\t}\n\t$customer = WC()->customer;\n\t$states   = array_filter( array_map( 'trim', explode( ',', strtoupper( '{{surcharge_states}}' ) ) ) );\n\tif ( ! $customer || strtoupper( '{{surcharge_country}}' ) !== $customer->get_shipping_country() || ! in_array( strtoupper( $customer->get_shipping_state() ), $states, true ) ) {\n\t\treturn;\n\t}\n\t$cart->add_fee( '{{surcharge_label}}', (float) '{{surcharge_amount}}', 'yes' === '{{surcharge_taxable}}' );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shipping",
+        "fees",
+        "states"
+    ],
+    "variables": [
+        {
+            "name": "surcharge_country",
+            "label": "Χώρα (κωδικός)",
+            "default": "GR",
+            "description": "Κωδικός 2 γραμμάτων"
+        },
+        {
+            "name": "surcharge_states",
+            "label": "Κωδικοί περιοχών (με κόμμα)",
+            "default": "L,M",
+            "description": "Για Ελλάδα: L = Νότιο Αιγαίο, M = Κρήτη, K = Βόρειο Αιγαίο, F = Ιόνια Νησιά"
+        },
+        {
+            "name": "surcharge_amount",
+            "label": "Ποσό",
+            "default": "4",
+            "description": "Μόνο αριθμός"
+        },
+        {
+            "name": "surcharge_label",
+            "label": "Κείμενο",
+            "default": "Επιβάρυνση αποστολής νησιών",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "surcharge_taxable",
+            "label": "Με ΦΠΑ (yes/no)",
+            "default": "yes",
+            "description": "yes = προστίθεται ΦΠΑ στο ποσό"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-shipping-fee-non-continental-states/"
+    ],
+    "updated": "2026-11-18T17:21:44+00:00"
+}

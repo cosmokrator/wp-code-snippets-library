@@ -1,0 +1,22 @@
+{
+    "title": "Shortcode that lists only in-stock products",
+    "description": "Shortcode [in_stock_products] που εμφανίζει μόνο τα προϊόντα που είναι σε απόθεμα, οπουδήποτε (σελίδα, άρθρο, widget). Δέχεται όλες τις παραμέτρους του [products] του WooCommerce, π.χ. [in_stock_products limit=\"8\" columns=\"4\" category=\"papoutsia\" orderby=\"date\"].",
+    "type": "php",
+    "code": "add_shortcode( 'in_stock_products', 'perfectpixel_in_stock_products_shortcode' );\nadd_filter( 'woocommerce_shortcode_products_query', 'perfectpixel_in_stock_products_query', 10, 3 );\n\nfunction perfectpixel_in_stock_products_shortcode( $atts ) {\n\tif ( ! class_exists( 'WC_Shortcode_Products' ) ) {\n\t\treturn '';\n\t}\n\t$atts            = (array) $atts;\n\t$atts['class']   = trim( ( $atts['class'] ?? '' ) . ' perfectpixel-in-stock' );\n\t$shortcode       = new WC_Shortcode_Products( $atts, 'products' );\n\treturn $shortcode->get_content();\n}\n\n// Out-of-stock products carry the \"outofstock\" product_visibility term.\nfunction perfectpixel_in_stock_products_query( $args, $atts, $type ) {\n\tif ( false !== strpos( (string) ( $atts['class'] ?? '' ), 'perfectpixel-in-stock' ) ) {\n\t\t$args['tax_query'][] = array(\n\t\t\t'taxonomy' => 'product_visibility',\n\t\t\t'field'    => 'name',\n\t\t\t'terms'    => array( 'outofstock' ),\n\t\t\t'operator' => 'NOT IN',\n\t\t);\n\t}\n\treturn $args;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shop",
+        "stock",
+        "shortcodes"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-in-stock-products-shortcode/"
+    ],
+    "updated": "2026-11-18T17:21:44+00:00"
+}

@@ -1,0 +1,22 @@
+{
+    "title": "Shortcode that lists only out-of-stock products",
+    "description": "Shortcode [out_of_stock_products] που εμφανίζει μόνο τα εξαντλημένα προϊόντα, π.χ. σε σελίδα «Πουλήθηκαν» για κοινωνική απόδειξη ή «Έρχονται ξανά σύντομα». Δέχεται όλες τις παραμέτρους του [products], π.χ. [out_of_stock_products limit=\"12\" columns=\"4\"]. Αν έχετε ενεργή την «Απόκρυψη εξαντλημένων προϊόντων», το shortcode θα είναι κενό.",
+    "type": "php",
+    "code": "add_shortcode( 'out_of_stock_products', 'perfectpixel_out_of_stock_products_shortcode' );\nadd_filter( 'woocommerce_shortcode_products_query', 'perfectpixel_out_of_stock_products_query', 10, 3 );\n\nfunction perfectpixel_out_of_stock_products_shortcode( $atts ) {\n\tif ( ! class_exists( 'WC_Shortcode_Products' ) ) {\n\t\treturn '';\n\t}\n\t$atts          = (array) $atts;\n\t$atts['class'] = trim( ( $atts['class'] ?? '' ) . ' perfectpixel-out-of-stock' );\n\t$shortcode     = new WC_Shortcode_Products( $atts, 'products' );\n\treturn $shortcode->get_content();\n}\n\nfunction perfectpixel_out_of_stock_products_query( $args, $atts, $type ) {\n\tif ( false !== strpos( (string) ( $atts['class'] ?? '' ), 'perfectpixel-out-of-stock' ) ) {\n\t\t$args['tax_query'][] = array(\n\t\t\t'taxonomy' => 'product_visibility',\n\t\t\t'field'    => 'name',\n\t\t\t'terms'    => array( 'outofstock' ),\n\t\t\t'operator' => 'IN',\n\t\t);\n\t}\n\treturn $args;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shop",
+        "stock",
+        "shortcodes"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-display-stock-products-shortcode/"
+    ],
+    "updated": "2026-11-18T17:21:44+00:00"
+}

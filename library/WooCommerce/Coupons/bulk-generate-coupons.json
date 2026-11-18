@@ -1,0 +1,22 @@
+{
+    "title": "Bulk generate unique coupon codes",
+    "description": "Προσθέτει τη σελίδα WooCommerce → «Μαζικά κουπόνια», όπου δημιουργείτε με μία φορά πολλά μοναδικά κουπόνια (π.χ. 200 κωδικοί μίας χρήσης για έντυπα ή συνεργάτες): πλήθος, πρόθεμα, τύπος και ποσό έκπτωσης, όριο χρήσης και ημερομηνία λήξης. Στο τέλος εμφανίζεται η λίστα των κωδικών για αντιγραφή. Έως 500 ανά εκτέλεση.",
+    "type": "php",
+    "code": "add_action( 'admin_menu', 'perfectpixel_bulk_coupons_menu', 60 );\n\nfunction perfectpixel_bulk_coupons_menu() {\n\tadd_submenu_page( 'woocommerce', 'Μαζικά κουπόνια', 'Μαζικά κουπόνια', 'manage_woocommerce', 'perfectpixel-bulk-coupons', 'perfectpixel_bulk_coupons_page' );\n}\n\nfunction perfectpixel_bulk_coupons_page() {\n\tif ( ! current_user_can( 'manage_woocommerce' ) ) {\n\t\treturn;\n\t}\n\t$created = array();\n\tif ( isset( $_POST['perfectpixel_bulk_coupons'] ) && check_admin_referer( 'perfectpixel_bulk_coupons' ) ) {\n\t\t$count  = min( 500, max( 1, absint( $_POST['count'] ?? 0 ) ) );\n\t\t$prefix = strtoupper( preg_replace( '/[^A-Za-z0-9_-]/', '', wp_unslash( $_POST['prefix'] ?? '' ) ) );\n\t\t$type   = in_array( $_POST['discount_type'] ?? '', array( 'percent', 'fixed_cart', 'fixed_product' ), true ) ? $_POST['discount_type'] : 'percent';\n\t\t$amount = wc_format_decimal( wp_unslash( $_POST['amount'] ?? 0 ) );\n\t\t$limit  = absint( $_POST['usage_limit'] ?? 1 );\n\t\t$expiry = sanitize_text_field( wp_unslash( $_POST['expiry'] ?? '' ) );\n\t\tfor ( $i = 0; $i < $count; $i++ ) {\n\t\t\tdo {\n\t\t\t\t$code = $prefix . strtoupper( wp_generate_password( 8, false ) );\n\t\t\t} while ( wc_get_coupon_id_by_code( $code ) );\n\t\t\t$coupon = new WC_Coupon();\n\t\t\t$coupon->set_code( $code );\n\t\t\t$coupon->set_discount_type( $type );\n\t\t\t$coupon->set_amount( $amount );\n\t\t\t$coupon->set_usage_limit( $limit );\n\t\t\tif ( $expiry ) {\n\t\t\t\t$coupon->set_date_expires( $expiry );\n\t\t\t}\n\t\t\t$coupon->save();\n\t\t\t$created[] = $code;\n\t\t}\n\t}\n\techo '<div class=\"wrap\"><h1>Μαζική δημιουργία κουπονιών</h1><form method=\"post\">';\n\twp_nonce_field( 'perfectpixel_bulk_coupons' );\n\techo '<table class=\"form-table\">';\n\techo '<tr><th>Πλήθος (έως 500)</th><td><input type=\"number\" name=\"count\" value=\"10\" min=\"1\" max=\"500\"></td></tr>';\n\techo '<tr><th>Πρόθεμα κωδικού</th><td><input type=\"text\" name=\"prefix\" value=\"PROMO-\"></td></tr>';\n\techo '<tr><th>Τύπος έκπτωσης</th><td><select name=\"discount_type\"><option value=\"percent\">Ποσοστό %</option><option value=\"fixed_cart\">Σταθερό ποσό καλαθιού</option><option value=\"fixed_product\">Σταθερό ποσό προϊόντος</option></select></td></tr>';\n\techo '<tr><th>Ποσό</th><td><input type=\"text\" name=\"amount\" value=\"10\"></td></tr>';\n\techo '<tr><th>Όριο χρήσης ανά κουπόνι</th><td><input type=\"number\" name=\"usage_limit\" value=\"1\" min=\"0\"> <span class=\"description\">0 = απεριόριστο</span></td></tr>';\n\techo '<tr><th>Λήξη</th><td><input type=\"date\" name=\"expiry\"></td></tr>';\n\techo '</table>';\n\tsubmit_button( 'Δημιουργία κουπονιών', 'primary', 'perfectpixel_bulk_coupons' );\n\techo '</form>';\n\tif ( $created ) {\n\t\techo '<h2>' . count( $created ) . ' κουπόνια δημιουργήθηκαν</h2><textarea readonly rows=\"12\" class=\"large-text code\">' . esc_textarea( implode( \"\\n\", $created ) ) . '</textarea>';\n\t}\n\techo '</div>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "coupons",
+        "admin",
+        "bulk"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-bulk-generate-coupons/"
+    ],
+    "updated": "2026-11-18T17:21:44+00:00"
+}

@@ -1,0 +1,34 @@
+{
+    "title": "Hide shipping methods for specific user roles",
+    "description": "Κρύβει συγκεκριμένους τρόπους αποστολής από χρήστες με συγκεκριμένους ρόλους, π.χ. όχι «Δωρεάν αποστολή» για πελάτες χονδρικής ή όχι «Express» για απλούς πελάτες. Ορίστε τους ρόλους (slug, π.χ. customer, wholesale) και τους τρόπους αποστολής (π.χ. free_shipping για όλους τους δωρεάν ή flat_rate:3 για συγκεκριμένο). Τα μεταφορικά κρατιούνται στη συνεδρία του πελάτη: για να δείτε την αλλαγή σε υπάρχον καλάθι, αλλάξτε κάτι στο καλάθι.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_package_rates', 'perfectpixel_hide_rates_by_user_role', 20 );\n\nfunction perfectpixel_hide_rates_by_user_role( $rates ) {\n\t$user  = wp_get_current_user();\n\t$roles = array_filter( array_map( 'trim', explode( ',', '{{hidden_rates_roles}}' ) ) );\n\tif ( ! $user->exists() || ! array_intersect( $roles, (array) $user->roles ) ) {\n\t\treturn $rates;\n\t}\n\t$hide = array_filter( array_map( 'trim', explode( ',', '{{hidden_rates_ids}}' ) ) );\n\tforeach ( $rates as $key => $rate ) {\n\t\tif ( in_array( $key, $hide, true ) || in_array( $rate->get_method_id(), $hide, true ) ) {\n\t\t\tunset( $rates[ $key ] );\n\t\t}\n\t}\n\treturn $rates;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shipping",
+        "user-roles"
+    ],
+    "variables": [
+        {
+            "name": "hidden_rates_roles",
+            "label": "Ρόλοι (με κόμμα)",
+            "default": "wholesale_customer",
+            "description": "Slugs ρόλων, π.χ. customer,wholesale_customer"
+        },
+        {
+            "name": "hidden_rates_ids",
+            "label": "Τρόποι αποστολής (με κόμμα)",
+            "default": "free_shipping",
+            "description": "Π.χ. free_shipping ή flat_rate:3"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-exclude-shipping-method-from-specific-user-role/"
+    ],
+    "updated": "2026-11-18T17:21:44+00:00"
+}

@@ -1,0 +1,41 @@
+{
+    "title": "Charge a flat rate per kilogram",
+    "description": "Ένας τρόπος αποστολής «Σταθερή τιμή» χρεώνει ανάλογα με το βάρος του καλαθιού, π.χ. 1,50 € ανά κιλό (με προαιρετικό ελάχιστο κόστος), αντί για ένα σταθερό ποσό. Φτιάξτε τον τρόπο αποστολής στη ζώνη σας και ορίστε το ID του (π.χ. flat_rate:4). Χρειάζεται βάρος σε όλα τα προϊόντα. Ο ΦΠΑ μεταφορικών υπολογίζεται ξανά. Τα μεταφορικά κρατιούνται στη συνεδρία του πελάτη: για να δείτε την αλλαγή σε υπάρχον καλάθι, αλλάξτε κάτι στο καλάθι.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_package_rates', 'perfectpixel_flat_rate_per_kg', 20, 2 );\n\nfunction perfectpixel_flat_rate_per_kg( $rates, $package ) {\n\t$rate_id = trim( '{{per_kg_rate_id}}' );\n\tif ( ! isset( $rates[ $rate_id ] ) ) {\n\t\treturn $rates;\n\t}\n\t$weight = 0.0;\n\tforeach ( $package['contents'] as $item ) {\n\t\tif ( $item['data']->needs_shipping() ) {\n\t\t\t$weight += (float) $item['data']->get_weight() * (int) $item['quantity'];\n\t\t}\n\t}\n\t$cost = max( (float) '{{per_kg_minimum}}', $weight * (float) '{{per_kg_cost}}' );\n\t$rate = $rates[ $rate_id ];\n\t$rate->set_cost( wc_format_decimal( $cost, wc_get_price_decimals() ) );\n\tif ( $rate->get_taxes() ) {\n\t\t$rate->set_taxes( WC_Tax::calc_shipping_tax( $cost, WC_Tax::get_shipping_tax_rates() ) );\n\t}\n\treturn $rates;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shipping",
+        "weight",
+        "flat-rate"
+    ],
+    "variables": [
+        {
+            "name": "per_kg_rate_id",
+            "label": "ID τρόπου αποστολής",
+            "default": "flat_rate:1",
+            "description": "Π.χ. flat_rate:4"
+        },
+        {
+            "name": "per_kg_cost",
+            "label": "Κόστος ανά μονάδα βάρους",
+            "default": "1.5",
+            "description": "Μόνο αριθμός, στη μονάδα βάρους του καταστήματος"
+        },
+        {
+            "name": "per_kg_minimum",
+            "label": "Ελάχιστο κόστος",
+            "default": "3",
+            "description": "Μόνο αριθμός. 0 = χωρίς ελάχιστο"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-flat-rate-by-weight/"
+    ],
+    "updated": "2026-11-18T17:21:44+00:00"
+}

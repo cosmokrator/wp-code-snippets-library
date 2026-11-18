@@ -1,0 +1,29 @@
+{
+    "title": "Show different shipping rates by order amount",
+    "description": "Κλιμακωτά μεταφορικά ανάλογα με το ποσό του καλαθιού: π.χ. έως 100 € «Αποστολή 5 €», από 100 € «Αποστολή 2 €», από 250 € «Δωρεάν αποστολή». Φτιάξτε τους τρόπους αποστολής στη ζώνη σας και ορίστε στη μεταβλητή ζεύγη ελάχιστο ποσό=ID τρόπου. Εμφανίζεται μόνο ο τρόπος της κλίμακας που ισχύει· όσοι δεν είναι στη λίστα μένουν ως έχουν. Τα μεταφορικά κρατιούνται στη συνεδρία του πελάτη: για να δείτε την αλλαγή σε υπάρχον καλάθι, αλλάξτε κάτι στο καλάθι.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_package_rates', 'perfectpixel_rates_by_cart_amount', 30 );\n\nfunction perfectpixel_rates_by_cart_amount( $rates ) {\n\t$tiers = array();\n\tforeach ( explode( '|', '{{tiered_rates}}' ) as $pair ) {\n\t\t$parts = array_map( 'trim', explode( '=', $pair, 2 ) );\n\t\tif ( 2 === count( $parts ) && is_numeric( $parts[0] ) && '' !== $parts[1] ) {\n\t\t\t$tiers[ $parts[1] ] = (float) $parts[0];\n\t\t}\n\t}\n\tif ( ! $tiers || ! WC()->cart ) {\n\t\treturn $rates;\n\t}\n\t$amount = (float) WC()->cart->get_displayed_subtotal();\n\t$chosen = '';\n\tforeach ( $tiers as $rate_id => $min ) {\n\t\tif ( $amount >= $min && isset( $rates[ $rate_id ] ) && ( '' === $chosen || $min >= $tiers[ $chosen ] ) ) {\n\t\t\t$chosen = $rate_id;\n\t\t}\n\t}\n\tif ( '' === $chosen ) {\n\t\treturn $rates;\n\t}\n\tforeach ( array_keys( $tiers ) as $rate_id ) {\n\t\tif ( $rate_id !== $chosen ) {\n\t\t\tunset( $rates[ $rate_id ] );\n\t\t}\n\t}\n\treturn $rates;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shipping",
+        "tiered",
+        "cart-total"
+    ],
+    "variables": [
+        {
+            "name": "tiered_rates",
+            "label": "Ποσό=ID τρόπου (με |)",
+            "default": "0=flat_rate:1|100=flat_rate:2|250=free_shipping:3",
+            "description": "Π.χ. 0=flat_rate:1|100=flat_rate:2|250=free_shipping:3"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-setup-tiered-shipping-rates-order-amount/"
+    ],
+    "updated": "2026-11-18T17:21:44+00:00"
+}
