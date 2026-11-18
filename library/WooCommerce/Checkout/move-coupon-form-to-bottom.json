@@ -1,0 +1,29 @@
+{
+    "title": "Move the coupon form to the bottom of checkout",
+    "description": "Μεταφέρει τη φόρμα κουπονιού από την κορυφή στο τέλος του checkout, ώστε ο πελάτης να εστιάζει πρώτα στην παραγγελία αντί να ψάχνει κουπόνια (όπως κάνουν τα μεγάλα e-shops). Προαιρετικά την αφαιρεί και από τη σελίδα καλαθιού (μεταβλητή). Λειτουργεί με το κλασικό checkout (shortcode)· το checkout με blocks δεν χρησιμοποιεί αυτό το hook.",
+    "type": "php",
+    "code": "// WooCommerce registers its template hooks after snippets load, so move the form on \"init\".\nadd_action( 'init', 'perfectpixel_move_coupon_form' );\nadd_filter( 'woocommerce_coupons_enabled', 'perfectpixel_coupon_form_cart' );\n\nfunction perfectpixel_move_coupon_form() {\n\tremove_action( 'woocommerce_before_checkout_form', 'woocommerce_checkout_coupon_form', 10 );\n\tadd_action( 'woocommerce_after_checkout_form', 'woocommerce_checkout_coupon_form' );\n}\n\nfunction perfectpixel_coupon_form_cart( $enabled ) {\n\tif ( 'yes' === '{{coupon_hide_on_cart}}' && function_exists( 'is_cart' ) && is_cart() ) {\n\t\treturn false;\n\t}\n\treturn $enabled;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "coupons",
+        "ux"
+    ],
+    "variables": [
+        {
+            "name": "coupon_hide_on_cart",
+            "label": "Απόκρυψη και από το καλάθι (yes/no)",
+            "default": "no",
+            "description": ""
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-move-remove-coupon-form-cart-checkout/"
+    ],
+    "updated": "2026-11-18T09:47:27+00:00"
+}

@@ -1,0 +1,21 @@
+{
+    "title": "Ignore the theme's WooCommerce template overrides",
+    "description": "Αγνοεί τα αντίγραφα templates του WooCommerce που έχει το theme (φάκελος /woocommerce μέσα στο theme) και χρησιμοποιεί τα πρωτότυπα του plugin. Χρήσιμο όταν ένα theme με παλιά templates «σπάει» μετά από ενημέρωση του WooCommerce, ή για να ελέγξετε αν ένα πρόβλημα οφείλεται στο theme. Προαιρετικά επιτρέψτε κάποια templates στο $allowed.",
+    "type": "php",
+    "code": "add_filter( 'wc_get_template', 'perfectpixel_ignore_theme_wc_templates', 9999, 5 );\n\nfunction perfectpixel_ignore_theme_wc_templates( $located, $template_name, $args, $template_path, $default_path ) {\n\t// Template names the theme may still override, e.g. 'single-product/title.php'.\n\t$allowed = array();\n\n\tif ( in_array( $template_name, $allowed, true ) ) {\n\t\treturn $located;\n\t}\n\t$themes = array_unique( array( wp_normalize_path( get_stylesheet_directory() ), wp_normalize_path( get_template_directory() ) ) );\n\tforeach ( $themes as $dir ) {\n\t\tif ( 0 === strpos( wp_normalize_path( $located ), trailingslashit( $dir ) ) ) {\n\t\t\t$plugin_template = trailingslashit( $default_path ? $default_path : WC()->plugin_path() . '/templates/' ) . $template_name;\n\t\t\treturn file_exists( $plugin_template ) ? $plugin_template : $located;\n\t\t}\n\t}\n\treturn $located;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "development",
+        "themes"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-disable-template-overrides/"
+    ],
+    "updated": "2026-11-18T09:47:27+00:00"
+}

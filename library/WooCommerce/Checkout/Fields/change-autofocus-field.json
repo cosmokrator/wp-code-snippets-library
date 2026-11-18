@@ -1,0 +1,29 @@
+{
+    "title": "Change which checkout field gets autofocus",
+    "description": "Ορίζει σε ποιο πεδίο πηγαίνει αυτόματα ο κέρσορας όταν ανοίγει το checkout (από προεπιλογή το «Όνομα»). Χρήσιμο αν έχετε μετακινήσει ή αφαιρέσει πεδία. Ορίστε το πεδίο στη μεταβλητή, π.χ. billing_email. Λειτουργεί με το κλασικό checkout (shortcode)· το checkout με blocks δεν χρησιμοποιεί αυτό το hook.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_checkout_fields', 'perfectpixel_change_autofocus_field', 9999 );\n\nfunction perfectpixel_change_autofocus_field( $fields ) {\n\t$target = '{{autofocus_field}}';\n\tforeach ( $fields as $group => $group_fields ) {\n\t\tforeach ( $group_fields as $key => $field ) {\n\t\t\t$fields[ $group ][ $key ]['autofocus'] = ( $key === $target );\n\t\t}\n\t}\n\treturn $fields;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "checkout-fields",
+        "ux"
+    ],
+    "variables": [
+        {
+            "name": "autofocus_field",
+            "label": "Πεδίο με autofocus",
+            "default": "billing_email",
+            "description": "Κλειδί πεδίου, π.χ. billing_email, billing_phone"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-change-autofocus-field-checkout/"
+    ],
+    "updated": "2026-11-18T09:47:27+00:00"
+}

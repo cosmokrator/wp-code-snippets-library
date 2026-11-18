@@ -1,0 +1,28 @@
+{
+    "title": "Rename the \"Place order\" button",
+    "description": "Αλλάζει το κείμενο του κουμπιού «Ολοκλήρωση παραγγελίας» (π.χ. «Πληρωμή με ασφάλεια»). Ορισμένοι τρόποι πληρωμής (π.χ. PayPal) ορίζουν δικό τους κείμενο, το οποίο υπερισχύει όταν επιλεγούν. Ορίστε το κείμενο στη μεταβλητή. Λειτουργεί με το κλασικό checkout (shortcode)· το checkout με blocks δεν χρησιμοποιεί αυτό το hook.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_order_button_text', 'perfectpixel_rename_place_order_button', 9999 );\n\nfunction perfectpixel_rename_place_order_button( $text ) {\n\treturn '{{place_order_text}}';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "texts"
+    ],
+    "variables": [
+        {
+            "name": "place_order_text",
+            "label": "Κείμενο κουμπιού",
+            "default": "Πληρωμή με ασφάλεια",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-rename-place-order-button-checkout/"
+    ],
+    "updated": "2026-11-18T09:47:27+00:00"
+}

@@ -1,0 +1,22 @@
+{
+    "title": "Cart and checkout on the same page",
+    "description": "Ο πίνακας καλαθιού εμφανίζεται στην κορυφή του checkout και όλοι οι σύνδεσμοι «Καλάθι» οδηγούν στο checkout, ώστε η αγορά να γίνεται σε ένα βήμα λιγότερο (ιδανικό για καταστήματα με 1-2 προϊόντα ανά παραγγελία). Αν ο πελάτης αδειάσει το καλάθι, βλέπει το μήνυμα άδειου καλαθιού χωρίς ατέρμονες ανακατευθύνσεις. Λειτουργεί με το κλασικό checkout (shortcode)· το checkout με blocks δεν χρησιμοποιεί αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_before_checkout_form', 'perfectpixel_cart_on_checkout', 5 );\nadd_filter( 'woocommerce_get_cart_url', 'perfectpixel_cart_url_to_checkout' );\nadd_filter( 'woocommerce_checkout_redirect_empty_cart', '__return_false' );\nadd_filter( 'woocommerce_checkout_update_order_review_expired', '__return_false' );\nadd_action( 'wp_head', 'perfectpixel_cart_on_checkout_css' );\n\nfunction perfectpixel_cart_on_checkout() {\n\tif ( is_wc_endpoint_url() ) {\n\t\treturn;\n\t}\n\techo do_shortcode( '[woocommerce_cart]' );\n}\n\nfunction perfectpixel_cart_url_to_checkout( $url ) {\n\treturn wc_get_checkout_url();\n}\n\n// The cart totals and \"Proceed to checkout\" button are not needed on the checkout itself.\nfunction perfectpixel_cart_on_checkout_css() {\n\tif ( function_exists( 'is_checkout' ) && is_checkout() ) {\n\t\techo '<style>.woocommerce-checkout .cart-collaterals{display:none}</style>';\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "cart",
+        "ux"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-cart-checkout-same-page/"
+    ],
+    "updated": "2026-11-18T09:47:27+00:00"
+}

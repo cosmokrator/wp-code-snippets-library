@@ -1,0 +1,41 @@
+{
+    "title": "Add-ons / upsell box above the \"Place order\" button",
+    "description": "Εμφανίζει ένα πλαίσιο με προτεινόμενα προϊόντα (π.χ. δωροκάρτα, συσκευασία δώρου, δωρεά) ακριβώς πάνω από το κουμπί ολοκλήρωσης. Με ένα κλικ το προϊόν μπαίνει στο καλάθι και ο πελάτης μένει στο checkout. Όσα είναι ήδη στο καλάθι δεν εμφανίζονται. Ορίστε τα IDs και τον τίτλο στις μεταβλητές. Λειτουργεί με το κλασικό checkout (shortcode)· το checkout με blocks δεν χρησιμοποιεί αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_review_order_before_submit', 'perfectpixel_checkout_upsell_box' );\n\nfunction perfectpixel_checkout_upsell_box() {\n\t$ids = wp_parse_id_list( '{{upsell_product_ids}}' );\n\tif ( ! $ids || ! WC()->cart ) {\n\t\treturn;\n\t}\n\t$in_cart = array();\n\tforeach ( WC()->cart->get_cart() as $item ) {\n\t\t$in_cart[] = (int) $item['product_id'];\n\t}\n\n\t$rows = '';\n\tforeach ( $ids as $id ) {\n\t\t$product = wc_get_product( $id );\n\t\tif ( ! $product || ! $product->is_purchasable() || ! $product->is_in_stock() || in_array( $id, $in_cart, true ) || ! $product->is_type( 'simple' ) ) {\n\t\t\tcontinue;\n\t\t}\n\t\t$rows .= sprintf(\n\t\t\t'<li style=\"display:flex;justify-content:space-between;align-items:center;gap:1em;margin:.4em 0\"><span>%1$s — %2$s</span><a class=\"button\" href=\"%3$s\">%4$s</a></li>',\n\t\t\tesc_html( $product->get_name() ),\n\t\t\twp_kses_post( $product->get_price_html() ),\n\t\t\tesc_url( add_query_arg( 'add-to-cart', $id, wc_get_checkout_url() ) ),\n\t\t\tesc_html( '{{upsell_button}}' )\n\t\t);\n\t}\n\tif ( '' !== $rows ) {\n\t\techo '<div class=\"perfectpixel-checkout-upsell\" style=\"border:1px dashed currentColor;padding:1em;margin:0 0 1em\"><strong>' . esc_html( '{{upsell_title}}' ) . '</strong><ul style=\"list-style:none;margin:.5em 0 0;padding:0\">' . $rows . '</ul></div>'; // phpcs:ignore WordPress.Security.EscapeOutput -- Rows escaped above.\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "upsell",
+        "aov"
+    ],
+    "variables": [
+        {
+            "name": "upsell_product_ids",
+            "label": "IDs προϊόντων (με κόμμα)",
+            "default": "",
+            "description": "Απλά προϊόντα, π.χ. 120, 135"
+        },
+        {
+            "name": "upsell_title",
+            "label": "Τίτλος πλαισίου",
+            "default": "Μήπως θέλετε και…",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "upsell_button",
+            "label": "Κείμενο κουμπιού",
+            "default": "Προσθήκη",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-upsell-area-checkout-page/"
+    ],
+    "updated": "2026-11-18T09:47:27+00:00"
+}

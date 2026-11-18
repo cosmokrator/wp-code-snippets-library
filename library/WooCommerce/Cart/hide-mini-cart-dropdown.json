@@ -1,0 +1,21 @@
+{
+    "title": "Hide the mini cart dropdown",
+    "description": "Κρύβει το αναδυόμενο περιεχόμενο του mini cart (widget καλαθιού στο header). Χρήσιμο όταν πηγαίνετε τους πελάτες κατευθείαν στο checkout ή έχετε απενεργοποιήσει τα cart fragments για ταχύτητα.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_widget_cart_is_hidden', '__return_true' );",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "cart",
+        "mini-cart"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-hide-mini-cart-widget-dropdown/"
+    ],
+    "updated": "2026-11-18T09:47:27+00:00"
+}

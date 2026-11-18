@@ -1,0 +1,30 @@
+{
+    "title": "Save \"Terms & conditions\" acceptance on the order",
+    "description": "Αποθηκεύει στην παραγγελία ότι ο πελάτης αποδέχτηκε τους όρους χρήσης, με ημερομηνία/ώρα και τη σελίδα όρων, ως αποδεικτικό. Εμφανίζεται στη σελίδα της παραγγελίας στη διαχείριση. Χρειάζεται να έχει οριστεί σελίδα όρων στις ρυθμίσεις του WooCommerce (Ρυθμίσεις → Για προχωρημένους). Λειτουργεί με το κλασικό checkout (shortcode)· το checkout με blocks δεν χρησιμοποιεί αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_checkout_create_order', 'perfectpixel_save_terms_acceptance', 10, 2 );\nadd_action( 'woocommerce_admin_order_data_after_billing_address', 'perfectpixel_show_terms_acceptance' );\n\nfunction perfectpixel_save_terms_acceptance( $order, $data ) {\n\tif ( empty( $_POST['terms'] ) || ! wc_terms_and_conditions_checkbox_enabled() ) { // phpcs:ignore WordPress.Security.NonceVerification\n\t\treturn;\n\t}\n\t$order->update_meta_data( '_perfectpixel_terms_accepted', current_time( 'mysql' ) );\n\t$order->update_meta_data( '_perfectpixel_terms_page_id', wc_terms_and_conditions_page_id() );\n}\n\nfunction perfectpixel_show_terms_acceptance( $order ) {\n\t$accepted = $order->get_meta( '_perfectpixel_terms_accepted' );\n\tif ( ! $accepted ) {\n\t\treturn;\n\t}\n\t$page_id = (int) $order->get_meta( '_perfectpixel_terms_page_id' );\n\tprintf(\n\t\t'<p><strong>%1$s</strong> %2$s%3$s</p>',\n\t\tesc_html( '{{terms_admin_label}}' ),\n\t\tesc_html( mysql2date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $accepted ) ),\n\t\t$page_id ? ' — <a href=\"' . esc_url( get_permalink( $page_id ) ) . '\" target=\"_blank\">' . esc_html( get_the_title( $page_id ) ) . '</a>' : ''\n\t);\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "legal",
+        "terms",
+        "orders"
+    ],
+    "variables": [
+        {
+            "name": "terms_admin_label",
+            "label": "Ετικέτα στη διαχείριση",
+            "default": "Αποδοχή όρων:",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-save-terms-conditions-user-acceptance-checkout/"
+    ],
+    "updated": "2026-11-18T09:47:27+00:00"
+}

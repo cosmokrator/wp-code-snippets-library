@@ -1,0 +1,29 @@
+{
+    "title": "Checkout radio options that add a fee (e.g. gift wrapping)",
+    "description": "Προσθέτει επιλογές με κουμπιά radio πάνω από τους τρόπους πληρωμής (π.χ. «Χωρίς συσκευασία / Συσκευασία δώρου +3€ / Premium +6€»). Η χρέωση μπαίνει και τα σύνολα ενημερώνονται αμέσως μόλις ο πελάτης αλλάξει επιλογή. Η επιλογή αποθηκεύεται στην παραγγελία ως χρέωση. Ορίστε επιλογές και ποσά στο $options. Λειτουργεί με το κλασικό checkout (shortcode)· το checkout με blocks δεν χρησιμοποιεί αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_review_order_before_payment', 'perfectpixel_radio_fee_options' );\nadd_action( 'woocommerce_checkout_update_order_review', 'perfectpixel_radio_fee_store' );\nadd_action( 'woocommerce_cart_calculate_fees', 'perfectpixel_radio_fee_apply' );\nadd_action( 'woocommerce_checkout_order_processed', 'perfectpixel_radio_fee_reset' );\n\n/**\n * Option key => [ label, fee amount ].\n */\nfunction perfectpixel_radio_fee_choices() {\n\treturn array(\n\t\t'none'    => array( 'Χωρίς συσκευασία', 0 ),\n\t\t'gift'    => array( 'Συσκευασία δώρου', 3 ),\n\t\t'premium' => array( 'Premium συσκευασία', 6 ),\n\t);\n}\n\nfunction perfectpixel_radio_fee_options() {\n\t$chosen = WC()->session ? WC()->session->get( 'perfectpixel_radio_fee', 'none' ) : 'none';\n\techo '<div class=\"perfectpixel-radio-fee\" style=\"margin:0 0 1em\"><h3>' . esc_html( '{{radio_fee_title}}' ) . '</h3>';\n\tforeach ( perfectpixel_radio_fee_choices() as $key => $choice ) {\n\t\tprintf(\n\t\t\t'<p style=\"margin:.25em 0\"><label><input type=\"radio\" name=\"perfectpixel_radio_fee\" value=\"%1$s\" %2$s> %3$s%4$s</label></p>',\n\t\t\tesc_attr( $key ),\n\t\t\tchecked( $chosen, $key, false ),\n\t\t\tesc_html( $choice[0] ),\n\t\t\t$choice[1] > 0 ? ' (+' . wp_kses_post( wc_price( $choice[1] ) ) . ')' : ''\n\t\t);\n\t}\n\techo '</div>';\n\t?>\n\t<script>\n\tjQuery( function ( $ ) {\n\t\t$( document.body ).off( 'change.perfectpixel' ).on( 'change.perfectpixel', 'input[name=\"perfectpixel_radio_fee\"]', function () {\n\t\t\t$( document.body ).trigger( 'update_checkout' );\n\t\t} );\n\t} );\n\t</script>\n\t<?php\n}\n\nfunction perfectpixel_radio_fee_store( $posted ) {\n\tparse_str( (string) $posted, $data );\n\tif ( isset( $data['perfectpixel_radio_fee'] ) && array_key_exists( $data['perfectpixel_radio_fee'], perfectpixel_radio_fee_choices() ) ) {\n\t\tWC()->session->set( 'perfectpixel_radio_fee', $data['perfectpixel_radio_fee'] );\n\t}\n}\n\nfunction perfectpixel_radio_fee_apply( $cart ) {\n\tif ( is_admin() && ! defined( 'DOING_AJAX' ) ) {\n\t\treturn;\n\t}\n\t$key     = WC()->session ? WC()->session->get( 'perfectpixel_radio_fee', 'none' ) : 'none';\n\t$choices = perfectpixel_radio_fee_choices();\n\tif ( isset( $choices[ $key ] ) && $choices[ $key ][1] > 0 ) {\n\t\t$cart->add_fee( $choices[ $key ][0], $choices[ $key ][1], true );\n\t}\n}\n\nfunction perfectpixel_radio_fee_reset() {\n\tif ( WC()->session ) {\n\t\tWC()->session->set( 'perfectpixel_radio_fee', 'none' );\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "fees",
+        "aov"
+    ],
+    "variables": [
+        {
+            "name": "radio_fee_title",
+            "label": "Τίτλος επιλογών",
+            "default": "Συσκευασία",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-checkout-fees-based-on-radio-button-choice-ajax/"
+    ],
+    "updated": "2026-11-18T09:47:27+00:00"
+}
