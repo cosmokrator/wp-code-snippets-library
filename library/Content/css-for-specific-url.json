@@ -1,0 +1,34 @@
+{
+    "title": "Add CSS only to pages whose URL contains some text",
+    "description": "Προσθέτει CSS μόνο στις σελίδες των οποίων το URL περιέχει ένα κομμάτι κειμένου που ορίζετε (π.χ. /directory/ ή ?view=entry), για περιπτώσεις όπου οι σελίδες δεν έχουν δική τους κλάση για στόχευση με CSS, π.χ. σελίδες που δημιουργούν plugins φορμών ή καταλόγων. Γράψτε το CSS στη μεταβλητή.",
+    "type": "php",
+    "code": "add_action( 'wp_head', 'perfectpixel_css_for_specific_url', 99 );\n\nfunction perfectpixel_css_for_specific_url() {\n\t$needle = trim( '{{css_url_contains}}' );\n\t$uri    = isset( $_SERVER['REQUEST_URI'] ) ? wp_unslash( $_SERVER['REQUEST_URI'] ) : '';\n\tif ( '' === $needle || false === strpos( rawurldecode( $uri ), $needle ) ) {\n\t\treturn;\n\t}\n\t// Strip tags so the CSS cannot close the <style> element.\n\techo '<style id=\"perfectpixel-url-css\">' . wp_strip_all_tags( '{{css_url_rules}}' ) . '</style>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "css",
+        "conditional"
+    ],
+    "variables": [
+        {
+            "name": "css_url_contains",
+            "label": "Το URL περιέχει",
+            "default": "/directory/",
+            "description": "Κομμάτι του URL, π.χ. /directory/ ή ?view="
+        },
+        {
+            "name": "css_url_rules",
+            "label": "CSS",
+            "default": ".site-header { display: none; }",
+            "description": "Κανόνες CSS χωρίς <style>, Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/wordpress-add-css-specific-page-url-via-php/"
+    ],
+    "updated": "2026-11-18T18:52:39+00:00"
+}

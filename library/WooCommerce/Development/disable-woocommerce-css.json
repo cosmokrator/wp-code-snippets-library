@@ -1,0 +1,29 @@
+{
+    "title": "Disable the default WooCommerce stylesheets",
+    "description": "Απενεργοποιεί τα CSS αρχεία του WooCommerce στο κατάστημα, για themes ή custom σχέδια που ορίζουν όλη την εμφάνιση μόνα τους. Μπορείτε να τα κλείσετε όλα ή να κρατήσετε τα αρχεία διάταξης (layout και κινητών) και να κλείσετε μόνο το γενικό στυλ (χρώματα, κουμπιά, πλαίσια).",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_enqueue_styles', 'perfectpixel_disable_woocommerce_css', 99 );\n\nfunction perfectpixel_disable_woocommerce_css( $styles ) {\n\tif ( 'all' === '{{disable_wc_css_mode}}' ) {\n\t\treturn array();\n\t}\n\tunset( $styles['woocommerce-general'] );\n\treturn $styles;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "css",
+        "performance",
+        "development"
+    ],
+    "variables": [
+        {
+            "name": "disable_wc_css_mode",
+            "label": "Τι απενεργοποιείται (all/general)",
+            "default": "general",
+            "description": "all = όλα, general = μόνο το γενικό στυλ (μένουν layout και κινητά)"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-disable-default-woocommerce-css/"
+    ],
+    "updated": "2026-11-18T18:52:39+00:00"
+}

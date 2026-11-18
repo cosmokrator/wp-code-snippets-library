@@ -1,0 +1,29 @@
+{
+    "title": "Exclude specific images from lazy loading",
+    "description": "Οι εικόνες που φαίνονται αμέσως στην οθόνη (π.χ. λογότυπο, banner της αρχικής, κύρια εικόνα προϊόντος) δεν πρέπει να φορτώνουν «καθυστερημένα» (lazy load), γιατί η σελίδα «πηδάει» και χειροτερεύει το LCP. Το snippet τις εξαιρεί από το lazy loading του WordPress και του Jetpack, με βάση ένα κομμάτι της κλάσης ή του ονόματος αρχείου τους (π.χ. custom-logo, hero).",
+    "type": "php",
+    "code": "add_filter( 'wp_img_tag_add_loading_attr', 'perfectpixel_exclude_images_from_lazy_load', 20, 2 );\nadd_filter( 'jetpack_lazy_images_blocked_classes', 'perfectpixel_exclude_images_from_jetpack_lazy' );\n\nfunction perfectpixel_no_lazy_keywords() {\n\treturn array_filter( array_map( 'trim', explode( ',', '{{no_lazy_keywords}}' ) ) );\n}\n\nfunction perfectpixel_exclude_images_from_lazy_load( $value, $image ) {\n\tforeach ( perfectpixel_no_lazy_keywords() as $keyword ) {\n\t\tif ( false !== strpos( $image, $keyword ) ) {\n\t\t\treturn false;\n\t\t}\n\t}\n\treturn $value;\n}\n\nfunction perfectpixel_exclude_images_from_jetpack_lazy( $classes ) {\n\treturn array_merge( (array) $classes, perfectpixel_no_lazy_keywords() );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "performance",
+        "images",
+        "lazy-load",
+        "jetpack"
+    ],
+    "variables": [
+        {
+            "name": "no_lazy_keywords",
+            "label": "Κλάσεις ή ονόματα αρχείων (με κόμμα)",
+            "default": "custom-logo,wp-post-image",
+            "description": "Κομμάτια κειμένου που υπάρχουν στο <img> των εικόνων"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-jetpack-exclude-image-from-lazy-load/"
+    ],
+    "updated": "2026-11-18T18:52:39+00:00"
+}

@@ -1,0 +1,30 @@
+{
+    "title": "Remove sections from the Storefront homepage",
+    "description": "Η αρχική σελίδα του Storefront (πρότυπο «Homepage») έχει ενότητες: περιεχόμενο σελίδας, κατηγορίες, νέα προϊόντα, προβεβλημένα, δημοφιλή, σε προσφορά, best sellers. Το snippet αφαιρεί όσες ορίσετε. Κλειδιά: content, categories, recent, featured, popular, on_sale, best_selling. Για το theme Storefront· με άλλο theme δεν κάνει τίποτα.",
+    "type": "php",
+    "code": "add_action( 'init', 'perfectpixel_storefront_homepage_sections', 20 );\n\nfunction perfectpixel_storefront_homepage_sections() {\n\t$map = array(\n\t\t'content'      => array( 'storefront_homepage_content', 10 ),\n\t\t'categories'   => array( 'storefront_product_categories', 20 ),\n\t\t'recent'       => array( 'storefront_recent_products', 30 ),\n\t\t'featured'     => array( 'storefront_featured_products', 40 ),\n\t\t'popular'      => array( 'storefront_popular_products', 50 ),\n\t\t'on_sale'      => array( 'storefront_on_sale_products', 60 ),\n\t\t'best_selling' => array( 'storefront_best_selling_products', 70 ),\n\t);\n\tforeach ( array_filter( array_map( 'trim', explode( ',', '{{storefront_removed_sections}}' ) ) ) as $key ) {\n\t\tif ( isset( $map[ $key ] ) ) {\n\t\t\tremove_action( 'homepage', $map[ $key ][0], $map[ $key ][1] );\n\t\t}\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "storefront",
+        "theme",
+        "woocommerce",
+        "homepage",
+        "layout"
+    ],
+    "variables": [
+        {
+            "name": "storefront_removed_sections",
+            "label": "Ενότητες προς αφαίρεση (με κόμμα)",
+            "default": "popular,on_sale",
+            "description": "Π.χ. popular,on_sale,best_selling"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/change-storefront-homepage-layout/"
+    ],
+    "updated": "2026-11-18T18:52:39+00:00"
+}

@@ -1,0 +1,23 @@
+{
+    "title": "Hide the homepage title in the Storefront theme",
+    "description": "Το Storefront εμφανίζει τον τίτλο (H1) της αρχικής σελίδας, π.χ. «Αρχική». Το snippet δεν τον τυπώνει καθόλου (όχι απλή απόκρυψη με CSS), είτε η αρχική χρησιμοποιεί το πρότυπο «Homepage» είτε το προεπιλεγμένο. Αν η αρχική δεν έχει άλλη επικεφαλίδα H1, καλό είναι να προσθέσετε μία στο περιεχόμενο για το SEO. Για το theme Storefront· με άλλο theme δεν κάνει τίποτα.",
+    "type": "php",
+    "code": "add_action( 'wp', 'perfectpixel_storefront_hide_homepage_title' );\n\nfunction perfectpixel_storefront_hide_homepage_title() {\n\tif ( is_front_page() ) {\n\t\tremove_action( 'storefront_homepage', 'storefront_homepage_header', 10 );\n\t\tremove_action( 'storefront_page', 'storefront_page_header', 10 );\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "storefront",
+        "theme",
+        "woocommerce",
+        "homepage",
+        "titles"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-storefront-hide-home-title-homepage/"
+    ],
+    "updated": "2026-11-18T18:52:39+00:00"
+}

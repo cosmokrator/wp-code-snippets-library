@@ -1,0 +1,22 @@
+{
+    "title": "Remove the breadcrumbs from the Storefront theme",
+    "description": "Αφαιρεί τα breadcrumbs («Αρχική / Κατάστημα / Κατηγορία / Προϊόν») που εμφανίζει το Storefront στην κορυφή των σελίδων του καταστήματος, για πιο καθαρή εμφάνιση. Για το theme Storefront· με άλλο theme δεν κάνει τίποτα.",
+    "type": "php",
+    "code": "add_action( 'init', 'perfectpixel_storefront_remove_breadcrumbs', 20 );\n\nfunction perfectpixel_storefront_remove_breadcrumbs() {\n\tremove_action( 'storefront_before_content', 'woocommerce_breadcrumb', 10 );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "storefront",
+        "theme",
+        "woocommerce",
+        "breadcrumbs"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/remove-storefront-breadcrumb/"
+    ],
+    "updated": "2026-11-18T18:52:39+00:00"
+}

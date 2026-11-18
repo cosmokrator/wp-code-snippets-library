@@ -1,0 +1,21 @@
+{
+    "title": "Show the product brand in the shop lists",
+    "description": "Στις λίστες προϊόντων (κατάστημα, κατηγορίες) εμφανίζει τη μάρκα κάθε προϊόντος πάνω από τον τίτλο, από τις «Μάρκες» του WooCommerce (ενσωματωμένες από την έκδοση 9.6 ή από το plugin WooCommerce Brands), ως σύνδεσμο προς τη σελίδα της μάρκας. Τα προϊόντα χωρίς μάρκα δεν δείχνουν τίποτα.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_shop_loop_item_title', 'perfectpixel_brand_in_loop', 6 );\n\nfunction perfectpixel_brand_in_loop() {\n\tif ( ! taxonomy_exists( 'product_brand' ) ) {\n\t\treturn;\n\t}\n\t$terms = get_the_terms( get_the_ID(), 'product_brand' );\n\tif ( ! $terms || is_wp_error( $terms ) ) {\n\t\treturn;\n\t}\n\t$links = array();\n\tforeach ( $terms as $term ) {\n\t\t$links[] = '<a href=\"' . esc_url( get_term_link( $term ) ) . '\">' . esc_html( $term->name ) . '</a>';\n\t}\n\techo '<div class=\"perfectpixel-loop-brand\" style=\"font-size:.8em;text-transform:uppercase;letter-spacing:.05em;opacity:.8\">' . implode( ', ', $links ) . '</div>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shop",
+        "brands"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-brands-display-brands-loop-shop-category-pages/"
+    ],
+    "updated": "2026-11-18T18:52:39+00:00"
+}

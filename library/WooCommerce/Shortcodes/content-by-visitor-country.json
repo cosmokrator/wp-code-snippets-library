@@ -1,0 +1,22 @@
+{
+    "title": "Shortcode to show content by visitor country",
+    "description": "Shortcode [geo_content countries=\"GR,CY\"]…[/geo_content] που εμφανίζει το περιεχόμενό του μόνο σε επισκέπτες από τις χώρες που ορίζετε (με βάση τη γεωγραφική θέση της IP), π.χ. «Δωρεάν αποστολή σε όλη την Ελλάδα» μόνο σε Έλληνες επισκέπτες. Με exclude=\"yes\" το εμφανίζει σε όλους εκτός από αυτές τις χώρες. Χρειάζεται ενεργή «Γεωγραφική εντόπιση» και κλειδί MaxMind στις ρυθμίσεις του WooCommerce.",
+    "type": "php",
+    "code": "add_shortcode( 'geo_content', 'perfectpixel_geo_content_shortcode' );\n\nfunction perfectpixel_visitor_country() {\n\tstatic $country = null;\n\tif ( null === $country ) {\n\t\t$location = class_exists( 'WC_Geolocation' ) ? WC_Geolocation::geolocate_ip( '', true, true ) : array();\n\t\t$country  = ! empty( $location['country'] ) ? $location['country'] : '';\n\t}\n\treturn $country;\n}\n\nfunction perfectpixel_geo_content_shortcode( $atts, $content = '' ) {\n\t$atts      = shortcode_atts( array( 'countries' => '', 'exclude' => 'no' ), $atts );\n\t$countries = array_filter( array_map( 'trim', explode( ',', strtoupper( $atts['countries'] ) ) ) );\n\tif ( ! $countries ) {\n\t\treturn '';\n\t}\n\t$match = in_array( perfectpixel_visitor_country(), $countries, true );\n\t$show  = 'yes' === $atts['exclude'] ? ! $match : $match;\n\treturn $show ? do_shortcode( $content ) : '';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shortcodes",
+        "geolocation",
+        "personalization"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-detecting-current-user-country-geolocation/"
+    ],
+    "updated": "2026-11-18T18:52:39+00:00"
+}

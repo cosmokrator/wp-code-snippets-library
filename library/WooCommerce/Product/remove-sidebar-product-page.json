@@ -1,0 +1,22 @@
+{
+    "title": "Remove the sidebar from product pages",
+    "description": "Αφαιρεί τη sidebar από τις σελίδες προϊόντων, ώστε η εικόνα και οι πληροφορίες να πιάνουν όλο το πλάτος. Λειτουργεί με τα themes που χρησιμοποιούν τη sidebar του WooCommerce και με το Storefront (που αλλάζει και σε διάταξη πλήρους πλάτους). Κάποια themes έχουν δική τους ρύθμιση για αυτό.",
+    "type": "php",
+    "code": "add_action( 'wp', 'perfectpixel_remove_sidebar_product_page' );\nadd_filter( 'body_class', 'perfectpixel_remove_sidebar_product_body_class' );\n\nfunction perfectpixel_remove_sidebar_product_page() {\n\tif ( function_exists( 'is_product' ) && is_product() ) {\n\t\tremove_action( 'woocommerce_sidebar', 'woocommerce_get_sidebar', 10 );\n\t\tremove_action( 'storefront_sidebar', 'storefront_get_sidebar', 10 );\n\t}\n}\n\n// Storefront switches to its full-width layout with this class.\nfunction perfectpixel_remove_sidebar_product_body_class( $classes ) {\n\tif ( function_exists( 'is_product' ) && is_product() ) {\n\t\t$classes[] = 'storefront-full-width-content';\n\t}\n\treturn $classes;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "sidebar",
+        "layout"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-remove-sidebar-single-product-page/"
+    ],
+    "updated": "2026-11-18T18:52:39+00:00"
+}

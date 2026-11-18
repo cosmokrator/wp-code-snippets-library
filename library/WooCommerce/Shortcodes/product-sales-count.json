@@ -1,0 +1,22 @@
+{
+    "title": "Shortcode for the total sales of a product",
+    "description": "Shortcode [product_sales id=\"123\"] που εμφανίζει πόσες φορές έχει πουληθεί ένα προϊόν (από τον μετρητή πωλήσεων του WooCommerce), για κοινωνική απόδειξη σε σελίδες πωλήσεων ή πίνακες τιμών, π.χ. «Το έχουν ήδη αγοράσει [product_sales id=\"123\"] πελάτες». Χωρίς id δείχνει το τρέχον προϊόν. Για παραλλαγές δείτε το [variation_sales].",
+    "type": "php",
+    "code": "add_shortcode( 'product_sales', 'perfectpixel_product_sales_shortcode' );\n\nfunction perfectpixel_product_sales_shortcode( $atts ) {\n\t$atts    = shortcode_atts( array( 'id' => 0 ), $atts );\n\t$product = wc_get_product( absint( $atts['id'] ) ? absint( $atts['id'] ) : get_the_ID() );\n\tif ( ! $product ) {\n\t\treturn '';\n\t}\n\treturn '<span class=\"perfectpixel-product-sales\">' . esc_html( number_format_i18n( $product->get_total_sales() ) ) . '</span>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shortcodes",
+        "sales",
+        "social-proof"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-calculate-sales-by-product-id-shortcode/"
+    ],
+    "updated": "2026-11-18T18:52:39+00:00"
+}

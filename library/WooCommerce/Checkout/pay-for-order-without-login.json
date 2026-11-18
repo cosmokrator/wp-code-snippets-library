@@ -1,0 +1,22 @@
+{
+    "title": "Allow paying for an order without logging in",
+    "description": "Όταν στέλνετε στον πελάτη σύνδεσμο «Πληρωμή παραγγελίας» (χειροκίνητες παραγγελίες, προκαταβολές, ανανεώσεις), μπορεί να πληρώσει χωρίς να συνδεθεί πρώτα στον λογαριασμό του και χωρίς να ξαναγράψει το email του. Ισχύει μόνο με τον σύνδεσμο που περιέχει το μοναδικό κλειδί της παραγγελίας.",
+    "type": "php",
+    "code": "add_filter( 'user_has_cap', 'perfectpixel_pay_for_order_without_login', 20, 3 );\nadd_filter( 'woocommerce_order_email_verification_required', 'perfectpixel_pay_for_order_no_email_check', 20, 2 );\n\nfunction perfectpixel_order_key_matches( $order_id ) {\n\t$order = wc_get_order( $order_id );\n\t$key   = isset( $_GET['key'] ) ? wc_clean( wp_unslash( $_GET['key'] ) ) : '';\n\treturn $order && '' !== $key && hash_equals( $order->get_order_key(), $key );\n}\n\nfunction perfectpixel_pay_for_order_without_login( $allcaps, $caps, $args ) {\n\tif ( isset( $args[0], $args[2] ) && 'pay_for_order' === $args[0] && ! is_user_logged_in() && perfectpixel_order_key_matches( (int) $args[2] ) ) {\n\t\t$allcaps['pay_for_order'] = true;\n\t}\n\treturn $allcaps;\n}\n\nfunction perfectpixel_pay_for_order_no_email_check( $required, $order ) {\n\treturn ( $order && perfectpixel_order_key_matches( $order->get_id() ) ) ? false : $required;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "order-pay",
+        "conversion"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-allow-to-pay-for-order-without-login/"
+    ],
+    "updated": "2026-11-18T18:52:39+00:00"
+}

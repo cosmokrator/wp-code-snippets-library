@@ -1,0 +1,30 @@
+{
+    "title": "Add a full width slider to the Storefront homepage",
+    "description": "Εμφανίζει ένα slider (από οποιοδήποτε plugin slider με shortcode, π.χ. Smart Slider, MetaSlider) σε όλο το πλάτος στην κορυφή της αρχικής σελίδας του Storefront όταν χρησιμοποιεί το πρότυπο «Homepage». Ορίστε το shortcode του slider. Για το theme Storefront· με άλλο theme δεν κάνει τίποτα.",
+    "type": "php",
+    "code": "add_action( 'homepage', 'perfectpixel_storefront_homepage_slider', 5 );\n\nfunction perfectpixel_storefront_homepage_slider() {\n\t$shortcode = trim( '{{storefront_slider_shortcode}}' );\n\tif ( '' === $shortcode ) {\n\t\treturn;\n\t}\n\techo '<div class=\"perfectpixel-homepage-slider\" style=\"width:100vw;position:relative;left:50%;margin-left:-50vw;margin-bottom:2.5em\">' . do_shortcode( $shortcode ) . '</div>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "storefront",
+        "theme",
+        "woocommerce",
+        "homepage",
+        "slider"
+    ],
+    "variables": [
+        {
+            "name": "storefront_slider_shortcode",
+            "label": "Shortcode slider",
+            "default": "[smartslider3 slider=\"1\"]",
+            "description": "Το shortcode όπως το δίνει το plugin slider"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/add-slider-to-storefront-homepage/"
+    ],
+    "updated": "2026-11-18T18:52:39+00:00"
+}
