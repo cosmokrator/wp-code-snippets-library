@@ -1,0 +1,29 @@
+{
+    "title": "Show product categories under item names in cart & checkout",
+    "description": "Εμφανίζει τις κατηγορίες κάθε προϊόντος κάτω από το όνομά του στο καλάθι και στο checkout. Για παραλλαγές εμφανίζονται οι κατηγορίες του γονικού προϊόντος. Ορίστε την ετικέτα στη μεταβλητή. Ισχύει για το κλασικό καλάθι/checkout.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_cart_item_name', 'perfectpixel_categories_under_cart_item', 30, 3 );\n\nfunction perfectpixel_categories_under_cart_item( $name, $cart_item, $cart_item_key ) {\n\t$product_id = (int) ( $cart_item['product_id'] ?? 0 );\n\tif ( ! $product_id ) {\n\t\treturn $name;\n\t}\n\t$list = wc_get_product_category_list( $product_id, ', ' );\n\tif ( '' === (string) $list ) {\n\t\treturn $name;\n\t}\n\treturn $name . '<div class=\"perfectpixel-cart-categories\" style=\"font-size:.85em;opacity:.8\">' . esc_html( '{{categories_label}}' ) . ' ' . wp_strip_all_tags( $list ) . '</div>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "cart",
+        "checkout",
+        "categories"
+    ],
+    "variables": [
+        {
+            "name": "categories_label",
+            "label": "Ετικέτα",
+            "default": "Κατηγορία:",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-display-categories-product-name-cart/"
+    ],
+    "updated": "2026-11-18T09:53:27+00:00"
+}

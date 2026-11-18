@@ -1,0 +1,35 @@
+{
+    "title": "Remove tax when a checkout field has a specific value",
+    "description": "Κάνει τον πελάτη απαλλαγμένο από φόρο (ΦΠΑ) όταν ένα πεδίο του checkout έχει συγκεκριμένη τιμή, π.χ. ταχυδρομικούς κώδικες περιοχών με ειδικό καθεστώς. Τα σύνολα ενημερώνονται αμέσως μόλις ο πελάτης γράψει την τιμή. Ορίστε πεδίο και τιμές (με κόμμα) στις μεταβλητές. Λειτουργεί με το κλασικό checkout (shortcode)· το checkout με blocks δεν χρησιμοποιεί αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_checkout_update_order_review', 'perfectpixel_tax_exempt_review' );\nadd_action( 'woocommerce_checkout_process', 'perfectpixel_tax_exempt_process' );\n\nfunction perfectpixel_tax_exempt_apply( $value ) {\n\tif ( ! WC()->customer ) {\n\t\treturn;\n\t}\n\t$values = array_filter( array_map( 'trim', explode( ',', strtoupper( '{{tax_exempt_values}}' ) ) ), 'strlen' );\n\tWC()->customer->set_is_vat_exempt( in_array( strtoupper( trim( (string) $value ) ), $values, true ) );\n}\n\nfunction perfectpixel_tax_exempt_review( $posted ) {\n\tparse_str( (string) $posted, $data );\n\tperfectpixel_tax_exempt_apply( $data['{{tax_exempt_field}}'] ?? '' );\n}\n\nfunction perfectpixel_tax_exempt_process() {\n\tperfectpixel_tax_exempt_apply( isset( $_POST['{{tax_exempt_field}}'] ) ? sanitize_text_field( wp_unslash( $_POST['{{tax_exempt_field}}'] ) ) : '' ); // phpcs:ignore WordPress.Security.NonceVerification\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "tax",
+        "vat"
+    ],
+    "variables": [
+        {
+            "name": "tax_exempt_field",
+            "label": "Πεδίο checkout",
+            "default": "billing_postcode",
+            "description": "Κλειδί πεδίου, π.χ. billing_postcode"
+        },
+        {
+            "name": "tax_exempt_values",
+            "label": "Τιμές για απαλλαγή (με κόμμα)",
+            "default": "85100",
+            "description": ""
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-remove-tax-checkout-field-value-exists/"
+    ],
+    "updated": "2026-11-18T09:53:27+00:00"
+}

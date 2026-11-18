@@ -1,0 +1,47 @@
+{
+    "title": "Extra terms checkbox for specific products",
+    "description": "Όταν το καλάθι περιέχει συγκεκριμένα προϊόντα (π.χ. συνδρομή ή μάθημα), εμφανίζεται επιπλέον υποχρεωτικό checkbox αποδοχής ειδικών όρων με σύνδεσμο προς τη σελίδα τους. Χωρίς τσεκάρισμα η παραγγελία δεν ολοκληρώνεται. Ορίστε IDs προϊόντων, σελίδα όρων και κείμενα στις μεταβλητές. Λειτουργεί με το κλασικό checkout (shortcode)· το checkout με blocks δεν χρησιμοποιεί αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_review_order_before_submit', 'perfectpixel_product_terms_checkbox', 9 );\nadd_action( 'woocommerce_checkout_process', 'perfectpixel_product_terms_validate' );\n\nfunction perfectpixel_product_terms_needed() {\n\t$ids = wp_parse_id_list( '{{terms_product_ids}}' );\n\tif ( ! $ids || ! WC()->cart ) {\n\t\treturn false;\n\t}\n\tforeach ( WC()->cart->get_cart() as $item ) {\n\t\tif ( in_array( (int) $item['product_id'], $ids, true ) ) {\n\t\t\treturn true;\n\t\t}\n\t}\n\treturn false;\n}\n\nfunction perfectpixel_product_terms_checkbox() {\n\tif ( ! perfectpixel_product_terms_needed() ) {\n\t\treturn;\n\t}\n\t$page_id = (int) '{{terms_page_id}}';\n\t$text    = esc_html( '{{terms_checkbox_text}}' );\n\tif ( $page_id ) {\n\t\t$text = '<a href=\"' . esc_url( get_permalink( $page_id ) ) . '\" target=\"_blank\" rel=\"noopener\">' . $text . '</a>';\n\t}\n\techo '<p class=\"form-row validate-required perfectpixel-product-terms\"><label class=\"woocommerce-form__label woocommerce-form__label-for-checkbox checkbox\">';\n\techo '<input type=\"checkbox\" class=\"woocommerce-form__input woocommerce-form__input-checkbox input-checkbox\" name=\"perfectpixel_product_terms\" value=\"1\"> ';\n\techo '<span>' . $text . '</span>&nbsp;<abbr class=\"required\">*</abbr></label></p>'; // phpcs:ignore WordPress.Security.EscapeOutput -- Escaped above.\n}\n\nfunction perfectpixel_product_terms_validate() {\n\tif ( perfectpixel_product_terms_needed() && empty( $_POST['perfectpixel_product_terms'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification\n\t\twc_add_notice( esc_html( '{{terms_error}}' ), 'error' );\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "legal",
+        "terms"
+    ],
+    "variables": [
+        {
+            "name": "terms_product_ids",
+            "label": "IDs προϊόντων (με κόμμα)",
+            "default": "",
+            "description": ""
+        },
+        {
+            "name": "terms_page_id",
+            "label": "ID σελίδας όρων",
+            "default": "0",
+            "description": "Μόνο αριθμός"
+        },
+        {
+            "name": "terms_checkbox_text",
+            "label": "Κείμενο checkbox",
+            "default": "Αποδέχομαι τους ειδικούς όρους του προϊόντος",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "terms_error",
+            "label": "Μήνυμα όταν δεν τσεκαριστεί",
+            "default": "Για να συνεχίσετε, πρέπει να αποδεχτείτε τους ειδικούς όρους του προϊόντος.",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-display-product-specific-tc-checkout/"
+    ],
+    "updated": "2026-11-18T09:53:27+00:00"
+}

@@ -1,0 +1,53 @@
+{
+    "title": "Delivery date picker at checkout",
+    "description": "Προσθέτει πεδίο «Ημερομηνία παράδοσης» με ημερολόγιο (το ενσωματωμένο του browser) πάνω από τους τρόπους πληρωμής. Επιτρέπει μόνο ημερομηνίες από Χ έως Υ ημέρες από σήμερα και αποκλείει τις ημέρες που ορίζετε (π.χ. Κυριακή). Η ημερομηνία ελέγχεται, αποθηκεύεται στην παραγγελία και εμφανίζεται στη διαχείριση, στη σελίδα ευχαριστίας και στα emails. Λειτουργεί με το κλασικό checkout (shortcode)· το checkout με blocks δεν χρησιμοποιεί αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_review_order_before_payment', 'perfectpixel_delivery_date_field' );\nadd_action( 'woocommerce_checkout_process', 'perfectpixel_delivery_date_validate' );\nadd_action( 'woocommerce_checkout_create_order', 'perfectpixel_delivery_date_save', 10, 2 );\nadd_action( 'woocommerce_admin_order_data_after_billing_address', 'perfectpixel_delivery_date_show' );\nadd_action( 'woocommerce_order_details_after_order_table', 'perfectpixel_delivery_date_show' );\nadd_action( 'woocommerce_email_after_order_table', 'perfectpixel_delivery_date_show' );\n\nfunction perfectpixel_delivery_range() {\n\t$today = new DateTimeImmutable( 'today', wp_timezone() );\n\treturn array(\n\t\t$today->modify( '+' . max( 0, (int) '{{delivery_min_days}}' ) . ' days' ),\n\t\t$today->modify( '+' . max( 0, (int) '{{delivery_max_days}}' ) . ' days' ),\n\t\tarray_map( 'intval', array_filter( array_map( 'trim', explode( ',', '{{delivery_closed_days}}' ) ), 'strlen' ) ),\n\t);\n}\n\nfunction perfectpixel_delivery_date_field() {\n\tlist( $min, $max ) = perfectpixel_delivery_range();\n\twoocommerce_form_field(\n\t\t'perfectpixel_delivery_date',\n\t\tarray(\n\t\t\t'type'              => 'date',\n\t\t\t'label'             => '{{delivery_label}}',\n\t\t\t'required'          => true,\n\t\t\t'class'             => array( 'form-row-wide' ),\n\t\t\t'custom_attributes' => array(\n\t\t\t\t'min' => $min->format( 'Y-m-d' ),\n\t\t\t\t'max' => $max->format( 'Y-m-d' ),\n\t\t\t),\n\t\t),\n\t\tWC()->checkout()->get_value( 'perfectpixel_delivery_date' )\n\t);\n}\n\nfunction perfectpixel_delivery_date_is_valid( $value ) {\n\tlist( $min, $max, $closed ) = perfectpixel_delivery_range();\n\t$date = DateTimeImmutable::createFromFormat( '!Y-m-d', (string) $value, wp_timezone() );\n\treturn $date && $date >= $min && $date <= $max && ! in_array( (int) $date->format( 'w' ), $closed, true );\n}\n\nfunction perfectpixel_delivery_date_validate() {\n\t$value = isset( $_POST['perfectpixel_delivery_date'] ) ? sanitize_text_field( wp_unslash( $_POST['perfectpixel_delivery_date'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification\n\tif ( ! perfectpixel_delivery_date_is_valid( $value ) ) {\n\t\twc_add_notice( esc_html( '{{delivery_error}}' ), 'error' );\n\t}\n}\n\nfunction perfectpixel_delivery_date_save( $order, $data ) {\n\t$value = isset( $_POST['perfectpixel_delivery_date'] ) ? sanitize_text_field( wp_unslash( $_POST['perfectpixel_delivery_date'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification\n\tif ( perfectpixel_delivery_date_is_valid( $value ) ) {\n\t\t$order->update_meta_data( '_perfectpixel_delivery_date', $value );\n\t}\n}\n\nfunction perfectpixel_delivery_date_show( $order ) {\n\tif ( ! $order instanceof WC_Order ) {\n\t\treturn;\n\t}\n\t$value = $order->get_meta( '_perfectpixel_delivery_date' );\n\tif ( $value ) {\n\t\tprintf( '<p><strong>%s:</strong> %s</p>', esc_html( '{{delivery_label}}' ), esc_html( date_i18n( get_option( 'date_format' ), strtotime( $value ) ) ) );\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "delivery",
+        "custom-field"
+    ],
+    "variables": [
+        {
+            "name": "delivery_label",
+            "label": "Ετικέτα πεδίου",
+            "default": "Ημερομηνία παράδοσης",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "delivery_min_days",
+            "label": "Ελάχιστες ημέρες από σήμερα",
+            "default": "1",
+            "description": "Μόνο αριθμός"
+        },
+        {
+            "name": "delivery_max_days",
+            "label": "Μέγιστες ημέρες από σήμερα",
+            "default": "30",
+            "description": "Μόνο αριθμός"
+        },
+        {
+            "name": "delivery_closed_days",
+            "label": "Ημέρες χωρίς παράδοση",
+            "default": "0",
+            "description": "0=Κυριακή, 1=Δευτέρα … 6=Σάββατο, με κόμμα (π.χ. 0,6)"
+        },
+        {
+            "name": "delivery_error",
+            "label": "Μήνυμα λάθους",
+            "default": "Επιλέξτε μια διαθέσιμη ημερομηνία παράδοσης.",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-display-order-delivery-date-checkout/"
+    ],
+    "updated": "2026-11-18T09:53:27+00:00"
+}

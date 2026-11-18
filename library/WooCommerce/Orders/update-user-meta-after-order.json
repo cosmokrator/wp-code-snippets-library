@@ -1,0 +1,21 @@
+{
+    "title": "Update customer profile data after an order",
+    "description": "Πρότυπο για ενημέρωση στοιχείων του λογαριασμού πελάτη μετά από κάθε νέα παραγγελία. Το παράδειγμα αποθηκεύει στο προφίλ την ημερομηνία και τον αριθμό της τελευταίας παραγγελίας (χρήσιμο για segments, newsletters, CRM). Προσθέστε δικά σας πεδία στη συνάρτηση.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_checkout_order_processed', 'perfectpixel_update_user_meta_after_order', 20, 3 );\n\nfunction perfectpixel_update_user_meta_after_order( $order_id, $posted_data, $order ) {\n\t$user_id = $order instanceof WC_Order ? $order->get_customer_id() : 0;\n\tif ( ! $user_id ) {\n\t\treturn; // Guest order.\n\t}\n\tupdate_user_meta( $user_id, 'perfectpixel_last_order_date', current_time( 'mysql' ) );\n\tupdate_user_meta( $user_id, 'perfectpixel_last_order_id', $order->get_id() );\n\n\t// More examples:\n\t// update_user_meta( $user_id, 'perfectpixel_bought_course', 'yes' );\n\t// update_user_meta( $user_id, 'perfectpixel_last_payment_method', $order->get_payment_method() );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "orders",
+        "customers"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-update-user-meta-successful-order/"
+    ],
+    "updated": "2026-11-18T09:53:27+00:00"
+}

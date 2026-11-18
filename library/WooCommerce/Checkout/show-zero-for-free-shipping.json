@@ -1,0 +1,22 @@
+{
+    "title": "Show the 0,00 € amount next to free shipping rates",
+    "description": "Εμφανίζει το ποσό «0,00 €» δίπλα στους δωρεάν τρόπους αποστολής στο καλάθι και στο checkout (το WooCommerce δείχνει μόνο το όνομα), ώστε να φαίνεται καθαρά ότι η αποστολή είναι δωρεάν. Το ίδιο και στη σελίδα ευχαριστίας και στα emails. Το κομμάτι καλαθιού/checkout ισχύει για το κλασικό καλάθι/checkout.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_cart_shipping_method_full_label', 'perfectpixel_zero_free_shipping_label', 10, 2 );\nadd_filter( 'woocommerce_order_shipping_to_display', 'perfectpixel_zero_free_shipping_order', 10, 2 );\n\nfunction perfectpixel_zero_free_shipping_label( $label, $method ) {\n\tif ( 0.0 === (float) $method->get_cost() && false === strpos( $label, 'amount' ) ) {\n\t\t$label .= ': ' . wc_price( 0 );\n\t}\n\treturn $label;\n}\n\nfunction perfectpixel_zero_free_shipping_order( $shipping, $order ) {\n\tif ( 0.0 === (float) $order->get_shipping_total() && $order->get_shipping_methods() && false === strpos( $shipping, 'amount' ) ) {\n\t\t$shipping = wc_price( 0, array( 'currency' => $order->get_currency() ) ) . ' ' . $shipping;\n\t}\n\treturn $shipping;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "shipping",
+        "cart"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-display-0-00-amount-free-shipping-rates/"
+    ],
+    "updated": "2026-11-18T09:53:27+00:00"
+}

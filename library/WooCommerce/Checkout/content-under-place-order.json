@@ -1,0 +1,29 @@
+{
+    "title": "Add content under the \"Place order\" button",
+    "description": "Εμφανίζει κείμενο κάτω από το κουμπί ολοκλήρωσης παραγγελίας, π.χ. μήνυμα ασφαλών πληρωμών, εγγύηση επιστροφής ή κριτική πελάτη, για να ενισχύσει την εμπιστοσύνη. Επιτρέπεται απλό HTML (π.χ. <strong>, <a>). Στο checkout με blocks προσθέστε απλώς ένα block «Παράγραφος» στο ίδιο σημείο από τον editor. Λειτουργεί με το κλασικό checkout (shortcode)· το checkout με blocks δεν χρησιμοποιεί αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_review_order_after_submit', 'perfectpixel_content_under_place_order' );\n\nfunction perfectpixel_content_under_place_order() {\n\techo '<p class=\"perfectpixel-under-place-order\" style=\"margin:1em 0 0;font-size:.875em;text-align:center\">' . wp_kses_post( '{{under_button_text}}' ) . '</p>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "trust",
+        "conversions"
+    ],
+    "variables": [
+        {
+            "name": "under_button_text",
+            "label": "Κείμενο",
+            "default": "🔒 Ασφαλείς πληρωμές με κρυπτογράφηση SSL · Δωρεάν επιστροφή σε 14 ημέρες",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-content-under-place-order-button-checkout/"
+    ],
+    "updated": "2026-11-18T09:53:27+00:00"
+}

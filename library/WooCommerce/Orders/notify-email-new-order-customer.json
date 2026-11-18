@@ -1,0 +1,34 @@
+{
+    "title": "Send customer details of new orders to another email address",
+    "description": "Σε κάθε νέα παραγγελία στέλνει ένα σύντομο email (όνομα, email, τηλέφωνο, διεύθυνση αποστολής και αριθμό παραγγελίας) σε μια επιπλέον διεύθυνση, π.χ. συνεργάτη, αποθήκη ή dropshipper, χωρίς να του δώσετε πρόσβαση στη διαχείριση. Ορίστε τη διεύθυνση και το θέμα στις μεταβλητές.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_checkout_order_processed', 'perfectpixel_notify_email_new_order', 20, 3 );\n\nfunction perfectpixel_notify_email_new_order( $order_id, $posted_data, $order ) {\n\t$to = sanitize_email( '{{notify_email}}' );\n\tif ( ! is_email( $to ) || ! $order instanceof WC_Order ) {\n\t\treturn;\n\t}\n\t$lines = array(\n\t\t$order->get_formatted_billing_full_name(),\n\t\t$order->get_billing_email(),\n\t\t$order->get_billing_phone(),\n\t\t'',\n\t\twp_strip_all_tags( str_replace( '<br/>', \"\\n\", (string) $order->get_formatted_shipping_address( $order->get_formatted_billing_address() ) ) ),\n\t\t'',\n\t\tadmin_url( 'post.php?post=' . $order->get_id() . '&action=edit' ),\n\t);\n\twp_mail( $to, sprintf( '{{notify_subject}}', $order->get_order_number() ), implode( \"\\n\", $lines ) );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "orders",
+        "emails"
+    ],
+    "variables": [
+        {
+            "name": "notify_email",
+            "label": "Διεύθυνση παραλήπτη",
+            "default": "warehouse@example.com",
+            "description": ""
+        },
+        {
+            "name": "notify_subject",
+            "label": "Θέμα email",
+            "default": "Νέα παραγγελία #%s",
+            "description": "%s = αριθμός παραγγελίας. Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-send-checkout-user-info-email-recipient/"
+    ],
+    "updated": "2026-11-18T09:53:27+00:00"
+}

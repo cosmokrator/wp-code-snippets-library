@@ -1,0 +1,23 @@
+{
+    "title": "Hide the shipping address when local pickup is selected",
+    "description": "Όταν ο πελάτης επιλέγει «Παραλαβή από το κατάστημα», κρύβεται η φόρμα «Αποστολή σε διαφορετική διεύθυνση», αφού δεν χρειάζεται. Επανεμφανίζεται αν αλλάξει σε άλλον τρόπο αποστολής. Μειώνει τα λάθη στις παραγγελίες. Λειτουργεί με το κλασικό checkout (shortcode)· το checkout με blocks δεν χρησιμοποιεί αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_after_checkout_form', 'perfectpixel_hide_shipping_on_pickup' );\n\nfunction perfectpixel_hide_shipping_on_pickup() {\n\t?>\n\t<script>\n\tjQuery( function ( $ ) {\n\t\tvar toggle = function () {\n\t\t\tvar method = $( 'input.shipping_method:checked, input.shipping_method[type=\"hidden\"]' ).first().val() || '';\n\t\t\tvar pickup = method.indexOf( 'local_pickup' ) === 0 || method.indexOf( 'pickup_location' ) === 0;\n\t\t\tvar $shipping = $( '.woocommerce-shipping-fields' );\n\t\t\tif ( pickup ) {\n\t\t\t\t$( '#ship-to-different-address-checkbox' ).prop( 'checked', false ).trigger( 'change' );\n\t\t\t\t$shipping.hide();\n\t\t\t} else {\n\t\t\t\t$shipping.show();\n\t\t\t}\n\t\t};\n\t\t$( document.body ).on( 'updated_checkout', toggle );\n\t\t$( 'form.checkout' ).on( 'change', 'input.shipping_method', toggle );\n\t\ttoggle();\n\t} );\n\t</script>\n\t<?php\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "shipping",
+        "local-pickup",
+        "ux"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-hide-shipping-local-pickup-selected/"
+    ],
+    "updated": "2026-11-18T09:53:27+00:00"
+}
