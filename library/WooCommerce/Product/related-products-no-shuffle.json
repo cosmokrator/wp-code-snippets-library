@@ -1,0 +1,35 @@
+{
+    "title": "Stop related products from shuffling",
+    "description": "Το WooCommerce ανακατεύει τυχαία τα «Σχετικά προϊόντα» σε κάθε φόρτωση της σελίδας. Με το snippet εμφανίζονται πάντα με την ίδια σειρά (π.χ. νεότερα, δημοφιλέστερα ή κατά τιμή), για σταθερή εμφάνιση και καλύτερη συνεργασία με την cache.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_product_related_posts_shuffle', 'perfectpixel_related_no_shuffle' );\nadd_filter( 'woocommerce_output_related_products_args', 'perfectpixel_related_order_args', 20 );\n\nfunction perfectpixel_related_no_shuffle() {\n\treturn false;\n}\n\nfunction perfectpixel_related_order_args( $args ) {\n\t$orderby = sanitize_key( '{{related_orderby}}' );\n\tif ( in_array( $orderby, array( 'date', 'title', 'price', 'popularity', 'rating', 'id', 'menu_order' ), true ) ) {\n\t\t$args['orderby'] = $orderby;\n\t\t$args['order']   = 'asc' === strtolower( '{{related_order}}' ) ? 'asc' : 'desc';\n\t}\n\treturn $args;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "related-products",
+        "sorting"
+    ],
+    "variables": [
+        {
+            "name": "related_orderby",
+            "label": "Ταξινόμηση (date/title/price/popularity/rating)",
+            "default": "date",
+            "description": "date = νεότερα, popularity = πωλήσεις"
+        },
+        {
+            "name": "related_order",
+            "label": "Σειρά (desc/asc)",
+            "default": "desc",
+            "description": "desc = φθίνουσα, asc = αύξουσα"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-disable-related-products-shuffle/"
+    ],
+    "updated": "2026-11-18T18:46:57+00:00"
+}

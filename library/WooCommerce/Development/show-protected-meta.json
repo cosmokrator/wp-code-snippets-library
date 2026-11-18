@@ -1,0 +1,22 @@
+{
+    "title": "Debug: show hidden custom fields on product and order screens",
+    "description": "Εργαλείο για developers: στο πλαίσιο «Προσαρμοσμένα πεδία» της σελίδας επεξεργασίας προϊόντος εμφανίζονται και τα «κρυφά» πεδία (όσα ξεκινούν με _, π.χ. _price, _stock, total_sales), ώστε να βλέπετε τι αποθηκεύει το WooCommerce και τα plugins. Ισχύει μόνο για διαχειριστές. Ενεργοποιήστε το μόνο όσο το χρειάζεστε.",
+    "type": "php",
+    "code": "add_filter( 'is_protected_meta', 'perfectpixel_show_protected_meta', 20, 3 );\nadd_filter( 'acf/settings/remove_wp_meta_box', '__return_false' );\n\nfunction perfectpixel_show_protected_meta( $protected, $meta_key, $meta_type ) {\n\tif ( ! is_admin() || 'post' !== $meta_type || ! current_user_can( 'manage_options' ) || ! function_exists( 'get_current_screen' ) ) {\n\t\treturn $protected;\n\t}\n\t$screen = get_current_screen();\n\treturn ( $screen && 'product' === $screen->id ) ? false : $protected;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "development",
+        "debug",
+        "custom-fields"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-view-product-hidden-custom-fields-protected-meta/"
+    ],
+    "updated": "2026-11-18T18:46:57+00:00"
+}

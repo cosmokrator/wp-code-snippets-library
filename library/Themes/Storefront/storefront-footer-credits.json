@@ -1,0 +1,35 @@
+{
+    "title": "Edit or remove the Storefront footer credits",
+    "description": "Για το theme Storefront: αλλάζει το κείμενο πνευματικών δικαιωμάτων του footer (π.χ. «© 2026 Το κατάστημά μου») και αφαιρεί το «Built with WooCommerce». Ο σύνδεσμος Πολιτικής απορρήτου μπορεί να μείνει ή να αφαιρεθεί. Με άλλο theme δεν κάνει τίποτα. Το {year} γίνεται το τρέχον έτος.",
+    "type": "php",
+    "code": "add_filter( 'storefront_copyright_text', 'perfectpixel_storefront_copyright' );\nadd_filter( 'storefront_credit_link', 'perfectpixel_storefront_no_credit_link' );\nadd_filter( 'storefront_privacy_policy_link', 'perfectpixel_storefront_privacy_link' );\n\nfunction perfectpixel_storefront_copyright() {\n\treturn esc_html( str_replace( '{year}', wp_date( 'Y' ), '{{storefront_copyright}}' ) );\n}\n\nfunction perfectpixel_storefront_no_credit_link() {\n\treturn false;\n}\n\nfunction perfectpixel_storefront_privacy_link( $show ) {\n\treturn 'yes' === '{{storefront_keep_privacy}}' ? $show : false;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "storefront",
+        "theme",
+        "footer",
+        "woocommerce"
+    ],
+    "variables": [
+        {
+            "name": "storefront_copyright",
+            "label": "Κείμενο copyright",
+            "default": "© {year} Το κατάστημά μου",
+            "description": "Χωρίς απόστροφο ('). Το {year} γίνεται το τρέχον έτος"
+        },
+        {
+            "name": "storefront_keep_privacy",
+            "label": "Σύνδεσμος Πολιτικής απορρήτου (yes/no)",
+            "default": "yes",
+            "description": "yes = μένει"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/storefront-theme-edit-remove-credits/"
+    ],
+    "updated": "2026-11-18T18:46:57+00:00"
+}

@@ -1,0 +1,35 @@
+{
+    "title": "Add a top bar to the Storefront theme",
+    "description": "Για το theme Storefront (που δεν έχει top bar): εμφανίζει μια λεπτή μπάρα πάνω από το header με δικό σας κείμενο, π.χ. «Δωρεάν αποστολή για αγορές άνω των 50 € · Τηλ. 210 0000000». Επιτρέπεται απλό HTML. Με άλλο theme δεν κάνει τίποτα.",
+    "type": "php",
+    "code": "add_action( 'storefront_before_header', 'perfectpixel_storefront_top_bar' );\n\nfunction perfectpixel_storefront_top_bar() {\n\t$bg = sanitize_hex_color( '{{storefront_top_bar_bg}}' );\n\tprintf(\n\t\t'<div class=\"perfectpixel-top-bar\" style=\"background:%s;color:#fff;text-align:center;font-size:.85em;padding:.5em 1em\">%s</div>',\n\t\tesc_attr( $bg ? $bg : '#1d2327' ),\n\t\twp_kses_post( '{{storefront_top_bar_text}}' )\n\t);\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "storefront",
+        "theme",
+        "header",
+        "woocommerce"
+    ],
+    "variables": [
+        {
+            "name": "storefront_top_bar_text",
+            "label": "Κείμενο",
+            "default": "Δωρεάν αποστολή για αγορές άνω των 50 €",
+            "description": "Χωρίς απόστροφο ('). Επιτρέπεται απλό HTML"
+        },
+        {
+            "name": "storefront_top_bar_bg",
+            "label": "Χρώμα φόντου",
+            "default": "#1d2327",
+            "description": "Χρώμα CSS, π.χ. #1d2327"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-how-to-add-a-top-bar-to-storefront-theme/"
+    ],
+    "updated": "2026-11-18T18:46:57+00:00"
+}

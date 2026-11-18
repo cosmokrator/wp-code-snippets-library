@@ -1,0 +1,29 @@
+{
+    "title": "Limit the product CSV export to specific tags",
+    "description": "Η εξαγωγή προϊόντων σε CSV του WooCommerce (Προϊόντα → Εξαγωγή) φιλτράρει μόνο ανά τύπο και κατηγορία. Με το snippet, όσο η μεταβλητή έχει ετικέτες, η εξαγωγή περιλαμβάνει μόνο τα προϊόντα με αυτές τις ετικέτες (π.χ. για να στείλετε σε συνεργάτη μόνο μια συλλογή). Αδειάστε τη μεταβλητή (ή απενεργοποιήστε το snippet) για κανονική εξαγωγή.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_product_export_product_query_args', 'perfectpixel_csv_export_by_tag' );\n\nfunction perfectpixel_csv_export_by_tag( $args ) {\n\t$tags = array_filter( array_map( 'sanitize_title', explode( ',', '{{export_tag_slugs}}' ) ) );\n\tif ( $tags ) {\n\t\t$args['tag'] = $tags;\n\t}\n\treturn $args;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "admin",
+        "export",
+        "csv"
+    ],
+    "variables": [
+        {
+            "name": "export_tag_slugs",
+            "label": "Slugs ετικετών (με κόμμα)",
+            "default": "",
+            "description": "Κενό = κανονική εξαγωγή όλων"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-allow-csv-product-export-by-tag/"
+    ],
+    "updated": "2026-11-18T18:46:57+00:00"
+}

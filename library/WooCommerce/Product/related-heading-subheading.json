@@ -1,0 +1,35 @@
+{
+    "title": "Change the related products heading and add a subheading",
+    "description": "Αλλάζει τον τίτλο «Σχετικά προϊόντα» της σελίδας προϊόντος και προσθέτει ένα σύντομο κείμενο κάτω από αυτόν. Αφήστε κενό όποιο από τα δύο δεν θέλετε να αλλάξει. Για τα upsells («Μπορεί επίσης να σας αρέσουν…») υπάρχει ξεχωριστό snippet.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_product_related_products_heading', 'perfectpixel_related_heading' );\nadd_filter( 'woocommerce_product_loop_start', 'perfectpixel_related_subheading' );\n\nfunction perfectpixel_related_heading( $heading ) {\n\t$custom = trim( '{{related_heading}}' );\n\treturn '' !== $custom ? $custom : $heading;\n}\n\nfunction perfectpixel_related_subheading( $html ) {\n\t$text = trim( '{{related_subheading}}' );\n\tif ( '' !== $text && 'related' === wc_get_loop_prop( 'name' ) ) {\n\t\t$html = '<p class=\"perfectpixel-related-subheading\">' . esc_html( $text ) . '</p>' . $html;\n\t}\n\treturn $html;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "related-products",
+        "labels"
+    ],
+    "variables": [
+        {
+            "name": "related_heading",
+            "label": "Τίτλος",
+            "default": "Ίσως σας ενδιαφέρουν",
+            "description": "Χωρίς απόστροφο ('). Κενό = χωρίς αλλαγή"
+        },
+        {
+            "name": "related_subheading",
+            "label": "Υπότιτλος",
+            "default": "Προϊόντα από την ίδια συλλογή.",
+            "description": "Χωρίς απόστροφο ('). Κενό = χωρίς υπότιτλο"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-related-products-custom-heading-subheading/"
+    ],
+    "updated": "2026-11-18T18:46:57+00:00"
+}

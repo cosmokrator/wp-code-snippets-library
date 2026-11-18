@@ -1,0 +1,29 @@
+{
+    "title": "Show the long description instead of the short one",
+    "description": "Στη σελίδα προϊόντος, δίπλα στην εικόνα (εκεί που εμφανίζεται η σύντομη περιγραφή) εμφανίζεται η κύρια περιγραφή του προϊόντος. Χρήσιμο μετά από εισαγωγή προϊόντων από άλλη πλατφόρμα όπου το κείμενο μπήκε μόνο στην κύρια περιγραφή. Προαιρετικά κρύβεται η καρτέλα «Περιγραφή» για να μη φαίνεται το ίδιο κείμενο δύο φορές.",
+    "type": "php",
+    "code": "add_action( 'init', 'perfectpixel_long_description_in_summary_setup' );\nadd_filter( 'woocommerce_product_tabs', 'perfectpixel_long_description_hide_tab', 98 );\n\nfunction perfectpixel_long_description_in_summary_setup() {\n\tremove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_excerpt', 20 );\n\tadd_action( 'woocommerce_single_product_summary', 'perfectpixel_long_description_in_summary', 20 );\n}\n\nfunction perfectpixel_long_description_in_summary() {\n\techo '<div class=\"woocommerce-product-details__short-description perfectpixel-long-description\">';\n\tthe_content();\n\techo '</div>';\n}\n\nfunction perfectpixel_long_description_hide_tab( $tabs ) {\n\tif ( 'yes' === '{{hide_description_tab}}' ) {\n\t\tunset( $tabs['description'] );\n\t}\n\treturn $tabs;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "description",
+        "layout"
+    ],
+    "variables": [
+        {
+            "name": "hide_description_tab",
+            "label": "Απόκρυψη καρτέλας «Περιγραφή» (yes/no)",
+            "default": "yes",
+            "description": "yes ή no"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-display-long-description-instead-of-short-one-single-product-page/"
+    ],
+    "updated": "2026-11-18T18:46:57+00:00"
+}

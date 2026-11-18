@@ -1,0 +1,36 @@
+{
+    "title": "Hide sidebar widgets on the cart and checkout pages",
+    "description": "Κρύβει τα widgets μιας sidebar του theme στις σελίδες καλαθιού και ολοκλήρωσης αγοράς (προαιρετικά και στον λογαριασμό), ώστε ο πελάτης να μην αποσπάται τη στιγμή της αγοράς. Ορίστε το ID της sidebar (π.χ. sidebar-1). Ισχύει για τις κλασικές sidebars με widgets.",
+    "type": "php",
+    "code": "add_filter( 'sidebars_widgets', 'perfectpixel_hide_sidebar_on_cart_checkout' );\n\nfunction perfectpixel_hide_sidebar_on_cart_checkout( $sidebars ) {\n\tif ( is_admin() || ! function_exists( 'is_cart' ) || ! did_action( 'wp' ) ) {\n\t\treturn $sidebars; // Conditionals are only reliable after the main query.\n\t}\n\t$hide = is_cart() || is_checkout() || ( 'yes' === '{{hide_sidebar_on_account}}' && is_account_page() );\n\t$id   = sanitize_key( '{{hidden_sidebar_id}}' );\n\tif ( $hide && isset( $sidebars[ $id ] ) ) {\n\t\t$sidebars[ $id ] = array();\n\t}\n\treturn $sidebars;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "cart",
+        "widgets",
+        "conversion"
+    ],
+    "variables": [
+        {
+            "name": "hidden_sidebar_id",
+            "label": "ID sidebar",
+            "default": "sidebar-1",
+            "description": "Το ID της περιοχής widgets του theme"
+        },
+        {
+            "name": "hide_sidebar_on_account",
+            "label": "Και στον λογαριασμό (yes/no)",
+            "default": "no",
+            "description": "yes ή no"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-conditionally-hide-widgets/"
+    ],
+    "updated": "2026-11-18T18:46:57+00:00"
+}

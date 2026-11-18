@@ -1,0 +1,29 @@
+{
+    "title": "Allow extra file types for downloadable products",
+    "description": "Επιτρέπει στους διαχειριστές του καταστήματος να ανεβάζουν τύπους αρχείων που το WordPress απορρίπτει με «Λυπούμαστε, αυτός ο τύπος αρχείου δεν επιτρέπεται για λόγους ασφαλείας», π.χ. EPUB, MOBI, ZIP ή αρχεία γραμματοσειρών, για ψηφιακά προϊόντα. Γράψτε ζεύγη επέκταση=MIME type χωρισμένα με |. Οι πελάτες και οι άλλοι χρήστες δεν επηρεάζονται.",
+    "type": "php",
+    "code": "add_filter( 'upload_mimes', 'perfectpixel_allow_download_file_types' );\nadd_filter( 'wp_check_filetype_and_ext', 'perfectpixel_allow_download_file_types_check', 10, 4 );\n\nfunction perfectpixel_extra_upload_types() {\n\t$blocked = array( 'php', 'phtml', 'phar', 'svg', 'svgz', 'html', 'htm', 'js', 'exe', 'sh', 'bat', 'cgi', 'pl', 'py', 'shtml' );\n\t$types   = array();\n\tforeach ( explode( '|', '{{extra_upload_types}}' ) as $pair ) {\n\t\t$parts = array_map( 'trim', explode( '=', $pair, 2 ) );\n\t\t$ext   = strtolower( preg_replace( '/[^a-z0-9]/i', '', $parts[0] ?? '' ) );\n\t\tif ( 2 === count( $parts ) && $ext && ! in_array( $ext, $blocked, true ) && preg_match( '#^[a-z0-9.+-]+/[a-z0-9.+-]+$#i', $parts[1] ) ) {\n\t\t\t$types[ $ext ] = $parts[1];\n\t\t}\n\t}\n\treturn $types;\n}\n\nfunction perfectpixel_allow_download_file_types( $mimes ) {\n\treturn current_user_can( 'manage_woocommerce' ) ? array_merge( $mimes, perfectpixel_extra_upload_types() ) : $mimes;\n}\n\n// Some types (e.g. epub) are detected with a generic MIME; accept the extension we explicitly allowed.\nfunction perfectpixel_allow_download_file_types_check( $data, $file, $filename, $mimes ) {\n\tif ( ! empty( $data['ext'] ) || ! current_user_can( 'manage_woocommerce' ) ) {\n\t\treturn $data;\n\t}\n\t$ext   = strtolower( pathinfo( $filename, PATHINFO_EXTENSION ) );\n\t$types = perfectpixel_extra_upload_types();\n\tif ( isset( $types[ $ext ] ) ) {\n\t\t$data['ext']  = $ext;\n\t\t$data['type'] = $types[ $ext ];\n\t}\n\treturn $data;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "admin",
+        "uploads",
+        "downloads"
+    ],
+    "variables": [
+        {
+            "name": "extra_upload_types",
+            "label": "Επέκταση=MIME (με |)",
+            "default": "epub=application/epub+zip|mobi=application/x-mobipocket-ebook",
+            "description": "Π.χ. epub=application/epub+zip|zip=application/zip"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-fix-sorry-file-type-not-permitted/"
+    ],
+    "updated": "2026-11-18T18:46:57+00:00"
+}

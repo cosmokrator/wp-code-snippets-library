@@ -1,0 +1,22 @@
+{
+    "title": "Shortcode for the number of sales of a variation",
+    "description": "Shortcode [variation_sales id=\"123\"] που εμφανίζει πόσα τεμάχια έχουν πουληθεί από μια συγκεκριμένη παραλλαγή (π.χ. «Μέγεθος L: 37 πωλήσεις»), αφού ο μετρητής πωλήσεων του WooCommerce μετρά μόνο το γονικό προϊόν. Μετρώνται ολοκληρωμένες και υπό επεξεργασία παραγγελίες· ο αριθμός ανανεώνεται κάθε μία ώρα.",
+    "type": "php",
+    "code": "add_shortcode( 'variation_sales', 'perfectpixel_variation_sales_shortcode' );\n\nfunction perfectpixel_variation_sales_shortcode( $atts ) {\n\tglobal $wpdb;\n\t$atts = shortcode_atts( array( 'id' => 0 ), $atts );\n\t$id   = absint( $atts['id'] );\n\tif ( ! $id ) {\n\t\treturn '';\n\t}\n\t$key  = 'perfectpixel_variation_sales_' . $id;\n\t$sold = get_transient( $key );\n\tif ( false === $sold ) {\n\t\t$sold = (int) $wpdb->get_var(\n\t\t\t$wpdb->prepare(\n\t\t\t\t\"SELECT SUM(l.product_qty) FROM {$wpdb->prefix}wc_order_product_lookup l\n\t\t\t\tINNER JOIN {$wpdb->prefix}wc_order_stats s ON s.order_id = l.order_id\n\t\t\t\tWHERE l.variation_id = %d AND s.status IN ('wc-completed','wc-processing')\",\n\t\t\t\t$id\n\t\t\t)\n\t\t);\n\t\tset_transient( $key, $sold, HOUR_IN_SECONDS );\n\t}\n\treturn '<span class=\"perfectpixel-variation-sales\">' . esc_html( number_format_i18n( $sold ) ) . '</span>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shortcodes",
+        "variations",
+        "sales"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-count-variation-sales/"
+    ],
+    "updated": "2026-11-18T18:46:57+00:00"
+}

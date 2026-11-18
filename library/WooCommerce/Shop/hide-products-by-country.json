@@ -1,0 +1,35 @@
+{
+    "title": "Hide products for visitors from specific countries",
+    "description": "Κρύβει επιλεγμένα προϊόντα (από τις λίστες του καταστήματος) και τα κάνει μη διαθέσιμα για αγορά όταν ο επισκέπτης βρίσκεται σε συγκεκριμένες χώρες, με βάση τη γεωγραφική θέση της IP του (π.χ. προϊόντα χωρίς άδεια πώλησης σε κάποια χώρα). Χρειάζεται ενεργή «Γεωγραφική εντόπιση» στις Γενικές ρυθμίσεις του WooCommerce.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_product_query', 'perfectpixel_hide_products_by_country_query' );\nadd_filter( 'woocommerce_is_purchasable', 'perfectpixel_hide_products_by_country_purchasable', 60, 2 );\n\nfunction perfectpixel_visitor_in_hidden_country() {\n\tstatic $hidden = null;\n\tif ( null === $hidden ) {\n\t\t$countries = array_filter( array_map( 'trim', explode( ',', strtoupper( '{{geo_hidden_countries}}' ) ) ) );\n\t\t$location  = class_exists( 'WC_Geolocation' ) ? WC_Geolocation::geolocate_ip( '', true, true ) : array();\n\t\t$hidden    = $countries && ! empty( $location['country'] ) && in_array( $location['country'], $countries, true );\n\t}\n\treturn $hidden;\n}\n\nfunction perfectpixel_hide_products_by_country_query( $q ) {\n\t$ids = wp_parse_id_list( '{{geo_hidden_product_ids}}' );\n\tif ( $ids && perfectpixel_visitor_in_hidden_country() ) {\n\t\t$q->set( 'post__not_in', array_merge( (array) $q->get( 'post__not_in' ), $ids ) );\n\t}\n}\n\nfunction perfectpixel_hide_products_by_country_purchasable( $purchasable, $product ) {\n\t$id = $product->get_parent_id() ? $product->get_parent_id() : $product->get_id();\n\tif ( $purchasable && ! is_admin() && in_array( $id, wp_parse_id_list( '{{geo_hidden_product_ids}}' ), true ) && perfectpixel_visitor_in_hidden_country() ) {\n\t\treturn false;\n\t}\n\treturn $purchasable;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shop",
+        "geolocation",
+        "restrictions"
+    ],
+    "variables": [
+        {
+            "name": "geo_hidden_product_ids",
+            "label": "IDs προϊόντων (με κόμμα)",
+            "default": "",
+            "description": "Υποχρεωτικό"
+        },
+        {
+            "name": "geo_hidden_countries",
+            "label": "Χώρες (κωδικοί με κόμμα)",
+            "default": "US",
+            "description": "Κωδικοί 2 γραμμάτων, π.χ. US,CA"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-hide-product-based-on-ip-address-geolocation/"
+    ],
+    "updated": "2026-11-18T18:46:57+00:00"
+}

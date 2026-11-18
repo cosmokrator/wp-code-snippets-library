@@ -1,0 +1,35 @@
+{
+    "title": "Show related products at the end of blog posts",
+    "description": "Στο τέλος κάθε άρθρου του blog εμφανίζει ενότητα «Προϊόντα για αυτό το θέμα» με προϊόντα που έχουν ετικέτες ίδιες με τις ετικέτες του άρθρου (π.χ. άρθρο με ετικέτα «καφές» → προϊόντα με ετικέτα «καφές»). Αν δεν υπάρχουν τέτοια προϊόντα, δεν εμφανίζεται τίποτα. Μετατρέπει την επισκεψιμότητα του blog σε πωλήσεις.",
+    "type": "php",
+    "code": "add_filter( 'the_content', 'perfectpixel_related_products_in_posts', 20 );\n\nfunction perfectpixel_related_products_in_posts( $content ) {\n\tif ( ! is_singular( 'post' ) || ! in_the_loop() || ! is_main_query() ) {\n\t\treturn $content;\n\t}\n\t$tags = wp_get_post_tags( get_the_ID(), array( 'fields' => 'slugs' ) );\n\tif ( ! $tags ) {\n\t\treturn $content;\n\t}\n\t$limit = min( 12, max( 1, (int) '{{post_products_limit}}' ) );\n\t$ids   = wc_get_products( array( 'status' => 'publish', 'tag' => $tags, 'limit' => $limit, 'return' => 'ids', 'visibility' => 'catalog' ) );\n\tif ( ! $ids ) {\n\t\treturn $content;\n\t}\n\t$grid = do_shortcode( sprintf( '[products ids=\"%s\" columns=\"%d\"]', esc_attr( implode( ',', $ids ) ), min( 4, $limit ) ) );\n\treturn $content . '<section class=\"perfectpixel-post-products\"><h2>' . esc_html( '{{post_products_heading}}' ) . '</h2>' . $grid . '</section>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "blog",
+        "related-products",
+        "content-marketing"
+    ],
+    "variables": [
+        {
+            "name": "post_products_heading",
+            "label": "Τίτλος",
+            "default": "Προϊόντα για αυτό το θέμα",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "post_products_limit",
+            "label": "Πλήθος",
+            "default": "4",
+            "description": "Μόνο αριθμός"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-related-products-in-blog-post/"
+    ],
+    "updated": "2026-11-18T18:46:57+00:00"
+}
