@@ -1,0 +1,41 @@
+{
+    "title": "Send an email when specific coupons are used",
+    "description": "Όταν μια παραγγελία με ένα από τα κουπόνια που ορίζετε γίνει «Σε επεξεργασία» ή «Ολοκληρωμένη», στέλνεται email σε έναν παραλήπτη (π.χ. στον συνεργάτη/affiliate του κουπονιού ή σε εσάς) με τον αριθμό, το σύνολο και το κουπόνι της παραγγελίας. Στέλνεται μία φορά ανά παραγγελία. Δεν περιέχει στοιχεία πελάτη.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_order_status_processing', 'perfectpixel_notify_when_coupon_used', 20, 2 );\nadd_action( 'woocommerce_order_status_completed', 'perfectpixel_notify_when_coupon_used', 20, 2 );\n\nfunction perfectpixel_notify_when_coupon_used( $order_id, $order ) {\n\tif ( ! $order || $order->get_meta( '_perfectpixel_coupon_notified' ) ) {\n\t\treturn;\n\t}\n\t$watched = array_filter( array_map( 'wc_format_coupon_code', explode( ',', '{{notify_coupon_codes}}' ) ) );\n\t$used    = array_intersect( $watched, array_map( 'wc_format_coupon_code', $order->get_coupon_codes() ) );\n\tif ( ! $used ) {\n\t\treturn;\n\t}\n\t$recipient = sanitize_email( '{{notify_coupon_recipient}}' );\n\t$recipient = $recipient ? $recipient : get_option( 'admin_email' );\n\t$coupon    = strtoupper( implode( ', ', $used ) );\n\t$subject   = str_replace( array( '{coupon}', '{order}' ), array( $coupon, $order->get_order_number() ), '{{notify_coupon_subject}}' );\n\t$body      = sprintf(\n\t\t'<p>Παραγγελία: #%s<br>Ημερομηνία: %s<br>Κουπόνι: %s<br>Έκπτωση: %s<br>Σύνολο: %s</p>',\n\t\tesc_html( $order->get_order_number() ),\n\t\tesc_html( wc_format_datetime( $order->get_date_created() ) ),\n\t\tesc_html( $coupon ),\n\t\twp_kses_post( wc_price( $order->get_discount_total(), array( 'currency' => $order->get_currency() ) ) ),\n\t\twp_kses_post( wc_price( $order->get_total(), array( 'currency' => $order->get_currency() ) ) )\n\t);\n\t$mailer = WC()->mailer();\n\t$mailer->send( $recipient, $subject, $mailer->wrap_message( $subject, $body ) );\n\t$order->update_meta_data( '_perfectpixel_coupon_notified', 1 );\n\t$order->save();\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "emails",
+        "coupons",
+        "affiliates"
+    ],
+    "variables": [
+        {
+            "name": "notify_coupon_codes",
+            "label": "Κωδικοί κουπονιών (με κόμμα)",
+            "default": "",
+            "description": "Υποχρεωτικό"
+        },
+        {
+            "name": "notify_coupon_recipient",
+            "label": "Email παραλήπτη",
+            "default": "",
+            "description": "Κενό = το email του διαχειριστή"
+        },
+        {
+            "name": "notify_coupon_subject",
+            "label": "Θέμα",
+            "default": "Το κουπόνι {coupon} χρησιμοποιήθηκε στην παραγγελία #{order}",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-send-email-when-a-coupon-is-used/"
+    ],
+    "updated": "2026-11-18T17:28:39+00:00"
+}

@@ -1,0 +1,29 @@
+{
+    "title": "Allow editing orders in more statuses",
+    "description": "Το WooCommerce επιτρέπει αλλαγή προϊόντων, χρεώσεων και αποστολής σε μια παραγγελία μόνο όταν είναι «Σε αναμονή» ή «Εκκρεμεί πληρωμή». Με το snippet η επεξεργασία επιτρέπεται και σε άλλες καταστάσεις που ορίζετε (π.χ. υπό επεξεργασία ή δική σας κατάσταση), π.χ. για αλλαγή χρώματος ή προσθήκη δωρεάν δείγματος μετά την πληρωμή.",
+    "type": "php",
+    "code": "add_filter( 'wc_order_is_editable', 'perfectpixel_editable_order_statuses', 10, 2 );\n\nfunction perfectpixel_editable_order_statuses( $editable, $order ) {\n\t$statuses = array_filter( array_map( 'sanitize_key', explode( ',', '{{editable_order_statuses}}' ) ) );\n\treturn ( $statuses && $order->has_status( $statuses ) ) ? true : $editable;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "orders",
+        "order-status",
+        "admin"
+    ],
+    "variables": [
+        {
+            "name": "editable_order_statuses",
+            "label": "Καταστάσεις (με κόμμα)",
+            "default": "processing",
+            "description": "Π.χ. processing,shipped (χωρίς wc-)"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-allow-order-editing-for-custom-order-status/"
+    ],
+    "updated": "2026-11-18T17:28:39+00:00"
+}

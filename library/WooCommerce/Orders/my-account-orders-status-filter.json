@@ -1,0 +1,29 @@
+{
+    "title": "Filter orders by status in My Account",
+    "description": "Στη σελίδα «Ο λογαριασμός μου → Παραγγελίες» εμφανίζονται σύνδεσμοι φίλτρου ανά κατάσταση (Όλες · Σε επεξεργασία · Ολοκληρωμένες · …), ώστε ο πελάτης με πολλές παραγγελίες να βρίσκει γρήγορα αυτό που ψάχνει. Εμφανίζονται μόνο οι καταστάσεις που έχει ο πελάτης, και το φίλτρο διατηρείται στη σελιδοποίηση.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_before_account_orders', 'perfectpixel_my_orders_status_links' );\nadd_filter( 'woocommerce_my_account_my_orders_query', 'perfectpixel_my_orders_status_query' );\nadd_filter( 'woocommerce_get_endpoint_url', 'perfectpixel_my_orders_status_pagination', 10, 2 );\n\nfunction perfectpixel_my_orders_current_status() {\n\t$status = isset( $_GET['order_status'] ) ? sanitize_key( $_GET['order_status'] ) : '';\n\treturn array_key_exists( 'wc-' . $status, wc_get_order_statuses() ) ? $status : '';\n}\n\nfunction perfectpixel_my_orders_status_links() {\n\t$used = array();\n\tforeach ( wc_get_orders( array( 'customer' => get_current_user_id(), 'limit' => 200 ) ) as $order ) {\n\t\t$used[ $order->get_status() ] = true;\n\t}\n\tif ( count( $used ) < 2 ) {\n\t\treturn;\n\t}\n\t$base    = wc_get_account_endpoint_url( 'orders' );\n\t$current = perfectpixel_my_orders_current_status();\n\t$links   = array( '' === $current ? '<strong>' . esc_html( '{{orders_filter_all_label}}' ) . '</strong>' : '<a href=\"' . esc_url( $base ) . '\">' . esc_html( '{{orders_filter_all_label}}' ) . '</a>' );\n\tforeach ( wc_get_order_statuses() as $key => $label ) {\n\t\t$status = substr( $key, 3 );\n\t\tif ( isset( $used[ $status ] ) ) {\n\t\t\t$links[] = $status === $current ? '<strong>' . esc_html( $label ) . '</strong>' : '<a href=\"' . esc_url( add_query_arg( 'order_status', $status, $base ) ) . '\">' . esc_html( $label ) . '</a>';\n\t\t}\n\t}\n\techo '<p class=\"perfectpixel-orders-filter\">' . implode( ' &middot; ', $links ) . '</p>';\n}\n\nfunction perfectpixel_my_orders_status_query( $args ) {\n\t$status = perfectpixel_my_orders_current_status();\n\tif ( $status ) {\n\t\t$args['status'] = array( $status );\n\t}\n\treturn $args;\n}\n\nfunction perfectpixel_my_orders_status_pagination( $url, $endpoint ) {\n\t$status = perfectpixel_my_orders_current_status();\n\treturn ( 'orders' === $endpoint && $status ) ? add_query_arg( 'order_status', $status, $url ) : $url;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "orders",
+        "my-account",
+        "filters"
+    ],
+    "variables": [
+        {
+            "name": "orders_filter_all_label",
+            "label": "Κείμενο «Όλες»",
+            "default": "Όλες",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-filter-by-order-status-my-account/"
+    ],
+    "updated": "2026-11-18T17:28:39+00:00"
+}

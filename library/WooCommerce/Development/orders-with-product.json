@@ -1,0 +1,22 @@
+{
+    "title": "Helper: get orders that contain a specific product",
+    "description": "Βοηθητική συνάρτηση για developers: perfectpixel_get_order_ids_with_product( $product_id, $statuses ) επιστρέφει τα IDs των παραγγελιών που περιέχουν ένα προϊόν (ή μια παραλλαγή του), προαιρετικά μόνο σε ορισμένες καταστάσεις. Δουλεύει και με HPOS, γιατί διαβάζει τις γραμμές παραγγελιών και φορτώνει κάθε παραγγελία μέσω του WooCommerce. Δεν εμφανίζει τίποτα μόνο του.",
+    "type": "php",
+    "code": "/**\n * IDs of orders containing a product (or one of its variations).\n *\n * @param int      $product_id Product or variation ID.\n * @param string[] $statuses   Order statuses without \"wc-\" (empty = any).\n * @return int[]\n */\nfunction perfectpixel_get_order_ids_with_product( $product_id, $statuses = array() ) {\n\tglobal $wpdb;\n\t$ids = $wpdb->get_col(\n\t\t$wpdb->prepare(\n\t\t\t\"SELECT DISTINCT i.order_id FROM {$wpdb->prefix}woocommerce_order_items i\n\t\t\tINNER JOIN {$wpdb->prefix}woocommerce_order_itemmeta m ON m.order_item_id = i.order_item_id\n\t\t\tWHERE i.order_item_type = 'line_item' AND m.meta_key IN ('_product_id','_variation_id') AND m.meta_value = %d\",\n\t\t\t$product_id\n\t\t)\n\t);\n\tif ( ! $ids ) {\n\t\treturn array();\n\t}\n\t// Load through the CRUD so it works with either order storage (posts or HPOS).\n\t$statuses = array_map( 'sanitize_key', (array) $statuses );\n\t$result   = array();\n\tforeach ( $ids as $order_id ) {\n\t\t$order = wc_get_order( (int) $order_id );\n\t\tif ( $order && 'shop_order' === $order->get_type() && ( ! $statuses || $order->has_status( $statuses ) ) ) {\n\t\t\t$result[] = $order->get_id();\n\t\t}\n\t}\n\treturn $result;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "development",
+        "orders",
+        "helpers"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-get-orders-containing-a-specific-product/"
+    ],
+    "updated": "2026-11-18T17:28:47+00:00"
+}

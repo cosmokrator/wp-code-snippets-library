@@ -1,0 +1,47 @@
+{
+    "title": "Temporarily disable a gateway after many failed orders",
+    "description": "Προστασία από επιθέσεις «carding» (δοκιμές κλεμμένων καρτών): αν γίνουν αρκετές αποτυχημένες παραγγελίες μέσα σε λίγο χρόνο (π.χ. 3 σε 15 λεπτά), οι τρόποι πληρωμής που ορίζετε (π.χ. stripe) απενεργοποιούνται για κάποια λεπτά και στέλνεται email στον διαχειριστή. Μια επιτυχημένη πληρωμή μηδενίζει τον μετρητή.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_order_status_failed', 'perfectpixel_lockdown_count_failure' );\nadd_action( 'woocommerce_payment_complete', 'perfectpixel_lockdown_reset' );\nadd_filter( 'woocommerce_available_payment_gateways', 'perfectpixel_lockdown_gateways' );\n\nfunction perfectpixel_lockdown_count_failure() {\n\t$count = (int) get_transient( 'perfectpixel_failed_orders' ) + 1;\n\tset_transient( 'perfectpixel_failed_orders', $count, max( 1, (int) '{{lockdown_window_minutes}}' ) * MINUTE_IN_SECONDS );\n\tif ( $count >= max( 1, (int) '{{lockdown_failed_count}}' ) && ! get_transient( 'perfectpixel_checkout_lockdown' ) ) {\n\t\t$minutes = max( 1, (int) '{{lockdown_minutes}}' );\n\t\tset_transient( 'perfectpixel_checkout_lockdown', 1, $minutes * MINUTE_IN_SECONDS );\n\t\tdelete_transient( 'perfectpixel_failed_orders' );\n\t\twp_mail(\n\t\t\tget_option( 'admin_email' ),\n\t\t\t'[' . wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES ) . '] Κλείδωμα πληρωμών μετά από αποτυχημένες παραγγελίες',\n\t\t\tsprintf( \"Έγιναν %d αποτυχημένες παραγγελίες σε σύντομο χρόνο. Οι τρόποι πληρωμής %s είναι απενεργοποιημένοι για %d λεπτά.\\nΕλέγξτε τις παραγγελίες για πιθανή επίθεση.\", $count, '{{lockdown_gateways}}', $minutes )\n\t\t);\n\t}\n}\n\nfunction perfectpixel_lockdown_reset() {\n\tdelete_transient( 'perfectpixel_failed_orders' );\n}\n\nfunction perfectpixel_lockdown_gateways( $gateways ) {\n\tif ( is_admin() || ! get_transient( 'perfectpixel_checkout_lockdown' ) ) {\n\t\treturn $gateways;\n\t}\n\tforeach ( array_filter( array_map( 'trim', explode( ',', '{{lockdown_gateways}}' ) ) ) as $id ) {\n\t\tunset( $gateways[ $id ] );\n\t}\n\treturn $gateways;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "security",
+        "payment-gateways",
+        "fraud"
+    ],
+    "variables": [
+        {
+            "name": "lockdown_failed_count",
+            "label": "Αποτυχημένες παραγγελίες για κλείδωμα",
+            "default": "3",
+            "description": "Μόνο αριθμός"
+        },
+        {
+            "name": "lockdown_window_minutes",
+            "label": "Μέσα σε (λεπτά)",
+            "default": "15",
+            "description": "Μόνο αριθμός"
+        },
+        {
+            "name": "lockdown_minutes",
+            "label": "Διάρκεια κλειδώματος (λεπτά)",
+            "default": "10",
+            "description": "Μόνο αριθμός"
+        },
+        {
+            "name": "lockdown_gateways",
+            "label": "Τρόποι πληρωμής (IDs με κόμμα)",
+            "default": "stripe",
+            "description": "Π.χ. stripe,ppcp-gateway"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-failed-orders-monitor-temporary-lockdown/"
+    ],
+    "updated": "2026-11-18T17:28:39+00:00"
+}

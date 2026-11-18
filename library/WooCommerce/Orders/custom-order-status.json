@@ -1,0 +1,35 @@
+{
+    "title": "Add a custom order status",
+    "description": "Προσθέτει μια νέα κατάσταση παραγγελίας (π.χ. «Απεστάλη», «Αναμονή προϊόντος», «Προς συσκευασία») που μπορείτε να επιλέγετε στην παραγγελία, να φιλτράρετε στη λίστα παραγγελιών και να βλέπει ο πελάτης στον λογαριασμό του. Εμφανίζεται και στις μαζικές ενέργειες. Για email σε αυτή την κατάσταση δείτε το «Send a WooCommerce email on any order status change».",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_register_shop_order_post_statuses', 'perfectpixel_register_custom_order_status' );\nadd_filter( 'wc_order_statuses', 'perfectpixel_add_custom_order_status' );\nadd_filter( 'bulk_actions-edit-shop_order', 'perfectpixel_custom_status_bulk_action', 30 );\nadd_filter( 'bulk_actions-woocommerce_page_wc-orders', 'perfectpixel_custom_status_bulk_action', 30 );\n\nfunction perfectpixel_custom_status_key() {\n\treturn 'wc-' . substr( sanitize_key( '{{custom_status_slug}}' ), 0, 17 );\n}\n\nfunction perfectpixel_register_custom_order_status( $statuses ) {\n\t$statuses[ perfectpixel_custom_status_key() ] = array(\n\t\t'label'                     => '{{custom_status_label}}',\n\t\t'public'                    => false,\n\t\t'exclude_from_search'       => false,\n\t\t'show_in_admin_all_list'    => true,\n\t\t'show_in_admin_status_list' => true,\n\t\t/* translators: %s: number of orders */\n\t\t'label_count'               => _n_noop( '{{custom_status_label}} <span class=\"count\">(%s)</span>', '{{custom_status_label}} <span class=\"count\">(%s)</span>' ),\n\t);\n\treturn $statuses;\n}\n\nfunction perfectpixel_add_custom_order_status( $statuses ) {\n\t$new = array();\n\tforeach ( $statuses as $key => $label ) {\n\t\t$new[ $key ] = $label;\n\t\tif ( 'wc-processing' === $key ) {\n\t\t\t$new[ perfectpixel_custom_status_key() ] = '{{custom_status_label}}'; // Right after \"Processing\".\n\t\t}\n\t}\n\treturn $new;\n}\n\nfunction perfectpixel_custom_status_bulk_action( $actions ) {\n\t$actions[ 'mark_' . substr( perfectpixel_custom_status_key(), 3 ) ] = 'Αλλαγή σε «{{custom_status_label}}»';\n\treturn $actions;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "orders",
+        "order-status",
+        "custom-status"
+    ],
+    "variables": [
+        {
+            "name": "custom_status_slug",
+            "label": "Κωδικός (slug)",
+            "default": "shipped",
+            "description": "Μόνο λατινικά πεζά και -, έως 17 χαρακτήρες, χωρίς wc-"
+        },
+        {
+            "name": "custom_status_label",
+            "label": "Όνομα",
+            "default": "Απεστάλη",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-set-custom-order-status-for-new-orders/"
+    ],
+    "updated": "2026-11-18T17:28:39+00:00"
+}

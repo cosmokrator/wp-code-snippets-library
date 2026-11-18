@@ -1,0 +1,28 @@
+{
+    "title": "Send a WooCommerce email on any order status change",
+    "description": "Στέλνει ένα από τα υπάρχοντα emails του WooCommerce σε αλλαγές κατάστασης που κανονικά δεν το στέλνουν, π.χ. «Ολοκληρωμένη παραγγελία» όταν η παραγγελία περνά από δική σας κατάσταση «Απεστάλη» σε «Ολοκληρωμένη», ή «Σε αναμονή» όταν μπαίνει στη δική σας κατάσταση. Γράψτε κανόνες από>σε=email, με * για «από οποιαδήποτε». Το email πρέπει να είναι ενεργό στις ρυθμίσεις.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_order_status_changed', 'perfectpixel_send_email_on_status_change', 20, 4 );\n\nfunction perfectpixel_send_email_on_status_change( $order_id, $from, $to, $order ) {\n\tforeach ( explode( '|', '{{status_email_rules}}' ) as $rule ) {\n\t\tif ( ! preg_match( '/^\\s*([a-z0-9_*-]+)\\s*>\\s*([a-z0-9_-]+)\\s*=\\s*([a-z0-9_]+)\\s*$/', $rule, $m ) ) {\n\t\t\tcontinue;\n\t\t}\n\t\tif ( ( '*' !== $m[1] && $m[1] !== $from ) || $m[2] !== $to ) {\n\t\t\tcontinue;\n\t\t}\n\t\tforeach ( WC()->mailer()->get_emails() as $email ) {\n\t\t\tif ( $email->id === $m[3] && $email->is_enabled() ) {\n\t\t\t\t$email->trigger( $order_id, $order );\n\t\t\t}\n\t\t}\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "emails",
+        "order-status"
+    ],
+    "variables": [
+        {
+            "name": "status_email_rules",
+            "label": "Κανόνες από>σε=email (με |)",
+            "default": "shipped>completed=customer_completed_order",
+            "description": "Π.χ. *>refused=customer_on_hold_order|shipped>completed=customer_completed_order. IDs emails: customer_processing_order, customer_completed_order, customer_on_hold_order, customer_invoice, new_order"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-send-order-email-custom-status-transition/"
+    ],
+    "updated": "2026-11-18T17:28:39+00:00"
+}

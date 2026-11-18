@@ -1,0 +1,36 @@
+{
+    "title": "Let customers confirm receipt of their order",
+    "description": "Στη σελίδα «Ο λογαριασμός μου → Παραγγελίες», οι παραγγελίες «Σε επεξεργασία» αποκτούν κουμπί «Επιβεβαίωση παραλαβής». Με το κλικ η παραγγελία γίνεται «Ολοκληρωμένη» και σημειώνεται στο ιστορικό ότι την επιβεβαίωσε ο πελάτης. Μόνο ο ίδιος ο πελάτης της παραγγελίας μπορεί να το κάνει.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_my_account_my_orders_actions', 'perfectpixel_customer_confirm_action', 20, 2 );\nadd_action( 'template_redirect', 'perfectpixel_customer_confirm_handle' );\n\nfunction perfectpixel_customer_confirm_action( $actions, $order ) {\n\tif ( $order->has_status( 'processing' ) ) {\n\t\t$actions['perfectpixel-confirm'] = array(\n\t\t\t'url'  => wp_nonce_url( add_query_arg( 'perfectpixel_confirm_order', $order->get_id(), wc_get_account_endpoint_url( 'orders' ) ), 'perfectpixel_confirm_order_' . $order->get_id() ),\n\t\t\t'name' => '{{confirm_order_label}}',\n\t\t);\n\t}\n\treturn $actions;\n}\n\nfunction perfectpixel_customer_confirm_handle() {\n\tif ( empty( $_GET['perfectpixel_confirm_order'] ) || ! is_user_logged_in() ) {\n\t\treturn;\n\t}\n\t$order_id = absint( $_GET['perfectpixel_confirm_order'] );\n\tif ( ! wp_verify_nonce( sanitize_key( $_GET['_wpnonce'] ?? '' ), 'perfectpixel_confirm_order_' . $order_id ) ) {\n\t\treturn;\n\t}\n\t$order = wc_get_order( $order_id );\n\tif ( $order && (int) $order->get_customer_id() === get_current_user_id() && $order->has_status( 'processing' ) ) {\n\t\t$order->update_status( 'completed', 'Ο πελάτης επιβεβαίωσε την παραλαβή από τον λογαριασμό του.' );\n\t\twc_add_notice( '{{confirm_order_notice}}' );\n\t}\n\twp_safe_redirect( wc_get_account_endpoint_url( 'orders' ) );\n\texit;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "orders",
+        "order-status",
+        "my-account",
+        "customers"
+    ],
+    "variables": [
+        {
+            "name": "confirm_order_label",
+            "label": "Κείμενο κουμπιού",
+            "default": "Επιβεβαίωση παραλαβής",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "confirm_order_notice",
+            "label": "Μήνυμα επιβεβαίωσης",
+            "default": "Ευχαριστούμε! Η παραγγελία σας ολοκληρώθηκε.",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-let-customer-complete-order/"
+    ],
+    "updated": "2026-11-18T17:28:39+00:00"
+}

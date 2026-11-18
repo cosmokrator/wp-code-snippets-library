@@ -1,0 +1,22 @@
+{
+    "title": "Add a \"Complete order\" button to the order edit screen",
+    "description": "Στη σελίδα επεξεργασίας παραγγελίας, δίπλα στο κουμπί «Ενημέρωση», προστίθεται κουμπί «Ολοκλήρωση παραγγελίας» που αποθηκεύει και κάνει την παραγγελία «Ολοκληρωμένη» με ένα κλικ, χωρίς να αλλάζετε την κατάσταση από τη λίστα. Δεν εμφανίζεται σε παραγγελίες που είναι ήδη ολοκληρωμένες.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_order_actions_end', 'perfectpixel_complete_order_button' );\nadd_action( 'woocommerce_process_shop_order_meta', 'perfectpixel_complete_order_button_save', 60 );\n\nfunction perfectpixel_complete_order_button( $order_id ) {\n\t$order = wc_get_order( $order_id );\n\tif ( $order && ! $order->has_status( array( 'completed', 'refunded', 'cancelled' ) ) ) {\n\t\techo '<li class=\"wide\"><button type=\"submit\" class=\"button\" name=\"perfectpixel_complete_order\" value=\"1\" style=\"width:100%\">Ολοκλήρωση παραγγελίας</button></li>';\n\t}\n}\n\n// Runs after WooCommerce saved the order data (priority 40), so our status wins.\nfunction perfectpixel_complete_order_button_save( $order_id ) {\n\tif ( empty( $_POST['perfectpixel_complete_order'] ) || ! current_user_can( 'edit_shop_orders' ) ) {\n\t\treturn;\n\t}\n\t$order = wc_get_order( $order_id );\n\tif ( $order && ! $order->has_status( 'completed' ) ) {\n\t\t$order->update_status( 'completed', 'Ολοκληρώθηκε από το κουμπί «Ολοκλήρωση παραγγελίας».' );\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "orders",
+        "order-status",
+        "admin"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-complete-button-order-admin/"
+    ],
+    "updated": "2026-11-18T17:28:39+00:00"
+}

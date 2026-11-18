@@ -1,0 +1,48 @@
+{
+    "title": "Let customers request a refund from My Account",
+    "description": "Στις ολοκληρωμένες παραγγελίες των τελευταίων ημερών (ορίστε πόσες) εμφανίζεται στη λίστα του λογαριασμού κουμπί «Αίτημα επιστροφής», που οδηγεί σε φόρμα στη σελίδα της παραγγελίας. Ο πελάτης γράφει τον λόγο, το αίτημα καταγράφεται στο ιστορικό της παραγγελίας και ειδοποιείται ο διαχειριστής με email. Η επιστροφή χρημάτων γίνεται χειροκίνητα από εσάς.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_my_account_my_orders_actions', 'perfectpixel_refund_request_action', 30, 2 );\nadd_action( 'woocommerce_view_order', 'perfectpixel_refund_request_form', 30 );\nadd_action( 'template_redirect', 'perfectpixel_refund_request_submit' );\n\nfunction perfectpixel_refund_request_allowed( $order ) {\n\tif ( ! $order || ! $order->has_status( 'completed' ) || $order->get_meta( '_perfectpixel_refund_requested' ) || ! $order->get_date_completed() ) {\n\t\treturn false;\n\t}\n\treturn ( time() - $order->get_date_completed()->getTimestamp() ) <= max( 1, (int) '{{refund_request_days}}' ) * DAY_IN_SECONDS;\n}\n\nfunction perfectpixel_refund_request_action( $actions, $order ) {\n\tif ( perfectpixel_refund_request_allowed( $order ) ) {\n\t\t$actions['perfectpixel-refund'] = array(\n\t\t\t'url'  => $order->get_view_order_url() . '#perfectpixel-refund',\n\t\t\t'name' => '{{refund_request_button}}',\n\t\t);\n\t}\n\treturn $actions;\n}\n\nfunction perfectpixel_refund_request_form( $order_id ) {\n\t$order = wc_get_order( $order_id );\n\tif ( ! perfectpixel_refund_request_allowed( $order ) ) {\n\t\treturn;\n\t}\n\techo '<section id=\"perfectpixel-refund\" style=\"margin-top:2em\"><h2>' . esc_html( '{{refund_request_button}}' ) . '</h2><form method=\"post\">';\n\twp_nonce_field( 'perfectpixel_refund_' . $order_id, 'perfectpixel_refund_nonce' );\n\techo '<input type=\"hidden\" name=\"perfectpixel_refund_order\" value=\"' . esc_attr( $order_id ) . '\">';\n\techo '<p><label for=\"perfectpixel_refund_reason\">' . esc_html( '{{refund_request_label}}' ) . '</label><textarea id=\"perfectpixel_refund_reason\" name=\"perfectpixel_refund_reason\" rows=\"4\" required maxlength=\"1000\" style=\"width:100%\"></textarea></p>';\n\techo '<p><button type=\"submit\" class=\"button\">' . esc_html( '{{refund_request_button}}' ) . '</button></p></form></section>';\n}\n\nfunction perfectpixel_refund_request_submit() {\n\tif ( empty( $_POST['perfectpixel_refund_order'] ) || ! is_user_logged_in() ) {\n\t\treturn;\n\t}\n\t$order_id = absint( $_POST['perfectpixel_refund_order'] );\n\tif ( ! wp_verify_nonce( sanitize_key( $_POST['perfectpixel_refund_nonce'] ?? '' ), 'perfectpixel_refund_' . $order_id ) ) {\n\t\treturn;\n\t}\n\t$order = wc_get_order( $order_id );\n\tif ( ! $order || (int) $order->get_customer_id() !== get_current_user_id() || ! perfectpixel_refund_request_allowed( $order ) ) {\n\t\treturn;\n\t}\n\t$reason = mb_substr( sanitize_textarea_field( wp_unslash( $_POST['perfectpixel_refund_reason'] ?? '' ) ), 0, 1000 );\n\t$order->update_meta_data( '_perfectpixel_refund_requested', current_time( 'mysql' ) );\n\t$order->add_order_note( \"Αίτημα επιστροφής από τον πελάτη:\\n\" . $reason );\n\t$order->save();\n\twp_mail(\n\t\tget_option( 'admin_email' ),\n\t\tsprintf( 'Αίτημα επιστροφής για την παραγγελία #%s', $order->get_order_number() ),\n\t\tsprintf( \"Ο πελάτης ζήτησε επιστροφή για την παραγγελία #%s.\\n\\nΛόγος:\\n%s\\n\\n%s\", $order->get_order_number(), $reason, $order->get_edit_order_url() )\n\t);\n\twc_add_notice( '{{refund_request_thanks}}' );\n\twp_safe_redirect( $order->get_view_order_url() );\n\texit;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "orders",
+        "my-account",
+        "refunds",
+        "returns"
+    ],
+    "variables": [
+        {
+            "name": "refund_request_days",
+            "label": "Ημέρες από την ολοκλήρωση",
+            "default": "14",
+            "description": "Μόνο αριθμός"
+        },
+        {
+            "name": "refund_request_button",
+            "label": "Κείμενο κουμπιού",
+            "default": "Αίτημα επιστροφής",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "refund_request_label",
+            "label": "Ετικέτα πεδίου",
+            "default": "Πείτε μας γιατί θέλετε επιστροφή:",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "refund_request_thanks",
+            "label": "Μήνυμα μετά την υποβολή",
+            "default": "Λάβαμε το αίτημά σας και θα επικοινωνήσουμε μαζί σας σύντομα.",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-refund-request-button-my-account/"
+    ],
+    "updated": "2026-11-18T17:28:39+00:00"
+}

@@ -1,0 +1,22 @@
+{
+    "title": "Resend processing, completed or on-hold emails from an order",
+    "description": "Στη σελίδα επεξεργασίας παραγγελίας, στη λίστα «Ενέργειες παραγγελίας», προσθέτει επιλογές για επαναποστολή στον πελάτη των emails «Σε επεξεργασία», «Ολοκληρωμένη» και «Σε αναμονή» (το WooCommerce επιτρέπει μόνο το «Νέα παραγγελία» και τα στοιχεία παραγγελίας). Χρήσιμο αν ο πελάτης δεν έλαβε το email ή για δοκιμή templates (αλλάξτε πρώτα το email του πελάτη στο δικό σας).",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_order_actions', 'perfectpixel_resend_email_actions' );\nadd_action( 'woocommerce_order_action_perfectpixel_resend_processing', 'perfectpixel_resend_processing_email' );\nadd_action( 'woocommerce_order_action_perfectpixel_resend_completed', 'perfectpixel_resend_completed_email' );\nadd_action( 'woocommerce_order_action_perfectpixel_resend_on_hold', 'perfectpixel_resend_on_hold_email' );\n\nfunction perfectpixel_resend_email_actions( $actions ) {\n\t$actions['perfectpixel_resend_processing'] = 'Επαναποστολή email «Σε επεξεργασία»';\n\t$actions['perfectpixel_resend_completed']  = 'Επαναποστολή email «Ολοκληρωμένη»';\n\t$actions['perfectpixel_resend_on_hold']    = 'Επαναποστολή email «Σε αναμονή»';\n\treturn $actions;\n}\n\nfunction perfectpixel_resend_order_email( $order, $email_id, $label ) {\n\tforeach ( WC()->mailer()->get_emails() as $email ) {\n\t\tif ( $email->id === $email_id ) {\n\t\t\t$email->trigger( $order->get_id(), $order );\n\t\t\t$order->add_order_note( sprintf( 'Το email «%s» στάλθηκε ξανά χειροκίνητα.', $label ), false, true );\n\t\t}\n\t}\n}\n\nfunction perfectpixel_resend_processing_email( $order ) {\n\tperfectpixel_resend_order_email( $order, 'customer_processing_order', 'Σε επεξεργασία' );\n}\n\nfunction perfectpixel_resend_completed_email( $order ) {\n\tperfectpixel_resend_order_email( $order, 'customer_completed_order', 'Ολοκληρωμένη' );\n}\n\nfunction perfectpixel_resend_on_hold_email( $order ) {\n\tperfectpixel_resend_order_email( $order, 'customer_on_hold_order', 'Σε αναμονή' );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "emails",
+        "orders",
+        "admin"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-resend-any-order-email/"
+    ],
+    "updated": "2026-11-18T17:28:39+00:00"
+}

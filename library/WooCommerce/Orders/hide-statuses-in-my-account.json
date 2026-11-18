@@ -1,0 +1,29 @@
+{
+    "title": "Hide orders with specific statuses from My Account",
+    "description": "Στη σελίδα «Ο λογαριασμός μου → Παραγγελίες» δεν εμφανίζονται οι παραγγελίες με τις καταστάσεις που ορίζετε, π.χ. «Απέτυχε» ή «Εκκρεμεί πληρωμή» (εγκαταλελειμμένες απόπειρες) ή μια εσωτερική δική σας κατάσταση. Οι παραγγελίες παραμένουν κανονικά στον διαχειριστή.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_my_account_my_orders_query', 'perfectpixel_hide_statuses_in_my_account', 20 );\n\nfunction perfectpixel_hide_statuses_in_my_account( $args ) {\n\t$hidden = array_filter( array_map( 'sanitize_key', explode( ',', '{{my_account_hidden_statuses}}' ) ) );\n\tif ( ! $hidden ) {\n\t\treturn $args;\n\t}\n\t$all = array_map(\n\t\tfunction ( $key ) {\n\t\t\treturn substr( $key, 3 );\n\t\t},\n\t\tarray_keys( wc_get_order_statuses() )\n\t);\n\t$current        = ! empty( $args['status'] ) ? (array) $args['status'] : $all;\n\t$args['status'] = array_values( array_diff( $current, $hidden ) );\n\treturn $args;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "orders",
+        "my-account",
+        "order-status"
+    ],
+    "variables": [
+        {
+            "name": "my_account_hidden_statuses",
+            "label": "Καταστάσεις (με κόμμα)",
+            "default": "failed",
+            "description": "Χωρίς wc-, π.χ. failed,pending"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-hide-specific-orders-e-g-on-hold-from-my-account-orders-page/"
+    ],
+    "updated": "2026-11-18T17:28:39+00:00"
+}

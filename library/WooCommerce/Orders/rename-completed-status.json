@@ -1,0 +1,29 @@
+{
+    "title": "Rename the \"Completed\" order status",
+    "description": "Αλλάζει το όνομα της κατάστασης «Ολοκληρωμένη» σε κάτι πιο σαφές για εσάς και τους πελάτες, π.χ. «Απεστάλη» για φυσικά προϊόντα ή «Παραδόθηκε» για ψηφιακά. Αλλάζει στον διαχειριστή, στα φίλτρα παραγγελιών και στον λογαριασμό του πελάτη· η κατάσταση και τα emails λειτουργούν όπως πριν.",
+    "type": "php",
+    "code": "add_filter( 'wc_order_statuses', 'perfectpixel_rename_completed_status' );\nadd_filter( 'woocommerce_register_shop_order_post_statuses', 'perfectpixel_rename_completed_status_count' );\n\nfunction perfectpixel_rename_completed_status( $statuses ) {\n\tif ( isset( $statuses['wc-completed'] ) ) {\n\t\t$statuses['wc-completed'] = '{{completed_status_label}}';\n\t}\n\treturn $statuses;\n}\n\nfunction perfectpixel_rename_completed_status_count( $statuses ) {\n\tif ( isset( $statuses['wc-completed'] ) ) {\n\t\t$statuses['wc-completed']['label'] = '{{completed_status_label}}';\n\t\t/* translators: %s: number of orders */\n\t\t$statuses['wc-completed']['label_count'] = _n_noop( '{{completed_status_label}} <span class=\"count\">(%s)</span>', '{{completed_status_label}} <span class=\"count\">(%s)</span>' );\n\t}\n\treturn $statuses;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "orders",
+        "order-status",
+        "labels"
+    ],
+    "variables": [
+        {
+            "name": "completed_status_label",
+            "label": "Νέο όνομα",
+            "default": "Απεστάλη",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-rename-completed-order-status/"
+    ],
+    "updated": "2026-11-18T17:28:39+00:00"
+}

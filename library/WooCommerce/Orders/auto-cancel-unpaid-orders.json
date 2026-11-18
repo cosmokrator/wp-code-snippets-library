@@ -1,0 +1,36 @@
+{
+    "title": "Automatically cancel unpaid orders after some hours",
+    "description": "Οι παραγγελίες που μένουν «Εκκρεμεί πληρωμή» ή «Απέτυχε» για περισσότερες από τις ώρες που ορίζετε ακυρώνονται αυτόματα, ώστε να μη γεμίζει η λίστα με εκκρεμείς παραγγελίες. Το WooCommerce το κάνει μόνο αν έχετε διαχείριση αποθέματος και «Διατήρηση αποθέματος (λεπτά)». Χρησιμοποιεί το Action Scheduler του WooCommerce.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_new_order', 'perfectpixel_auto_cancel_schedule', 20 );\nadd_action( 'perfectpixel_auto_cancel_order', 'perfectpixel_auto_cancel_run' );\n\nfunction perfectpixel_auto_cancel_schedule( $order_id ) {\n\tif ( function_exists( 'as_schedule_single_action' ) ) {\n\t\t$delay = max( 1, (float) '{{auto_cancel_hours}}' ) * HOUR_IN_SECONDS;\n\t\tas_schedule_single_action( time() + (int) $delay, 'perfectpixel_auto_cancel_order', array( 'order_id' => (int) $order_id ), 'perfectpixel' );\n\t}\n}\n\nfunction perfectpixel_auto_cancel_run( $order_id ) {\n\t$order    = wc_get_order( $order_id );\n\t$statuses = array_filter( array_map( 'sanitize_key', explode( ',', '{{auto_cancel_statuses}}' ) ) );\n\tif ( $order && $statuses && $order->has_status( $statuses ) && ! $order->is_paid() ) {\n\t\t$order->update_status( 'cancelled', 'Ακυρώθηκε αυτόματα: δεν πληρώθηκε εγκαίρως.' );\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "orders",
+        "order-status",
+        "automation",
+        "cron"
+    ],
+    "variables": [
+        {
+            "name": "auto_cancel_hours",
+            "label": "Ώρες",
+            "default": "24",
+            "description": "Μόνο αριθμός"
+        },
+        {
+            "name": "auto_cancel_statuses",
+            "label": "Καταστάσεις (με κόμμα)",
+            "default": "pending,failed",
+            "description": "Χωρίς wc-, π.χ. pending,failed"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-automatically-cancel-orders/"
+    ],
+    "updated": "2026-11-18T17:28:39+00:00"
+}

@@ -1,0 +1,29 @@
+{
+    "title": "Show the \"Order again\" button for more order statuses",
+    "description": "Το κουμπί «Παραγγελία ξανά» (στη σελίδα ευχαριστίας και στην προβολή παραγγελίας του λογαριασμού) εμφανίζεται κανονικά μόνο σε ολοκληρωμένες παραγγελίες. Με το snippet εμφανίζεται και σε άλλες καταστάσεις, π.χ. ακυρωμένες (για να ξαναπαραγγείλει ο πελάτης εύκολα) ή υπό επεξεργασία.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_valid_order_statuses_for_order_again', 'perfectpixel_order_again_for_more_statuses' );\n\nfunction perfectpixel_order_again_for_more_statuses( $statuses ) {\n\t$extra = array_filter( array_map( 'sanitize_key', explode( ',', '{{order_again_statuses}}' ) ) );\n\treturn array_values( array_unique( array_merge( (array) $statuses, $extra ) ) );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "orders",
+        "my-account",
+        "reorder"
+    ],
+    "variables": [
+        {
+            "name": "order_again_statuses",
+            "label": "Επιπλέον καταστάσεις (με κόμμα)",
+            "default": "cancelled,processing",
+            "description": "Π.χ. cancelled,processing,failed (χωρίς wc-)"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-order-again-button-cancelled-status/"
+    ],
+    "updated": "2026-11-18T17:28:39+00:00"
+}

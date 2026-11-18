@@ -1,0 +1,22 @@
+{
+    "title": "Helper: get the tax rates (%) applied to an order",
+    "description": "Βοηθητική συνάρτηση για developers: perfectpixel_get_order_tax_rates( $order ) επιστρέφει τους συντελεστές φόρου που εφαρμόστηκαν σε μια παραγγελία (π.χ. array( \"ΦΠΑ\" => 24 )), αφού το WooCommerce δίνει μόνο το ποσό του φόρου. Δεν εμφανίζει τίποτα μόνο του.",
+    "type": "php",
+    "code": "/**\n * Tax rates applied to an order, as label => percent.\n *\n * @param WC_Order|int $order Order object or ID.\n * @return array\n */\nfunction perfectpixel_get_order_tax_rates( $order ) {\n\t$order = $order instanceof WC_Order ? $order : wc_get_order( $order );\n\t$rates = array();\n\tif ( ! $order ) {\n\t\treturn $rates;\n\t}\n\tforeach ( $order->get_items( 'tax' ) as $tax_item ) {\n\t\t$percent = method_exists( $tax_item, 'get_rate_percent' ) ? $tax_item->get_rate_percent() : null;\n\t\tif ( null === $percent || '' === $percent ) {\n\t\t\t$percent = WC_Tax::get_rate_percent_value( $tax_item->get_rate_id() );\n\t\t}\n\t\t$rates[ $tax_item->get_label() ] = (float) $percent;\n\t}\n\treturn $rates;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "development",
+        "tax",
+        "helpers"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-get-order-tax-percentage/"
+    ],
+    "updated": "2026-11-18T17:28:39+00:00"
+}

@@ -1,0 +1,34 @@
+{
+    "title": "Set a default tax location for customers without an address",
+    "description": "Όταν ο φόρος υπολογίζεται με βάση τη διεύθυνση του πελάτη, οι επισκέπτες (και οι πελάτες χωρίς αποθηκευμένη διεύθυνση) βλέπουν τιμές με τον ΦΠΑ μιας προεπιλεγμένης χώρας που ορίζετε, μέχρι να συμπληρώσουν διεύθυνση στο checkout. Π.χ. Ελλάδα, ώστε να βλέπουν 24% και όχι 0%.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_customer_taxable_address', 'perfectpixel_default_tax_location' );\n\nfunction perfectpixel_default_tax_location( $address ) {\n\t// $address = array( country, state, postcode, city ).\n\tif ( empty( $address[0] ) ) {\n\t\t$address[0] = strtoupper( sanitize_text_field( '{{default_tax_country}}' ) );\n\t\t$address[1] = strtoupper( sanitize_text_field( '{{default_tax_state}}' ) );\n\t}\n\treturn $address;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "tax",
+        "checkout"
+    ],
+    "variables": [
+        {
+            "name": "default_tax_country",
+            "label": "Χώρα (κωδικός)",
+            "default": "GR",
+            "description": "Κωδικός 2 γραμμάτων"
+        },
+        {
+            "name": "default_tax_state",
+            "label": "Νομός/περιοχή (κωδικός)",
+            "default": "",
+            "description": "Συνήθως κενό"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-set-customer-default-tax-location/"
+    ],
+    "updated": "2026-11-18T17:28:39+00:00"
+}
