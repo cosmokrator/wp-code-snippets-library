@@ -1,0 +1,21 @@
+{
+    "title": "Remove the product count next to category names",
+    "description": "Όταν το κατάστημα εμφανίζει κατηγορίες, κρύβει τον αριθμό προϊόντων (π.χ. «(12)») δίπλα στο όνομα κάθε κατηγορίας. Μην το χρησιμοποιείτε μαζί με το «Show the price range of each product category», που αντικαθιστά τον ίδιο αριθμό.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_subcategory_count_html', 'perfectpixel_remove_category_counters' );\n\nfunction perfectpixel_remove_category_counters() {\n\treturn '';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shop",
+        "categories"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-remove-product-category-counters/"
+    ],
+    "updated": "2026-11-18T17:05:39+00:00"
+}

@@ -1,0 +1,41 @@
+{
+    "title": "Redirect product category pages to another URL",
+    "description": "Οι σελίδες κατηγοριών προϊόντων ανακατευθύνονται σε άλλο URL, π.χ. στο κατάστημα με φίλτρο κατηγορίας (/shop/?filter_cat={slug}) αν χρησιμοποιείτε plugin φίλτρων, ή στο κατάστημα αν έχετε μία μόνο κατηγορία. Το {slug} αντικαθίσταται με το slug της κατηγορίας. Μπορεί να περιοριστεί σε συγκεκριμένες κατηγορίες.",
+    "type": "php",
+    "code": "add_action( 'template_redirect', 'perfectpixel_redirect_category_pages' );\n\nfunction perfectpixel_redirect_category_pages() {\n\tif ( ! function_exists( 'is_product_category' ) || ! is_product_category() ) {\n\t\treturn;\n\t}\n\t$term = get_queried_object();\n\t$ids  = wp_parse_id_list( '{{category_redirect_ids}}' );\n\tif ( ! $term || ( $ids && ! in_array( (int) $term->term_id, $ids, true ) ) ) {\n\t\treturn;\n\t}\n\t$url = str_replace( '{slug}', rawurlencode( $term->slug ), '{{category_redirect_url}}' );\n\t$url = 0 === strpos( $url, '/' ) ? home_url( $url ) : $url;\n\twp_safe_redirect( $url, '302' === trim( '{{category_redirect_status}}' ) ? 302 : 301 );\n\texit;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "categories",
+        "redirect",
+        "seo"
+    ],
+    "variables": [
+        {
+            "name": "category_redirect_url",
+            "label": "URL προορισμού",
+            "default": "/shop/?filter_cat={slug}",
+            "description": "Σχετικό ή πλήρες URL. Το {slug} γίνεται το slug της κατηγορίας"
+        },
+        {
+            "name": "category_redirect_ids",
+            "label": "IDs κατηγοριών (με κόμμα)",
+            "default": "",
+            "description": "Κενό = όλες οι κατηγορίες"
+        },
+        {
+            "name": "category_redirect_status",
+            "label": "Κωδικός (301/302)",
+            "default": "301",
+            "description": "301 = μόνιμη, 302 = προσωρινή"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-redirect-product-category-pages/"
+    ],
+    "updated": "2026-11-18T17:05:39+00:00"
+}

@@ -1,0 +1,23 @@
+{
+    "title": "Set a custom page title for product categories",
+    "description": "Προσθέτει στη σελίδα επεξεργασίας κάθε κατηγορίας προϊόντων το πεδίο «Τίτλος σελίδας». Αν συμπληρωθεί, εμφανίζεται ως κύριος τίτλος (H1) στη σελίδα της κατηγορίας, ενώ στο μενού, στα breadcrumbs και στα widgets μένει το σύντομο όνομα. Π.χ. όνομα «Τραπέζια», τίτλος σελίδας «Στρογγυλά τραπέζια από μασίφ ξύλο». Ισχύει για τις κλασικές σελίδες καταστήματος/κατηγοριών· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'product_cat_add_form_fields', 'perfectpixel_cat_title_add_field' );\nadd_action( 'product_cat_edit_form_fields', 'perfectpixel_cat_title_edit_field' );\nadd_action( 'created_product_cat', 'perfectpixel_cat_title_save' );\nadd_action( 'edited_product_cat', 'perfectpixel_cat_title_save' );\nadd_filter( 'woocommerce_page_title', 'perfectpixel_cat_title_output' );\n\nfunction perfectpixel_cat_title_add_field() {\n\twp_nonce_field( 'perfectpixel_cat_title', 'perfectpixel_cat_title_nonce' );\n\techo '<div class=\"form-field\"><label for=\"perfectpixel_page_title\">Τίτλος σελίδας</label><input type=\"text\" id=\"perfectpixel_page_title\" name=\"perfectpixel_page_title\" value=\"\"><p>Κύριος τίτλος στη σελίδα της κατηγορίας. Κενό = το όνομα της κατηγορίας.</p></div>';\n}\n\nfunction perfectpixel_cat_title_edit_field( $term ) {\n\twp_nonce_field( 'perfectpixel_cat_title', 'perfectpixel_cat_title_nonce' );\n\t$value = get_term_meta( $term->term_id, 'perfectpixel_page_title', true );\n\techo '<tr class=\"form-field\"><th scope=\"row\"><label for=\"perfectpixel_page_title\">Τίτλος σελίδας</label></th><td><input type=\"text\" id=\"perfectpixel_page_title\" name=\"perfectpixel_page_title\" value=\"' . esc_attr( $value ) . '\"><p class=\"description\">Κύριος τίτλος στη σελίδα της κατηγορίας. Κενό = το όνομα της κατηγορίας.</p></td></tr>';\n}\n\nfunction perfectpixel_cat_title_save( $term_id ) {\n\tif ( ! isset( $_POST['perfectpixel_cat_title_nonce'], $_POST['perfectpixel_page_title'] ) || ! current_user_can( 'manage_product_terms' ) ) {\n\t\treturn;\n\t}\n\tif ( wp_verify_nonce( sanitize_key( $_POST['perfectpixel_cat_title_nonce'] ), 'perfectpixel_cat_title' ) ) {\n\t\tupdate_term_meta( $term_id, 'perfectpixel_page_title', sanitize_text_field( wp_unslash( $_POST['perfectpixel_page_title'] ) ) );\n\t}\n}\n\nfunction perfectpixel_cat_title_output( $title ) {\n\tif ( function_exists( 'is_product_category' ) && is_product_category() ) {\n\t\t$custom = get_term_meta( get_queried_object_id(), 'perfectpixel_page_title', true );\n\t\tif ( '' !== (string) $custom ) {\n\t\t\treturn $custom;\n\t\t}\n\t}\n\treturn $title;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "categories",
+        "titles",
+        "seo",
+        "admin"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-custom-product-category-title/"
+    ],
+    "updated": "2026-11-18T17:05:40+00:00"
+}

@@ -1,0 +1,30 @@
+{
+    "title": "Add a second description below category products",
+    "description": "Προσθέτει στη σελίδα επεξεργασίας κάθε κατηγορίας προϊόντων ένα δεύτερο πεδίο κειμένου (επεξεργαστή), που εμφανίζεται κάτω από τα προϊόντα της κατηγορίας. Η κανονική περιγραφή μένει πάνω. Ιδανικό για κείμενο SEO που δεν θέλετε να σπρώχνει τα προϊόντα προς τα κάτω. Ισχύει για τις κλασικές σελίδες καταστήματος/κατηγοριών· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'product_cat_add_form_fields', 'perfectpixel_cat_bottom_desc_add_field' );\nadd_action( 'product_cat_edit_form_fields', 'perfectpixel_cat_bottom_desc_edit_field' );\nadd_action( 'created_product_cat', 'perfectpixel_cat_bottom_desc_save' );\nadd_action( 'edited_product_cat', 'perfectpixel_cat_bottom_desc_save' );\nadd_action( 'woocommerce_after_shop_loop', 'perfectpixel_cat_bottom_desc_output', 50 );\n\nfunction perfectpixel_cat_bottom_desc_add_field() {\n\techo '<div class=\"form-field\"><label for=\"perfectpixel_bottom_desc\">' . esc_html( '{{cat_bottom_desc_label}}' ) . '</label>';\n\twp_nonce_field( 'perfectpixel_cat_bottom_desc', 'perfectpixel_cat_bottom_desc_nonce' );\n\twp_editor( '', 'perfectpixel_bottom_desc', array( 'textarea_rows' => 6, 'media_buttons' => false ) );\n\techo '</div>';\n}\n\nfunction perfectpixel_cat_bottom_desc_edit_field( $term ) {\n\techo '<tr class=\"form-field\"><th scope=\"row\"><label for=\"perfectpixel_bottom_desc\">' . esc_html( '{{cat_bottom_desc_label}}' ) . '</label></th><td>';\n\twp_nonce_field( 'perfectpixel_cat_bottom_desc', 'perfectpixel_cat_bottom_desc_nonce' );\n\twp_editor( get_term_meta( $term->term_id, 'perfectpixel_bottom_desc', true ), 'perfectpixel_bottom_desc', array( 'textarea_rows' => 8 ) );\n\techo '</td></tr>';\n}\n\nfunction perfectpixel_cat_bottom_desc_save( $term_id ) {\n\tif ( ! isset( $_POST['perfectpixel_cat_bottom_desc_nonce'], $_POST['perfectpixel_bottom_desc'] ) || ! current_user_can( 'manage_product_terms' ) ) {\n\t\treturn;\n\t}\n\tif ( ! wp_verify_nonce( sanitize_key( $_POST['perfectpixel_cat_bottom_desc_nonce'] ), 'perfectpixel_cat_bottom_desc' ) ) {\n\t\treturn;\n\t}\n\tupdate_term_meta( $term_id, 'perfectpixel_bottom_desc', wp_kses_post( wp_unslash( $_POST['perfectpixel_bottom_desc'] ) ) );\n}\n\nfunction perfectpixel_cat_bottom_desc_output() {\n\tif ( ! is_product_category() || is_paged() ) {\n\t\treturn;\n\t}\n\t$content = get_term_meta( get_queried_object_id(), 'perfectpixel_bottom_desc', true );\n\tif ( $content ) {\n\t\techo '<div class=\"term-description perfectpixel-cat-bottom-desc\" style=\"clear:both;margin-top:2em\">' . wp_kses_post( wpautop( do_shortcode( $content ) ) ) . '</div>';\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "categories",
+        "seo",
+        "content",
+        "admin"
+    ],
+    "variables": [
+        {
+            "name": "cat_bottom_desc_label",
+            "label": "Ετικέτα πεδίου στον διαχειριστή",
+            "default": "Περιγραφή κάτω από τα προϊόντα",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-a-second-content-box-product-category-pages/"
+    ],
+    "updated": "2026-11-18T17:05:39+00:00"
+}

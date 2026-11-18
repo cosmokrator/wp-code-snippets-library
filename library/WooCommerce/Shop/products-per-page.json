@@ -1,0 +1,29 @@
+{
+    "title": "Change the number of products per page",
+    "description": "Ορίζει πόσα προϊόντα εμφανίζονται σε κάθε σελίδα του καταστήματος και των κατηγοριών, ακόμη και αν το theme ορίζει δικό του αριθμό. Καλό είναι να είναι πολλαπλάσιο του αριθμού στηλών, ώστε να μη μένουν κενά στην τελευταία σειρά.",
+    "type": "php",
+    "code": "add_filter( 'loop_shop_per_page', 'perfectpixel_products_per_page', 999 );\n\nfunction perfectpixel_products_per_page() {\n\treturn max( 1, (int) '{{shop_products_per_page}}' );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shop",
+        "pagination",
+        "layout"
+    ],
+    "variables": [
+        {
+            "name": "shop_products_per_page",
+            "label": "Προϊόντα ανά σελίδα",
+            "default": "24",
+            "description": "Μόνο αριθμός"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-show-number-products-shop-page/"
+    ],
+    "updated": "2026-11-18T17:05:39+00:00"
+}

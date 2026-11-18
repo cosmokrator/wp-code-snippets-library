@@ -1,0 +1,35 @@
+{
+    "title": "Add a short text under every shop product",
+    "description": "Στις λίστες προϊόντων εμφανίζει ένα σύντομο κείμενο κάτω από κάθε προϊόν, πριν από το κουμπί, π.χ. «🚚 Δωρεάν αποστολή». Μπορεί να περιοριστεί σε συγκεκριμένες κατηγορίες. Επιτρέπεται απλό HTML. Ισχύει για τις κλασικές σελίδες καταστήματος/κατηγοριών· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_after_shop_loop_item', 'perfectpixel_text_under_products', 9 );\n\nfunction perfectpixel_text_under_products() {\n\t$categories = wp_parse_id_list( '{{loop_extra_text_category_ids}}' );\n\tif ( $categories && ! has_term( $categories, 'product_cat', get_the_ID() ) ) {\n\t\treturn;\n\t}\n\techo '<div class=\"perfectpixel-loop-text\" style=\"font-size:.85em;margin:.5em 0\">' . wp_kses_post( '{{loop_extra_text}}' ) . '</div>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shop",
+        "content",
+        "badges"
+    ],
+    "variables": [
+        {
+            "name": "loop_extra_text",
+            "label": "Κείμενο",
+            "default": "🚚 Δωρεάν αποστολή",
+            "description": "Χωρίς απόστροφο ('). Επιτρέπεται απλό HTML"
+        },
+        {
+            "name": "loop_extra_text_category_ids",
+            "label": "IDs κατηγοριών (με κόμμα)",
+            "default": "",
+            "description": "Κενό = όλα τα προϊόντα"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-text-product-shop-page-loop/"
+    ],
+    "updated": "2026-11-18T17:05:39+00:00"
+}

@@ -1,0 +1,23 @@
+{
+    "title": "Redirect empty paginated category pages",
+    "description": "Όταν μια σελίδα κατηγορίας με αρίθμηση (π.χ. /product-category/mployzes/page/5/) δεν έχει πια προϊόντα επειδή αφαιρέσατε προϊόντα, αντί για σφάλμα 404 ο επισκέπτης (και οι μηχανές αναζήτησης) μεταφέρεται με 301 στην πρώτη σελίδα της κατηγορίας. Ισχύει και για ετικέτες προϊόντων.",
+    "type": "php",
+    "code": "add_action( 'template_redirect', 'perfectpixel_redirect_empty_category_pages' );\n\nfunction perfectpixel_redirect_empty_category_pages() {\n\tif ( ! is_404() || (int) get_query_var( 'paged' ) < 2 ) {\n\t\treturn;\n\t}\n\tforeach ( array( 'product_cat', 'product_tag' ) as $taxonomy ) {\n\t\t$slug = get_query_var( $taxonomy );\n\t\tif ( $slug ) {\n\t\t\t$term = get_term_by( 'slug', $slug, $taxonomy );\n\t\t\tif ( $term ) {\n\t\t\t\twp_safe_redirect( get_term_link( $term ), 301 );\n\t\t\t\texit;\n\t\t\t}\n\t\t}\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "categories",
+        "redirect",
+        "seo",
+        "pagination"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-redirect-empty-paginated-category-pages-404/"
+    ],
+    "updated": "2026-11-18T17:05:39+00:00"
+}

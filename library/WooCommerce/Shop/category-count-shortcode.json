@@ -1,0 +1,28 @@
+{
+    "title": "Shortcode for the number of products in a category",
+    "description": "Shortcode που εμφανίζει πόσα προϊόντα έχει μια κατηγορία, π.χ. «Δείτε και τα [product_cat_count] προϊόντα της συλλογής» μέσα στην περιγραφή της κατηγορίας. Χωρίς παράμετρο δείχνει την τρέχουσα κατηγορία· για άλλη: [product_cat_count id=\"15\"]. Μετρά και τα προϊόντα των υποκατηγοριών.",
+    "type": "php",
+    "code": "add_shortcode( '{{cat_count_shortcode}}', 'perfectpixel_category_count_shortcode' );\n\nfunction perfectpixel_category_count_shortcode( $atts ) {\n\t$atts    = shortcode_atts( array( 'id' => 0 ), $atts );\n\t$term_id = absint( $atts['id'] );\n\tif ( ! $term_id && function_exists( 'is_product_category' ) && is_product_category() ) {\n\t\t$term_id = get_queried_object_id();\n\t}\n\tif ( ! $term_id ) {\n\t\treturn '';\n\t}\n\t$ids   = array_merge( array( $term_id ), get_term_children( $term_id, 'product_cat' ) );\n\t$count = count(\n\t\tget_posts(\n\t\t\tarray(\n\t\t\t\t'post_type'      => 'product',\n\t\t\t\t'post_status'    => 'publish',\n\t\t\t\t'fields'         => 'ids',\n\t\t\t\t'posts_per_page' => -1,\n\t\t\t\t'no_found_rows'  => true,\n\t\t\t\t'tax_query'      => array( array( 'taxonomy' => 'product_cat', 'terms' => $ids ) ),\n\t\t\t)\n\t\t)\n\t);\n\treturn '<span class=\"perfectpixel-cat-count\">' . esc_html( number_format_i18n( $count ) ) . '</span>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "categories",
+        "shortcodes"
+    ],
+    "variables": [
+        {
+            "name": "cat_count_shortcode",
+            "label": "Όνομα shortcode",
+            "default": "product_cat_count",
+            "description": "Μόνο λατινικά, αριθμοί και _"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-product-category-counter-shortcode/"
+    ],
+    "updated": "2026-11-18T17:05:39+00:00"
+}

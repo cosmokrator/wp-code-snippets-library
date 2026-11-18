@@ -1,0 +1,23 @@
+{
+    "title": "Helper: total sales of a product category",
+    "description": "Βοηθητική συνάρτηση για developers: perfectpixel_get_category_sales( $category_id, $from, $to ) επιστρέφει τα τεμάχια και το καθαρό ποσό πωλήσεων των προϊόντων μιας κατηγορίας (και των υποκατηγοριών της) σε ένα διάστημα, από ολοκληρωμένες και υπό επεξεργασία παραγγελίες. Δεν εμφανίζει τίποτα μόνο του.",
+    "type": "php",
+    "code": "/**\n * Units and net revenue of a product category (incl. subcategories) between two dates (Y-m-d).\n *\n * @return array { qty: int, net: float }\n */\nfunction perfectpixel_get_category_sales( $category_id, $from, $to ) {\n\tglobal $wpdb;\n\t$terms = array_merge( array( (int) $category_id ), array_map( 'intval', get_term_children( $category_id, 'product_cat' ) ) );\n\t$tt    = array_map( 'intval', get_terms( array( 'taxonomy' => 'product_cat', 'include' => $terms, 'fields' => 'tt_ids', 'hide_empty' => false ) ) );\n\tif ( ! $tt ) {\n\t\treturn array( 'qty' => 0, 'net' => 0.0 );\n\t}\n\t$row = $wpdb->get_row(\n\t\t$wpdb->prepare(\n\t\t\t\"SELECT SUM(l.product_qty) AS qty, SUM(l.product_net_revenue) AS net\n\t\t\tFROM {$wpdb->prefix}wc_order_product_lookup l\n\t\t\tINNER JOIN {$wpdb->prefix}wc_order_stats s ON s.order_id = l.order_id\n\t\t\tWHERE s.status IN ('wc-completed','wc-processing')\n\t\t\tAND l.date_created BETWEEN %s AND %s\n\t\t\tAND l.product_id IN ( SELECT object_id FROM {$wpdb->term_relationships} WHERE term_taxonomy_id IN (\" . implode( ',', $tt ) . ') )',\n\t\t\t$from . ' 00:00:00',\n\t\t\t$to . ' 23:59:59'\n\t\t),\n\t\tARRAY_A\n\t);\n\treturn array(\n\t\t'qty' => (int) ( $row['qty'] ?? 0 ),\n\t\t'net' => (float) ( $row['net'] ?? 0 ),\n\t);\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "development",
+        "categories",
+        "reports",
+        "helpers"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-get-total-sales-by-product-category/"
+    ],
+    "updated": "2026-11-18T17:05:39+00:00"
+}

@@ -1,0 +1,29 @@
+{
+    "title": "Exclude product categories from search results",
+    "description": "Τα προϊόντα συγκεκριμένων κατηγοριών (π.χ. δωρεάν μαθήματα, ανταλλακτικά, χονδρική) δεν εμφανίζονται στα αποτελέσματα της αναζήτησης του site. Παραμένουν κανονικά στις σελίδες των κατηγοριών τους.",
+    "type": "php",
+    "code": "add_action( 'pre_get_posts', 'perfectpixel_exclude_category_from_search' );\n\nfunction perfectpixel_exclude_category_from_search( $query ) {\n\tif ( is_admin() || ! $query->is_main_query() || ! $query->is_search() ) {\n\t\treturn;\n\t}\n\t$ids = wp_parse_id_list( '{{search_excluded_category_ids}}' );\n\tif ( ! $ids ) {\n\t\treturn;\n\t}\n\t$tax_query   = (array) $query->get( 'tax_query' );\n\t$tax_query[] = array(\n\t\t'taxonomy' => 'product_cat',\n\t\t'field'    => 'term_id',\n\t\t'terms'    => $ids,\n\t\t'operator' => 'NOT IN',\n\t);\n\t$query->set( 'tax_query', $tax_query );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "categories",
+        "search",
+        "query"
+    ],
+    "variables": [
+        {
+            "name": "search_excluded_category_ids",
+            "label": "IDs κατηγοριών (με κόμμα)",
+            "default": "",
+            "description": "Κενό = καμία αλλαγή"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-exclude-category-from-search/"
+    ],
+    "updated": "2026-11-18T17:05:40+00:00"
+}

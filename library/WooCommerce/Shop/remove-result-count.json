@@ -1,0 +1,21 @@
+{
+    "title": "Remove the \"Showing x–y of z results\" text",
+    "description": "Αφαιρεί το κείμενο «Εμφάνιση 1–12 από 48 αποτελέσματα» (ή «Εμφάνιση του μοναδικού αποτελέσματος») από το κατάστημα και τις κατηγορίες. Καλύπτει και το theme Storefront, που το δείχνει πάνω και κάτω από τα προϊόντα. Ισχύει για τις κλασικές σελίδες καταστήματος/κατηγοριών· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'init', 'perfectpixel_remove_result_count', 20 );\n\nfunction perfectpixel_remove_result_count() {\n\tremove_action( 'woocommerce_before_shop_loop', 'woocommerce_result_count', 20 );\n\tremove_action( 'woocommerce_after_shop_loop', 'woocommerce_result_count', 20 ); // Storefront.\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shop",
+        "layout"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-remove-showing-single-result/"
+    ],
+    "updated": "2026-11-18T17:05:39+00:00"
+}

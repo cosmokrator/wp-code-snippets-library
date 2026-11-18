@@ -1,0 +1,21 @@
+{
+    "title": "Add body classes on product subcategory pages",
+    "description": "Στις σελίδες υποκατηγοριών προϊόντων προσθέτει στο <body> την κλάση product-subcategory και μία κλάση για κάθε γονική κατηγορία (π.χ. product-cat-parent-rouxa), ώστε να εφαρμόζετε CSS μόνο σε υποκατηγορίες ή μόνο σε υποκατηγορίες μιας συγκεκριμένης κατηγορίας.",
+    "type": "php",
+    "code": "add_filter( 'body_class', 'perfectpixel_subcategory_body_class' );\n\nfunction perfectpixel_subcategory_body_class( $classes ) {\n\tif ( ! function_exists( 'is_product_category' ) || ! is_product_category() ) {\n\t\treturn $classes;\n\t}\n\t$ancestors = get_ancestors( get_queried_object_id(), 'product_cat', 'taxonomy' );\n\tif ( $ancestors ) {\n\t\t$classes[] = 'product-subcategory';\n\t\tforeach ( $ancestors as $ancestor_id ) {\n\t\t\t$term = get_term( $ancestor_id, 'product_cat' );\n\t\t\tif ( $term && ! is_wp_error( $term ) ) {\n\t\t\t\t$classes[] = 'product-cat-parent-' . sanitize_html_class( $term->slug );\n\t\t\t}\n\t\t}\n\t}\n\treturn $classes;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "categories",
+        "css"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-detect-if-current-category-page-is-a-subcategory/"
+    ],
+    "updated": "2026-11-18T17:05:39+00:00"
+}

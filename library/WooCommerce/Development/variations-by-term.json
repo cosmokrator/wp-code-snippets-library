@@ -1,0 +1,22 @@
+{
+    "title": "Helper: get variation IDs by product category or tag",
+    "description": "Βοηθητική συνάρτηση για developers: perfectpixel_get_variation_ids_by_term( $term_ids, $taxonomy ) επιστρέφει τα IDs όλων των παραλλαγών των μεταβλητών προϊόντων που ανήκουν σε κατηγορίες ή ετικέτες (οι παραλλαγές δεν έχουν δικές τους κατηγορίες). Δεν εμφανίζει τίποτα μόνο του.",
+    "type": "php",
+    "code": "/**\n * Variation IDs whose parent product belongs to the given terms.\n *\n * @param int[]  $term_ids Term IDs.\n * @param string $taxonomy product_cat or product_tag.\n * @return int[]\n */\nfunction perfectpixel_get_variation_ids_by_term( $term_ids, $taxonomy = 'product_cat' ) {\n\t$parents = wc_get_products(\n\t\tarray(\n\t\t\t'type'   => 'variable',\n\t\t\t'status' => 'publish',\n\t\t\t'limit'  => -1,\n\t\t\t'return' => 'ids',\n\t\t\t'tax_query' => array(\n\t\t\t\tarray(\n\t\t\t\t\t'taxonomy' => $taxonomy,\n\t\t\t\t\t'field'    => 'term_id',\n\t\t\t\t\t'terms'    => array_map( 'intval', (array) $term_ids ),\n\t\t\t\t),\n\t\t\t),\n\t\t)\n\t);\n\tif ( ! $parents ) {\n\t\treturn array();\n\t}\n\treturn array_map(\n\t\t'intval',\n\t\tget_posts(\n\t\t\tarray(\n\t\t\t\t'post_type'       => 'product_variation',\n\t\t\t\t'post_status'     => array( 'publish', 'private' ),\n\t\t\t\t'post_parent__in' => $parents,\n\t\t\t\t'fields'          => 'ids',\n\t\t\t\t'posts_per_page'  => -1,\n\t\t\t\t'no_found_rows'   => true,\n\t\t\t)\n\t\t)\n\t);\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "development",
+        "variations",
+        "helpers"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-get-variations-by-product-category-tag/"
+    ],
+    "updated": "2026-11-18T17:05:40+00:00"
+}

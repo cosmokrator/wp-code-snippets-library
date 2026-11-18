@@ -1,0 +1,30 @@
+{
+    "title": "Add a category dropdown above shop products",
+    "description": "Πάνω από τα προϊόντα του καταστήματος και των κατηγοριών εμφανίζει λίστα επιλογής με όλες τις κατηγορίες (με τον αριθμό προϊόντων). Με την επιλογή ο πελάτης μεταφέρεται στην κατηγορία, χωρίς sidebar ή widget. Ισχύει για τις κλασικές σελίδες καταστήματος/κατηγοριών· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_before_shop_loop', 'perfectpixel_category_dropdown_filter', 25 );\n\nfunction perfectpixel_category_dropdown_filter() {\n\tif ( ! function_exists( 'wc_product_dropdown_categories' ) ) {\n\t\treturn;\n\t}\n\techo '<div class=\"perfectpixel-category-filter\" style=\"margin-bottom:1em\">';\n\twc_product_dropdown_categories(\n\t\tarray(\n\t\t\t'show_count'       => 1,\n\t\t\t'hierarchical'     => 1,\n\t\t\t'show_option_none' => '{{category_dropdown_placeholder}}',\n\t\t\t'option_none_value'=> '',\n\t\t\t'value_field'      => 'slug',\n\t\t\t'selected'         => is_product_category() ? get_queried_object()->slug : '',\n\t\t)\n\t);\n\techo '</div>';\n\t$base = wp_json_encode( home_url( '/?product_cat=' ) );\n\t?>\n\t<script>\n\t( function () {\n\t\tvar select = document.querySelector( '.perfectpixel-category-filter select' );\n\t\tif ( select ) {\n\t\t\tselect.addEventListener( 'change', function () {\n\t\t\t\tif ( select.value ) {\n\t\t\t\t\twindow.location.href = <?php echo $base; ?> + encodeURIComponent( select.value );\n\t\t\t\t}\n\t\t\t} );\n\t\t}\n\t} )();\n\t</script>\n\t<?php\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shop",
+        "categories",
+        "navigation",
+        "filters"
+    ],
+    "variables": [
+        {
+            "name": "category_dropdown_placeholder",
+            "label": "Πρώτη επιλογή",
+            "default": "Επιλέξτε κατηγορία",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-display-product-categories-select-list/"
+    ],
+    "updated": "2026-11-18T17:05:39+00:00"
+}

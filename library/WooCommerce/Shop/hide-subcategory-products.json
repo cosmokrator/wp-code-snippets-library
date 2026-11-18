@@ -1,0 +1,21 @@
+{
+    "title": "Show only direct products on category pages",
+    "description": "Στις σελίδες κατηγοριών εμφανίζονται μόνο τα προϊόντα που ανήκουν απευθείας στην κατηγορία, όχι αυτά των υποκατηγοριών της. Ταιριάζει με τη ρύθμιση «Εμφάνιση υποκατηγοριών και προϊόντων», ώστε ο πελάτης να βλέπει τις υποκατηγορίες ως κουτιά και από κάτω μόνο τα «δικά» της προϊόντα.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_product_query', 'perfectpixel_hide_subcategory_products' );\n\nfunction perfectpixel_hide_subcategory_products( $q ) {\n\tif ( ! is_product_category() ) {\n\t\treturn;\n\t}\n\t$tax_query   = (array) $q->get( 'tax_query' );\n\t$tax_query[] = array(\n\t\t'taxonomy'         => 'product_cat',\n\t\t'field'            => 'term_id',\n\t\t'terms'            => array( get_queried_object_id() ),\n\t\t'include_children' => false,\n\t);\n\t$q->set( 'tax_query', $tax_query );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "categories",
+        "query"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-hide-subcategory-products-on-product-category-pages/"
+    ],
+    "updated": "2026-11-18T17:05:39+00:00"
+}
