@@ -1,0 +1,30 @@
+{
+    "title": "Show total savings in cart & checkout totals",
+    "description": "Προσθέτει γραμμή «Κερδίζετε» κάτω από το σύνολο στο καλάθι και στο checkout, με το συνολικό ποσό που γλιτώνει ο πελάτης από προσφορές (αρχική τιμή μείον τιμή προσφοράς) και κουπόνια. Εμφανίζεται μόνο όταν υπάρχει έκπτωση. Ορίστε την ετικέτα στη μεταβλητή. Ισχύει για το κλασικό καλάθι/checkout.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_cart_totals_after_order_total', 'perfectpixel_total_savings_row' );\nadd_action( 'woocommerce_review_order_after_order_total', 'perfectpixel_total_savings_row' );\n\nfunction perfectpixel_total_savings_row() {\n\tif ( ! WC()->cart ) {\n\t\treturn;\n\t}\n\t$savings = 0.0;\n\tforeach ( WC()->cart->get_cart() as $item ) {\n\t\t$product = $item['data'];\n\t\tif ( ! $product || ! $product->is_on_sale() ) {\n\t\t\tcontinue;\n\t\t}\n\t\t$regular = (float) wc_get_price_to_display( $product, array( 'price' => $product->get_regular_price() ) );\n\t\t$active  = (float) wc_get_price_to_display( $product );\n\t\tif ( $regular > $active ) {\n\t\t\t$savings += ( $regular - $active ) * $item['quantity'];\n\t\t}\n\t}\n\t$savings += (float) WC()->cart->get_discount_total();\n\tif ( WC()->cart->display_prices_including_tax() ) {\n\t\t$savings += (float) WC()->cart->get_discount_tax();\n\t}\n\tif ( $savings <= 0 ) {\n\t\treturn;\n\t}\n\tprintf(\n\t\t'<tr class=\"perfectpixel-total-savings\"><th>%1$s</th><td data-title=\"%1$s\"><strong>%2$s</strong></td></tr>',\n\t\tesc_html( '{{savings_label}}' ),\n\t\twp_kses_post( wc_price( $savings ) )\n\t);\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "cart",
+        "checkout",
+        "discounts",
+        "conversions"
+    ],
+    "variables": [
+        {
+            "name": "savings_label",
+            "label": "Ετικέτα",
+            "default": "Κερδίζετε",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-display-total-discount-savings-cart/"
+    ],
+    "updated": "2026-11-18T09:57:09+00:00"
+}

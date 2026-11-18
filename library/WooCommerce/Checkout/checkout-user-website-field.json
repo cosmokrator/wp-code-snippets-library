@@ -1,0 +1,29 @@
+{
+    "title": "Collect a WordPress profile field at checkout (website)",
+    "description": "Προσθέτει προαιρετικό πεδίο «Ιστοσελίδα» μετά τα στοιχεία χρέωσης και το αποθηκεύει στο προφίλ WordPress του πελάτη (πεδίο «Ιστότοπος»). Για συνδεδεμένους πελάτες προσυμπληρώνεται. Πρότυπο για οποιοδήποτε πεδίο προφίλ. Ορίστε την ετικέτα στη μεταβλητή. Λειτουργεί με το κλασικό checkout (shortcode)· το checkout με blocks δεν χρησιμοποιεί αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_after_checkout_billing_form', 'perfectpixel_checkout_user_url_field' );\nadd_action( 'woocommerce_checkout_update_user_meta', 'perfectpixel_checkout_user_url_save', 10, 2 );\n\nfunction perfectpixel_checkout_user_url_field( $checkout ) {\n\t$current = is_user_logged_in() ? wp_get_current_user()->user_url : '';\n\twoocommerce_form_field(\n\t\t'perfectpixel_user_url',\n\t\tarray(\n\t\t\t'type'        => 'url',\n\t\t\t'label'       => '{{website_label}}',\n\t\t\t'required'    => false,\n\t\t\t'class'       => array( 'form-row-wide' ),\n\t\t\t'placeholder' => 'https://',\n\t\t),\n\t\t$checkout->get_value( 'perfectpixel_user_url' ) ? $checkout->get_value( 'perfectpixel_user_url' ) : $current\n\t);\n}\n\nfunction perfectpixel_checkout_user_url_save( $customer_id, $posted ) {\n\tif ( $customer_id && ! empty( $_POST['perfectpixel_user_url'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification\n\t\twp_update_user(\n\t\t\tarray(\n\t\t\t\t'ID'       => $customer_id,\n\t\t\t\t'user_url' => esc_url_raw( wp_unslash( $_POST['perfectpixel_user_url'] ) ), // phpcs:ignore WordPress.Security.NonceVerification\n\t\t\t)\n\t\t);\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "customers",
+        "custom-field"
+    ],
+    "variables": [
+        {
+            "name": "website_label",
+            "label": "Ετικέτα πεδίου",
+            "default": "Ιστοσελίδα",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-display-save-wp-user-field-e-g-user_url-checkout/"
+    ],
+    "updated": "2026-11-18T09:57:09+00:00"
+}

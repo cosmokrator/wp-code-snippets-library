@@ -1,0 +1,30 @@
+{
+    "title": "Show the total cart weight in cart & checkout totals",
+    "description": "Προσθέτει γραμμή «Συνολικό βάρος» στα σύνολα του καλαθιού και του checkout, με τη μονάδα βάρους του καταστήματος. Χρειάζεται όλα τα προϊόντα να έχουν βάρος, αλλιώς το σύνολο βγαίνει μικρότερο. Ισχύει για το κλασικό καλάθι/checkout.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_cart_totals_before_order_total', 'perfectpixel_cart_total_weight_row' );\nadd_action( 'woocommerce_review_order_before_order_total', 'perfectpixel_cart_total_weight_row' );\n\nfunction perfectpixel_cart_total_weight_row() {\n\tif ( ! WC()->cart ) {\n\t\treturn;\n\t}\n\t$weight = (float) WC()->cart->get_cart_contents_weight();\n\tif ( $weight <= 0 ) {\n\t\treturn;\n\t}\n\tprintf(\n\t\t'<tr class=\"perfectpixel-cart-weight\"><th>%1$s</th><td data-title=\"%1$s\">%2$s %3$s</td></tr>',\n\t\tesc_html( '{{weight_label}}' ),\n\t\tesc_html( wc_format_localized_decimal( wc_format_decimal( $weight, 2 ) ) ),\n\t\tesc_html( get_option( 'woocommerce_weight_unit' ) )\n\t);\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "cart",
+        "checkout",
+        "weight",
+        "shipping"
+    ],
+    "variables": [
+        {
+            "name": "weight_label",
+            "label": "Ετικέτα",
+            "default": "Συνολικό βάρος",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-display-weight-cart-checkout/"
+    ],
+    "updated": "2026-11-18T09:57:09+00:00"
+}

@@ -1,0 +1,29 @@
+{
+    "title": "Show a payment method only on the \"Pay for order\" page",
+    "description": "Ορισμένοι τρόποι πληρωμής (π.χ. τραπεζική κατάθεση) εμφανίζονται μόνο στη σελίδα «Πληρωμή παραγγελίας» (το link που στέλνετε με τα τιμολόγια/χειροκίνητες παραγγελίες) και όχι στο κανονικό checkout. Ορίστε τα IDs των τρόπων πληρωμής στη μεταβλητή.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_available_payment_gateways', 'perfectpixel_gateways_only_on_order_pay' );\n\nfunction perfectpixel_gateways_only_on_order_pay( $gateways ) {\n\tif ( is_admin() || is_wc_endpoint_url( 'order-pay' ) ) {\n\t\treturn $gateways;\n\t}\n\tforeach ( array_filter( array_map( 'trim', explode( ',', '{{order_pay_only_gateways}}' ) ) ) as $id ) {\n\t\tunset( $gateways[ $id ] );\n\t}\n\treturn $gateways;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "payment",
+        "order-pay"
+    ],
+    "variables": [
+        {
+            "name": "order_pay_only_gateways",
+            "label": "IDs τρόπων πληρωμής (με κόμμα)",
+            "default": "bacs",
+            "description": "π.χ. bacs, cheque"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-enable-payment-gateway-only-for-order-pay-checkout/"
+    ],
+    "updated": "2026-11-18T09:57:09+00:00"
+}

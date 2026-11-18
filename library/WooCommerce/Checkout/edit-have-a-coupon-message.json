@@ -1,0 +1,35 @@
+{
+    "title": "Edit the \"Have a coupon?\" message",
+    "description": "Αλλάζει το κείμενο «Έχετε κουπόνι;» και τον σύνδεσμο που ανοίγει τη φόρμα κουπονιού στην κορυφή του checkout. Ορίστε τα κείμενα στις μεταβλητές. Λειτουργεί με το κλασικό checkout (shortcode)· το checkout με blocks δεν χρησιμοποιεί αυτό το hook.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_checkout_coupon_message', 'perfectpixel_have_a_coupon_message' );\n\nfunction perfectpixel_have_a_coupon_message( $message ) {\n\treturn esc_html( '{{coupon_question}}' ) . ' <a href=\"#\" role=\"button\" aria-label=\"' . esc_attr( '{{coupon_link_text}}' ) . '\" class=\"showcoupon\">' . esc_html( '{{coupon_link_text}}' ) . '</a>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "coupons",
+        "texts"
+    ],
+    "variables": [
+        {
+            "name": "coupon_question",
+            "label": "Ερώτηση",
+            "default": "Έχετε κωδικό έκπτωσης;",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "coupon_link_text",
+            "label": "Κείμενο συνδέσμου",
+            "default": "Πατήστε εδώ για να τον εισάγετε",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-change-coupon-code-message-cart-checkout/"
+    ],
+    "updated": "2026-11-18T09:57:09+00:00"
+}

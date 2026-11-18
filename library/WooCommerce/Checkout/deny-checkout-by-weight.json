@@ -1,0 +1,36 @@
+{
+    "title": "Block checkout when the cart is over a maximum weight",
+    "description": "Αν το συνολικό βάρος του καλαθιού ξεπερνά ένα όριο (π.χ. το μέγιστο που δέχεται η courier), η παραγγελία σταματά με μήνυμα που λέει το τρέχον βάρος και το όριο. Ορίστε όριο (στη μονάδα βάρους του καταστήματος) και μήνυμα στις μεταβλητές. Λειτουργεί με το κλασικό checkout (shortcode)· το checkout με blocks δεν χρησιμοποιεί αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_after_checkout_validation', 'perfectpixel_deny_checkout_by_weight', 10, 2 );\n\nfunction perfectpixel_deny_checkout_by_weight( $data, $errors ) {\n\t$max    = (float) '{{max_cart_weight}}';\n\t$weight = WC()->cart ? (float) WC()->cart->get_cart_contents_weight() : 0;\n\tif ( $max <= 0 || $weight <= $max ) {\n\t\treturn;\n\t}\n\t$unit = get_option( 'woocommerce_weight_unit' );\n\t$errors->add(\n\t\t'perfectpixel_max_weight',\n\t\tsprintf(\n\t\t\tesc_html( '{{max_weight_message}}' ),\n\t\t\tesc_html( wc_format_localized_decimal( wc_format_decimal( $weight, 2 ) ) . ' ' . $unit ),\n\t\t\tesc_html( wc_format_localized_decimal( wc_format_decimal( $max, 2 ) ) . ' ' . $unit )\n\t\t)\n\t);\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "weight",
+        "shipping",
+        "validation"
+    ],
+    "variables": [
+        {
+            "name": "max_cart_weight",
+            "label": "Μέγιστο βάρος",
+            "default": "30",
+            "description": "Μόνο αριθμός, στη μονάδα βάρους του καταστήματος"
+        },
+        {
+            "name": "max_weight_message",
+            "label": "Μήνυμα",
+            "default": "Το βάρος της παραγγελίας (%1$s) ξεπερνά το μέγιστο επιτρεπτό (%2$s). Αφαιρέστε κάποια προϊόντα ή επικοινωνήστε μαζί μας.",
+            "description": "%1$s = τρέχον βάρος, %2$s = όριο. Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-deny-checkout-based-cart-weight/"
+    ],
+    "updated": "2026-11-18T09:57:09+00:00"
+}

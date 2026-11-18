@@ -1,0 +1,22 @@
+{
+    "title": "Go straight to checkout after \"Add to cart\"",
+    "description": "Μετά την προσθήκη στο καλάθι ο πελάτης πηγαίνει κατευθείαν στο checkout (από τη σελίδα προϊόντος και από τις λίστες προϊόντων). Στις ρυθμίσεις του WooCommerce (Προϊόντα → Γενικά) απενεργοποιήστε το «Ενεργοποίηση AJAX προσθήκης στο καλάθι» στις λίστες, αλλιώς εκεί δεν γίνεται ανακατεύθυνση.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_add_to_cart_redirect', 'perfectpixel_redirect_to_checkout_on_add', 20 );\n\nfunction perfectpixel_redirect_to_checkout_on_add( $url ) {\n\treturn wc_get_checkout_url();\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "cart",
+        "add-to-cart",
+        "checkout"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-redirect-checkout-add-cart/"
+    ],
+    "updated": "2026-11-18T09:57:09+00:00"
+}

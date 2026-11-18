@@ -1,0 +1,29 @@
+{
+    "title": "Edit the \"Returning customer?\" message",
+    "description": "Αλλάζει το κείμενο «Είστε ήδη πελάτης;» στην κορυφή του checkout (ο σύνδεσμος «Κάντε κλικ εδώ για σύνδεση» παραμένει). Ορίστε το κείμενο στη μεταβλητή. Λειτουργεί με το κλασικό checkout (shortcode)· το checkout με blocks δεν χρησιμοποιεί αυτό το hook.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_checkout_login_message', 'perfectpixel_returning_customer_message' );\n\nfunction perfectpixel_returning_customer_message( $message ) {\n\treturn esc_html( '{{returning_text}}' );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "texts",
+        "login"
+    ],
+    "variables": [
+        {
+            "name": "returning_text",
+            "label": "Κείμενο",
+            "default": "Έχετε λογαριασμό; Συνδεθείτε για πιο γρήγορη αγορά.",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-edit-returning-customer-message-checkout/"
+    ],
+    "updated": "2026-11-18T09:57:09+00:00"
+}
