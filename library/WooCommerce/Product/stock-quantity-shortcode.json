@@ -1,0 +1,28 @@
+{
+    "title": "Shortcode for a product stock quantity",
+    "description": "Shortcode που εμφανίζει το τρέχον απόθεμα ενός προϊόντος οπουδήποτε (αρχική, άρθρο, πίνακας τιμών), π.χ. «Απομένουν [product_stock id=\"123\"] τεμάχια». Χωρίς id δείχνει το τρέχον προϊόν. Για προϊόντα χωρίς διαχείριση αποθέματος δείχνει «Σε απόθεμα» ή «Εξαντλημένο».",
+    "type": "php",
+    "code": "add_shortcode( '{{stock_shortcode_name}}', 'perfectpixel_stock_quantity_shortcode' );\n\nfunction perfectpixel_stock_quantity_shortcode( $atts ) {\n\t$atts    = shortcode_atts( array( 'id' => 0 ), $atts );\n\t$product = wc_get_product( absint( $atts['id'] ) ? absint( $atts['id'] ) : get_the_ID() );\n\tif ( ! $product ) {\n\t\treturn '';\n\t}\n\tif ( $product->managing_stock() ) {\n\t\treturn '<span class=\"perfectpixel-stock-qty\">' . esc_html( wc_stock_amount( max( 0, (int) $product->get_stock_quantity() ) ) ) . '</span>';\n\t}\n\treturn '<span class=\"perfectpixel-stock-qty\">' . esc_html( $product->is_in_stock() ? __( 'In stock', 'woocommerce' ) : __( 'Out of stock', 'woocommerce' ) ) . '</span>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "stock",
+        "shortcodes"
+    ],
+    "variables": [
+        {
+            "name": "stock_shortcode_name",
+            "label": "Όνομα shortcode",
+            "default": "product_stock",
+            "description": "Μόνο λατινικά, αριθμοί και _"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-stock-quantity-shortcode/"
+    ],
+    "updated": "2026-11-18T17:08:47+00:00"
+}

@@ -1,0 +1,28 @@
+{
+    "title": "Exclude categories from the [product_categories] shortcode",
+    "description": "Συγκεκριμένες κατηγορίες (π.χ. «Χωρίς κατηγορία») δεν εμφανίζονται στο shortcode [product_categories] του WooCommerce, που κανονικά δείχνει όλες τις κατηγορίες χωρίς δυνατότητα εξαίρεσης. Ισχύει και για τις κατηγορίες της σελίδας καταστήματος όταν αυτή εμφανίζει κατηγορίες.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_product_categories', 'perfectpixel_exclude_from_categories_shortcode' );\nadd_filter( 'woocommerce_product_subcategories_args', 'perfectpixel_exclude_from_shop_categories' );\n\nfunction perfectpixel_exclude_from_categories_shortcode( $terms ) {\n\t$ids = wp_parse_id_list( '{{categories_shortcode_excluded_ids}}' );\n\tif ( ! $ids || ! is_array( $terms ) ) {\n\t\treturn $terms;\n\t}\n\treturn array_values(\n\t\tarray_filter(\n\t\t\t$terms,\n\t\t\tfunction ( $term ) use ( $ids ) {\n\t\t\t\treturn ! in_array( (int) $term->term_id, $ids, true );\n\t\t\t}\n\t\t)\n\t);\n}\n\nfunction perfectpixel_exclude_from_shop_categories( $args ) {\n\t$ids = wp_parse_id_list( '{{categories_shortcode_excluded_ids}}' );\n\tif ( $ids ) {\n\t\t$args['exclude'] = array_merge( isset( $args['exclude'] ) ? wp_parse_id_list( $args['exclude'] ) : array(), $ids );\n\t}\n\treturn $args;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "categories",
+        "shortcodes"
+    ],
+    "variables": [
+        {
+            "name": "categories_shortcode_excluded_ids",
+            "label": "IDs κατηγοριών (με κόμμα)",
+            "default": "",
+            "description": "Κενό = καμία αλλαγή"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-hide-category-product-categories-shortcode/"
+    ],
+    "updated": "2026-11-18T17:08:47+00:00"
+}

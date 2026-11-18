@@ -1,0 +1,22 @@
+{
+    "title": "Remove price and stock from product structured data",
+    "description": "Αφαιρεί την τιμή και τη διαθεσιμότητα (το τμήμα «offers») από τα δομημένα δεδομένα (schema) που δίνει το WooCommerce στις μηχανές αναζήτησης, ώστε να μην εμφανίζονται στα αποτελέσματα του Google. Χρήσιμο όταν οι τιμές είναι μόνο για συνδεδεμένους πελάτες ή κατόπιν προσφοράς.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_structured_data_product', 'perfectpixel_remove_offers_from_schema', 20 );\n\nfunction perfectpixel_remove_offers_from_schema( $markup ) {\n\tunset( $markup['offers'] );\n\treturn $markup;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "prices",
+        "seo",
+        "schema"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-hide-product-prices-from-google/"
+    ],
+    "updated": "2026-11-18T17:08:47+00:00"
+}

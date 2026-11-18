@@ -1,0 +1,29 @@
+{
+    "title": "Exclude categories from the [products] shortcode",
+    "description": "Τα προϊόντα συγκεκριμένων κατηγοριών (π.χ. «Χωρίς κατηγορία» ή χονδρική) δεν εμφανίζονται ποτέ στο shortcode [products] του WooCommerce, όπου κι αν το χρησιμοποιείτε. Το shortcode έχει παράμετρο για επιλογή κατηγοριών, αλλά όχι για εξαίρεση.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_shortcode_products_query', 'perfectpixel_exclude_category_products_shortcode' );\n\nfunction perfectpixel_exclude_category_products_shortcode( $args ) {\n\t$ids = wp_parse_id_list( '{{shortcode_excluded_category_ids}}' );\n\tif ( $ids ) {\n\t\t$args['tax_query']   = isset( $args['tax_query'] ) ? (array) $args['tax_query'] : array();\n\t\t$args['tax_query'][] = array(\n\t\t\t'taxonomy' => 'product_cat',\n\t\t\t'field'    => 'term_id',\n\t\t\t'terms'    => $ids,\n\t\t\t'operator' => 'NOT IN',\n\t\t);\n\t}\n\treturn $args;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "categories",
+        "shortcodes",
+        "query"
+    ],
+    "variables": [
+        {
+            "name": "shortcode_excluded_category_ids",
+            "label": "IDs κατηγοριών (με κόμμα)",
+            "default": "",
+            "description": "Κενό = καμία αλλαγή"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-exclude-category-from-products-shortcode/"
+    ],
+    "updated": "2026-11-18T17:08:47+00:00"
+}

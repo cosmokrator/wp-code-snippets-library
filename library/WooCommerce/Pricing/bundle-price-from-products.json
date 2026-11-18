@@ -1,0 +1,40 @@
+{
+    "title": "Set a bundle product price from other products",
+    "description": "Η τιμή ενός προϊόντος «πακέτου» υπολογίζεται αυτόματα από το άθροισμα των τιμών άλλων προϊόντων μείον μια έκπτωση (π.χ. όλα τα μαθήματα -30%). Η αρχική τιμή εμφανίζεται διαγραμμένη. Όταν αλλάζουν οι τιμές των προϊόντων, αλλάζει αυτόματα και η τιμή του πακέτου.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_product_get_price', 'perfectpixel_bundle_price', 20, 2 );\nadd_filter( 'woocommerce_product_get_sale_price', 'perfectpixel_bundle_price', 20, 2 );\nadd_filter( 'woocommerce_product_get_regular_price', 'perfectpixel_bundle_regular_price', 20, 2 );\n\nfunction perfectpixel_bundle_items_total() {\n\tstatic $total = null;\n\tif ( null === $total ) {\n\t\t$total = 0.0;\n\t\tforeach ( wp_parse_id_list( '{{bundle_item_ids}}' ) as $id ) {\n\t\t\t$item = wc_get_product( $id );\n\t\t\tif ( $item && (int) $id !== (int) '{{bundle_product_id}}' ) {\n\t\t\t\t$total += (float) $item->get_price();\n\t\t\t}\n\t\t}\n\t}\n\treturn $total;\n}\n\nfunction perfectpixel_bundle_regular_price( $price, $product ) {\n\tif ( (int) $product->get_id() !== (int) '{{bundle_product_id}}' || ! perfectpixel_bundle_items_total() ) {\n\t\treturn $price;\n\t}\n\treturn wc_format_decimal( perfectpixel_bundle_items_total(), wc_get_price_decimals() );\n}\n\nfunction perfectpixel_bundle_price( $price, $product ) {\n\tif ( (int) $product->get_id() !== (int) '{{bundle_product_id}}' || ! perfectpixel_bundle_items_total() ) {\n\t\treturn $price;\n\t}\n\t$discount = min( 100, max( 0, (float) '{{bundle_discount_percent}}' ) );\n\treturn wc_format_decimal( perfectpixel_bundle_items_total() * ( 1 - $discount / 100 ), wc_get_price_decimals() );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "prices",
+        "bundles"
+    ],
+    "variables": [
+        {
+            "name": "bundle_product_id",
+            "label": "ID προϊόντος-πακέτου",
+            "default": "0",
+            "description": "Μόνο αριθμός, απλό προϊόν"
+        },
+        {
+            "name": "bundle_item_ids",
+            "label": "IDs προϊόντων του πακέτου (με κόμμα)",
+            "default": "",
+            "description": "Μόνο αριθμοί, με κόμμα"
+        },
+        {
+            "name": "bundle_discount_percent",
+            "label": "Έκπτωση %",
+            "default": "30",
+            "description": "Μόνο αριθμός"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-set-product-price-based-on-other-products/"
+    ],
+    "updated": "2026-11-18T17:08:47+00:00"
+}

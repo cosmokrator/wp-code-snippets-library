@@ -1,0 +1,29 @@
+{
+    "title": "Show the discount percentage instead of \"Sale!\" in the shop",
+    "description": "Στις λίστες προϊόντων, η ετικέτα «Προσφορά!» γίνεται το ποσοστό έκπτωσης, π.χ. «-25%». Για μεταβλητά προϊόντα δείχνει τη μεγαλύτερη έκπτωση των παραλλαγών (π.χ. «Έως -40%»). Μη το χρησιμοποιείτε μαζί με το «Rename or remove the Sale! badge».",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_sale_flash', 'perfectpixel_discount_percentage_badge', 15, 3 );\n\nfunction perfectpixel_discount_percentage_badge( $html, $post, $product ) {\n\tif ( ! $product || ( is_product() && get_queried_object_id() === $product->get_id() ) ) {\n\t\treturn $html; // Loops only.\n\t}\n\t$max = 0;\n\t$ids = $product->is_type( 'variable' ) ? $product->get_children() : array( $product->get_id() );\n\tforeach ( $ids as $id ) {\n\t\t$item = $id === $product->get_id() ? $product : wc_get_product( $id );\n\t\tif ( $item && $item->is_on_sale() && (float) $item->get_regular_price() > 0 ) {\n\t\t\t$max = max( $max, 100 - (float) $item->get_sale_price() / (float) $item->get_regular_price() * 100 );\n\t\t}\n\t}\n\tif ( $max < 1 ) {\n\t\treturn $html;\n\t}\n\t$prefix = $product->is_type( 'variable' ) ? esc_html( '{{percent_badge_upto}}' ) . ' ' : '';\n\treturn '<span class=\"onsale\">' . $prefix . '-' . (int) round( $max ) . '%</span>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shop",
+        "sale",
+        "badges"
+    ],
+    "variables": [
+        {
+            "name": "percent_badge_upto",
+            "label": "Πρόθεμα για μεταβλητά",
+            "default": "Έως",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-display-discount-shop-loop-pages/"
+    ],
+    "updated": "2026-11-18T17:08:47+00:00"
+}

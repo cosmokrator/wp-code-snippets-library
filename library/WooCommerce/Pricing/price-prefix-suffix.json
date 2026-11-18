@@ -1,0 +1,34 @@
+{
+    "title": "Add a prefix or suffix to all prices",
+    "description": "Προσθέτει κείμενο πριν ή/και μετά από κάθε τιμή προϊόντος στο κατάστημα, π.χ. «Μόνο 20,00 €» ή «20,00 € / τεμάχιο». Αν χρειάζεστε μόνο επίθημα για ΦΠΑ, υπάρχει και η ρύθμιση «Επίθημα εμφάνισης τιμής» (Ρυθμίσεις → Φόρος). Αφήστε κενό όποιο δεν θέλετε.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_get_price_html', 'perfectpixel_price_prefix_suffix', 30 );\n\nfunction perfectpixel_price_prefix_suffix( $html ) {\n\tif ( '' === trim( wp_strip_all_tags( $html ) ) ) {\n\t\treturn $html;\n\t}\n\t$prefix = trim( '{{price_prefix_text}}' );\n\t$suffix = trim( '{{price_suffix_text}}' );\n\treturn ( '' !== $prefix ? '<span class=\"perfectpixel-price-prefix\">' . esc_html( $prefix ) . '</span> ' : '' )\n\t\t. $html\n\t\t. ( '' !== $suffix ? ' <span class=\"perfectpixel-price-suffix\">' . esc_html( $suffix ) . '</span>' : '' );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "prices",
+        "labels"
+    ],
+    "variables": [
+        {
+            "name": "price_prefix_text",
+            "label": "Πρόθεμα",
+            "default": "",
+            "description": "Χωρίς απόστροφο ('). Κενό = χωρίς πρόθεμα"
+        },
+        {
+            "name": "price_suffix_text",
+            "label": "Επίθημα",
+            "default": "/ τεμάχιο",
+            "description": "Χωρίς απόστροφο ('). Κενό = χωρίς επίθημα"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-prefix-suffix-product-prices/"
+    ],
+    "updated": "2026-11-18T17:08:47+00:00"
+}

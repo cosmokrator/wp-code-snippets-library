@@ -1,0 +1,35 @@
+{
+    "title": "Show a custom field value on the product page",
+    "description": "Στη σελίδα προϊόντος, κάτω από τη σύντομη περιγραφή, εμφανίζει την τιμή ενός προσαρμοσμένου πεδίου (π.χ. πεδίο ACF «Χώρα προέλευσης») με ετικέτα. Λειτουργεί και χωρίς ενεργό ACF, γιατί διαβάζει απευθείας το πεδίο. Τα προϊόντα χωρίς τιμή δεν δείχνουν τίποτα.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_single_product_summary', 'perfectpixel_custom_field_on_product_page', 25 );\n\nfunction perfectpixel_custom_field_on_product_page() {\n\t$value = get_post_meta( get_the_ID(), sanitize_key( '{{product_field_key}}' ), true );\n\tif ( is_array( $value ) ) {\n\t\t$value = implode( ', ', array_map( 'strval', array_filter( $value, 'is_scalar' ) ) );\n\t}\n\tif ( '' === trim( (string) $value ) ) {\n\t\treturn;\n\t}\n\t$label = trim( '{{product_field_label}}' );\n\techo '<p class=\"perfectpixel-product-field\">' . ( '' !== $label ? '<strong>' . esc_html( $label ) . '</strong> ' : '' ) . esc_html( $value ) . '</p>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "custom-fields",
+        "acf"
+    ],
+    "variables": [
+        {
+            "name": "product_field_key",
+            "label": "Όνομα πεδίου (meta key)",
+            "default": "origin",
+            "description": "Το name του πεδίου, π.χ. του ACF"
+        },
+        {
+            "name": "product_field_label",
+            "label": "Ετικέτα",
+            "default": "Προέλευση:",
+            "description": "Χωρίς απόστροφο ('). Κενό = χωρίς ετικέτα"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-display-advanced-custom-fields-single-product/"
+    ],
+    "updated": "2026-11-18T17:08:47+00:00"
+}

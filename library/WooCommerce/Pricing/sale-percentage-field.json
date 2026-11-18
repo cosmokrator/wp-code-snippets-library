@@ -1,0 +1,29 @@
+{
+    "title": "Set the sale price as a percentage in the product editor",
+    "description": "Στις τιμές του προϊόντος (καρτέλα «Γενικά») προσθέτει λίστα «Έκπτωση %» (π.χ. 10%, 20%, 30%). Με την αποθήκευση, η τιμή προσφοράς υπολογίζεται αυτόματα από την κανονική τιμή, χωρίς να κάνετε πράξεις. Αποθηκεύεται ως κανονική τιμή προσφοράς, άρα δουλεύει παντού (φίλτρα, feeds, αναφορές). Για απλά και εξωτερικά προϊόντα.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_product_options_pricing', 'perfectpixel_sale_percentage_field' );\nadd_action( 'woocommerce_admin_process_product_object', 'perfectpixel_sale_percentage_save', 20 );\n\nfunction perfectpixel_sale_percentage_field() {\n\t$options = array( '' => '—' );\n\tforeach ( wp_parse_id_list( '{{sale_percent_options}}' ) as $percent ) {\n\t\tif ( $percent > 0 && $percent < 100 ) {\n\t\t\t$options[ $percent ] = $percent . '%';\n\t\t}\n\t}\n\twoocommerce_wp_select(\n\t\tarray(\n\t\t\t'id'          => '_perfectpixel_sale_percent',\n\t\t\t'label'       => 'Έκπτωση %',\n\t\t\t'options'     => $options,\n\t\t\t'desc_tip'    => true,\n\t\t\t'description' => 'Η τιμή προσφοράς υπολογίζεται από την κανονική τιμή με την αποθήκευση. Επιλέξτε — για χειροκίνητη τιμή προσφοράς.',\n\t\t)\n\t);\n}\n\nfunction perfectpixel_sale_percentage_save( $product ) {\n\tif ( ! isset( $_POST['_perfectpixel_sale_percent'] ) || ! $product->is_type( array( 'simple', 'external' ) ) ) {\n\t\treturn;\n\t}\n\t$percent = absint( $_POST['_perfectpixel_sale_percent'] );\n\t$product->update_meta_data( '_perfectpixel_sale_percent', $percent ? $percent : '' );\n\t$regular = (float) $product->get_regular_price( 'edit' );\n\tif ( $percent > 0 && $percent < 100 && $regular > 0 ) {\n\t\t$product->set_sale_price( wc_format_decimal( $regular * ( 1 - $percent / 100 ), wc_get_price_decimals() ) );\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "prices",
+        "sale",
+        "admin"
+    ],
+    "variables": [
+        {
+            "name": "sale_percent_options",
+            "label": "Διαθέσιμα ποσοστά (με κόμμα)",
+            "default": "5,10,15,20,25,30,40,50",
+            "description": "Μόνο αριθμοί, με κόμμα"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-set-product-discount-percentage/"
+    ],
+    "updated": "2026-11-18T17:08:47+00:00"
+}

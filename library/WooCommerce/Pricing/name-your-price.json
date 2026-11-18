@@ -1,0 +1,47 @@
+{
+    "title": "Let customers enter their own price (donations)",
+    "description": "Σε επιλεγμένα προϊόντα (π.χ. «Δωρεά» ή «Πληρωμή λογαριασμού») εμφανίζεται πεδίο όπου ο πελάτης γράφει το ποσό που θέλει να πληρώσει, με ελάχιστο ποσό. Αυτό το ποσό γίνεται η τιμή του προϊόντος στο καλάθι και στην παραγγελία. Δημιουργήστε απλό, εικονικό προϊόν με τιμή 0 και ορίστε το ID του.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_before_add_to_cart_button', 'perfectpixel_nyp_field' );\nadd_filter( 'woocommerce_add_to_cart_validation', 'perfectpixel_nyp_validate', 10, 2 );\nadd_filter( 'woocommerce_add_cart_item_data', 'perfectpixel_nyp_cart_data', 10, 2 );\nadd_action( 'woocommerce_before_calculate_totals', 'perfectpixel_nyp_set_price', 20 );\n\nfunction perfectpixel_nyp_applies( $product_id ) {\n\treturn in_array( (int) $product_id, wp_parse_id_list( '{{nyp_product_ids}}' ), true );\n}\n\nfunction perfectpixel_nyp_posted_amount() {\n\treturn isset( $_POST['perfectpixel_nyp'] ) ? (float) wc_format_decimal( wp_unslash( $_POST['perfectpixel_nyp'] ) ) : 0.0;\n}\n\nfunction perfectpixel_nyp_field() {\n\tglobal $product;\n\tif ( ! $product || ! perfectpixel_nyp_applies( $product->get_id() ) ) {\n\t\treturn;\n\t}\n\t$min = (float) '{{nyp_min_amount}}';\n\tprintf(\n\t\t'<p class=\"perfectpixel-nyp\" style=\"width:100%%\"><label for=\"perfectpixel_nyp\">%1$s (%2$s)</label><br><input type=\"number\" id=\"perfectpixel_nyp\" name=\"perfectpixel_nyp\" min=\"%3$s\" step=\"0.01\" value=\"%3$s\" required style=\"max-width:10em\"></p>',\n\t\tesc_html( '{{nyp_label}}' ),\n\t\tesc_html( get_woocommerce_currency_symbol() ),\n\t\tesc_attr( $min )\n\t);\n}\n\nfunction perfectpixel_nyp_validate( $passed, $product_id ) {\n\tif ( perfectpixel_nyp_applies( $product_id ) ) {\n\t\t$min = (float) '{{nyp_min_amount}}';\n\t\tif ( perfectpixel_nyp_posted_amount() < max( 0.01, $min ) ) {\n\t\t\twc_add_notice( sprintf( '{{nyp_error}}', wp_strip_all_tags( wc_price( $min ) ) ), 'error' );\n\t\t\treturn false;\n\t\t}\n\t}\n\treturn $passed;\n}\n\nfunction perfectpixel_nyp_cart_data( $data, $product_id ) {\n\tif ( perfectpixel_nyp_applies( $product_id ) ) {\n\t\t$data['perfectpixel_nyp'] = perfectpixel_nyp_posted_amount(); // Different amounts = separate lines.\n\t}\n\treturn $data;\n}\n\nfunction perfectpixel_nyp_set_price( $cart ) {\n\tif ( is_admin() && ! wp_doing_ajax() ) {\n\t\treturn;\n\t}\n\t$min = max( 0.01, (float) '{{nyp_min_amount}}' );\n\tforeach ( $cart->get_cart() as $item ) {\n\t\tif ( isset( $item['perfectpixel_nyp'] ) ) {\n\t\t\t$item['data']->set_price( max( $min, (float) $item['perfectpixel_nyp'] ) );\n\t\t}\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "prices",
+        "donations",
+        "custom-price"
+    ],
+    "variables": [
+        {
+            "name": "nyp_product_ids",
+            "label": "IDs προϊόντων (με κόμμα)",
+            "default": "",
+            "description": "Υποχρεωτικό"
+        },
+        {
+            "name": "nyp_min_amount",
+            "label": "Ελάχιστο ποσό",
+            "default": "5",
+            "description": "Μόνο αριθμός"
+        },
+        {
+            "name": "nyp_label",
+            "label": "Ετικέτα πεδίου",
+            "default": "Ποσό",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "nyp_error",
+            "label": "Μήνυμα λάθους",
+            "default": "Το ελάχιστο ποσό είναι %s.",
+            "description": "Χωρίς απόστροφο ('). Το %s γίνεται το ελάχιστο ποσό"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-customers-define-product-price/"
+    ],
+    "updated": "2026-11-18T17:08:47+00:00"
+}

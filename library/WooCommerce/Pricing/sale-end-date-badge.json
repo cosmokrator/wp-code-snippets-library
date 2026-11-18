@@ -1,0 +1,36 @@
+{
+    "title": "Show the sale end date next to the sale badge",
+    "description": "Αν μια προσφορά έχει ημερομηνία λήξης, δίπλα στην ετικέτα «Προσφορά!» εμφανίζεται πότε λήγει, π.χ. «Προσφορά! έως 31 Μαΐου», σε λίστες και σελίδα προϊόντος. Προσθέτει αίσθηση επείγοντος χωρίς αντίστροφη μέτρηση.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_sale_flash', 'perfectpixel_sale_end_date_badge', 40, 3 );\n\nfunction perfectpixel_sale_end_date_badge( $html, $post, $product ) {\n\tif ( ! $html || ! $product ) {\n\t\treturn $html;\n\t}\n\t$end = $product->get_date_on_sale_to();\n\tif ( ! $end || $end->getTimestamp() < time() ) {\n\t\treturn $html;\n\t}\n\t$date = wp_date( '{{sale_end_format}}', $end->getTimestamp() );\n\treturn preg_replace( '/<\\/span>\\s*$/', ' <small class=\"perfectpixel-sale-end\">' . esc_html( '{{sale_end_prefix}} ' . $date ) . '</small></span>', $html, 1 );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "prices",
+        "sale",
+        "badges",
+        "urgency"
+    ],
+    "variables": [
+        {
+            "name": "sale_end_prefix",
+            "label": "Κείμενο πριν την ημερομηνία",
+            "default": "έως",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "sale_end_format",
+            "label": "Μορφή ημερομηνίας (PHP)",
+            "default": "j F",
+            "description": "Π.χ. j F = 31 Μαΐου, d/m = 31/05"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-display-product-sale-price-end-date/"
+    ],
+    "updated": "2026-11-18T17:08:47+00:00"
+}

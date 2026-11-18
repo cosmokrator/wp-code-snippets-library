@@ -1,0 +1,21 @@
+{
+    "title": "Hide the price of out-of-stock products",
+    "description": "Τα προϊόντα που έχουν εξαντληθεί δεν δείχνουν τιμή, στις λίστες και στη σελίδα προϊόντος. Π.χ. για μοναδικά κομμάτια (έργα τέχνης) που πουλήθηκαν, ή για να μη φαίνεται η τιμή στην οποία πουλήθηκε κάτι σε προσφορά.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_get_price_html', 'perfectpixel_hide_price_out_of_stock', 99, 2 );\n\nfunction perfectpixel_hide_price_out_of_stock( $html, $product ) {\n\tif ( is_admin() && ! wp_doing_ajax() ) {\n\t\treturn $html;\n\t}\n\treturn ( $product && ! $product->is_in_stock() ) ? '' : $html;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "prices",
+        "stock"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-hide-price-if-out-of-stock/"
+    ],
+    "updated": "2026-11-18T17:08:47+00:00"
+}

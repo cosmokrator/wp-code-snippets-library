@@ -1,0 +1,40 @@
+{
+    "title": "Show sale prices as \"Was – Now – Save\"",
+    "description": "Για απλά προϊόντα σε προσφορά, αντί για «30,00 € 20,00 €» η τιμή εμφανίζεται ως «Πριν: 30,00 € · Τώρα: 20,00 € · Κερδίζετε: 10,00 €», ώστε ο πελάτης να βλέπει καθαρά την έκπτωση. Ισχύει σε λίστες και σελίδα προϊόντος.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_get_price_html', 'perfectpixel_was_now_save_prices', 20, 2 );\n\nfunction perfectpixel_was_now_save_prices( $html, $product ) {\n\tif ( ! $product || ! $product->is_type( 'simple' ) || ! $product->is_on_sale() ) {\n\t\treturn $html;\n\t}\n\t$regular = (float) wc_get_price_to_display( $product, array( 'price' => $product->get_regular_price() ) );\n\t$sale    = (float) wc_get_price_to_display( $product );\n\tif ( $regular <= $sale ) {\n\t\treturn $html;\n\t}\n\treturn sprintf(\n\t\t'<span class=\"perfectpixel-was\">%1$s <del>%2$s</del></span> <span class=\"perfectpixel-now\">%3$s <ins>%4$s</ins></span> <span class=\"perfectpixel-save\" style=\"color:#d63638\">%5$s %6$s</span>%7$s',\n\t\tesc_html( '{{was_label}}' ),\n\t\twc_price( $regular ),\n\t\tesc_html( '{{now_label}}' ),\n\t\twc_price( $sale ),\n\t\tesc_html( '{{save_label}}' ),\n\t\twc_price( $regular - $sale ),\n\t\t$product->get_price_suffix()\n\t);\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "prices",
+        "sale"
+    ],
+    "variables": [
+        {
+            "name": "was_label",
+            "label": "Ετικέτα «πριν»",
+            "default": "Πριν:",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "now_label",
+            "label": "Ετικέτα «τώρα»",
+            "default": "Τώρα:",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "save_label",
+            "label": "Ετικέτα «κερδίζετε»",
+            "default": "Κερδίζετε:",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-display-prices-now-save/"
+    ],
+    "updated": "2026-11-18T17:08:47+00:00"
+}

@@ -1,0 +1,30 @@
+{
+    "title": "Automatic \"Last chance\" category with expiring sales",
+    "description": "Μια κατηγορία προϊόντων (π.χ. «Τελευταία ευκαιρία») γεμίζει αυτόματα με τα προϊόντα σε προσφορά που έχουν ημερομηνία λήξης έκπτωσης, ταξινομημένα από αυτό που λήγει πρώτο. Δημιουργήστε μια κενή κατηγορία, βάλτε την στο μενού και ορίστε το ID της. Ισχύει για απλά προϊόντα (στα μεταβλητά η λήξη ορίζεται ανά παραλλαγή).",
+    "type": "php",
+    "code": "add_action( 'woocommerce_product_query', 'perfectpixel_last_chance_category' );\n\nfunction perfectpixel_last_chance_category( $q ) {\n\t$category = (int) '{{last_chance_category_id}}';\n\tif ( ! $category || ! is_product_category() || get_queried_object_id() !== $category ) {\n\t\treturn;\n\t}\n\t$ids = wc_get_product_ids_on_sale();\n\t$q->set( 'product_cat', '' );\n\t$q->set( 'tax_query', array() );\n\t$q->set( 'post__in', $ids ? array_values( array_unique( array_map( 'intval', $ids ) ) ) : array( 0 ) );\n\t$q->set(\n\t\t'meta_query',\n\t\tarray(\n\t\t\t'pp_sale_end' => array(\n\t\t\t\t'key'     => '_sale_price_dates_to',\n\t\t\t\t'value'   => time(),\n\t\t\t\t'compare' => '>',\n\t\t\t\t'type'    => 'NUMERIC',\n\t\t\t),\n\t\t)\n\t);\n\t$q->set( 'orderby', array( 'pp_sale_end' => 'ASC' ) );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "categories",
+        "sale",
+        "urgency",
+        "query"
+    ],
+    "variables": [
+        {
+            "name": "last_chance_category_id",
+            "label": "ID κατηγορίας «Τελευταία ευκαιρία»",
+            "default": "0",
+            "description": "Μόνο αριθμός"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-last-chance-category-with-expiring-sale-products/"
+    ],
+    "updated": "2026-11-18T17:08:47+00:00"
+}

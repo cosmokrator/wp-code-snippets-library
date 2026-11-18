@@ -1,0 +1,22 @@
+{
+    "title": "Filter the admin products list by sale status",
+    "description": "Στη λίστα Προϊόντα του διαχειριστή προσθέτει φίλτρο «Σε προσφορά / Χωρίς προσφορά», ώστε να βρίσκετε γρήγορα ποια προϊόντα έχουν ενεργή έκπτωση (π.χ. για να τη λήξετε μετά από μια καμπάνια).",
+    "type": "php",
+    "code": "add_action( 'restrict_manage_posts', 'perfectpixel_admin_sale_filter_select', 20 );\nadd_filter( 'request', 'perfectpixel_admin_sale_filter_query' );\n\nfunction perfectpixel_admin_sale_filter_select( $post_type ) {\n\tif ( 'product' !== $post_type ) {\n\t\treturn;\n\t}\n\t$current = isset( $_GET['perfectpixel_sale'] ) ? sanitize_key( $_GET['perfectpixel_sale'] ) : '';\n\techo '<select name=\"perfectpixel_sale\">';\n\tforeach ( array( '' => 'Όλες οι τιμές', 'yes' => 'Σε προσφορά', 'no' => 'Χωρίς προσφορά' ) as $value => $label ) {\n\t\tprintf( '<option value=\"%s\"%s>%s</option>', esc_attr( $value ), selected( $current, $value, false ), esc_html( $label ) );\n\t}\n\techo '</select>';\n}\n\nfunction perfectpixel_admin_sale_filter_query( $vars ) {\n\tglobal $typenow;\n\tif ( ! is_admin() || 'product' !== $typenow || empty( $_GET['perfectpixel_sale'] ) ) {\n\t\treturn $vars;\n\t}\n\t$ids = array_map( 'intval', wc_get_product_ids_on_sale() );\n\tif ( 'yes' === $_GET['perfectpixel_sale'] ) {\n\t\t$vars['post__in'] = $ids ? $ids : array( 0 );\n\t} elseif ( 'no' === $_GET['perfectpixel_sale'] && $ids ) {\n\t\t$vars['post__not_in'] = $ids;\n\t}\n\treturn $vars;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "admin",
+        "sale",
+        "filters"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-filter-products-by-sale-status-wp-dashboard/"
+    ],
+    "updated": "2026-11-18T17:08:47+00:00"
+}

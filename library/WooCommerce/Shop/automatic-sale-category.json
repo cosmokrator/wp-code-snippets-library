@@ -1,0 +1,29 @@
+{
+    "title": "Automatic \"Sale\" category with all discounted products",
+    "description": "Μια κατηγορία προϊόντων (π.χ. «Προσφορές») γεμίζει αυτόματα με όλα τα προϊόντα που είναι σε έκπτωση, χωρίς να την αντιστοιχίζετε σε κάθε προϊόν. Δημιουργήστε μια κενή κατηγορία, βάλτε την στο μενού και ορίστε το ID της στη μεταβλητή. Όταν λήξει μια προσφορά, το προϊόν φεύγει αυτόματα.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_product_query', 'perfectpixel_automatic_sale_category' );\nadd_filter( 'woocommerce_product_subcategories_hide_empty', 'perfectpixel_automatic_sale_category_visible' );\n\nfunction perfectpixel_automatic_sale_category( $q ) {\n\t$category = (int) '{{sale_category_id}}';\n\tif ( ! $category || ! is_product_category() || get_queried_object_id() !== $category ) {\n\t\treturn;\n\t}\n\t$ids = wc_get_product_ids_on_sale();\n\t// Drop the (empty) category filter and list the products on sale instead.\n\t$q->set( 'product_cat', '' );\n\t$q->set( 'tax_query', array() );\n\t$q->set( 'post__in', $ids ? array_values( array_unique( array_map( 'intval', $ids ) ) ) : array( 0 ) );\n}\n\nfunction perfectpixel_automatic_sale_category_visible( $hide_empty ) {\n\treturn (int) '{{sale_category_id}}' ? false : $hide_empty;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "categories",
+        "sale",
+        "query"
+    ],
+    "variables": [
+        {
+            "name": "sale_category_id",
+            "label": "ID κατηγορίας «Προσφορές»",
+            "default": "0",
+            "description": "Μόνο αριθμός"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-sale-category-automatic/"
+    ],
+    "updated": "2026-11-18T17:08:47+00:00"
+}
