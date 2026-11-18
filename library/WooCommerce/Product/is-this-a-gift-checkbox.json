@@ -1,0 +1,42 @@
+{
+    "title": "Add an \"Is this a gift?\" checkbox to products",
+    "description": "Πάνω από το κουμπί αγοράς εμφανίζεται κουτάκι «Είναι δώρο;». Στο καλάθι και στην παραγγελία το προϊόν σημειώνεται ως δώρο. Αν το καλάθι έχει δώρο, στο κλασικό checkout ανοίγει αυτόματα η «Αποστολή σε διαφορετική διεύθυνση» και μετονομάζεται σε «Σε ποιον στέλνετε το δώρο;».",
+    "type": "php",
+    "code": "add_action( 'woocommerce_before_add_to_cart_quantity', 'perfectpixel_gift_checkbox' );\nadd_filter( 'woocommerce_add_cart_item_data', 'perfectpixel_gift_cart_data' );\nadd_filter( 'woocommerce_get_item_data', 'perfectpixel_gift_item_data', 10, 2 );\nadd_action( 'woocommerce_checkout_create_order_line_item', 'perfectpixel_gift_order_meta', 10, 3 );\nadd_filter( 'woocommerce_ship_to_different_address_checked', 'perfectpixel_gift_ship_checked' );\nadd_filter( 'gettext_woocommerce', 'perfectpixel_gift_ship_heading', 10, 2 );\n\nfunction perfectpixel_gift_checkbox() {\n\techo '<p class=\"perfectpixel-gift\" style=\"width:100%\"><label><input type=\"checkbox\" name=\"perfectpixel_gift\" value=\"1\"> ' . esc_html( '{{gift_checkbox_label}}' ) . '</label></p>';\n}\n\nfunction perfectpixel_gift_cart_data( $data ) {\n\tif ( ! empty( $_POST['perfectpixel_gift'] ) ) {\n\t\t$data['perfectpixel_gift'] = 1; // Gift and non-gift become separate cart lines.\n\t}\n\treturn $data;\n}\n\nfunction perfectpixel_gift_item_data( $item_data, $cart_item ) {\n\tif ( ! empty( $cart_item['perfectpixel_gift'] ) ) {\n\t\t$item_data[] = array( 'key' => '{{gift_item_label}}', 'value' => '✓' );\n\t}\n\treturn $item_data;\n}\n\nfunction perfectpixel_gift_order_meta( $item, $cart_item_key, $values ) {\n\tif ( ! empty( $values['perfectpixel_gift'] ) ) {\n\t\t$item->add_meta_data( '{{gift_item_label}}', '✓', true );\n\t}\n}\n\nfunction perfectpixel_gift_cart_has_gift() {\n\tif ( ! function_exists( 'WC' ) || ! WC()->cart ) {\n\t\treturn false;\n\t}\n\tforeach ( WC()->cart->get_cart() as $item ) {\n\t\tif ( ! empty( $item['perfectpixel_gift'] ) ) {\n\t\t\treturn true;\n\t\t}\n\t}\n\treturn false;\n}\n\nfunction perfectpixel_gift_ship_checked( $checked ) {\n\treturn perfectpixel_gift_cart_has_gift() ? true : $checked;\n}\n\nfunction perfectpixel_gift_ship_heading( $translation, $text ) {\n\tif ( 'Ship to a different address?' === $text && is_checkout() && perfectpixel_gift_cart_has_gift() ) {\n\t\treturn '{{gift_ship_heading}}';\n\t}\n\treturn $translation;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "gifts",
+        "checkout",
+        "cart"
+    ],
+    "variables": [
+        {
+            "name": "gift_checkbox_label",
+            "label": "Κουτάκι",
+            "default": "Είναι δώρο;",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "gift_item_label",
+            "label": "Σημείωση στο καλάθι/παραγγελία",
+            "default": "Δώρο",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "gift_ship_heading",
+            "label": "Τίτλος διεύθυνσης αποστολής",
+            "default": "Σε ποιον στέλνετε το δώρο;",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-gift-checkbox-single-product-page/"
+    ],
+    "updated": "2026-11-18T15:22:54+00:00"
+}

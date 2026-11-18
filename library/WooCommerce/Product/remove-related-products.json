@@ -1,0 +1,21 @@
+{
+    "title": "Remove related products from the product page",
+    "description": "Αφαιρεί την ενότητα «Σχετικά προϊόντα» από όλες τις σελίδες προϊόντων, για πιο καθαρή σελίδα με εστίαση στο προϊόν. Για απόκρυψη μόνο σε επιλεγμένα προϊόντα δείτε το snippet «Checkbox to hide related products per product». Ισχύει για το κλασικό template σελίδας προϊόντος· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'init', 'perfectpixel_remove_related_products' );\n\nfunction perfectpixel_remove_related_products() {\n\tremove_action( 'woocommerce_after_single_product_summary', 'woocommerce_output_related_products', 20 );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "related-products"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/remove-woocommerce-related-products/"
+    ],
+    "updated": "2026-11-18T15:22:54+00:00"
+}

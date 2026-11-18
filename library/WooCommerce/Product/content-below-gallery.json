@@ -1,0 +1,30 @@
+{
+    "title": "Add content below the product gallery",
+    "description": "Εμφανίζει δικό σας περιεχόμενο κάτω από τις εικόνες της σελίδας προϊόντος (π.χ. εικονίδια εγγύησης, πληρωμών ή σύντομα πλεονεκτήματα). Επιτρέπεται απλό HTML. Ακολουθεί το πλάτος της γκαλερί των περισσότερων themes (48%)· σε κινητά πιάνει όλο το πλάτος. Αν το theme σας έχει άλλη διάταξη, προσαρμόστε το CSS. Ισχύει για το κλασικό template σελίδας προϊόντος· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_before_single_product_summary', 'perfectpixel_content_below_gallery', 25 );\n\nfunction perfectpixel_content_below_gallery() {\n\techo '<style>.perfectpixel-below-gallery{float:left;clear:left;width:48%;margin:0 0 2em}@media(max-width:768px){.perfectpixel-below-gallery{float:none;width:100%}}</style>';\n\techo '<div class=\"perfectpixel-below-gallery\">' . wp_kses_post( '{{below_gallery_content}}' ) . '</div>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "gallery",
+        "content",
+        "layout"
+    ],
+    "variables": [
+        {
+            "name": "below_gallery_content",
+            "label": "Περιεχόμενο",
+            "default": "<p>✓ Εγγύηση 2 ετών · ✓ Ασφαλείς πληρωμές · ✓ Επιστροφές σε 14 ημέρες</p>",
+            "description": "Χωρίς απόστροφο ('). Επιτρέπεται απλό HTML"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-content-below-the-single-product-page-images/"
+    ],
+    "updated": "2026-11-18T15:22:54+00:00"
+}

@@ -1,0 +1,29 @@
+{
+    "title": "Show a default short description when empty",
+    "description": "Αν ένα προϊόν δεν έχει σύντομη περιγραφή, στη θέση της εμφανίζεται ένα κοινό κείμενο που ορίζετε (π.χ. πληροφορίες αποστολής ή εγγύησης). Τα προϊόντα με δική τους σύντομη περιγραφή δεν επηρεάζονται. Επιτρέπεται απλό HTML.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_short_description', 'perfectpixel_default_short_description', 5 );\n\nfunction perfectpixel_default_short_description( $excerpt ) {\n\tif ( '' !== trim( wp_strip_all_tags( (string) $excerpt ) ) || ! is_product() ) {\n\t\treturn $excerpt;\n\t}\n\treturn wp_kses_post( '{{default_short_description}}' );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "description",
+        "content"
+    ],
+    "variables": [
+        {
+            "name": "default_short_description",
+            "label": "Κείμενο",
+            "default": "<p>Αποστολή σε 1-3 εργάσιμες · Δωρεάν επιστροφή σε 14 ημέρες.</p>",
+            "description": "Χωρίς απόστροφο ('). Επιτρέπεται απλό HTML"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-show-custom-short-description-when-empty/"
+    ],
+    "updated": "2026-11-18T15:22:54+00:00"
+}

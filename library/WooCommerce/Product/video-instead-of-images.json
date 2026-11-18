@@ -1,0 +1,30 @@
+{
+    "title": "Show a video instead of the product images",
+    "description": "Σε επιλεγμένα προϊόντα, στη θέση της εικόνας και της γκαλερί εμφανίζεται βίντεο (YouTube, Vimeo ή άλλη υπηρεσία που υποστηρίζει το WordPress). Στη μεταβλητή γράψτε ζεύγη ID προϊόντος=URL βίντεο χωρισμένα με |. Τα υπόλοιπα προϊόντα κρατούν τις εικόνες τους. Ισχύει για το κλασικό template σελίδας προϊόντος· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_before_single_product', 'perfectpixel_product_video_setup' );\n\nfunction perfectpixel_product_video_url( $product_id ) {\n\tforeach ( explode( '|', '{{product_videos}}' ) as $pair ) {\n\t\t$parts = array_map( 'trim', explode( '=', $pair, 2 ) );\n\t\tif ( 2 === count( $parts ) && (int) $parts[0] === (int) $product_id ) {\n\t\t\treturn esc_url_raw( $parts[1] );\n\t\t}\n\t}\n\treturn '';\n}\n\nfunction perfectpixel_product_video_setup() {\n\tglobal $product;\n\tif ( $product && perfectpixel_product_video_url( $product->get_id() ) ) {\n\t\tremove_action( 'woocommerce_before_single_product_summary', 'woocommerce_show_product_images', 20 );\n\t\tadd_action( 'woocommerce_before_single_product_summary', 'perfectpixel_product_video_output', 20 );\n\t}\n}\n\nfunction perfectpixel_product_video_output() {\n\tglobal $product;\n\t$embed = wp_oembed_get( perfectpixel_product_video_url( $product->get_id() ) );\n\tif ( $embed ) {\n\t\techo '<div class=\"woocommerce-product-gallery images perfectpixel-product-video\" style=\"opacity:1\"><div style=\"position:relative;padding-top:56.25%\">';\n\t\techo str_replace( '<iframe ', '<iframe style=\"position:absolute;inset:0;width:100%;height:100%\" ', $embed ); // oEmbed HTML from WordPress' trusted providers.\n\t\techo '</div></div>';\n\t} else {\n\t\twoocommerce_show_product_images(); // Fall back to the images if the URL cannot be embedded.\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "video",
+        "gallery",
+        "media"
+    ],
+    "variables": [
+        {
+            "name": "product_videos",
+            "label": "ID=URL βίντεο (με |)",
+            "default": "",
+            "description": "Π.χ. 123=https://www.youtube.com/watch?v=xxxx|456=https://vimeo.com/1234"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-show-video-instead-featured-image/"
+    ],
+    "updated": "2026-11-18T15:22:54+00:00"
+}

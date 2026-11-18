@@ -1,0 +1,21 @@
+{
+    "title": "Disable Jetpack Social auto-sharing for products",
+    "description": "Αν χρησιμοποιείτε το Jetpack Social (πρώην Publicize) για αυτόματη κοινοποίηση στα social, τα νέα προϊόντα του WooCommerce δεν κοινοποιούνται πια αυτόματα· τα άρθρα συνεχίζουν κανονικά.",
+    "type": "php",
+    "code": "add_action( 'init', 'perfectpixel_disable_jetpack_social_products', 99 );\n\nfunction perfectpixel_disable_jetpack_social_products() {\n\tremove_post_type_support( 'product', 'publicize' );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "jetpack",
+        "social"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-disable-jetpack-publicize-products/"
+    ],
+    "updated": "2026-11-18T15:22:54+00:00"
+}

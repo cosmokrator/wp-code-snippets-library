@@ -1,0 +1,42 @@
+{
+    "title": "Add an \"Order a free sample\" button to products",
+    "description": "Κάτω από το κουμπί αγοράς εμφανίζει κουμπί «Παραγγείλτε δωρεάν δείγμα». Προσθέτει στο καλάθι ένα κοινό προϊόν «Δείγμα» με τιμή 0 και σημειώνει από ποιο προϊόν είναι, π.χ. «Δείγμα – Πλακάκι Marble». Δημιουργήστε πρώτα ένα απλό προϊόν «Δείγμα» με τιμή 0 και ορατότητα «Κρυφό» και βάλτε το ID του στη μεταβλητή. Ισχύει για το κλασικό template σελίδας προϊόντος· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_after_add_to_cart_form', 'perfectpixel_free_sample_button' );\nadd_filter( 'woocommerce_add_cart_item_data', 'perfectpixel_free_sample_cart_data', 10, 2 );\nadd_filter( 'woocommerce_get_item_data', 'perfectpixel_free_sample_item_data', 10, 2 );\nadd_action( 'woocommerce_checkout_create_order_line_item', 'perfectpixel_free_sample_order_meta', 10, 3 );\n\nfunction perfectpixel_free_sample_button() {\n\tglobal $product;\n\t$sample_id = (int) '{{free_sample_product_id}}';\n\tif ( ! $sample_id || ! $product || $product->get_id() === $sample_id ) {\n\t\treturn;\n\t}\n\tprintf(\n\t\t'<form method=\"post\" action=\"%1$s\" class=\"perfectpixel-free-sample\" style=\"margin-bottom:1.5em\"><input type=\"hidden\" name=\"add-to-cart\" value=\"%2$d\"><input type=\"hidden\" name=\"perfectpixel_sample_of\" value=\"%3$d\"><button type=\"submit\" class=\"button\">%4$s</button></form>',\n\t\tesc_url( $product->get_permalink() ),\n\t\t$sample_id,\n\t\t(int) $product->get_id(),\n\t\tesc_html( '{{free_sample_button}}' )\n\t);\n}\n\nfunction perfectpixel_free_sample_cart_data( $data, $product_id ) {\n\tif ( (int) $product_id === (int) '{{free_sample_product_id}}' && ! empty( $_POST['perfectpixel_sample_of'] ) ) {\n\t\t$source = wc_get_product( absint( $_POST['perfectpixel_sample_of'] ) );\n\t\tif ( $source ) {\n\t\t\t// One line per source product; adding the same sample again only bumps its quantity.\n\t\t\t$data['perfectpixel_sample_of'] = $source->get_id();\n\t\t}\n\t}\n\treturn $data;\n}\n\nfunction perfectpixel_free_sample_item_data( $item_data, $cart_item ) {\n\tif ( ! empty( $cart_item['perfectpixel_sample_of'] ) ) {\n\t\t$item_data[] = array( 'key' => '{{free_sample_meta_label}}', 'value' => get_the_title( $cart_item['perfectpixel_sample_of'] ) );\n\t}\n\treturn $item_data;\n}\n\nfunction perfectpixel_free_sample_order_meta( $item, $cart_item_key, $values ) {\n\tif ( ! empty( $values['perfectpixel_sample_of'] ) ) {\n\t\t$item->add_meta_data( '{{free_sample_meta_label}}', get_the_title( $values['perfectpixel_sample_of'] ), true );\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "samples",
+        "cart",
+        "add-to-cart"
+    ],
+    "variables": [
+        {
+            "name": "free_sample_product_id",
+            "label": "ID προϊόντος «Δείγμα»",
+            "default": "0",
+            "description": "Μόνο αριθμός"
+        },
+        {
+            "name": "free_sample_button",
+            "label": "Κείμενο κουμπιού",
+            "default": "Παραγγείλτε δωρεάν δείγμα",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "free_sample_meta_label",
+            "label": "Ετικέτα «δείγμα από»",
+            "default": "Δείγμα από",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-order-free-sample-single-product-page/"
+    ],
+    "updated": "2026-11-18T15:22:54+00:00"
+}

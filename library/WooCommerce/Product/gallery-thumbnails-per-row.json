@@ -1,0 +1,29 @@
+{
+    "title": "Change the number of gallery thumbnails per row",
+    "description": "Αλλάζει πόσες μικρογραφίες εμφανίζονται ανά σειρά κάτω από την κύρια εικόνα της σελίδας προϊόντος (προεπιλογή του WooCommerce: 4). Ορίστε τον αριθμό στη μεταβλητή. Αν το theme σας ορίζει δικό του πλάτος μικρογραφιών, ίσως χρειαστεί επιπλέον CSS.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_single_product_image_gallery_classes', 'perfectpixel_gallery_columns_class' );\nadd_filter( 'woocommerce_product_thumbnails_columns', 'perfectpixel_gallery_columns_number' );\nadd_action( 'wp_head', 'perfectpixel_gallery_columns_css' );\n\nfunction perfectpixel_gallery_columns_number() {\n\treturn max( 1, (int) '{{gallery_thumbnail_columns}}' );\n}\n\nfunction perfectpixel_gallery_columns_class( $classes ) {\n\t$classes = preg_grep( '/^woocommerce-product-gallery--columns-\\d+$/', $classes, PREG_GREP_INVERT );\n\t$classes[] = 'woocommerce-product-gallery--columns-' . perfectpixel_gallery_columns_number();\n\treturn $classes;\n}\n\nfunction perfectpixel_gallery_columns_css() {\n\tif ( ! function_exists( 'is_product' ) || ! is_product() ) {\n\t\treturn;\n\t}\n\t$n = perfectpixel_gallery_columns_number();\n\tprintf(\n\t\t'<style>.woocommerce div.product div.images .flex-control-thumbs li{width:calc(%1$s%% - .5em);margin:.5em .5em 0 0;clear:none!important}.woocommerce div.product div.images .flex-control-thumbs li:nth-child(%2$dn){margin-right:0}</style>',\n\t\tesc_html( round( 100 / $n, 4 ) ),\n\t\t$n\n\t);\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "gallery",
+        "images"
+    ],
+    "variables": [
+        {
+            "name": "gallery_thumbnail_columns",
+            "label": "Μικρογραφίες ανά σειρά",
+            "default": "5",
+            "description": "Μόνο αριθμός"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-change-no-thumbnails-per-row-product-gallery/"
+    ],
+    "updated": "2026-11-18T15:22:54+00:00"
+}

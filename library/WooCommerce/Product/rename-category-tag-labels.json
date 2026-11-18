@@ -1,0 +1,48 @@
+{
+    "title": "Rename the \"Category\" and \"Tags\" labels on the product page",
+    "description": "Αλλάζει τις ετικέτες «Κατηγορία:» / «Κατηγορίες:» και «Ετικέτα:» / «Ετικέτες:» κάτω από το κουμπί αγοράς, π.χ. «Ετικέτες» → «Μάρκα» αν χρησιμοποιείτε τις ετικέτες για μάρκες. Αλλάζει μόνο το κείμενο, όχι τα URLs. Αφήστε κενό όποιο δεν θέλετε να αλλάξει.",
+    "type": "php",
+    "code": "add_filter( 'ngettext_woocommerce', 'perfectpixel_rename_meta_labels', 10, 4 );\n\nfunction perfectpixel_rename_meta_labels( $translation, $single, $plural, $number ) {\n\t$map = array(\n\t\t'Category:' => array( '{{cat_label_single}}', '{{cat_label_plural}}' ),\n\t\t'Tag:'      => array( '{{tag_label_single}}', '{{tag_label_plural}}' ),\n\t);\n\tif ( isset( $map[ $single ] ) ) {\n\t\t$custom = 1 === (int) $number ? $map[ $single ][0] : $map[ $single ][1];\n\t\tif ( '' !== trim( $custom ) ) {\n\t\t\treturn $custom;\n\t\t}\n\t}\n\treturn $translation;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "labels",
+        "product-meta",
+        "translation"
+    ],
+    "variables": [
+        {
+            "name": "cat_label_single",
+            "label": "Κατηγορία (ενικός)",
+            "default": "",
+            "description": "Χωρίς απόστροφο ('). Κενό = χωρίς αλλαγή"
+        },
+        {
+            "name": "cat_label_plural",
+            "label": "Κατηγορίες (πληθυντικός)",
+            "default": "",
+            "description": "Χωρίς απόστροφο ('). Κενό = χωρίς αλλαγή"
+        },
+        {
+            "name": "tag_label_single",
+            "label": "Ετικέτα (ενικός)",
+            "default": "Μάρκα:",
+            "description": "Χωρίς απόστροφο ('). Κενό = χωρίς αλλαγή"
+        },
+        {
+            "name": "tag_label_plural",
+            "label": "Ετικέτες (πληθυντικός)",
+            "default": "Μάρκες:",
+            "description": "Χωρίς απόστροφο ('). Κενό = χωρίς αλλαγή"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-rename-tag-taxonomy/"
+    ],
+    "updated": "2026-11-18T15:22:54+00:00"
+}

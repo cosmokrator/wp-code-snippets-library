@@ -1,0 +1,35 @@
+{
+    "title": "Show a custom badge on selected products",
+    "description": "Προσθέτει στη σελίδα επεξεργασίας προϊόντος (καρτέλα «Γενικά») το κουτάκι «Εμφάνιση ετικέτας» και ένα πεδίο κειμένου. Στα προϊόντα που το έχουν τσεκαρισμένο, εμφανίζεται ετικέτα πάνω από τον τίτλο στη σελίδα προϊόντος (π.χ. «Νέο», «Χειροποίητο»). Αν το πεδίο μείνει κενό, μπαίνει το προεπιλεγμένο κείμενο. Ισχύει για το κλασικό template σελίδας προϊόντος· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_product_options_general_product_data', 'perfectpixel_custom_badge_fields' );\nadd_action( 'woocommerce_admin_process_product_object', 'perfectpixel_custom_badge_save' );\nadd_action( 'woocommerce_single_product_summary', 'perfectpixel_custom_badge_output', 3 );\n\nfunction perfectpixel_custom_badge_fields() {\n\techo '<div class=\"options_group\">';\n\twoocommerce_wp_checkbox( array( 'id' => '_perfectpixel_badge', 'label' => 'Εμφάνιση ετικέτας' ) );\n\twoocommerce_wp_text_input( array( 'id' => '_perfectpixel_badge_text', 'label' => 'Κείμενο ετικέτας', 'placeholder' => '{{custom_badge_default}}' ) );\n\techo '</div>';\n}\n\nfunction perfectpixel_custom_badge_save( $product ) {\n\t$product->update_meta_data( '_perfectpixel_badge', isset( $_POST['_perfectpixel_badge'] ) ? 'yes' : 'no' );\n\t$text = isset( $_POST['_perfectpixel_badge_text'] ) ? sanitize_text_field( wp_unslash( $_POST['_perfectpixel_badge_text'] ) ) : '';\n\t$product->update_meta_data( '_perfectpixel_badge_text', $text );\n}\n\nfunction perfectpixel_custom_badge_output() {\n\tglobal $product;\n\tif ( ! $product || 'yes' !== $product->get_meta( '_perfectpixel_badge' ) ) {\n\t\treturn;\n\t}\n\t$text  = $product->get_meta( '_perfectpixel_badge_text' );\n\t$color = sanitize_hex_color( '{{custom_badge_color}}' );\n\tprintf(\n\t\t'<span class=\"perfectpixel-badge\" style=\"display:inline-block;margin-bottom:.5em;padding:.2em .7em;border-radius:3px;color:#fff;font-size:.85em;background:%s\">%s</span>',\n\t\tesc_attr( $color ? $color : '#2271b1' ),\n\t\tesc_html( $text ? $text : '{{custom_badge_default}}' )\n\t);\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "badges",
+        "admin"
+    ],
+    "variables": [
+        {
+            "name": "custom_badge_default",
+            "label": "Προεπιλεγμένο κείμενο ετικέτας",
+            "default": "Νέο",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "custom_badge_color",
+            "label": "Χρώμα φόντου",
+            "default": "#2271b1",
+            "description": "Χρώμα CSS, π.χ. #2271b1"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-display-custom-product-badge/"
+    ],
+    "updated": "2026-11-18T15:22:54+00:00"
+}

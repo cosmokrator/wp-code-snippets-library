@@ -1,0 +1,42 @@
+{
+    "title": "Disable zoom, lightbox and slider in the product gallery",
+    "description": "Απενεργοποιεί τις λειτουργίες της γκαλερί στη σελίδα προϊόντος: μεγέθυνση στο hover (zoom), άνοιγμα σε lightbox και slider. Επιλέξτε ποιες με yes/no. Λιγότερα scripts σημαίνει και πιο γρήγορη σελίδα. Κάποια themes ενεργοποιούν τις λειτουργίες με δικό τους τρόπο, οπότε ελέγξτε το αποτέλεσμα.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_single_product_zoom_enabled', 'perfectpixel_gallery_zoom', 99 );\nadd_filter( 'woocommerce_single_product_photoswipe_enabled', 'perfectpixel_gallery_lightbox', 99 );\nadd_filter( 'woocommerce_single_product_flexslider_enabled', 'perfectpixel_gallery_slider', 99 );\n\nfunction perfectpixel_gallery_zoom( $enabled ) {\n\treturn 'yes' === '{{gallery_disable_zoom}}' ? false : $enabled;\n}\n\nfunction perfectpixel_gallery_lightbox( $enabled ) {\n\treturn 'yes' === '{{gallery_disable_lightbox}}' ? false : $enabled;\n}\n\nfunction perfectpixel_gallery_slider( $enabled ) {\n\treturn 'yes' === '{{gallery_disable_slider}}' ? false : $enabled;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "gallery",
+        "images",
+        "performance"
+    ],
+    "variables": [
+        {
+            "name": "gallery_disable_zoom",
+            "label": "Χωρίς zoom (yes/no)",
+            "default": "yes",
+            "description": "yes ή no"
+        },
+        {
+            "name": "gallery_disable_lightbox",
+            "label": "Χωρίς lightbox (yes/no)",
+            "default": "yes",
+            "description": "yes ή no"
+        },
+        {
+            "name": "gallery_disable_slider",
+            "label": "Χωρίς slider (yes/no)",
+            "default": "no",
+            "description": "yes ή no"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-disable-zoom-gallery-slider-lightbox-single-product/"
+    ],
+    "updated": "2026-11-18T15:22:54+00:00"
+}

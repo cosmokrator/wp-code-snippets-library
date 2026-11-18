@@ -1,0 +1,30 @@
+{
+    "title": "Add a custom text field to each variation",
+    "description": "Προσθέτει ένα πεδίο κειμένου σε κάθε παραλλαγή στη σελίδα επεξεργασίας προϊόντος (π.χ. «Χρόνος παράδοσης» ή «Υλικό»). Όταν ο πελάτης επιλέξει την παραλλαγή, η τιμή εμφανίζεται μαζί με την περιγραφή της παραλλαγής, χωρίς αλλαγή σε templates. Ορίστε την ετικέτα στη μεταβλητή.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_variation_options_pricing', 'perfectpixel_variation_field_input', 10, 3 );\nadd_action( 'woocommerce_save_product_variation', 'perfectpixel_variation_field_save', 10, 2 );\nadd_filter( 'woocommerce_available_variation', 'perfectpixel_variation_field_display', 10, 3 );\n\nfunction perfectpixel_variation_field_input( $loop, $variation_data, $variation ) {\n\twoocommerce_wp_text_input(\n\t\tarray(\n\t\t\t'id'            => 'perfectpixel_variation_field[' . $loop . ']',\n\t\t\t'label'         => '{{variation_field_label}}',\n\t\t\t'value'         => get_post_meta( $variation->ID, '_perfectpixel_variation_field', true ),\n\t\t\t'wrapper_class' => 'form-row form-row-full',\n\t\t)\n\t);\n}\n\nfunction perfectpixel_variation_field_save( $variation_id, $loop ) {\n\tif ( isset( $_POST['perfectpixel_variation_field'][ $loop ] ) ) {\n\t\tupdate_post_meta( $variation_id, '_perfectpixel_variation_field', sanitize_text_field( wp_unslash( $_POST['perfectpixel_variation_field'][ $loop ] ) ) );\n\t}\n}\n\n// Appended to the variation description, which WooCommerce already shows on selection.\nfunction perfectpixel_variation_field_display( $data, $product, $variation ) {\n\t$value = get_post_meta( $variation->get_id(), '_perfectpixel_variation_field', true );\n\tif ( '' !== (string) $value ) {\n\t\t$data['variation_description'] .= '<p class=\"perfectpixel-variation-field\"><strong>' . esc_html( '{{variation_field_label}}' ) . ':</strong> ' . esc_html( $value ) . '</p>';\n\t}\n\treturn $data;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "variations",
+        "custom-fields",
+        "admin"
+    ],
+    "variables": [
+        {
+            "name": "variation_field_label",
+            "label": "Ετικέτα πεδίου",
+            "default": "Χρόνος παράδοσης",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-custom-field-product-variation/"
+    ],
+    "updated": "2026-11-18T15:22:54+00:00"
+}

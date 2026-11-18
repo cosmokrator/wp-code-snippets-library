@@ -1,0 +1,22 @@
+{
+    "title": "Add the product categories as body classes",
+    "description": "Στη σελίδα προϊόντος προσθέτει στο <body> μια CSS κλάση για κάθε κατηγορία του προϊόντος (π.χ. product-cat-papoutsia), ώστε να εφαρμόζετε διαφορετικό CSS ανά κατηγορία. Μπαίνουν και οι γονικές κατηγορίες.",
+    "type": "php",
+    "code": "add_filter( 'body_class', 'perfectpixel_category_body_class' );\n\nfunction perfectpixel_category_body_class( $classes ) {\n\tif ( ! function_exists( 'is_product' ) || ! is_product() ) {\n\t\treturn $classes;\n\t}\n\t$ids = wp_get_post_terms( get_queried_object_id(), 'product_cat', array( 'fields' => 'ids' ) );\n\tforeach ( (array) $ids as $id ) {\n\t\tforeach ( array_merge( array( $id ), get_ancestors( $id, 'product_cat', 'taxonomy' ) ) as $term_id ) {\n\t\t\t$term = get_term( $term_id, 'product_cat' );\n\t\t\tif ( $term && ! is_wp_error( $term ) ) {\n\t\t\t\t$classes[] = 'product-cat-' . sanitize_html_class( $term->slug );\n\t\t\t}\n\t\t}\n\t}\n\treturn array_unique( $classes );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "css",
+        "categories"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-category-css-body-class/"
+    ],
+    "updated": "2026-11-18T15:22:54+00:00"
+}

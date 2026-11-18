@@ -1,0 +1,29 @@
+{
+    "title": "Add a \"Continue shopping\" button on the product page",
+    "description": "Κάτω από το κουμπί αγοράς εμφανίζει κουμπί «Συνέχεια αγορών» που επιστρέφει τον πελάτη στη σελίδα από την οποία ήρθε (π.χ. την κατηγορία ή την αναζήτηση), αν είναι μέσα στο site· αλλιώς οδηγεί στο κατάστημα. Δουλεύει και με page cache, γιατί η επιστροφή υπολογίζεται στον browser. Ισχύει για το κλασικό template σελίδας προϊόντος· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_after_add_to_cart_form', 'perfectpixel_product_continue_shopping', 5 );\n\nfunction perfectpixel_product_continue_shopping() {\n\tprintf( '<p><a class=\"button perfectpixel-continue-shopping\" href=\"%s\">%s</a></p>', esc_url( wc_get_page_permalink( 'shop' ) ), esc_html( '{{continue_shopping_label}}' ) );\n\t?>\n\t<script>\n\t( function () {\n\t\tvar ref = document.referrer;\n\t\tif ( ref && 0 === ref.indexOf( location.origin + '/' ) && ref.split( '#' )[0] !== location.href.split( '#' )[0] ) {\n\t\t\tdocument.querySelectorAll( '.perfectpixel-continue-shopping' ).forEach( function ( a ) { a.href = ref; } );\n\t\t}\n\t} )();\n\t</script>\n\t<?php\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "navigation",
+        "buttons"
+    ],
+    "variables": [
+        {
+            "name": "continue_shopping_label",
+            "label": "Κείμενο κουμπιού",
+            "default": "← Συνέχεια αγορών",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-continue-shopping-button-single-product-page/"
+    ],
+    "updated": "2026-11-18T15:22:54+00:00"
+}

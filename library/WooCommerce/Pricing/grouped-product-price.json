@@ -1,0 +1,34 @@
+{
+    "title": "Change or hide the price range of grouped products",
+    "description": "Στα ομαδοποιημένα (grouped) προϊόντα, αντί για εύρος τιμών «10,00 € – 99,00 €» εμφανίζει «Από 10,00 €», ή τίποτα αν επιλέξετε hide. Ισχύει σε κατάστημα και σελίδα προϊόντος· οι τιμές των επιμέρους προϊόντων δεν αλλάζουν.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_grouped_price_html', 'perfectpixel_grouped_price_html', 10, 3 );\n\nfunction perfectpixel_grouped_price_html( $html, $product, $child_prices ) {\n\tif ( 'hide' === '{{grouped_price_mode}}' ) {\n\t\treturn '';\n\t}\n\t$child_prices = array_filter( (array) $child_prices, 'is_numeric' );\n\tif ( count( array_unique( $child_prices ) ) < 2 ) {\n\t\treturn $html; // No range to replace.\n\t}\n\treturn esc_html( '{{grouped_price_prefix}}' ) . ' ' . wc_price( min( $child_prices ) ) . $product->get_price_suffix();\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "prices",
+        "grouped-products"
+    ],
+    "variables": [
+        {
+            "name": "grouped_price_mode",
+            "label": "Λειτουργία (from/hide)",
+            "default": "from",
+            "description": "from = «Από ελάχιστη τιμή», hide = απόκρυψη"
+        },
+        {
+            "name": "grouped_price_prefix",
+            "label": "Πρόθεμα",
+            "default": "Από",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/disable-grouped-product-price-range-woocommerce/"
+    ],
+    "updated": "2026-11-18T15:22:54+00:00"
+}

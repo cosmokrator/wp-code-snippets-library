@@ -1,0 +1,48 @@
+{
+    "title": "Add a product enquiry form to the product page",
+    "description": "Κάτω από το κουμπί αγοράς εμφανίζει κουμπί «Ρωτήστε για το προϊόν» που ανοίγει φόρμα επικοινωνίας (π.χ. Contact Form 7, WPForms ή οποιαδήποτε φόρμα με shortcode). Ένα πεδίο της φόρμας (π.χ. Θέμα) συμπληρώνεται αυτόματα με το όνομα του προϊόντος. Ορίστε το shortcode και το όνομα του πεδίου στις μεταβλητές. Ισχύει για το κλασικό template σελίδας προϊόντος· τα templates με blocks δεν χρησιμοποιούν αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_after_add_to_cart_form', 'perfectpixel_product_enquiry_form', 20 );\n\nfunction perfectpixel_product_enquiry_form() {\n\tglobal $product;\n\tif ( ! $product ) {\n\t\treturn;\n\t}\n\t$cfg = array(\n\t\t'field'   => '{{enquiry_subject_field}}',\n\t\t'subject' => '{{enquiry_subject_prefix}} ' . wp_strip_all_tags( $product->get_name() ) . ( $product->get_sku() ? ' (' . $product->get_sku() . ')' : '' ),\n\t);\n\techo '<div class=\"perfectpixel-enquiry\" style=\"margin-bottom:1.5em\">';\n\techo '<button type=\"button\" class=\"button perfectpixel-enquiry-toggle\" aria-expanded=\"false\">' . esc_html( '{{enquiry_button_text}}' ) . '</button>';\n\techo '<div class=\"perfectpixel-enquiry-form\" hidden style=\"margin-top:1em\">' . do_shortcode( '{{enquiry_form_shortcode}}' ) . '</div>';\n\techo '</div>';\n\t?>\n\t<script>\n\t( function ( cfg ) {\n\t\tvar wrap = document.querySelector( '.perfectpixel-enquiry' );\n\t\tif ( ! wrap ) {\n\t\t\treturn;\n\t\t}\n\t\tvar toggle = wrap.querySelector( '.perfectpixel-enquiry-toggle' );\n\t\tvar form   = wrap.querySelector( '.perfectpixel-enquiry-form' );\n\t\tvar field  = form.querySelector( '[name=\"' + cfg.field + '\"]' );\n\t\tif ( field ) {\n\t\t\tfield.value = cfg.subject;\n\t\t}\n\t\ttoggle.addEventListener( 'click', function () {\n\t\t\tform.hidden = ! form.hidden;\n\t\t\ttoggle.setAttribute( 'aria-expanded', String( ! form.hidden ) );\n\t\t} );\n\t} )( <?php echo wp_json_encode( $cfg ); ?> );\n\t</script>\n\t<?php\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "forms",
+        "enquiry",
+        "contact"
+    ],
+    "variables": [
+        {
+            "name": "enquiry_form_shortcode",
+            "label": "Shortcode φόρμας",
+            "default": "[contact-form-7 id=\"123\"]",
+            "description": "Το shortcode όπως το δίνει το plugin φορμών"
+        },
+        {
+            "name": "enquiry_subject_field",
+            "label": "Όνομα πεδίου για το προϊόν (name)",
+            "default": "your-subject",
+            "description": "Το name του πεδίου, π.χ. your-subject στο CF7"
+        },
+        {
+            "name": "enquiry_button_text",
+            "label": "Κείμενο κουμπιού",
+            "default": "Ρωτήστε για το προϊόν",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "enquiry_subject_prefix",
+            "label": "Πρόθεμα θέματος",
+            "default": "Ερώτηση για:",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-show-inquiry-form-single-product-page-cf7/"
+    ],
+    "updated": "2026-11-18T15:22:54+00:00"
+}

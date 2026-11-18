@@ -1,0 +1,22 @@
+{
+    "title": "Hide the SKU on the storefront",
+    "description": "Κρύβει τον κωδικό προϊόντος (SKU) από τη σελίδα προϊόντος και τα υπόλοιπα σημεία του καταστήματος, ενώ παραμένει στον διαχειριστή για παραγγελίες, εισαγωγές και εξαγωγές.",
+    "type": "php",
+    "code": "add_filter( 'wc_product_sku_enabled', 'perfectpixel_hide_sku_frontend' );\n\nfunction perfectpixel_hide_sku_frontend( $enabled ) {\n\treturn is_admin() && ! wp_doing_ajax() ? $enabled : false;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "single-product",
+        "sku",
+        "product-meta"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-hide-sku-front-end/"
+    ],
+    "updated": "2026-11-18T15:22:54+00:00"
+}
