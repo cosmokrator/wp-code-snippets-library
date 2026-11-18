@@ -1,0 +1,29 @@
+{
+    "title": "Give shipping classes their own product archive pages",
+    "description": "Κάνει τις κλάσεις αποστολής δημόσιες, ώστε κάθε μία να έχει σελίδα με τα προϊόντα της (π.χ. /shipping-class/dorean-apostoli/), όπως οι κατηγορίες. Χρήσιμο για σελίδες όπως «Προϊόντα με δωρεάν αποστολή» ή «Ογκώδη προϊόντα». Μετά την ενεργοποίηση πηγαίνετε στις Ρυθμίσεις → Μόνιμοι σύνδεσμοι και πατήστε «Αποθήκευση».",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_taxonomy_args_product_shipping_class', 'perfectpixel_shipping_class_archives' );\n\nfunction perfectpixel_shipping_class_archives( $args ) {\n\t$args['public']             = true;\n\t$args['publicly_queryable'] = true;\n\t$args['query_var']          = true;\n\t$args['rewrite']            = array( 'slug' => sanitize_title( '{{shipping_class_slug}}' ), 'with_front' => false );\n\treturn $args;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shop",
+        "shipping-classes",
+        "archives"
+    ],
+    "variables": [
+        {
+            "name": "shipping_class_slug",
+            "label": "Βάση URL",
+            "default": "shipping-class",
+            "description": "Μόνο λατινικά πεζά και -"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-product-archive-for-shipping-classes/"
+    ],
+    "updated": "2026-11-18T18:43:07+00:00"
+}

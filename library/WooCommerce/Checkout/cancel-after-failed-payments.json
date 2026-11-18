@@ -1,0 +1,29 @@
+{
+    "title": "Cancel an order after repeated failed payment attempts",
+    "description": "Προστασία από επιθέσεις «carding» στη σελίδα πληρωμής παραγγελίας: μετρά τις αποτυχημένες προσπάθειες πληρωμής κάθε παραγγελίας και, όταν φτάσουν το όριο (π.χ. 3), την ακυρώνει, ώστε τα bots να μην μπορούν να δοκιμάζουν εκατοντάδες κάρτες στην ίδια παραγγελία. Μετρά τις αποτυχίες του Stripe και κάθε μετάβαση σε «Απέτυχε».",
+    "type": "php",
+    "code": "add_action( 'wc_gateway_stripe_process_payment_error', 'perfectpixel_count_failed_payment', 10, 2 );\nadd_action( 'woocommerce_order_status_failed', 'perfectpixel_count_failed_payment_status', 10, 2 );\n\nfunction perfectpixel_count_failed_payment_status( $order_id, $order = null ) {\n\tperfectpixel_count_failed_payment( null, $order ? $order : wc_get_order( $order_id ) );\n}\n\nfunction perfectpixel_count_failed_payment( $error, $order ) {\n\tif ( ! $order instanceof WC_Order || $order->has_status( 'cancelled' ) || $order->is_paid() ) {\n\t\treturn;\n\t}\n\t$count = (int) $order->get_meta( '_perfectpixel_failed_payments' ) + 1;\n\t$order->update_meta_data( '_perfectpixel_failed_payments', $count );\n\tif ( $count >= max( 1, (int) '{{failed_payments_limit}}' ) ) {\n\t\t$order->update_status( 'cancelled', sprintf( 'Ακυρώθηκε αυτόματα μετά από %d αποτυχημένες προσπάθειες πληρωμής.', $count ) );\n\t} else {\n\t\t$order->save();\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "security",
+        "fraud",
+        "payments"
+    ],
+    "variables": [
+        {
+            "name": "failed_payments_limit",
+            "label": "Αποτυχημένες προσπάθειες για ακύρωση",
+            "default": "3",
+            "description": "Μόνο αριθμός"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-auto-cancel-orders-after-3-failed-payments/"
+    ],
+    "updated": "2026-11-18T18:43:07+00:00"
+}

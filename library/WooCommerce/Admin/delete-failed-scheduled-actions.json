@@ -1,0 +1,22 @@
+{
+    "title": "Tool to delete failed scheduled actions",
+    "description": "Προσθέτει στο WooCommerce → Κατάσταση → Εργαλεία το εργαλείο «Διαγραφή αποτυχημένων προγραμματισμένων ενεργειών», που σβήνει με ένα κλικ τις αποτυχημένες εργασίες του Action Scheduler (που συχνά μαζεύονται κατά χιλιάδες από plugins και βαραίνουν τη βάση). Εκτελείται μόνο όταν το πατήσετε. Οι εκκρεμείς και οι ολοκληρωμένες εργασίες δεν αγγίζονται.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_debug_tools', 'perfectpixel_failed_actions_tool' );\n\nfunction perfectpixel_failed_actions_tool( $tools ) {\n\t$tools['perfectpixel_delete_failed_actions'] = array(\n\t\t'name'     => 'Διαγραφή αποτυχημένων προγραμματισμένων ενεργειών',\n\t\t'button'   => 'Διαγραφή',\n\t\t'desc'     => 'Σβήνει όλες τις εργασίες του Action Scheduler με κατάσταση «failed» (και τα logs τους). Οι εκκρεμείς εργασίες δεν αγγίζονται.',\n\t\t'callback' => 'perfectpixel_delete_failed_actions',\n\t);\n\treturn $tools;\n}\n\nfunction perfectpixel_delete_failed_actions() {\n\tglobal $wpdb;\n\tif ( ! current_user_can( 'manage_woocommerce' ) ) {\n\t\treturn 'Δεν έχετε δικαίωμα.';\n\t}\n\t$actions = $wpdb->prefix . 'actionscheduler_actions';\n\t$logs    = $wpdb->prefix . 'actionscheduler_logs';\n\t$ids     = $wpdb->get_col( \"SELECT action_id FROM {$actions} WHERE status = 'failed' LIMIT 50000\" );\n\tif ( ! $ids ) {\n\t\treturn 'Δεν βρέθηκαν αποτυχημένες ενέργειες.';\n\t}\n\tforeach ( array_chunk( array_map( 'intval', $ids ), 1000 ) as $chunk ) {\n\t\t$in = implode( ',', $chunk );\n\t\t$wpdb->query( \"DELETE FROM {$logs} WHERE action_id IN ({$in})\" );\n\t\t$wpdb->query( \"DELETE FROM {$actions} WHERE action_id IN ({$in})\" );\n\t}\n\treturn sprintf( 'Διαγράφηκαν %d αποτυχημένες ενέργειες.', count( $ids ) );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "admin",
+        "action-scheduler",
+        "performance"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-bulk-delete-pending-failed-scheduled-actions/"
+    ],
+    "updated": "2026-11-18T18:43:07+00:00"
+}

@@ -1,0 +1,21 @@
+{
+    "title": "Show the star rating in review notification emails",
+    "description": "Στα emails του WordPress για νέες αξιολογήσεις προϊόντων (για έγκριση ή ειδοποίηση) προσθέτει τη βαθμολογία της αξιολόγησης, π.χ. «Βαθμολογία: 4/5 ★★★★☆», και αν ο αξιολογητής είναι επιβεβαιωμένος αγοραστής, ώστε να βλέπετε αμέσως τις αρνητικές αξιολογήσεις.",
+    "type": "php",
+    "code": "add_filter( 'comment_moderation_text', 'perfectpixel_rating_in_review_email', 20, 2 );\nadd_filter( 'comment_notification_text', 'perfectpixel_rating_in_review_email', 20, 2 );\n\nfunction perfectpixel_rating_in_review_email( $text, $comment_id ) {\n\t$comment = get_comment( $comment_id );\n\tif ( ! $comment || 'product' !== get_post_type( $comment->comment_post_ID ) ) {\n\t\treturn $text;\n\t}\n\t$rating = (int) get_comment_meta( $comment_id, 'rating', true );\n\tif ( ! $rating ) {\n\t\treturn $text;\n\t}\n\t$stars    = str_repeat( '★', $rating ) . str_repeat( '☆', max( 0, 5 - $rating ) );\n\t$verified = wc_review_is_from_verified_owner( $comment_id ) ? ' (επιβεβαιωμένος αγοραστής)' : '';\n\treturn sprintf( \"Βαθμολογία: %d/5 %s%s\\r\\n\\r\\n\", $rating, $stars, $verified ) . $text;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "emails",
+        "reviews"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-show-rating-woocommerce-product-review-admin-email/"
+    ],
+    "updated": "2026-11-18T18:43:07+00:00"
+}

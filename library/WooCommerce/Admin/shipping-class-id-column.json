@@ -1,0 +1,22 @@
+{
+    "title": "Show the shipping class ID in the shipping classes table",
+    "description": "Στη σελίδα WooCommerce → Ρυθμίσεις → Αποστολή → Κλάσεις αποστολής προσθέτει στήλη «ID» με τον αριθμό κάθε κλάσης, που χρειάζεται σε πολλά snippets της βιβλιοθήκης, χωρίς να ψάχνετε με το εργαλείο επιθεώρησης του browser.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_shipping_classes_columns', 'perfectpixel_shipping_class_id_column' );\nadd_action( 'woocommerce_shipping_classes_column_perfectpixel_id', 'perfectpixel_shipping_class_id_value' );\n\nfunction perfectpixel_shipping_class_id_column( $columns ) {\n\treturn array( 'perfectpixel_id' => 'ID' ) + $columns;\n}\n\n// The table is rendered by a JS (underscore) template, so print the template tag for the term ID.\nfunction perfectpixel_shipping_class_id_value() {\n\techo '{' . '{ data.term_id }' . '}';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "admin",
+        "shipping",
+        "shipping-classes"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-show-shipping-class-id-admin/"
+    ],
+    "updated": "2026-11-18T18:43:07+00:00"
+}

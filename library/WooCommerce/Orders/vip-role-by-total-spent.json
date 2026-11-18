@@ -1,0 +1,35 @@
+{
+    "title": "Promote customers to a VIP role after spending a set amount",
+    "description": "Όταν ένας πελάτης ξεπεράσει ένα συνολικό ποσό αγορών (π.χ. 1.000 €, από ολοκληρωμένες παραγγελίες), ο ρόλος του αλλάζει αυτόματα από «Πελάτης» σε έναν ρόλο VIP που έχετε δημιουργήσει (π.χ. με plugin ρόλων), για εκπτώσεις ανά ρόλο, τμηματοποίηση στο email marketing κ.λπ. Για ασφάλεια δεν επιτρέπονται ρόλοι με δικαιώματα επεξεργασίας ή διαχείρισης.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_order_status_completed', 'perfectpixel_vip_role_by_total_spent', 20, 2 );\n\nfunction perfectpixel_vip_role_by_total_spent( $order_id, $order = null ) {\n\t$order   = $order ? $order : wc_get_order( $order_id );\n\t$user_id = $order ? $order->get_customer_id() : 0;\n\t$role    = get_role( sanitize_key( '{{vip_role}}' ) );\n\tif ( ! $user_id || ! $role || $role->has_cap( 'edit_posts' ) || $role->has_cap( 'manage_woocommerce' ) ) {\n\t\treturn;\n\t}\n\t$user = get_userdata( $user_id );\n\t// Only promote plain customers (never touch admins, shop managers, etc.).\n\tif ( ! $user || ! in_array( 'customer', (array) $user->roles, true ) ) {\n\t\treturn;\n\t}\n\tif ( (float) wc_get_customer_total_spent( $user_id ) >= (float) '{{vip_spent_threshold}}' ) {\n\t\t$user->set_role( $role->name );\n\t\t$order->add_order_note( sprintf( 'Ο πελάτης έγινε «%s» (σύνολο αγορών πάνω από το όριο).', $role->name ), false, true );\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "customers",
+        "user-roles",
+        "loyalty"
+    ],
+    "variables": [
+        {
+            "name": "vip_spent_threshold",
+            "label": "Ποσό αγορών",
+            "default": "1000",
+            "description": "Μόνο αριθμός"
+        },
+        {
+            "name": "vip_role",
+            "label": "Ρόλος VIP (slug)",
+            "default": "vip_customer",
+            "description": "Ο ρόλος πρέπει να υπάρχει ήδη"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-switch-user-role-if-customer-spent-more-than/"
+    ],
+    "updated": "2026-11-18T18:43:07+00:00"
+}

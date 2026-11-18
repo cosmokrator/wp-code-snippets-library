@@ -1,0 +1,23 @@
+{
+    "title": "Add a badge to featured products in the shop",
+    "description": "CSS που προσθέτει ετικέτα «Προτεινόμενο» στη γωνία της εικόνας των προβεβλημένων προϊόντων (με αστεράκι στη λίστα Προϊόντα) στις λίστες του καταστήματος, ώστε να ξεχωρίζουν. Αλλάξτε κείμενο και χρώματα μέσα στο CSS. Ισχύει για τα κλασικά πλέγματα (κατάστημα, κατηγορίες, shortcodes).",
+    "type": "css",
+    "code": ".woocommerce ul.products li.product.featured {\n\tposition: relative;\n}\n.woocommerce ul.products li.product.featured::before {\n\tcontent: \"Προτεινόμενο\";\n\tposition: absolute;\n\ttop: .5em;\n\tright: .5em;\n\tz-index: 9;\n\tpadding: .2em .6em;\n\tborder-radius: 3px;\n\tbackground: #dba617;\n\tcolor: #fff;\n\tfont-size: .75em;\n\tfont-weight: 600;\n\tline-height: 1.6;\n}",
+    "location": "site_header",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shop",
+        "css",
+        "badges",
+        "featured"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-custom-badge-to-featured-products-shop-page/"
+    ],
+    "updated": "2026-11-18T18:43:07+00:00"
+}

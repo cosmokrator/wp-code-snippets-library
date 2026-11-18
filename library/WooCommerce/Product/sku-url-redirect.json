@@ -1,0 +1,22 @@
+{
+    "title": "Open a product by typing its SKU in the URL",
+    "description": "Αν κάποιος ανοίξει ένα URL της μορφής example.com/ΚΩΔΙΚΟΣ (π.χ. από κατάλογο, ετικέτα ή QR code) και ο κωδικός είναι SKU προϊόντος, μεταφέρεται στη σελίδα του προϊόντος αντί να δει σφάλμα 404. Ενεργοποιείται μόνο όταν η διεύθυνση δεν αντιστοιχεί ήδη σε σελίδα του site. Για παραλλαγές ανοίγει το γονικό προϊόν με την παραλλαγή επιλεγμένη.",
+    "type": "php",
+    "code": "add_action( 'template_redirect', 'perfectpixel_sku_url_redirect', 5 );\n\nfunction perfectpixel_sku_url_redirect() {\n\tif ( ! is_404() ) {\n\t\treturn;\n\t}\n\t$path = trim( (string) wp_parse_url( $_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH ), '/' );\n\tif ( '' === $path || false !== strpos( $path, '/' ) ) {\n\t\treturn; // Only single-segment URLs like /SKU123.\n\t}\n\t$product_id = wc_get_product_id_by_sku( rawurldecode( $path ) );\n\t$product    = $product_id ? wc_get_product( $product_id ) : null;\n\tif ( $product && 'publish' === get_post_status( $product->get_parent_id() ? $product->get_parent_id() : $product->get_id() ) ) {\n\t\twp_safe_redirect( $product->get_permalink(), 301 );\n\t\texit;\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "products",
+        "sku",
+        "redirect"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-redirect-url-with-sku-to-product/"
+    ],
+    "updated": "2026-11-18T18:43:07+00:00"
+}

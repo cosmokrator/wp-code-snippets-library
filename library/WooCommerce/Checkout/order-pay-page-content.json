@@ -1,0 +1,29 @@
+{
+    "title": "Add content to the \"Pay for order\" page",
+    "description": "Εμφανίζει δικό σας περιεχόμενο πάνω από τη φόρμα πληρωμής της σελίδας «Πληρωμή παραγγελίας» (ο σύνδεσμος πληρωμής που στέλνετε στον πελάτη για χειροκίνητες παραγγελίες ή προσφορές), π.χ. οδηγίες, όρους της προσφοράς ή στοιχεία επικοινωνίας. Επιτρέπεται απλό HTML και shortcodes.",
+    "type": "php",
+    "code": "add_action( 'before_woocommerce_pay_form', 'perfectpixel_order_pay_page_content', 5 );\n\nfunction perfectpixel_order_pay_page_content() {\n\techo '<div class=\"woocommerce-info perfectpixel-order-pay-content\">' . wp_kses_post( do_shortcode( '{{order_pay_content}}' ) ) . '</div>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "checkout",
+        "order-pay",
+        "content"
+    ],
+    "variables": [
+        {
+            "name": "order_pay_content",
+            "label": "Περιεχόμενο",
+            "default": "<p>Ελέγξτε τα στοιχεία της παραγγελίας σας και ολοκληρώστε την πληρωμή. Για απορίες καλέστε μας στο 210 0000000.</p>",
+            "description": "Χωρίς απόστροφο ('). Επιτρέπεται απλό HTML και shortcodes"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-content-to-the-order-pay-page/"
+    ],
+    "updated": "2026-11-18T18:43:07+00:00"
+}

@@ -1,0 +1,35 @@
+{
+    "title": "Add an extra button to the mini cart",
+    "description": "Προσθέτει ένα επιπλέον κουμπί δίπλα στα «Προβολή καλαθιού» και «Ολοκλήρωση αγοράς» του mini cart (widget καλαθιού), π.χ. «Συνέχεια αγορών» προς το κατάστημα ή «Προσφορές». Ορίστε κείμενο και URL. Ισχύει για το κλασικό widget καλαθιού· το mini cart block έχει δικές του ρυθμίσεις.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_widget_shopping_cart_buttons', 'perfectpixel_mini_cart_extra_button', 30 );\n\nfunction perfectpixel_mini_cart_extra_button() {\n\t$url = trim( '{{mini_cart_button_url}}' );\n\t$url = 0 === strpos( $url, '/' ) ? home_url( $url ) : $url;\n\techo '<a href=\"' . esc_url( $url ) . '\" class=\"button wc-forward perfectpixel-mini-cart-button\">' . esc_html( '{{mini_cart_button_text}}' ) . '</a>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "cart",
+        "mini-cart",
+        "buttons"
+    ],
+    "variables": [
+        {
+            "name": "mini_cart_button_text",
+            "label": "Κείμενο κουμπιού",
+            "default": "Συνέχεια αγορών",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "mini_cart_button_url",
+            "label": "URL",
+            "default": "/shop/",
+            "description": "Σχετικό ή πλήρες URL"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-show-additional-button-mini-cart/"
+    ],
+    "updated": "2026-11-18T18:43:07+00:00"
+}

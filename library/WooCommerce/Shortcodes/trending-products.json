@@ -1,0 +1,22 @@
+{
+    "title": "Shortcode for trending products (best sellers of the last days)",
+    "description": "Shortcode [trending_products] που εμφανίζει τα προϊόντα με τις περισσότερες πωλήσεις τις τελευταίες ημέρες (π.χ. 7), όχι συνολικά όπως τα «Best sellers» του WooCommerce. Παράμετροι: days, limit, columns. Η λίστα υπολογίζεται από τα αναλυτικά του WooCommerce και ανανεώνεται κάθε μία ώρα.",
+    "type": "php",
+    "code": "add_shortcode( 'trending_products', 'perfectpixel_trending_products_shortcode' );\n\nfunction perfectpixel_trending_products_shortcode( $atts ) {\n\tglobal $wpdb;\n\t$atts  = shortcode_atts( array( 'days' => 7, 'limit' => 4, 'columns' => 4 ), $atts );\n\t$days  = min( 365, max( 1, absint( $atts['days'] ) ) );\n\t$limit = min( 24, max( 1, absint( $atts['limit'] ) ) );\n\t$key   = 'perfectpixel_trending_' . $days . '_' . $limit;\n\t$ids   = get_transient( $key );\n\tif ( false === $ids ) {\n\t\t$ids = $wpdb->get_col(\n\t\t\t$wpdb->prepare(\n\t\t\t\t\"SELECT l.product_id FROM {$wpdb->prefix}wc_order_product_lookup l\n\t\t\t\tINNER JOIN {$wpdb->prefix}wc_order_stats s ON s.order_id = l.order_id\n\t\t\t\tINNER JOIN {$wpdb->posts} p ON p.ID = l.product_id AND p.post_status = 'publish'\n\t\t\t\tWHERE l.date_created >= %s AND s.status IN ('wc-completed','wc-processing')\n\t\t\t\tGROUP BY l.product_id ORDER BY SUM(l.product_qty) DESC LIMIT %d\",\n\t\t\t\tgmdate( 'Y-m-d H:i:s', time() - $days * DAY_IN_SECONDS ),\n\t\t\t\t$limit\n\t\t\t)\n\t\t);\n\t\t$ids = array_map( 'intval', (array) $ids );\n\t\tset_transient( $key, $ids, HOUR_IN_SECONDS );\n\t}\n\tif ( ! $ids ) {\n\t\treturn '';\n\t}\n\treturn do_shortcode( sprintf( '[products ids=\"%s\" columns=\"%d\" orderby=\"post__in\"]', esc_attr( implode( ',', $ids ) ), min( 6, max( 1, absint( $atts['columns'] ) ) ) ) );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shortcodes",
+        "best-sellers",
+        "sales"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-get-trending-products/"
+    ],
+    "updated": "2026-11-18T18:43:07+00:00"
+}
