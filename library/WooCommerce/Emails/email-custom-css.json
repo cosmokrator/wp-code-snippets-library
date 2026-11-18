@@ -1,0 +1,29 @@
+{
+    "title": "Add custom CSS to WooCommerce emails",
+    "description": "Προσθέτει δικό σας CSS στα emails του WooCommerce (το WooCommerce το «ενσωματώνει» στο HTML, γιατί τα προγράμματα email δεν διαβάζουν το CSS του theme). Το παράδειγμα αλλάζει γραμματοσειρά, χρώμα επικεφαλίδων και πλαίσια πινάκων· αλλάξτε το CSS στον κώδικα. Αν θέλετε CSS μόνο για ένα email, ορίστε το ID του.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_email_styles', 'perfectpixel_email_custom_css', 20, 2 );\n\nfunction perfectpixel_email_custom_css( $css, $email = null ) {\n\t$only = trim( '{{email_css_only_for}}' );\n\tif ( '' !== $only && ( ! $email || $email->id !== $only ) ) {\n\t\treturn $css;\n\t}\n\t// Edit the rules below.\n\t$css .= '\n\t\t#template_container, #body_content_inner { font-family: Arial, Helvetica, sans-serif; }\n\t\th1 { font-weight: 600; }\n\t\th2, h3 { color: #2271b1; }\n\t\t.td { border-color: #e5e5e5 !important; }\n\t\t.order_item td { vertical-align: middle; }\n\t';\n\treturn $css;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "emails",
+        "css",
+        "design"
+    ],
+    "variables": [
+        {
+            "name": "email_css_only_for",
+            "label": "Μόνο για email (ID)",
+            "default": "",
+            "description": "Κενό = όλα τα emails. IDs emails: customer_processing_order, customer_completed_order, customer_on_hold_order, customer_invoice, customer_refunded_order, new_order"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-css-woocommerce-emails/"
+    ],
+    "updated": "2026-11-18T17:50:03+00:00"
+}

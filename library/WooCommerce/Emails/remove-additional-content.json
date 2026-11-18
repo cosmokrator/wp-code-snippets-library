@@ -1,0 +1,28 @@
+{
+    "title": "Remove the closing text (\"Thanks for shopping with us\") from emails",
+    "description": "Αφαιρεί το κείμενο κλεισίματος των emails πελάτη (π.χ. «Ευχαριστούμε για την αγορά σας.», «Ελπίζουμε να σας ξαναδούμε σύντομα.») από τα emails που ορίζετε. Το ίδιο κείμενο μπορείτε να το αλλάξετε ή να το σβήσετε και από το πεδίο «Επιπλέον περιεχόμενο» κάθε email στις ρυθμίσεις· το snippet είναι χρήσιμο για όλα μαζί.",
+    "type": "php",
+    "code": "add_action( 'init', 'perfectpixel_remove_additional_content_setup' );\n\nfunction perfectpixel_remove_additional_content_setup() {\n\tforeach ( array_filter( array_map( 'sanitize_key', explode( ',', '{{no_additional_content_emails}}' ) ) ) as $email_id ) {\n\t\tadd_filter( 'woocommerce_email_additional_content_' . $email_id, '__return_empty_string', 99 );\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "emails",
+        "content"
+    ],
+    "variables": [
+        {
+            "name": "no_additional_content_emails",
+            "label": "Emails (με κόμμα)",
+            "default": "customer_processing_order,customer_completed_order,customer_on_hold_order",
+            "description": "IDs emails: customer_processing_order, customer_completed_order, customer_on_hold_order, customer_invoice, customer_refunded_order, new_order"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-hide-thanks-for-shopping-with-us-etc-emails/"
+    ],
+    "updated": "2026-11-18T17:50:03+00:00"
+}

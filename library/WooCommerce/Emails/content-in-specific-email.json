@@ -1,0 +1,35 @@
+{
+    "title": "Add content to specific order emails",
+    "description": "Προσθέτει δικό σας περιεχόμενο πάνω από τον πίνακα της παραγγελίας σε συγκεκριμένα emails, π.χ. κουπόνι για την επόμενη αγορά στο «Ολοκληρωμένη παραγγελία» ή οδηγίες παραλαβής στο «Σε επεξεργασία». Επιτρέπεται απλό HTML (στα emails απλού κειμένου στέλνεται χωρίς HTML).",
+    "type": "php",
+    "code": "add_action( 'woocommerce_email_before_order_table', 'perfectpixel_content_in_specific_email', 20, 4 );\n\nfunction perfectpixel_content_in_specific_email( $order, $sent_to_admin, $plain_text, $email ) {\n\t$ids = array_filter( array_map( 'trim', explode( ',', '{{email_extra_content_ids}}' ) ) );\n\tif ( ! $email || ! in_array( $email->id, $ids, true ) ) {\n\t\treturn;\n\t}\n\tif ( $plain_text ) {\n\t\techo \"\\n\" . wp_strip_all_tags( '{{email_extra_content}}' ) . \"\\n\\n\";\n\t} else {\n\t\techo '<div class=\"perfectpixel-email-extra\" style=\"margin-bottom:24px\">' . wp_kses_post( '{{email_extra_content}}' ) . '</div>';\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "emails",
+        "content",
+        "marketing"
+    ],
+    "variables": [
+        {
+            "name": "email_extra_content_ids",
+            "label": "Emails (με κόμμα)",
+            "default": "customer_completed_order",
+            "description": "IDs emails: customer_processing_order, customer_completed_order, customer_on_hold_order, customer_invoice, customer_refunded_order, new_order"
+        },
+        {
+            "name": "email_extra_content",
+            "label": "Περιεχόμενο",
+            "default": "<p>Ευχαριστούμε! Για την επόμενη αγορά σας έχετε <strong>10% έκπτωση</strong> με τον κωδικό <strong>THANKYOU10</strong>.</p>",
+            "description": "Χωρίς απόστροφο ('). Επιτρέπεται απλό HTML"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-extra-content-order-email/"
+    ],
+    "updated": "2026-11-18T17:50:03+00:00"
+}

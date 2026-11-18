@@ -1,0 +1,29 @@
+{
+    "title": "Rename the page titles of My Account sections",
+    "description": "Αλλάζει τον τίτλο (H1) που εμφανίζεται όταν ο πελάτης ανοίγει μια ενότητα του λογαριασμού του, π.χ. «Παραγγελίες» → «Οι παραγγελίες μου». Δεν αλλάζει το όνομα στο μενού του λογαριασμού. Γράψτε ζεύγη ενότητα=τίτλος χωρισμένα με |. Ενότητες: orders, view-order, downloads, edit-address, edit-account, payment-methods.",
+    "type": "php",
+    "code": "add_action( 'init', 'perfectpixel_rename_endpoint_titles_setup' );\n\nfunction perfectpixel_rename_endpoint_titles_setup() {\n\tforeach ( array( 'orders', 'view-order', 'downloads', 'edit-address', 'edit-account', 'payment-methods', 'add-payment-method' ) as $endpoint ) {\n\t\tadd_filter( 'woocommerce_endpoint_' . $endpoint . '_title', 'perfectpixel_rename_endpoint_title', 20, 2 );\n\t}\n}\n\nfunction perfectpixel_rename_endpoint_title( $title, $endpoint ) {\n\tforeach ( explode( '|', '{{account_endpoint_titles}}' ) as $pair ) {\n\t\t$parts = array_map( 'trim', explode( '=', $pair, 2 ) );\n\t\tif ( 2 === count( $parts ) && $parts[0] === $endpoint && '' !== $parts[1] ) {\n\t\t\treturn $parts[1];\n\t\t}\n\t}\n\treturn $title;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "my-account",
+        "titles",
+        "labels"
+    ],
+    "variables": [
+        {
+            "name": "account_endpoint_titles",
+            "label": "Ενότητα=Τίτλος (με |)",
+            "default": "orders=Οι παραγγελίες μου|downloads=Τα αρχεία μου",
+            "description": "Χωρίς απόστροφο ('). Π.χ. orders=Οι παραγγελίες μου|edit-account=Το προφίλ μου"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-rename-my-account-endpoint-page-title/"
+    ],
+    "updated": "2026-11-18T17:50:03+00:00"
+}

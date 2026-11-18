@@ -1,0 +1,29 @@
+{
+    "title": "Show product images in order emails",
+    "description": "Στα emails παραγγελιών (προς πελάτη και διαχειριστή) εμφανίζεται μικρή εικόνα κάθε προϊόντος δίπλα στο όνομά του στον πίνακα της παραγγελίας. Ορίστε το μέγεθος σε pixels.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_email_order_items_args', 'perfectpixel_product_images_in_emails' );\n\nfunction perfectpixel_product_images_in_emails( $args ) {\n\t$size               = max( 24, (int) '{{email_image_size}}' );\n\t$args['show_image'] = true;\n\t$args['image_size'] = array( $size, $size );\n\treturn $args;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "emails",
+        "images",
+        "order-items"
+    ],
+    "variables": [
+        {
+            "name": "email_image_size",
+            "label": "Μέγεθος εικόνας (px)",
+            "default": "64",
+            "description": "Μόνο αριθμός"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-show-product-image-emails/"
+    ],
+    "updated": "2026-11-18T17:50:03+00:00"
+}

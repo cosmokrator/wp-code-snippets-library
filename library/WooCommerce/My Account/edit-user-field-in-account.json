@@ -1,0 +1,35 @@
+{
+    "title": "Let customers edit a user field in Account details",
+    "description": "Προσθέτει ένα πεδίο του προφίλ χρήστη στη φόρμα «Στοιχεία λογαριασμού» του πελάτη, ώστε να το βλέπει και να το αλλάζει μόνος του, π.χ. «Ιστότοπος», «Επάγγελμα» ή ένα δικό σας πεδίο. Ορίστε το όνομα του πεδίου (user meta key ή user_url για τον ιστότοπο) και την ετικέτα. Για λόγους ασφαλείας δεν επιτρέπονται πεδία ρόλων/δικαιωμάτων.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_edit_account_form', 'perfectpixel_account_user_field' );\nadd_action( 'woocommerce_save_account_details', 'perfectpixel_account_user_field_save' );\n\nfunction perfectpixel_account_user_field_key() {\n\t$key = sanitize_key( '{{account_user_field_key}}' );\n\t// Never let customers edit roles, capabilities or session data.\n\tforeach ( array( 'capabilities', 'user_level', 'session_tokens', 'user_pass', 'user_login', 'user_email', 'user_status', 'user_activation_key' ) as $blocked ) {\n\t\tif ( false !== strpos( $key, $blocked ) ) {\n\t\t\treturn '';\n\t\t}\n\t}\n\treturn $key;\n}\n\nfunction perfectpixel_account_user_field() {\n\t$key = perfectpixel_account_user_field_key();\n\tif ( ! $key ) {\n\t\treturn;\n\t}\n\t$user  = wp_get_current_user();\n\t$value = 'user_url' === $key ? $user->user_url : get_user_meta( $user->ID, $key, true );\n\tprintf(\n\t\t'<p class=\"woocommerce-form-row form-row form-row-wide\"><label for=\"perfectpixel_user_field\">%s</label><input type=\"%s\" class=\"woocommerce-Input input-text\" name=\"perfectpixel_user_field\" id=\"perfectpixel_user_field\" value=\"%s\"></p>',\n\t\tesc_html( '{{account_user_field_label}}' ),\n\t\t'user_url' === $key ? 'url' : 'text',\n\t\tesc_attr( is_scalar( $value ) ? $value : '' )\n\t);\n}\n\nfunction perfectpixel_account_user_field_save( $user_id ) {\n\t$key = perfectpixel_account_user_field_key();\n\tif ( ! $key || ! isset( $_POST['perfectpixel_user_field'] ) ) {\n\t\treturn;\n\t}\n\t$value = wp_unslash( $_POST['perfectpixel_user_field'] );\n\tif ( 'user_url' === $key ) {\n\t\twp_update_user( array( 'ID' => $user_id, 'user_url' => esc_url_raw( $value ) ) );\n\t} else {\n\t\tupdate_user_meta( $user_id, $key, sanitize_text_field( $value ) );\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "my-account",
+        "custom-fields",
+        "profile"
+    ],
+    "variables": [
+        {
+            "name": "account_user_field_key",
+            "label": "Όνομα πεδίου",
+            "default": "user_url",
+            "description": "user_url ή user meta key, π.χ. profession"
+        },
+        {
+            "name": "account_user_field_label",
+            "label": "Ετικέτα",
+            "default": "Ιστότοπος",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-edit-user-field-my-account/"
+    ],
+    "updated": "2026-11-18T17:50:03+00:00"
+}

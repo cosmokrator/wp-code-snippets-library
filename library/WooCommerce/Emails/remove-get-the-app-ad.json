@@ -1,0 +1,21 @@
+{
+    "title": "Remove the \"Get the app\" promo from admin emails",
+    "description": "Αφαιρεί τη διαφήμιση «Process your orders on the go. Get the app» της εφαρμογής WooCommerce από το υποσέλιδο του email «Νέα παραγγελία» που λαμβάνει ο διαχειριστής.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_email', 'perfectpixel_remove_get_the_app_ad' );\n\n// Runs when WooCommerce builds its mailer, so the exact callback can be removed.\nfunction perfectpixel_remove_get_the_app_ad( $mailer ) {\n\tremove_action( 'woocommerce_email_footer', array( $mailer, 'mobile_messaging' ), 9 );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "emails",
+        "admin"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-remove-jetpack-ads-wp-dashboard/"
+    ],
+    "updated": "2026-11-18T17:50:03+00:00"
+}

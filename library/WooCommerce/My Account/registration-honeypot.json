@@ -1,0 +1,23 @@
+{
+    "title": "Anti-spam honeypot for the My Account registration form",
+    "description": "Προσθέτει στη φόρμα εγγραφής του «Ο λογαριασμός μου» ένα κρυφό πεδίο που δεν βλέπουν οι άνθρωποι αλλά συμπληρώνουν τα bots. Αν συμπληρωθεί, η εγγραφή απορρίπτεται. Μειώνει τις ψεύτικες εγγραφές χωρίς CAPTCHA. Δεν σταματά όλα τα bots· για ισχυρή προστασία συνδυάστε με CAPTCHA/Turnstile.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_register_form', 'perfectpixel_registration_honeypot_field' );\nadd_filter( 'woocommerce_registration_errors', 'perfectpixel_registration_honeypot_check', 10, 3 );\n\nfunction perfectpixel_registration_honeypot_field() {\n\techo '<p style=\"position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden\" aria-hidden=\"true\"><label for=\"perfectpixel_company_url\">Website</label><input type=\"text\" name=\"perfectpixel_company_url\" id=\"perfectpixel_company_url\" value=\"\" tabindex=\"-1\" autocomplete=\"off\"></p>';\n}\n\nfunction perfectpixel_registration_honeypot_check( $errors, $username, $email ) {\n\tif ( ! empty( $_POST['perfectpixel_company_url'] ) ) {\n\t\t$errors->add( 'registration-error', __( 'An error occurred while creating your account.', 'woocommerce' ) );\n\t}\n\treturn $errors;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "my-account",
+        "registration",
+        "spam",
+        "security"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-my-account-registration-anti-spam-honeypot/"
+    ],
+    "updated": "2026-11-18T17:50:03+00:00"
+}

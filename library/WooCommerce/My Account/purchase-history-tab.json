@@ -1,0 +1,35 @@
+{
+    "title": "Add a \"Purchase history\" tab to My Account",
+    "description": "Προσθέτει την καρτέλα «Ιστορικό αγορών» στον λογαριασμό πελάτη, με όλα τα προϊόντα που έχει αγοράσει (μία γραμμή ανά προϊόν), την ημερομηνία της τελευταίας αγοράς και κουμπί «Αξιολογήστε» για όσα δεν έχει αξιολογήσει. Μετά την ενεργοποίηση πηγαίνετε στις Ρυθμίσεις → Μόνιμοι σύνδεσμοι και πατήστε «Αποθήκευση», ώστε να λειτουργήσει η νέα διεύθυνση.",
+    "type": "php",
+    "code": "add_action( 'init', 'perfectpixel_purchase_history_endpoint' );\nadd_filter( 'woocommerce_get_query_vars', 'perfectpixel_purchase_history_query_var' );\nadd_filter( 'woocommerce_account_menu_items', 'perfectpixel_purchase_history_menu' );\nadd_filter( 'woocommerce_endpoint_purchase-history_title', 'perfectpixel_purchase_history_title' );\nadd_action( 'woocommerce_account_purchase-history_endpoint', 'perfectpixel_purchase_history_content' );\n\nfunction perfectpixel_purchase_history_endpoint() {\n\tadd_rewrite_endpoint( 'purchase-history', EP_ROOT | EP_PAGES );\n}\n\nfunction perfectpixel_purchase_history_query_var( $vars ) {\n\t$vars['purchase-history'] = 'purchase-history';\n\treturn $vars;\n}\n\nfunction perfectpixel_purchase_history_menu( $items ) {\n\t$new = array();\n\tforeach ( $items as $key => $label ) {\n\t\t$new[ $key ] = $label;\n\t\tif ( 'orders' === $key ) {\n\t\t\t$new['purchase-history'] = '{{purchase_history_title}}';\n\t\t}\n\t}\n\treturn $new;\n}\n\nfunction perfectpixel_purchase_history_title() {\n\treturn '{{purchase_history_title}}';\n}\n\nfunction perfectpixel_purchase_history_content() {\n\t$products = array();\n\t$orders   = wc_get_orders(\n\t\tarray(\n\t\t\t'customer' => get_current_user_id(),\n\t\t\t'status'   => wc_get_is_paid_statuses(),\n\t\t\t'limit'    => 200,\n\t\t\t'orderby'  => 'date',\n\t\t\t'order'    => 'DESC',\n\t\t)\n\t);\n\tforeach ( $orders as $order ) {\n\t\tforeach ( $order->get_items() as $item ) {\n\t\t\t$id = (int) $item->get_product_id();\n\t\t\tif ( $id && ! isset( $products[ $id ] ) ) {\n\t\t\t\t$products[ $id ] = $order->get_date_created();\n\t\t\t}\n\t\t}\n\t}\n\tif ( ! $products ) {\n\t\twc_print_notice( __( 'No order has been made yet.', 'woocommerce' ), 'notice' );\n\t\treturn;\n\t}\n\techo '<table class=\"shop_table shop_table_responsive\"><tbody>';\n\tforeach ( $products as $id => $date ) {\n\t\t$product = wc_get_product( $id );\n\t\tif ( ! $product ) {\n\t\t\tcontinue;\n\t\t}\n\t\t$reviewed = get_comments( array( 'post_id' => $id, 'user_id' => get_current_user_id(), 'type' => 'review', 'count' => true, 'status' => 'all' ) );\n\t\t$action   = ( wc_reviews_enabled() && comments_open( $id ) && ! $reviewed ) ? '<a class=\"button\" href=\"' . esc_url( get_permalink( $id ) . '#reviews' ) . '\">' . esc_html( '{{purchase_history_review}}' ) . '</a>' : '';\n\t\tprintf(\n\t\t\t'<tr><td><a href=\"%s\">%s</a></td><td>%s</td><td>%s</td></tr>',\n\t\t\tesc_url( get_permalink( $id ) ),\n\t\t\tesc_html( $product->get_name() ),\n\t\t\tesc_html( wc_format_datetime( $date ) ),\n\t\t\t$action\n\t\t);\n\t}\n\techo '</tbody></table>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "my-account",
+        "reviews",
+        "endpoints"
+    ],
+    "variables": [
+        {
+            "name": "purchase_history_title",
+            "label": "Τίτλος καρτέλας",
+            "default": "Ιστορικό αγορών",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "purchase_history_review",
+            "label": "Κείμενο κουμπιού",
+            "default": "Αξιολογήστε",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-purchase-history-with-review-buttons-my-account/"
+    ],
+    "updated": "2026-11-18T17:50:03+00:00"
+}

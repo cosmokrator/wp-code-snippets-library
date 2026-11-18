@@ -1,0 +1,40 @@
+{
+    "title": "Add Cc or Bcc recipients to WooCommerce emails",
+    "description": "Προσθέτει αντίγραφο (Cc) ή κρυφό αντίγραφο (Bcc) σε συγκεκριμένα emails του WooCommerce, π.χ. Bcc του «Ολοκληρωμένη παραγγελία» στον dropshipper ή στο λογιστήριο, ή αντίγραφο των emails πελατών στον εαυτό σας. Οι ρυθμίσεις του WooCommerce επιτρέπουν επιπλέον παραλήπτες μόνο στα emails του διαχειριστή.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_email_headers', 'perfectpixel_cc_bcc_recipients', 10, 2 );\n\nfunction perfectpixel_cc_bcc_recipients( $headers, $email_id ) {\n\t$emails = array_filter( array_map( 'trim', explode( ',', '{{cc_bcc_emails}}' ) ) );\n\tif ( ! in_array( $email_id, $emails, true ) ) {\n\t\treturn $headers;\n\t}\n\tforeach ( array( 'Cc' => '{{cc_addresses}}', 'Bcc' => '{{bcc_addresses}}' ) as $type => $list ) {\n\t\t$valid = array_filter( array_map( 'sanitize_email', explode( ',', $list ) ), 'is_email' );\n\t\tif ( $valid ) {\n\t\t\t$headers .= $type . ': ' . implode( ', ', $valid ) . \"\\r\\n\";\n\t\t}\n\t}\n\treturn $headers;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "emails",
+        "recipients"
+    ],
+    "variables": [
+        {
+            "name": "cc_bcc_emails",
+            "label": "Emails (με κόμμα)",
+            "default": "customer_completed_order",
+            "description": "IDs emails: customer_processing_order, customer_completed_order, customer_on_hold_order, customer_invoice, customer_refunded_order, new_order"
+        },
+        {
+            "name": "cc_addresses",
+            "label": "Cc (με κόμμα)",
+            "default": "",
+            "description": "Διευθύνσεις email. Κενό = χωρίς Cc"
+        },
+        {
+            "name": "bcc_addresses",
+            "label": "Bcc (με κόμμα)",
+            "default": "",
+            "description": "Διευθύνσεις email. Κενό = χωρίς Bcc"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-to-cc-bcc-order-email-recipients/"
+    ],
+    "updated": "2026-11-18T17:50:03+00:00"
+}

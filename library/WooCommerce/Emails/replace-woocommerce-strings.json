@@ -1,0 +1,29 @@
+{
+    "title": "Replace WooCommerce texts (e.g. email greetings)",
+    "description": "Αντικαθιστά κείμενα του WooCommerce χωρίς plugin μετάφρασης, π.χ. το «Γεια σας %s,» των emails ή το «Ολοκληρώσαμε την επεξεργασία της παραγγελίας σας». Γράψτε ζεύγη αρχικό αγγλικό κείμενο=νέο κείμενο χωρισμένα με |, ακριβώς όπως είναι στον κώδικα του WooCommerce (με τα %s). Ισχύει για όλα τα σημεία όπου εμφανίζεται το κείμενο, όχι μόνο στα emails.",
+    "type": "php",
+    "code": "add_filter( 'gettext_woocommerce', 'perfectpixel_replace_woocommerce_strings', 20, 2 );\n\nfunction perfectpixel_replace_woocommerce_strings( $translation, $text ) {\n\tstatic $map = null;\n\tif ( null === $map ) {\n\t\t$map = array();\n\t\tforeach ( explode( '|', '{{string_replacements}}' ) as $pair ) {\n\t\t\t$parts = explode( '=', $pair, 2 );\n\t\t\tif ( 2 === count( $parts ) && '' !== trim( $parts[0] ) ) {\n\t\t\t\t$map[ trim( $parts[0] ) ] = trim( $parts[1] );\n\t\t\t}\n\t\t}\n\t}\n\treturn isset( $map[ $text ] ) ? $map[ $text ] : $translation;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "emails",
+        "translation",
+        "labels"
+    ],
+    "variables": [
+        {
+            "name": "string_replacements",
+            "label": "Αγγλικό=Νέο (με |)",
+            "default": "Hi %s,=Γεια σου %s!",
+            "description": "Χωρίς απόστροφο ('). Π.χ. Hi %s,=Γεια σου %s!|We have finished processing your order.=Η παραγγελία σας είναι έτοιμη!"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-edit-text-strings-order-emails/"
+    ],
+    "updated": "2026-11-18T17:50:03+00:00"
+}

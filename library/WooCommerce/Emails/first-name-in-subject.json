@@ -1,0 +1,35 @@
+{
+    "title": "Add the customer first name to email subjects",
+    "description": "Αλλάζει το θέμα των emails «Σε επεξεργασία» και «Ολοκληρωμένη παραγγελία» ώστε να περιέχει το μικρό όνομα του πελάτη, π.χ. «Μαρία, λάβαμε την παραγγελία σας #1234». Χρησιμοποιήστε {first_name}, {order_number} και {site_title}. Αφήστε κενό όποιο θέμα δεν θέλετε να αλλάξει.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_email_subject_customer_processing_order', 'perfectpixel_processing_subject', 20, 2 );\nadd_filter( 'woocommerce_email_subject_customer_completed_order', 'perfectpixel_completed_subject', 20, 2 );\n\nfunction perfectpixel_personal_subject( $template, $subject, $order ) {\n\tif ( '' === trim( $template ) || ! $order instanceof WC_Order ) {\n\t\treturn $subject;\n\t}\n\t$name = $order->get_billing_first_name();\n\t$text = str_replace(\n\t\tarray( '{first_name}', '{order_number}', '{site_title}' ),\n\t\tarray( $name, $order->get_order_number(), wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES ) ),\n\t\t$template\n\t);\n\treturn '' === $name ? ltrim( $text, ', ' ) : $text;\n}\n\nfunction perfectpixel_processing_subject( $subject, $order ) {\n\treturn perfectpixel_personal_subject( '{{processing_subject}}', $subject, $order );\n}\n\nfunction perfectpixel_completed_subject( $subject, $order ) {\n\treturn perfectpixel_personal_subject( '{{completed_subject}}', $subject, $order );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "emails",
+        "subject",
+        "personalization"
+    ],
+    "variables": [
+        {
+            "name": "processing_subject",
+            "label": "Θέμα «Σε επεξεργασία»",
+            "default": "{first_name}, λάβαμε την παραγγελία σας #{order_number}",
+            "description": "Χωρίς απόστροφο ('). Κενό = χωρίς αλλαγή"
+        },
+        {
+            "name": "completed_subject",
+            "label": "Θέμα «Ολοκληρωμένη»",
+            "default": "{first_name}, η παραγγελία σας #{order_number} είναι καθ’ οδόν",
+            "description": "Χωρίς απόστροφο ('). Κενό = χωρίς αλλαγή"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-billing-first_name-to-email-receipt/"
+    ],
+    "updated": "2026-11-18T17:50:03+00:00"
+}

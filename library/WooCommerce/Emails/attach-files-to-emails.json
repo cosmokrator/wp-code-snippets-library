@@ -1,0 +1,35 @@
+{
+    "title": "Attach files (PDF etc.) to order emails",
+    "description": "Επισυνάπτει αρχεία από τη Βιβλιοθήκη πολυμέσων (π.χ. όρους χρήσης, έντυπο υπαναχώρησης, οδηγίες) σε συγκεκριμένα emails του WooCommerce. Ανεβάστε το αρχείο στα Πολυμέσα, πάρτε το ID του από το URL της σελίδας επεξεργασίας του και ορίστε σε ποια emails θα μπαίνει.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_email_attachments', 'perfectpixel_attach_files_to_emails', 10, 2 );\n\nfunction perfectpixel_attach_files_to_emails( $attachments, $email_id ) {\n\t$emails = array_filter( array_map( 'trim', explode( ',', '{{email_attachment_emails}}' ) ) );\n\tif ( ! in_array( $email_id, $emails, true ) ) {\n\t\treturn $attachments;\n\t}\n\tforeach ( wp_parse_id_list( '{{email_attachment_ids}}' ) as $attachment_id ) {\n\t\t$file = get_attached_file( $attachment_id );\n\t\tif ( $file && file_exists( $file ) ) {\n\t\t\t$attachments[] = $file;\n\t\t}\n\t}\n\treturn $attachments;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "emails",
+        "attachments",
+        "pdf"
+    ],
+    "variables": [
+        {
+            "name": "email_attachment_ids",
+            "label": "IDs αρχείων πολυμέσων (με κόμμα)",
+            "default": "",
+            "description": "Μόνο αριθμοί"
+        },
+        {
+            "name": "email_attachment_emails",
+            "label": "Emails (με κόμμα)",
+            "default": "customer_processing_order",
+            "description": "IDs emails: customer_processing_order, customer_completed_order, customer_on_hold_order, customer_invoice, customer_refunded_order, new_order"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-attach-file-pdf-emails/"
+    ],
+    "updated": "2026-11-18T17:50:03+00:00"
+}

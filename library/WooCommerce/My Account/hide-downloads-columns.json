@@ -1,0 +1,28 @@
+{
+    "title": "Hide columns from the My Account downloads table",
+    "description": "Κρύβει στήλες από τον πίνακα «Λήψεις» του λογαριασμού πελάτη, π.χ. «Υπόλοιπες λήψεις» και «Λήγει» όταν οι λήψεις σας είναι απεριόριστες και χωρίς λήξη, για πιο καθαρή εμφάνιση. Στήλες: download-product, download-remaining, download-expires, download-file.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_account_downloads_columns', 'perfectpixel_hide_downloads_columns' );\n\nfunction perfectpixel_hide_downloads_columns( $columns ) {\n\tforeach ( array_filter( array_map( 'trim', explode( ',', '{{hidden_download_columns}}' ) ) ) as $key ) {\n\t\tunset( $columns[ $key ] );\n\t}\n\treturn $columns;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "my-account",
+        "downloads"
+    ],
+    "variables": [
+        {
+            "name": "hidden_download_columns",
+            "label": "Στήλες προς απόκρυψη (με κόμμα)",
+            "default": "download-remaining,download-expires",
+            "description": "Π.χ. download-remaining,download-expires"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-hide-columns-my-account-downloads-table/"
+    ],
+    "updated": "2026-11-18T17:50:03+00:00"
+}

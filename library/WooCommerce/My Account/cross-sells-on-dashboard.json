@@ -1,0 +1,35 @@
+{
+    "title": "Recommend cross-sells of purchased products on My Account",
+    "description": "Στον πίνακα ελέγχου του λογαριασμού πελάτη εμφανίζει ενότητα «Προτάσεις για εσάς» με τα cross-sells όλων των προϊόντων που έχει αγοράσει, χωρίς όσα έχει ήδη αγοράσει. Η λίστα αποθηκεύεται για 12 ώρες ανά πελάτη ώστε να μη φορτώνει κάθε φορά όλες τις παραγγελίες. Τα cross-sells ορίζονται στα «Συνδεδεμένα προϊόντα» κάθε προϊόντος.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_account_dashboard', 'perfectpixel_cross_sells_on_dashboard', 20 );\nadd_action( 'woocommerce_order_status_changed', 'perfectpixel_cross_sells_on_dashboard_flush', 10, 4 );\n\nfunction perfectpixel_cross_sells_on_dashboard() {\n\t$user_id = get_current_user_id();\n\t$key     = 'perfectpixel_account_xsells_' . $user_id;\n\t$ids     = get_transient( $key );\n\tif ( false === $ids ) {\n\t\t$bought = array();\n\t\t$ids    = array();\n\t\tforeach ( wc_get_orders( array( 'customer' => $user_id, 'status' => wc_get_is_paid_statuses(), 'limit' => 100 ) ) as $order ) {\n\t\t\tforeach ( $order->get_items() as $item ) {\n\t\t\t\t$bought[] = (int) $item->get_product_id();\n\t\t\t\t$product  = wc_get_product( $item->get_product_id() );\n\t\t\t\tif ( $product ) {\n\t\t\t\t\t$ids = array_merge( $ids, $product->get_cross_sell_ids() );\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\t$ids = array_values( array_diff( array_unique( array_map( 'intval', $ids ) ), $bought ) );\n\t\tset_transient( $key, $ids, 12 * HOUR_IN_SECONDS );\n\t}\n\t$ids = array_slice( (array) $ids, 0, max( 1, (int) '{{account_crosssells_limit}}' ) );\n\tif ( $ids ) {\n\t\techo '<h2>' . esc_html( '{{account_crosssells_title}}' ) . '</h2>';\n\t\techo do_shortcode( '[products ids=\"' . esc_attr( implode( ',', $ids ) ) . '\" columns=\"' . count( $ids ) . '\" orderby=\"post__in\"]' );\n\t}\n}\n\nfunction perfectpixel_cross_sells_on_dashboard_flush( $order_id, $from, $to, $order ) {\n\tif ( $order && $order->get_customer_id() ) {\n\t\tdelete_transient( 'perfectpixel_account_xsells_' . $order->get_customer_id() );\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "my-account",
+        "cross-selling",
+        "marketing"
+    ],
+    "variables": [
+        {
+            "name": "account_crosssells_title",
+            "label": "Τίτλος",
+            "default": "Προτάσεις για εσάς",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "account_crosssells_limit",
+            "label": "Πλήθος",
+            "default": "4",
+            "description": "Μόνο αριθμός"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-cross-sells-all-purchased-products/"
+    ],
+    "updated": "2026-11-18T17:50:03+00:00"
+}

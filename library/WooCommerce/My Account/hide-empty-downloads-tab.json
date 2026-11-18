@@ -1,0 +1,22 @@
+{
+    "title": "Hide the Downloads tab for customers without downloads",
+    "description": "Η καρτέλα «Λήψεις» του λογαριασμού εμφανίζεται μόνο στους πελάτες που έχουν διαθέσιμα αρχεία για λήψη. Οι υπόλοιποι (π.χ. όσοι αγοράζουν μόνο φυσικά προϊόντα) δεν βλέπουν μια άδεια καρτέλα.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_account_menu_items', 'perfectpixel_hide_empty_downloads_tab', 30 );\n\nfunction perfectpixel_hide_empty_downloads_tab( $items ) {\n\tif ( isset( $items['downloads'] ) && function_exists( 'WC' ) && WC()->customer && ! WC()->customer->get_downloadable_products() ) {\n\t\tunset( $items['downloads'] );\n\t}\n\treturn $items;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "my-account",
+        "downloads",
+        "menu"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-hide-my-account-downloads-tab/"
+    ],
+    "updated": "2026-11-18T17:50:03+00:00"
+}

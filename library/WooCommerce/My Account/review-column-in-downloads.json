@@ -1,0 +1,35 @@
+{
+    "title": "Add a \"Leave a review\" column to My Account downloads",
+    "description": "Στον πίνακα «Λήψεις» του λογαριασμού πελάτη προσθέτει στήλη με κουμπί «Αξιολογήστε», που οδηγεί στις αξιολογήσεις του προϊόντος. Εμφανίζεται μόνο για προϊόντα που ο πελάτης δεν έχει αξιολογήσει ακόμα και μόνο αν οι αξιολογήσεις είναι ενεργές. Ιδανικό για ψηφιακά προϊόντα.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_account_downloads_columns', 'perfectpixel_review_column_in_downloads', 20 );\nadd_action( 'woocommerce_account_downloads_column_perfectpixel-review', 'perfectpixel_review_column_value' );\n\nfunction perfectpixel_review_column_in_downloads( $columns ) {\n\tif ( wc_reviews_enabled() ) {\n\t\t$columns['perfectpixel-review'] = '{{download_review_column}}';\n\t}\n\treturn $columns;\n}\n\nfunction perfectpixel_customer_reviewed( $product_id ) {\n\treturn (bool) get_comments(\n\t\tarray(\n\t\t\t'post_id' => $product_id,\n\t\t\t'user_id' => get_current_user_id(),\n\t\t\t'type'    => 'review',\n\t\t\t'count'   => true,\n\t\t\t'status'  => 'all',\n\t\t)\n\t);\n}\n\nfunction perfectpixel_review_column_value( $download ) {\n\t$product_id = (int) $download['product_id'];\n\t$product    = wc_get_product( $product_id );\n\tif ( $product && $product->get_parent_id() ) {\n\t\t$product_id = $product->get_parent_id();\n\t}\n\tif ( $product_id && comments_open( $product_id ) && ! perfectpixel_customer_reviewed( $product_id ) ) {\n\t\techo '<a class=\"button\" href=\"' . esc_url( get_permalink( $product_id ) . '#reviews' ) . '\">' . esc_html( '{{download_review_button}}' ) . '</a>';\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "my-account",
+        "downloads",
+        "reviews"
+    ],
+    "variables": [
+        {
+            "name": "download_review_column",
+            "label": "Τίτλος στήλης",
+            "default": "Αξιολόγηση",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "download_review_button",
+            "label": "Κείμενο κουμπιού",
+            "default": "Αξιολογήστε",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-leave-a-review-column-to-downloads-table/"
+    ],
+    "updated": "2026-11-18T17:50:03+00:00"
+}

@@ -1,0 +1,35 @@
+{
+    "title": "Show related products in customer order emails",
+    "description": "Στα emails «Σε επεξεργασία» και «Ολοκληρωμένη παραγγελία» προς τον πελάτη, κάτω από τον πίνακα της παραγγελίας εμφανίζει πλέγμα με προτεινόμενα προϊόντα (cross-sells ή σχετικά των προϊόντων που αγόρασε) με εικόνα, όνομα, τιμή και σύνδεσμο. Φτιαγμένο με πίνακες ώστε να εμφανίζεται σωστά στα προγράμματα email (το shortcode [products] δεν δουλεύει σε emails).",
+    "type": "php",
+    "code": "add_action( 'woocommerce_email_after_order_table', 'perfectpixel_related_products_in_emails', 20, 4 );\n\nfunction perfectpixel_related_products_in_emails( $order, $sent_to_admin, $plain_text, $email ) {\n\tif ( $sent_to_admin || $plain_text || ! $email || ! in_array( $email->id, array( 'customer_processing_order', 'customer_completed_order' ), true ) ) {\n\t\treturn;\n\t}\n\t$bought = array();\n\t$ids    = array();\n\tforeach ( $order->get_items() as $item ) {\n\t\t$bought[] = (int) $item->get_product_id();\n\t\t$product  = wc_get_product( $item->get_product_id() );\n\t\tif ( $product ) {\n\t\t\t$ids = array_merge( $ids, $product->get_cross_sell_ids(), wc_get_related_products( $product->get_id(), 6 ) );\n\t\t}\n\t}\n\t$ids = array_slice( array_values( array_diff( array_unique( array_map( 'intval', $ids ) ), $bought ) ), 0, max( 1, (int) '{{email_products_count}}' ) );\n\tif ( ! $ids ) {\n\t\treturn;\n\t}\n\t$width = floor( 100 / count( $ids ) );\n\techo '<h2>' . esc_html( '{{email_products_heading}}' ) . '</h2><table cellspacing=\"0\" cellpadding=\"6\" border=\"0\" style=\"width:100%;margin-bottom:40px\"><tr>';\n\tforeach ( $ids as $id ) {\n\t\t$product = wc_get_product( $id );\n\t\tif ( ! $product || ! $product->is_visible() ) {\n\t\t\tcontinue;\n\t\t}\n\t\t$image = wp_get_attachment_image_url( $product->get_image_id(), 'woocommerce_thumbnail' );\n\t\tprintf(\n\t\t\t'<td valign=\"top\" align=\"center\" style=\"width:%1$d%%\"><a href=\"%2$s\" style=\"text-decoration:none\">%3$s<br><strong>%4$s</strong></a><br>%5$s</td>',\n\t\t\t(int) $width,\n\t\t\tesc_url( $product->get_permalink() ),\n\t\t\t$image ? '<img src=\"' . esc_url( $image ) . '\" alt=\"\" width=\"150\" style=\"max-width:100%;height:auto;margin-bottom:6px\">' : '',\n\t\t\tesc_html( $product->get_name() ),\n\t\t\twp_kses_post( $product->get_price_html() )\n\t\t);\n\t}\n\techo '</tr></table>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "emails",
+        "cross-selling",
+        "related-products"
+    ],
+    "variables": [
+        {
+            "name": "email_products_heading",
+            "label": "Τίτλος",
+            "default": "Μπορεί να σας αρέσουν επίσης",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "email_products_count",
+            "label": "Πλήθος προϊόντων",
+            "default": "3",
+            "description": "Μόνο αριθμός (1-4 ταιριάζουν καλύτερα)"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-display-product-grid-order-emails/"
+    ],
+    "updated": "2026-11-18T17:50:03+00:00"
+}
