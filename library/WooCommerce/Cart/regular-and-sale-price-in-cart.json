@@ -1,0 +1,22 @@
+{
+    "title": "Show regular and sale price in the cart table",
+    "description": "Για προϊόντα σε προσφορά, η στήλη «Τιμή» στο καλάθι δείχνει την αρχική τιμή διαγραμμένη και την τιμή προσφοράς δίπλα, ώστε ο πελάτης να βλέπει την έκπτωση. Ισχύει για το κλασικό καλάθι (shortcode)· το καλάθι με blocks δεν χρησιμοποιεί αυτό το hook.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_cart_item_price', 'perfectpixel_regular_and_sale_price_in_cart', 30, 3 );\n\nfunction perfectpixel_regular_and_sale_price_in_cart( $price_html, $cart_item, $cart_item_key ) {\n\t$product = $cart_item['data'];\n\tif ( ! $product || ! $product->is_on_sale() ) {\n\t\treturn $price_html;\n\t}\n\t$regular = wc_get_price_to_display( $product, array( 'price' => $product->get_regular_price() ) );\n\t$active  = wc_get_price_to_display( $product );\n\treturn $regular > $active ? wc_format_sale_price( $regular, $active ) : $price_html;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "cart",
+        "pricing",
+        "sales"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-display-regularsale-price-cart-table/"
+    ],
+    "updated": "2026-11-18T12:40:31+00:00"
+}

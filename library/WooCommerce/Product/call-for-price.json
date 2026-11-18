@@ -1,0 +1,41 @@
+{
+    "title": "\"Price on request\" text and enquiry button for products without price",
+    "description": "Για προϊόντα χωρίς τιμή εμφανίζει «Τιμή κατόπιν ζήτησης» αντί για κενό, και στη σελίδα προϊόντος ένα κουμπί «Ζητήστε τιμή» που οδηγεί σε σελίδα επικοινωνίας ή email. Ορίστε κείμενα και σύνδεσμο στις μεταβλητές.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_empty_price_html', 'perfectpixel_call_for_price', 10, 2 );\n\nfunction perfectpixel_call_for_price( $html, $product ) {\n\t$html = '<span class=\"perfectpixel-poa\">' . esc_html( '{{poa_text}}' ) . '</span>';\n\tif ( is_product() && get_the_ID() === $product->get_id() ) {\n\t\t$link = '{{poa_link}}';\n\t\tif ( 0 === strpos( $link, '/' ) ) {\n\t\t\t$link = home_url( $link );\n\t\t}\n\t\t$link  = add_query_arg( 'product', rawurlencode( $product->get_name() ), $link );\n\t\t$html .= ' <a class=\"button perfectpixel-poa-button\" href=\"' . esc_url( $link ) . '\">' . esc_html( '{{poa_button}}' ) . '</a>';\n\t}\n\treturn $html;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "product",
+        "pricing",
+        "b2b"
+    ],
+    "variables": [
+        {
+            "name": "poa_text",
+            "label": "Κείμενο αντί για τιμή",
+            "default": "Τιμή κατόπιν ζήτησης",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "poa_button",
+            "label": "Κείμενο κουμπιού",
+            "default": "Ζητήστε τιμή",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "poa_link",
+            "label": "Σύνδεσμος κουμπιού",
+            "default": "/contact/",
+            "description": "Σελίδα (/contact/) ή mailto:info@example.com"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-poa-call-price-button-price-empty/"
+    ],
+    "updated": "2026-11-18T12:40:31+00:00"
+}

@@ -1,0 +1,21 @@
+{
+    "title": "Set default, minimum, maximum and step quantities",
+    "description": "Ορίζει προεπιλεγμένη, ελάχιστη, μέγιστη ποσότητα και βήμα (π.χ. ανά 6 τεμάχια) στο πεδίο ποσότητας, για όλα τα προϊόντα ή ανά προϊόν, στη σελίδα προϊόντος, στις παραλλαγές και στο καλάθι. Ορίστε τους κανόνες στο $rules (ID προϊόντος ή «*» για όλα).",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_quantity_input_args', 'perfectpixel_quantity_rules_args', 20, 2 );\nadd_filter( 'woocommerce_available_variation', 'perfectpixel_quantity_rules_variation', 20, 3 );\n\n/**\n * Product ID (or '*' for all) => [ default, min, max, step ]. Use 0 for \"no change\".\n */\nfunction perfectpixel_quantity_rules_for( $product ) {\n\t$rules = array(\n\t\t'*' => array( 1, 1, 0, 1 ),\n\t\t// 123 => array( 6, 6, 60, 6 ),\n\t);\n\t$id = $product->get_parent_id() ? $product->get_parent_id() : $product->get_id();\n\treturn $rules[ $id ] ?? ( $rules['*'] ?? null );\n}\n\nfunction perfectpixel_quantity_rules_args( $args, $product ) {\n\t$rule = perfectpixel_quantity_rules_for( $product );\n\tif ( ! $rule ) {\n\t\treturn $args;\n\t}\n\tlist( $default, $min, $max, $step ) = $rule;\n\tif ( $min ) {\n\t\t$args['min_value'] = $min;\n\t}\n\tif ( $max ) {\n\t\t$args['max_value'] = $max;\n\t}\n\tif ( $step ) {\n\t\t$args['step'] = $step;\n\t}\n\tif ( $default && ! is_cart() ) {\n\t\t$args['input_value'] = $default;\n\t}\n\treturn $args;\n}\n\nfunction perfectpixel_quantity_rules_variation( $data, $product, $variation ) {\n\t$rule = perfectpixel_quantity_rules_for( $variation );\n\tif ( $rule ) {\n\t\tif ( $rule[1] ) {\n\t\t\t$data['min_qty'] = $rule[1];\n\t\t}\n\t\tif ( $rule[2] ) {\n\t\t\t$data['max_qty'] = $rule[2];\n\t\t}\n\t}\n\treturn $data;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "product",
+        "quantity"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-define-add-cart-min-max-incremental-quantities/"
+    ],
+    "updated": "2026-11-18T12:40:31+00:00"
+}

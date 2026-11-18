@@ -1,0 +1,22 @@
+{
+    "title": "Show the raw cart contents for debugging (admins only)",
+    "description": "Εργαλείο για developers: προσθέτοντας ?perfectpixel_debug_cart=1 στη διεύθυνση της σελίδας καλαθιού, οι διαχειριστές του καταστήματος βλέπουν τα περιεχόμενα του καλαθιού (προϊόντα, ποσότητες, δεδομένα γραμμών, σύνολα) για αποσφαλμάτωση. Οι πελάτες δεν βλέπουν ποτέ τίποτα. Απενεργοποιήστε το όταν δεν το χρειάζεστε.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_before_cart', 'perfectpixel_debug_cart_contents' );\n\nfunction perfectpixel_debug_cart_contents() {\n\tif ( empty( $_GET['perfectpixel_debug_cart'] ) || ! current_user_can( 'manage_woocommerce' ) ) { // phpcs:ignore WordPress.Security.NonceVerification\n\t\treturn;\n\t}\n\t$items = array();\n\tforeach ( WC()->cart->get_cart() as $key => $item ) {\n\t\t$copy         = $item;\n\t\t$copy['data'] = $item['data'] ? sprintf( '%s #%d (%s)', get_class( $item['data'] ), $item['data']->get_id(), $item['data']->get_name() ) : null;\n\t\t$items[ $key ] = $copy;\n\t}\n\t$dump = array(\n\t\t'items'   => $items,\n\t\t'totals'  => WC()->cart->get_totals(),\n\t\t'coupons' => WC()->cart->get_applied_coupons(),\n\t);\n\techo '<pre style=\"max-height:400px;overflow:auto;font-size:12px;background:#f6f7f7;padding:1em\">' . esc_html( print_r( $dump, true ) ) . '</pre>'; // phpcs:ignore WordPress.PHP.DevelopmentFunctions\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "development",
+        "debug",
+        "cart"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-see-whats-inside-cart-array-print_r/"
+    ],
+    "updated": "2026-11-18T12:40:31+00:00"
+}

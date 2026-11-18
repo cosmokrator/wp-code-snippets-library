@@ -1,0 +1,22 @@
+{
+    "title": "Restyle the \"remove item\" icon in the cart",
+    "description": "CSS που αντικαθιστά το κόκκινο «×» αφαίρεσης προϊόντος στο καλάθι με ένα πιο διακριτικό γκρι εικονίδιο που κοκκινίζει στο hover. Αλλάξτε χρώματα/μέγεθος στο CSS.",
+    "type": "css",
+    "code": ".woocommerce a.remove {\n\tdisplay: inline-flex;\n\talign-items: center;\n\tjustify-content: center;\n\twidth: 1.6em;\n\theight: 1.6em;\n\tborder-radius: 50%;\n\tcolor: #8c8f94 !important;\n\tbackground: transparent;\n\tfont-size: 1.25em;\n\ttransition: color .15s, background .15s;\n}\n.woocommerce a.remove:hover {\n\tcolor: #fff !important;\n\tbackground: #d63638;\n}",
+    "location": "site_header",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "cart",
+        "css",
+        "design"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-change-remove-item-icon-cart/"
+    ],
+    "updated": "2026-11-18T12:40:31+00:00"
+}

@@ -1,0 +1,40 @@
+{
+    "title": "Show different shipping rates by cart weight",
+    "description": "Επιλέγει ποιοι τρόποι αποστολής εμφανίζονται ανάλογα με το συνολικό βάρος του καλαθιού, π.χ. «Κανονική αποστολή» έως 10 kg και «Βαριά αποστολή» από 10 kg και πάνω. Φτιάξτε τους δύο τρόπους στη ζώνη αποστολής και ορίστε το όριο και τα IDs τους (π.χ. flat_rate:3) στις μεταβλητές. Χρειάζεται βάρος σε όλα τα προϊόντα.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_package_rates', 'perfectpixel_weight_based_shipping', 10, 2 );\n\nfunction perfectpixel_weight_based_shipping( $rates, $package ) {\n\t$weight = 0;\n\tforeach ( $package['contents'] as $item ) {\n\t\t$weight += (float) $item['data']->get_weight() * $item['quantity'];\n\t}\n\t$heavy = $weight > (float) '{{weight_limit}}';\n\t$hide  = $heavy ? '{{light_rate_ids}}' : '{{heavy_rate_ids}}';\n\tforeach ( array_filter( array_map( 'trim', explode( ',', $hide ) ) ) as $rate_id ) {\n\t\tunset( $rates[ $rate_id ] );\n\t}\n\treturn $rates;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "shipping",
+        "weight"
+    ],
+    "variables": [
+        {
+            "name": "weight_limit",
+            "label": "Όριο βάρους",
+            "default": "10",
+            "description": "Στη μονάδα βάρους του καταστήματος"
+        },
+        {
+            "name": "light_rate_ids",
+            "label": "Τρόποι για ελαφριά (IDs, με κόμμα)",
+            "default": "flat_rate:1",
+            "description": "Κρύβονται πάνω από το όριο"
+        },
+        {
+            "name": "heavy_rate_ids",
+            "label": "Τρόποι για βαριά (IDs, με κόμμα)",
+            "default": "flat_rate:2",
+            "description": "Κρύβονται κάτω από το όριο"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-shipping-weight-without-plugin/"
+    ],
+    "updated": "2026-11-18T12:40:31+00:00"
+}

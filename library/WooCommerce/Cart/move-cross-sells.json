@@ -1,0 +1,35 @@
+{
+    "title": "Move cross-sells below the cart and change how many show",
+    "description": "Μετακινεί την ενότητα «Μπορεί να σας ενδιαφέρουν» (cross-sells) κάτω από όλο το καλάθι, ώστε να μην αποσπά από το κουμπί ολοκλήρωσης, και ορίζει πόσα προϊόντα και σε πόσες στήλες εμφανίζονται. Ορίστε αριθμούς στις μεταβλητές. Ισχύει για το κλασικό καλάθι (shortcode)· το καλάθι με blocks δεν χρησιμοποιεί αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'init', 'perfectpixel_move_cross_sells' );\nadd_filter( 'woocommerce_cross_sells_total', 'perfectpixel_cross_sells_total' );\nadd_filter( 'woocommerce_cross_sells_columns', 'perfectpixel_cross_sells_columns' );\n\nfunction perfectpixel_move_cross_sells() {\n\tremove_action( 'woocommerce_cart_collaterals', 'woocommerce_cross_sell_display' );\n\tadd_action( 'woocommerce_after_cart', 'woocommerce_cross_sell_display' );\n}\n\nfunction perfectpixel_cross_sells_total() {\n\treturn max( 1, (int) '{{cross_sells_total}}' );\n}\n\nfunction perfectpixel_cross_sells_columns() {\n\treturn max( 1, (int) '{{cross_sells_columns}}' );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "cart",
+        "cross-sells",
+        "upsell"
+    ],
+    "variables": [
+        {
+            "name": "cross_sells_total",
+            "label": "Πλήθος προϊόντων",
+            "default": "4",
+            "description": "Μόνο αριθμός"
+        },
+        {
+            "name": "cross_sells_columns",
+            "label": "Στήλες",
+            "default": "4",
+            "description": "Μόνο αριθμός"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-move-change-number-cross-sells-cart-page/"
+    ],
+    "updated": "2026-11-18T12:40:31+00:00"
+}

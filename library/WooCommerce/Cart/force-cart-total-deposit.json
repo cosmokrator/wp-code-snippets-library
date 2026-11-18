@@ -1,0 +1,35 @@
+{
+    "title": "Charge a fixed amount (deposit) instead of the cart total",
+    "description": "Το σύνολο προς πληρωμή γίνεται ένα σταθερό ποσό (π.χ. προκαταβολή 100 €) ανεξάρτητα από την αξία του καλαθιού, μέσω μιας γραμμής «Υπόλοιπο εξόφλησης» που αφαιρεί τη διαφορά. Ο πελάτης βλέπει πόσο πληρώνει τώρα και πόσο αργότερα. Ορίστε ποσό και κείμενο στις μεταβλητές.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_cart_calculate_fees', 'perfectpixel_force_cart_total_deposit', 999 );\n\nfunction perfectpixel_force_cart_total_deposit( $cart ) {\n\tif ( is_admin() && ! wp_doing_ajax() ) {\n\t\treturn;\n\t}\n\t$deposit = (float) '{{deposit_amount}}';\n\t// Everything already in the total: items + shipping + other fees (incl. taxes).\n\t$current = (float) $cart->get_subtotal() + (float) $cart->get_subtotal_tax() + (float) $cart->get_shipping_total() + (float) $cart->get_shipping_tax();\n\tforeach ( $cart->get_fees() as $fee ) {\n\t\t$current += (float) $fee->total + (float) $fee->tax;\n\t}\n\t$current -= (float) $cart->get_discount_total() + (float) $cart->get_discount_tax();\n\n\tif ( $deposit > 0 && $current > $deposit ) {\n\t\t$cart->add_fee( '{{deposit_label}}', -( $current - $deposit ), false );\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "cart",
+        "deposits",
+        "fees"
+    ],
+    "variables": [
+        {
+            "name": "deposit_amount",
+            "label": "Ποσό προκαταβολής",
+            "default": "100",
+            "description": "Μόνο αριθμός"
+        },
+        {
+            "name": "deposit_label",
+            "label": "Όνομα γραμμής υπολοίπου",
+            "default": "Υπόλοιπο εξόφλησης (πληρώνεται αργότερα)",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-force-cart-specific-amount-deposit/"
+    ],
+    "updated": "2026-11-18T12:40:31+00:00"
+}

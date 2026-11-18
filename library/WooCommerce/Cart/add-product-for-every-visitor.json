@@ -1,0 +1,28 @@
+{
+    "title": "Pre-fill the cart with a product for every visitor",
+    "description": "Βάζει αυτόματα ένα προϊόν στο καλάθι κάθε επισκέπτη (μία φορά), π.χ. δωρεάν δείγμα ή για καταστήματα με ένα μόνο προϊόν που στέλνουν τους πελάτες κατευθείαν στο checkout. Αν ο πελάτης το αφαιρέσει, δεν ξαναμπαίνει. Ορίστε το ID στη μεταβλητή.",
+    "type": "php",
+    "code": "add_action( 'template_redirect', 'perfectpixel_prefill_cart_for_visitors' );\n\nfunction perfectpixel_prefill_cart_for_visitors() {\n\t$product_id = (int) '{{prefill_product_id}}';\n\tif ( ! $product_id || is_admin() || ! function_exists( 'WC' ) || ! WC()->cart || ! WC()->session ) {\n\t\treturn;\n\t}\n\tif ( WC()->session->get( 'perfectpixel_prefilled' ) ) {\n\t\treturn; // Already done once; respect a customer who removed it.\n\t}\n\tWC()->session->set( 'perfectpixel_prefilled', 1 );\n\tif ( ! WC()->session->has_session() ) {\n\t\tWC()->session->set_customer_session_cookie( true );\n\t}\n\tWC()->cart->add_to_cart( $product_id );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "cart",
+        "add-to-cart"
+    ],
+    "variables": [
+        {
+            "name": "prefill_product_id",
+            "label": "ID προϊόντος",
+            "default": "0",
+            "description": "Μόνο αριθμός"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-item-to-cart-programmatically/"
+    ],
+    "updated": "2026-11-18T12:40:31+00:00"
+}

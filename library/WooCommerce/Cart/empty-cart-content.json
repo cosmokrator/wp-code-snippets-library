@@ -1,0 +1,28 @@
+{
+    "title": "Add content to the empty cart page",
+    "description": "Εμφανίζει κείμενο (π.χ. προσφορές, κατηγορίες ή κουπόνι) στη σελίδα καλαθιού όταν το καλάθι είναι άδειο, κάτω από το μήνυμα του WooCommerce. Επιτρέπεται απλό HTML και shortcodes (π.χ. [products limit=\"4\"]). Ορίστε το περιεχόμενο στη μεταβλητή. Ισχύει για το κλασικό καλάθι (shortcode)· το καλάθι με blocks δεν χρησιμοποιεί αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_cart_is_empty', 'perfectpixel_empty_cart_content', 20 );\n\nfunction perfectpixel_empty_cart_content() {\n\techo '<div class=\"perfectpixel-empty-cart-content\">' . do_shortcode( wp_kses_post( '{{empty_cart_content}}' ) ) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "cart",
+        "content"
+    ],
+    "variables": [
+        {
+            "name": "empty_cart_content",
+            "label": "Περιεχόμενο",
+            "default": "Δείτε τις <a href=\"/shop/\">προσφορές της εβδομάδας</a>!",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-add-content-empty-cart-page/"
+    ],
+    "updated": "2026-11-18T12:40:31+00:00"
+}

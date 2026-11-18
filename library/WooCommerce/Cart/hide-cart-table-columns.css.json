@@ -1,0 +1,22 @@
+{
+    "title": "Hide columns in the cart table (CSS)",
+    "description": "CSS που κρύβει στήλες του πίνακα καλαθιού για πιο καθαρό καλάθι (ιδίως σε κινητά). Από προεπιλογή κρύβει τη στήλη «Μερικό σύνολο»· σβήστε τα σχόλια στις άλλες γραμμές για να κρύψετε εικόνα, τιμή κ.λπ. Ισχύει για το κλασικό καλάθι.",
+    "type": "css",
+    "code": "/* Subtotal column */\n.woocommerce-cart-form .product-subtotal { display: none; }\n\n/* Uncomment to hide other columns:\n.woocommerce-cart-form .product-thumbnail { display: none; }\n.woocommerce-cart-form .product-price { display: none; }\n*/",
+    "location": "site_header",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "cart",
+        "css",
+        "design"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-hide-column-cart-table/"
+    ],
+    "updated": "2026-11-18T12:40:31+00:00"
+}

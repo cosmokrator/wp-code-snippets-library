@@ -1,0 +1,35 @@
+{
+    "title": "Show a message when a specific product is in the cart",
+    "description": "Βοηθητική συνάρτηση perfectpixel_cart_has_product() που ελέγχει αν ένα προϊόν (ή παραλλαγή του) είναι στο καλάθι, για χρήση σε άλλα snippets. Ως παράδειγμα εμφανίζει μήνυμα στο καλάθι όταν υπάρχει το προϊόν. Ορίστε ID και μήνυμα στις μεταβλητές.",
+    "type": "php",
+    "code": "add_action( 'woocommerce_before_cart', 'perfectpixel_message_if_product_in_cart' );\n\n/**\n * Whether the cart contains a product (or one of its variations).\n */\nfunction perfectpixel_cart_has_product( $product_id ) {\n\tif ( ! WC()->cart ) {\n\t\treturn false;\n\t}\n\tforeach ( WC()->cart->get_cart() as $item ) {\n\t\tif ( (int) $item['product_id'] === (int) $product_id || (int) $item['variation_id'] === (int) $product_id ) {\n\t\t\treturn true;\n\t\t}\n\t}\n\treturn false;\n}\n\nfunction perfectpixel_message_if_product_in_cart() {\n\t$id = (int) '{{cart_product_id}}';\n\tif ( $id && perfectpixel_cart_has_product( $id ) ) {\n\t\techo '<div class=\"woocommerce-info\">' . wp_kses_post( '{{cart_product_message}}' ) . '</div>';\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "cart",
+        "conditional",
+        "notices"
+    ],
+    "variables": [
+        {
+            "name": "cart_product_id",
+            "label": "ID προϊόντος",
+            "default": "0",
+            "description": "Μόνο αριθμός"
+        },
+        {
+            "name": "cart_product_message",
+            "label": "Μήνυμα",
+            "default": "Το προϊόν αυτό αποστέλλεται χωριστά, σε 3-5 εργάσιμες.",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-easily-check-product-id-cart/"
+    ],
+    "updated": "2026-11-18T12:40:31+00:00"
+}

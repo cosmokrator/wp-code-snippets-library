@@ -1,0 +1,21 @@
+{
+    "title": "Remove cross-sells from the cart page",
+    "description": "Αφαιρεί εντελώς την ενότητα «Μπορεί να σας ενδιαφέρουν» (cross-sells) από τη σελίδα καλαθιού, χωρίς να χρειάζεται να σβήσετε τα cross-sells από κάθε προϊόν. Ισχύει για το κλασικό καλάθι (shortcode)· το καλάθι με blocks δεν χρησιμοποιεί αυτό το hook.",
+    "type": "php",
+    "code": "add_action( 'init', 'perfectpixel_remove_cross_sells' );\n\nfunction perfectpixel_remove_cross_sells() {\n\tremove_action( 'woocommerce_cart_collaterals', 'woocommerce_cross_sell_display' );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "cart",
+        "cross-sells"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-remove-cross-sells-cart-page/"
+    ],
+    "updated": "2026-11-18T12:40:31+00:00"
+}

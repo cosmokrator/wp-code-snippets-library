@@ -1,0 +1,28 @@
+{
+    "title": "Change the \"Return to shop\" button link",
+    "description": "Το κουμπί «Επιστροφή στο κατάστημα» στη σελίδα άδειου καλαθιού οδηγεί στη διεύθυνση που ορίζετε (π.χ. αρχική σελίδα ή προσφορές), χρήσιμο αν δεν έχετε σελίδα καταστήματος. Ορίστε τη διεύθυνση στη μεταβλητή (κενό = αρχική σελίδα).",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_return_to_shop_redirect', 'perfectpixel_return_to_shop_url' );\n\nfunction perfectpixel_return_to_shop_url( $url ) {\n\t$custom = trim( '{{return_to_shop_url}}' );\n\tif ( '' === $custom ) {\n\t\treturn home_url( '/' );\n\t}\n\treturn 0 === strpos( $custom, '/' ) ? home_url( $custom ) : $custom;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "cart",
+        "redirect"
+    ],
+    "variables": [
+        {
+            "name": "return_to_shop_url",
+            "label": "Διεύθυνση",
+            "default": "",
+            "description": "Κενό = αρχική σελίδα. Σχετικό (/prosfores/) ή πλήρες URL"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-change-return-shop-url/"
+    ],
+    "updated": "2026-11-18T12:40:31+00:00"
+}

@@ -1,0 +1,22 @@
+{
+    "title": "Hide \"hidden\" products in cart, checkout, orders and emails",
+    "description": "Προϊόντα με ορατότητα καταλόγου «Κρυφό» (π.χ. δώρα ή χρεώσεις που προστίθενται αυτόματα) δεν εμφανίζονται στο καλάθι, στο mini cart, στο checkout, στη σελίδα ευχαριστίας και στα emails, αλλά μετρούν κανονικά στα σύνολα.",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_cart_item_visible', 'perfectpixel_hide_hidden_cart_item', 10, 2 );\nadd_filter( 'woocommerce_widget_cart_item_visible', 'perfectpixel_hide_hidden_cart_item', 10, 2 );\nadd_filter( 'woocommerce_checkout_cart_item_visible', 'perfectpixel_hide_hidden_cart_item', 10, 2 );\nadd_filter( 'woocommerce_order_item_visible', 'perfectpixel_hide_hidden_order_item', 10, 2 );\n\nfunction perfectpixel_is_hidden_product( $product_id ) {\n\t$product = wc_get_product( $product_id );\n\treturn $product && 'hidden' === $product->get_catalog_visibility();\n}\n\nfunction perfectpixel_hide_hidden_cart_item( $visible, $cart_item ) {\n\treturn perfectpixel_is_hidden_product( $cart_item['product_id'] ) ? false : $visible;\n}\n\nfunction perfectpixel_hide_hidden_order_item( $visible, $item ) {\n\treturn is_callable( array( $item, 'get_product_id' ) ) && perfectpixel_is_hidden_product( $item->get_product_id() ) ? false : $visible;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "cart",
+        "orders",
+        "emails"
+    ],
+    "variables": [],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-hide-hidden-products-cart-order-emails/"
+    ],
+    "updated": "2026-11-18T12:40:31+00:00"
+}

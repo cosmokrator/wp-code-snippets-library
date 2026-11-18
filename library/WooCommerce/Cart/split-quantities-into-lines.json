@@ -1,0 +1,28 @@
+{
+    "title": "Show each unit as a separate cart line",
+    "description": "Όταν ο πελάτης προσθέτει ποσότητα μεγαλύτερη του 1, κάθε τεμάχιο μπαίνει ως ξεχωριστή γραμμή στο καλάθι (και στην παραγγελία), π.χ. για εισιτήρια με όνομα ανά άτομο ή προϊόντα με εξατομίκευση ανά τεμάχιο. Ορίστε IDs προϊόντων στη μεταβλητή (κενό = όλα).",
+    "type": "php",
+    "code": "add_filter( 'woocommerce_add_cart_item_data', 'perfectpixel_split_lines_unique_key', 10, 2 );\nadd_action( 'woocommerce_add_to_cart', 'perfectpixel_split_lines_add', 10, 6 );\n\nfunction perfectpixel_split_lines_applies( $product_id ) {\n\t$ids = wp_parse_id_list( '{{split_lines_product_ids}}' );\n\treturn ! $ids || in_array( (int) $product_id, $ids, true );\n}\n\n// A unique key makes WooCommerce create a new line instead of increasing an existing one.\nfunction perfectpixel_split_lines_unique_key( $data, $product_id ) {\n\tif ( perfectpixel_split_lines_applies( $product_id ) ) {\n\t\t$data['perfectpixel_unique'] = wp_generate_uuid4();\n\t}\n\treturn $data;\n}\n\nfunction perfectpixel_split_lines_add( $key, $product_id, $quantity, $variation_id, $variation, $data ) {\n\tstatic $running = false;\n\tif ( $running || $quantity < 2 || ! perfectpixel_split_lines_applies( $product_id ) ) {\n\t\treturn;\n\t}\n\t$running = true;\n\tWC()->cart->set_quantity( $key, 1, false );\n\tfor ( $i = 1; $i < $quantity; $i++ ) {\n\t\tunset( $data['perfectpixel_unique'] );\n\t\tWC()->cart->add_to_cart( $product_id, 1, $variation_id, $variation, $data );\n\t}\n\t$running = false;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "woocommerce",
+        "cart",
+        "quantity"
+    ],
+    "variables": [
+        {
+            "name": "split_lines_product_ids",
+            "label": "IDs προϊόντων (με κόμμα)",
+            "default": "",
+            "description": "Κενό = όλα τα προϊόντα"
+        }
+    ],
+    "source": [
+        "https://www.businessbloomer.com/woocommerce-display-separate-cart-items-product-quantity-1/"
+    ],
+    "updated": "2026-11-18T12:40:31+00:00"
+}
