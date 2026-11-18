@@ -1,0 +1,29 @@
+{
+    "title": "Make the site private for logged-in users only",
+    "description": "Μόνο οι συνδεδεμένοι χρήστες βλέπουν το site· οι επισκέπτες μεταφέρονται στη σελίδα σύνδεσης και μετά επιστρέφουν εκεί που ήθελαν να πάνε. Για ιδιωτικά intranet, sites μελών ή sites υπό κατασκευή. Μπορείτε να εξαιρέσετε σελίδες (π.χ. /contact/, /my-account/ για σύνδεση πελατών WooCommerce). Το RSS feed και το REST API για επισκέπτες κλείνουν επίσης.",
+    "type": "php",
+    "code": "add_action( 'template_redirect', 'perfectpixel_members_only_site', 1 );\nadd_filter( 'rest_authentication_errors', 'perfectpixel_members_only_rest' );\n\nfunction perfectpixel_members_only_site() {\n\tif ( is_user_logged_in() || wp_doing_cron() || wp_doing_ajax() || ( defined( 'WP_CLI' ) && WP_CLI ) ) {\n\t\treturn;\n\t}\n\t$path = (string) wp_parse_url( $_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH );\n\tforeach ( array_filter( array_map( 'trim', explode( ',', '{{members_only_exceptions}}' ) ) ) as $open ) {\n\t\tif ( 0 === strpos( $path, $open ) ) {\n\t\t\treturn;\n\t\t}\n\t}\n\tif ( is_feed() ) {\n\t\twp_die( 'Αυτό το site είναι ιδιωτικό.', '', array( 'response' => 403 ) );\n\t}\n\tauth_redirect(); // Redirects to wp-login.php and back after login.\n}\n\nfunction perfectpixel_members_only_rest( $result ) {\n\tif ( true === $result || is_wp_error( $result ) || is_user_logged_in() ) {\n\t\treturn $result;\n\t}\n\treturn new WP_Error( 'rest_forbidden', 'Αυτό το site είναι ιδιωτικό.', array( 'status' => 401 ) );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "security",
+        "private",
+        "membership"
+    ],
+    "variables": [
+        {
+            "name": "members_only_exceptions",
+            "label": "Ανοιχτά URLs (με κόμμα)",
+            "default": "/my-account/",
+            "description": "Κομμάτια διαδρομών που μένουν ανοιχτά, π.χ. /my-account/,/privacy-policy/"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/e5wmq68o/"
+    ],
+    "updated": "2026-11-18T19:07:57+00:00"
+}

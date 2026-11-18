@@ -1,0 +1,41 @@
+{
+    "title": "Add a \"Back to top\" button",
+    "description": "Εμφανίζει ένα στρογγυλό κουμπί κάτω δεξιά στην οθόνη όταν ο επισκέπτης κατεβαίνει στη σελίδα· με κλικ η σελίδα ανεβαίνει ομαλά στην κορυφή. Ορίστε χρώμα και από πόσα pixels κύλισης εμφανίζεται.",
+    "type": "php",
+    "code": "add_action( 'wp_footer', 'perfectpixel_back_to_top_button' );\n\nfunction perfectpixel_back_to_top_button() {\n\t$color = sanitize_hex_color( '{{back_to_top_color}}' );\n\t?>\n\t<button type=\"button\" class=\"perfectpixel-back-to-top\" aria-label=\"<?php echo esc_attr( '{{back_to_top_label}}' ); ?>\" style=\"position:fixed;right:20px;bottom:20px;z-index:9999;width:44px;height:44px;border:0;border-radius:50%;background:<?php echo esc_attr( $color ? $color : '#1d2327' ); ?>;color:#fff;font-size:20px;line-height:44px;cursor:pointer;opacity:0;visibility:hidden;transition:opacity .2s,visibility .2s;box-shadow:0 2px 6px rgba(0,0,0,.25)\">&#8593;</button>\n\t<script>\n\t( function ( offset ) {\n\t\tvar btn = document.querySelector( '.perfectpixel-back-to-top' );\n\t\tif ( ! btn ) {\n\t\t\treturn;\n\t\t}\n\t\tvar toggle = function () {\n\t\t\tvar show = window.scrollY > offset;\n\t\t\tbtn.style.opacity    = show ? '1' : '0';\n\t\t\tbtn.style.visibility = show ? 'visible' : 'hidden';\n\t\t};\n\t\twindow.addEventListener( 'scroll', toggle, { passive: true } );\n\t\tbtn.addEventListener( 'click', function () {\n\t\t\twindow.scrollTo( { top: 0, behavior: window.matchMedia( '(prefers-reduced-motion: reduce)' ).matches ? 'auto' : 'smooth' } );\n\t\t} );\n\t\ttoggle();\n\t} )( <?php echo (int) '{{back_to_top_offset}}'; ?> );\n\t</script>\n\t<?php\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "ux",
+        "navigation",
+        "buttons"
+    ],
+    "variables": [
+        {
+            "name": "back_to_top_color",
+            "label": "Χρώμα",
+            "default": "#1d2327",
+            "description": "Χρώμα CSS, π.χ. #1d2327"
+        },
+        {
+            "name": "back_to_top_offset",
+            "label": "Εμφάνιση μετά από (px κύλισης)",
+            "default": "400",
+            "description": "Μόνο αριθμός"
+        },
+        {
+            "name": "back_to_top_label",
+            "label": "Κείμενο για αναγνώστες οθόνης",
+            "default": "Επιστροφή στην κορυφή",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/e50xyx35/"
+    ],
+    "updated": "2026-11-18T19:07:57+00:00"
+}

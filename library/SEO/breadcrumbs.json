@@ -1,0 +1,41 @@
+{
+    "title": "SEO-friendly breadcrumbs (automatic or shortcode)",
+    "description": "Breadcrumbs («Αρχική › Κατηγορία › Άρθρο») με δομημένα δεδομένα BreadcrumbList για το Google. Μπαίνουν αυτόματα πάνω από το περιεχόμενο άρθρων και σελίδων ή, αν το απενεργοποιήσετε, όπου θέλετε με το shortcode [breadcrumbs]. Οι σελίδες δείχνουν τις γονικές τους σελίδες. Τα προϊόντα του WooCommerce έχουν δικά τους breadcrumbs και δεν επηρεάζονται.",
+    "type": "php",
+    "code": "add_shortcode( 'breadcrumbs', 'perfectpixel_breadcrumbs_html' );\nadd_filter( 'the_content', 'perfectpixel_breadcrumbs_auto', 5 );\n\nfunction perfectpixel_breadcrumbs_items() {\n\t$items = array( array( '{{breadcrumbs_home}}', home_url( '/' ) ) );\n\tif ( is_singular() ) {\n\t\t$post = get_queried_object();\n\t\tif ( 'post' === $post->post_type ) {\n\t\t\t$cats = get_the_category( $post->ID );\n\t\t\tif ( $cats ) {\n\t\t\t\tforeach ( array_reverse( get_ancestors( $cats[0]->term_id, 'category' ) ) as $ancestor ) {\n\t\t\t\t\t$items[] = array( get_cat_name( $ancestor ), get_category_link( $ancestor ) );\n\t\t\t\t}\n\t\t\t\t$items[] = array( $cats[0]->name, get_category_link( $cats[0] ) );\n\t\t\t}\n\t\t} elseif ( is_post_type_hierarchical( $post->post_type ) ) {\n\t\t\tforeach ( array_reverse( get_post_ancestors( $post ) ) as $ancestor ) {\n\t\t\t\t$items[] = array( get_the_title( $ancestor ), get_permalink( $ancestor ) );\n\t\t\t}\n\t\t}\n\t\t$items[] = array( get_the_title( $post ), get_permalink( $post ) );\n\t} elseif ( is_category() || is_tag() || is_tax() ) {\n\t\t$items[] = array( single_term_title( '', false ), get_term_link( get_queried_object() ) );\n\t} elseif ( is_search() ) {\n\t\t$items[] = array( get_search_query(), '' );\n\t}\n\treturn $items;\n}\n\nfunction perfectpixel_breadcrumbs_html() {\n\t$items = perfectpixel_breadcrumbs_items();\n\tif ( count( $items ) < 2 ) {\n\t\treturn '';\n\t}\n\t$links = array();\n\t$list  = array();\n\t$last  = count( $items ) - 1;\n\tforeach ( $items as $i => $item ) {\n\t\tlist( $name, $url ) = $item;\n\t\t$links[] = ( $i === $last || ! $url ) ? '<span aria-current=\"page\">' . esc_html( wp_strip_all_tags( $name ) ) . '</span>' : '<a href=\"' . esc_url( $url ) . '\">' . esc_html( wp_strip_all_tags( $name ) ) . '</a>';\n\t\t$list[]  = array_filter( array( '@type' => 'ListItem', 'position' => $i + 1, 'name' => wp_strip_all_tags( $name ), 'item' => $url ? $url : null ) );\n\t}\n\t$schema = array( '@context' => 'https://schema.org', '@type' => 'BreadcrumbList', 'itemListElement' => $list );\n\treturn '<nav class=\"perfectpixel-breadcrumbs\" aria-label=\"Breadcrumb\" style=\"font-size:.9em;margin-bottom:1em\">' . implode( ' ' . esc_html( '{{breadcrumbs_separator}}' ) . ' ', $links ) . '</nav>'\n\t\t. '<script type=\"application/ld+json\">' . wp_json_encode( $schema ) . '</script>';\n}\n\nfunction perfectpixel_breadcrumbs_auto( $content ) {\n\tif ( 'yes' !== '{{breadcrumbs_auto}}' || ! is_singular( array( 'post', 'page' ) ) || is_front_page() || ! in_the_loop() || ! is_main_query() ) {\n\t\treturn $content;\n\t}\n\treturn perfectpixel_breadcrumbs_html() . $content;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "seo",
+        "breadcrumbs",
+        "schema"
+    ],
+    "variables": [
+        {
+            "name": "breadcrumbs_auto",
+            "label": "Αυτόματα πάνω από το περιεχόμενο (yes/no)",
+            "default": "yes",
+            "description": "no = μόνο με το shortcode [breadcrumbs]"
+        },
+        {
+            "name": "breadcrumbs_home",
+            "label": "Κείμενο αρχικής",
+            "default": "Αρχική",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "breadcrumbs_separator",
+            "label": "Διαχωριστικό",
+            "default": "›",
+            "description": "Ένας χαρακτήρας, π.χ. › ή /"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/g5gm0v35/"
+    ],
+    "updated": "2026-11-18T19:07:57+00:00"
+}

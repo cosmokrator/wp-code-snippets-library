@@ -1,0 +1,29 @@
+{
+    "title": "Add basic Open Graph tags",
+    "description": "Προσθέτει τις βασικές ετικέτες Open Graph (τίτλος, περιγραφή, εικόνα, URL, τύπος, όνομα site) στα άρθρα, τις σελίδες και τα προϊόντα, ώστε οι κοινοποιήσεις σε Facebook, LinkedIn, Viber κ.λπ. να δείχνουν σωστή εικόνα και κείμενο. Δεν κάνει τίποτα αν είναι ενεργό plugin SEO (Yoast, Rank Math, AIOSEO, SEOPress), που τις προσθέτει ήδη. Για σελίδες χωρίς εικόνα χρησιμοποιείται η προεπιλεγμένη που ορίζετε.",
+    "type": "php",
+    "code": "add_action( 'wp_head', 'perfectpixel_open_graph_tags', 5 );\n\nfunction perfectpixel_open_graph_tags() {\n\t// SEO plugins already output Open Graph tags.\n\tif ( defined( 'WPSEO_VERSION' ) || defined( 'RANK_MATH_VERSION' ) || defined( 'AIOSEO_VERSION' ) || defined( 'SEOPRESS_VERSION' ) ) {\n\t\treturn;\n\t}\n\t$tags = array(\n\t\t'og:site_name' => get_bloginfo( 'name' ),\n\t\t'og:locale'    => get_locale(),\n\t);\n\tif ( is_singular() ) {\n\t\t$post                    = get_queried_object();\n\t\t$tags['og:type']         = 'article';\n\t\t$tags['og:title']        = wp_strip_all_tags( get_the_title( $post ) );\n\t\t$tags['og:url']          = get_permalink( $post );\n\t\t$excerpt                 = has_excerpt( $post ) ? get_the_excerpt( $post ) : wp_trim_words( strip_shortcodes( $post->post_content ), 30, '…' );\n\t\t$tags['og:description']  = wp_strip_all_tags( $excerpt );\n\t\tif ( has_post_thumbnail( $post ) ) {\n\t\t\t$tags['og:image'] = get_the_post_thumbnail_url( $post, 'large' );\n\t\t}\n\t} else {\n\t\t$tags['og:type']        = 'website';\n\t\t$tags['og:title']       = wp_get_document_title();\n\t\t$tags['og:url']         = home_url( add_query_arg( array() ) );\n\t\t$tags['og:description'] = get_bloginfo( 'description' );\n\t}\n\tif ( empty( $tags['og:image'] ) && '' !== trim( '{{og_default_image}}' ) ) {\n\t\t$tags['og:image'] = trim( '{{og_default_image}}' );\n\t}\n\tforeach ( array_filter( $tags ) as $property => $content ) {\n\t\tprintf( '<meta property=\"%s\" content=\"%s\">' . \"\\n\", esc_attr( $property ), 'og:url' === $property || 'og:image' === $property ? esc_url( $content ) : esc_attr( $content ) );\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "seo",
+        "social",
+        "open-graph"
+    ],
+    "variables": [
+        {
+            "name": "og_default_image",
+            "label": "URL προεπιλεγμένης εικόνας",
+            "default": "",
+            "description": "Εικόνα 1200×630 για σελίδες χωρίς επιλεγμένη εικόνα. Κενό = καμία"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/qo9zxwr2/"
+    ],
+    "updated": "2026-11-18T19:07:57+00:00"
+}

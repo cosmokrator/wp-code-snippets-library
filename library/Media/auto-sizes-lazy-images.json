@@ -1,0 +1,22 @@
+{
+    "title": "Add sizes=\"auto\" to lazy-loaded images",
+    "description": "Οι σύγχρονοι browsers υποστηρίζουν sizes=\"auto\" για εικόνες με lazy loading, ώστε να διαλέγουν μόνοι τους το σωστό μέγεθος από το srcset και να κατεβάζουν μικρότερα αρχεία. Το WordPress το κάνει από μόνο του από την έκδοση 6.7· το snippet το προσθέτει σε παλαιότερες εκδόσεις και δεν κάνει τίποτα στις νεότερες.",
+    "type": "php",
+    "code": "add_filter( 'wp_get_attachment_image_attributes', 'perfectpixel_auto_sizes_attributes', 20 );\nadd_filter( 'wp_content_img_tag', 'perfectpixel_auto_sizes_content_img', 20 );\n\nfunction perfectpixel_auto_sizes_needed() {\n\treturn ! function_exists( 'wp_sizes_attribute_includes_valid_auto' ); // WordPress 6.7+ handles it.\n}\n\nfunction perfectpixel_auto_sizes_attributes( $attr ) {\n\tif ( perfectpixel_auto_sizes_needed() && isset( $attr['loading'], $attr['sizes'] ) && 'lazy' === $attr['loading'] && 0 !== strpos( $attr['sizes'], 'auto' ) ) {\n\t\t$attr['sizes'] = 'auto, ' . $attr['sizes'];\n\t}\n\treturn $attr;\n}\n\nfunction perfectpixel_auto_sizes_content_img( $image ) {\n\tif ( perfectpixel_auto_sizes_needed() && false !== strpos( $image, 'loading=\"lazy\"' ) && preg_match( '/\\ssizes=\"(?!auto)/', $image ) ) {\n\t\t$image = preg_replace( '/\\ssizes=\"/', ' sizes=\"auto, ', $image, 1 );\n\t}\n\treturn $image;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "performance",
+        "images",
+        "lazy-load"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/ro8xdx95/"
+    ],
+    "updated": "2026-11-18T19:07:57+00:00"
+}

@@ -1,0 +1,22 @@
+{
+    "title": "Allow contributors to upload images",
+    "description": "Οι χρήστες με ρόλο «Συνεργάτης» (Contributor) μπορούν να ανεβάζουν εικόνες και αρχεία στα άρθρα τους, κάτι που κανονικά επιτρέπεται μόνο από τον «Συντάκτη» και πάνω. Το δικαίωμα δίνεται δυναμικά: αν απενεργοποιήσετε το snippet, ο ρόλος επανέρχεται όπως ήταν.",
+    "type": "php",
+    "code": "add_filter( 'user_has_cap', 'perfectpixel_contributors_upload_files', 10, 4 );\n\nfunction perfectpixel_contributors_upload_files( $allcaps, $caps, $args, $user ) {\n\tif ( in_array( 'upload_files', $caps, true ) && $user instanceof WP_User && in_array( 'contributor', (array) $user->roles, true ) ) {\n\t\t$allcaps['upload_files'] = true;\n\t}\n\treturn $allcaps;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "user-roles",
+        "media",
+        "uploads"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/joerdej5/"
+    ],
+    "updated": "2026-11-18T19:07:57+00:00"
+}

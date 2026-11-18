@@ -1,0 +1,40 @@
+{
+    "title": "Show a \"New\" badge on recent posts",
+    "description": "Στις λίστες άρθρων (αρχική blog, κατηγορίες, αναζήτηση) και στον τίτλο του άρθρου εμφανίζει ετικέτα «Νέο» δίπλα στα άρθρα που δημοσιεύτηκαν τις τελευταίες ημέρες (ορίστε πόσες), ώστε να ξεχωρίζει το φρέσκο περιεχόμενο. Δεν επηρεάζει μενού, widgets και τον διαχειριστή.",
+    "type": "php",
+    "code": "add_filter( 'the_title', 'perfectpixel_new_badge_recent_posts', 20, 2 );\n\nfunction perfectpixel_new_badge_recent_posts( $title, $post_id = 0 ) {\n\tif ( is_admin() || ! $post_id || ! in_the_loop() || 'post' !== get_post_type( $post_id ) || is_feed() ) {\n\t\treturn $title;\n\t}\n\t$age = time() - (int) get_post_time( 'U', true, $post_id );\n\tif ( $age > max( 1, (int) '{{new_post_days}}' ) * DAY_IN_SECONDS ) {\n\t\treturn $title;\n\t}\n\t$color = sanitize_hex_color( '{{new_post_badge_color}}' );\n\treturn $title . ' <span class=\"perfectpixel-new-badge\" style=\"display:inline-block;vertical-align:middle;margin-left:.4em;padding:.1em .45em;border-radius:3px;font-size:.6em;line-height:1.4;color:#fff;background:' . esc_attr( $color ? $color : '#d63638' ) . '\">' . esc_html( '{{new_post_badge_text}}' ) . '</span>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "posts",
+        "badges"
+    ],
+    "variables": [
+        {
+            "name": "new_post_days",
+            "label": "Ημέρες",
+            "default": "7",
+            "description": "Μόνο αριθμός"
+        },
+        {
+            "name": "new_post_badge_text",
+            "label": "Κείμενο",
+            "default": "Νέο",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "new_post_badge_color",
+            "label": "Χρώμα φόντου",
+            "default": "#d63638",
+            "description": "Χρώμα CSS, π.χ. #d63638"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/rod9ky02/"
+    ],
+    "updated": "2026-11-18T19:07:57+00:00"
+}

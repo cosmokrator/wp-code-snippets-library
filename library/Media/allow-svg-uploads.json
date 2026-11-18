@@ -1,0 +1,23 @@
+{
+    "title": "Allow SVG uploads for administrators",
+    "description": "Επιτρέπει στους διαχειριστές να ανεβάζουν αρχεία SVG (λογότυπα, εικονίδια) στη Βιβλιοθήκη πολυμέσων, που το WordPress μπλοκάρει από προεπιλογή. Τα αρχεία που περιέχουν scripts, event handlers ή εξωτερικά αντικείμενα απορρίπτονται. Οι υπόλοιποι ρόλοι δεν μπορούν να ανεβάσουν SVG.",
+    "type": "php",
+    "code": "add_filter( 'upload_mimes', 'perfectpixel_allow_svg_mimes' );\nadd_filter( 'wp_check_filetype_and_ext', 'perfectpixel_allow_svg_filetype', 10, 4 );\nadd_filter( 'wp_handle_upload_prefilter', 'perfectpixel_check_svg_upload' );\n\nfunction perfectpixel_allow_svg_mimes( $mimes ) {\n\tif ( current_user_can( 'manage_options' ) ) {\n\t\t$mimes['svg'] = 'image/svg+xml';\n\t}\n\treturn $mimes;\n}\n\nfunction perfectpixel_allow_svg_filetype( $data, $file, $filename, $mimes ) {\n\tif ( current_user_can( 'manage_options' ) && 'svg' === strtolower( pathinfo( $filename, PATHINFO_EXTENSION ) ) ) {\n\t\t$data['ext']  = 'svg';\n\t\t$data['type'] = 'image/svg+xml';\n\t}\n\treturn $data;\n}\n\nfunction perfectpixel_check_svg_upload( $file ) {\n\tif ( 'svg' !== strtolower( pathinfo( $file['name'], PATHINFO_EXTENSION ) ) ) {\n\t\treturn $file;\n\t}\n\tif ( ! current_user_can( 'manage_options' ) ) {\n\t\t$file['error'] = 'Δεν επιτρέπεται το ανέβασμα SVG.';\n\t\treturn $file;\n\t}\n\t$svg = (string) file_get_contents( $file['tmp_name'] );\n\tif ( preg_match( '/<script|\\son\\w+\\s*=|javascript:|<foreignObject|<!ENTITY|xlink:href\\s*=\\s*[\"\\']\\s*(?!#|data:image)/i', $svg ) ) {\n\t\t$file['error'] = 'Το SVG περιέχει scripts ή εξωτερικό περιεχόμενο και απορρίφθηκε για λόγους ασφαλείας.';\n\t}\n\treturn $file;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "media",
+        "uploads",
+        "svg",
+        "security"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/r5plmlo8/"
+    ],
+    "updated": "2026-11-18T19:07:57+00:00"
+}

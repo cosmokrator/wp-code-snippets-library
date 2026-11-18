@@ -1,0 +1,28 @@
+{
+    "title": "Add featured images to RSS feeds",
+    "description": "Προσθέτει την επιλεγμένη εικόνα κάθε άρθρου στην αρχή του περιεχομένου του RSS feed, ώστε να εμφανίζεται σε feed readers, εργαλεία newsletter (π.χ. Mailchimp RSS campaigns) και aggregators. Ορίστε το μέγεθος εικόνας.",
+    "type": "php",
+    "code": "add_filter( 'the_excerpt_rss', 'perfectpixel_featured_image_in_feed' );\nadd_filter( 'the_content_feed', 'perfectpixel_featured_image_in_feed' );\n\nfunction perfectpixel_featured_image_in_feed( $content ) {\n\t$post = get_post();\n\tif ( ! $post || ! has_post_thumbnail( $post ) ) {\n\t\treturn $content;\n\t}\n\t$size  = sanitize_key( '{{feed_image_size}}' );\n\t$image = get_the_post_thumbnail( $post, $size ? $size : 'medium_large', array( 'style' => 'display:block;max-width:100%;height:auto;margin-bottom:1em' ) );\n\treturn '<p>' . $image . '</p>' . $content;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "rss",
+        "images"
+    ],
+    "variables": [
+        {
+            "name": "feed_image_size",
+            "label": "Μέγεθος εικόνας",
+            "default": "medium_large",
+            "description": "thumbnail, medium, medium_large, large ή full"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/m5ljmz24/"
+    ],
+    "updated": "2026-11-18T19:07:57+00:00"
+}

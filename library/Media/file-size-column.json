@@ -1,0 +1,22 @@
+{
+    "title": "Show the file size in the Media library list",
+    "description": "Στη Βιβλιοθήκη πολυμέσων (προβολή λίστας) προσθέτει στήλη «Μέγεθος» με το μέγεθος κάθε αρχείου (π.χ. 2,4 MB), ώστε να εντοπίζετε εικόνες που δεν συμπιέστηκαν και βαραίνουν το site.",
+    "type": "php",
+    "code": "add_filter( 'manage_media_columns', 'perfectpixel_file_size_column' );\nadd_action( 'manage_media_custom_column', 'perfectpixel_file_size_column_value', 10, 2 );\n\nfunction perfectpixel_file_size_column( $columns ) {\n\t$columns['perfectpixel_filesize'] = 'Μέγεθος';\n\treturn $columns;\n}\n\nfunction perfectpixel_file_size_column_value( $column, $attachment_id ) {\n\tif ( 'perfectpixel_filesize' !== $column ) {\n\t\treturn;\n\t}\n\t$meta  = wp_get_attachment_metadata( $attachment_id );\n\t$bytes = ! empty( $meta['filesize'] ) ? (int) $meta['filesize'] : 0;\n\tif ( ! $bytes ) {\n\t\t$file  = get_attached_file( $attachment_id );\n\t\t$bytes = ( $file && file_exists( $file ) ) ? (int) filesize( $file ) : 0;\n\t}\n\techo $bytes ? esc_html( size_format( $bytes, 1 ) ) : '&ndash;';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "admin",
+        "media",
+        "performance"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/joejww2n/"
+    ],
+    "updated": "2026-11-18T19:07:57+00:00"
+}

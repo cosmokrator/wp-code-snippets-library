@@ -1,0 +1,21 @@
+{
+    "title": "Show the ID column in admin lists",
+    "description": "Προσθέτει στήλη «ID» στις λίστες του διαχειριστή: άρθρα, σελίδες και άλλους τύπους περιεχομένου, πολυμέσα, χρήστες και κατηγορίες/ετικέτες. Χρήσιμο γιατί πολλά snippets, shortcodes και plugins ζητούν ID και αλλιώς πρέπει να το ψάχνετε στο URL.",
+    "type": "php",
+    "code": "add_action( 'admin_init', 'perfectpixel_id_column_setup' );\n\nfunction perfectpixel_id_column_setup() {\n\tforeach ( get_post_types( array( 'show_ui' => true ) ) as $type ) {\n\t\tadd_filter( \"manage_{$type}_posts_columns\", 'perfectpixel_id_column' );\n\t\tadd_action( \"manage_{$type}_posts_custom_column\", 'perfectpixel_id_column_value', 10, 2 );\n\t}\n\tadd_filter( 'manage_media_columns', 'perfectpixel_id_column' );\n\tadd_action( 'manage_media_custom_column', 'perfectpixel_id_column_value', 10, 2 );\n\tadd_filter( 'manage_users_columns', 'perfectpixel_id_column' );\n\tadd_filter( 'manage_users_custom_column', 'perfectpixel_id_column_user_value', 10, 3 );\n\tforeach ( get_taxonomies( array( 'show_ui' => true ) ) as $taxonomy ) {\n\t\tadd_filter( \"manage_edit-{$taxonomy}_columns\", 'perfectpixel_id_column' );\n\t\tadd_filter( \"manage_{$taxonomy}_custom_column\", 'perfectpixel_id_column_term_value', 10, 3 );\n\t}\n\tadd_action( 'admin_head', 'perfectpixel_id_column_css' );\n}\n\nfunction perfectpixel_id_column( $columns ) {\n\t$columns['perfectpixel_id'] = 'ID';\n\treturn $columns;\n}\n\nfunction perfectpixel_id_column_value( $column, $id ) {\n\tif ( 'perfectpixel_id' === $column ) {\n\t\techo (int) $id;\n\t}\n}\n\nfunction perfectpixel_id_column_user_value( $output, $column, $user_id ) {\n\treturn 'perfectpixel_id' === $column ? (string) (int) $user_id : $output;\n}\n\nfunction perfectpixel_id_column_term_value( $output, $column, $term_id ) {\n\treturn 'perfectpixel_id' === $column ? (string) (int) $term_id : $output;\n}\n\nfunction perfectpixel_id_column_css() {\n\techo '<style>.column-perfectpixel_id{width:60px}</style>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "admin",
+        "columns"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/323jkk1o/"
+    ],
+    "updated": "2026-11-18T19:07:57+00:00"
+}

@@ -1,0 +1,29 @@
+{
+    "title": "Add an \"Edit\" link to posts in archives",
+    "description": "Για συνδεδεμένους χρήστες που έχουν δικαίωμα επεξεργασίας, εμφανίζει σύνδεσμο «Επεξεργασία» κάτω από κάθε άρθρο στις λίστες (αρχική blog, κατηγορίες, αναζήτηση) και στα μεμονωμένα άρθρα/σελίδες, ώστε να διορθώνετε γρήγορα. Οι επισκέπτες δεν βλέπουν τίποτα.",
+    "type": "php",
+    "code": "add_filter( 'the_excerpt', 'perfectpixel_edit_link_in_archives', 30 );\nadd_filter( 'the_content', 'perfectpixel_edit_link_in_archives', 30 );\n\nfunction perfectpixel_edit_link_in_archives( $content ) {\n\tif ( is_admin() || is_feed() || ! in_the_loop() || ! current_user_can( 'edit_post', get_the_ID() ) ) {\n\t\treturn $content;\n\t}\n\t$link = get_edit_post_link( get_the_ID() );\n\tif ( ! $link ) {\n\t\treturn $content;\n\t}\n\treturn $content . '<p class=\"perfectpixel-edit-link\"><a href=\"' . esc_url( $link ) . '\">' . esc_html( '{{archive_edit_link_text}}' ) . '</a></p>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "posts",
+        "admin",
+        "editing"
+    ],
+    "variables": [
+        {
+            "name": "archive_edit_link_text",
+            "label": "Κείμενο συνδέσμου",
+            "default": "✎ Επεξεργασία",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/05kr6v2k/"
+    ],
+    "updated": "2026-11-18T19:07:57+00:00"
+}

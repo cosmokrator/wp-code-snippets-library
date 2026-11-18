@@ -1,0 +1,22 @@
+{
+    "title": "Show the featured image in the admin posts list",
+    "description": "Στις λίστες Άρθρα και Σελίδες του διαχειριστή (και σε άλλους τύπους περιεχομένου με επιλεγμένη εικόνα) προσθέτει μικρή στήλη με την επιλεγμένη εικόνα κάθε εγγραφής, ώστε να βλέπετε αμέσως ποια δεν έχουν εικόνα. Τα προϊόντα του WooCommerce έχουν ήδη δική τους στήλη και δεν επηρεάζονται.",
+    "type": "php",
+    "code": "add_action( 'admin_init', 'perfectpixel_featured_image_column_setup' );\n\nfunction perfectpixel_featured_image_column_setup() {\n\tforeach ( get_post_types( array( 'show_ui' => true ) ) as $type ) {\n\t\tif ( 'product' === $type || ! post_type_supports( $type, 'thumbnail' ) ) {\n\t\t\tcontinue;\n\t\t}\n\t\tadd_filter( \"manage_{$type}_posts_columns\", 'perfectpixel_featured_image_column' );\n\t\tadd_action( \"manage_{$type}_posts_custom_column\", 'perfectpixel_featured_image_column_value', 10, 2 );\n\t}\n}\n\nfunction perfectpixel_featured_image_column( $columns ) {\n\t$new = array();\n\tforeach ( $columns as $key => $label ) {\n\t\tif ( 'title' === $key ) {\n\t\t\t$new['perfectpixel_thumb'] = '<span class=\"dashicons dashicons-format-image\" title=\"Επιλεγμένη εικόνα\"></span>';\n\t\t}\n\t\t$new[ $key ] = $label;\n\t}\n\treturn $new;\n}\n\nfunction perfectpixel_featured_image_column_value( $column, $post_id ) {\n\tif ( 'perfectpixel_thumb' === $column ) {\n\t\techo has_post_thumbnail( $post_id ) ? get_the_post_thumbnail( $post_id, array( 48, 48 ), array( 'style' => 'width:48px;height:48px;object-fit:cover;border-radius:3px' ) ) : '<span aria-hidden=\"true\">&ndash;</span>';\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "admin",
+        "columns",
+        "images"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/m5y4y45d/"
+    ],
+    "updated": "2026-11-18T19:07:57+00:00"
+}

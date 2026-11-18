@@ -1,0 +1,22 @@
+{
+    "title": "Link featured images to their posts",
+    "description": "Στις λίστες άρθρων (αρχική blog, κατηγορίες, αναζήτηση), αν το theme εμφανίζει την επιλεγμένη εικόνα χωρίς σύνδεσμο, τη μετατρέπει σε σύνδεσμο προς το άρθρο, ώστε ο αναγνώστης να μπορεί να πατήσει και στην εικόνα. Στη σελίδα του ίδιου του άρθρου η εικόνα δεν αλλάζει.",
+    "type": "php",
+    "code": "add_filter( 'post_thumbnail_html', 'perfectpixel_link_featured_images', 20, 2 );\n\nfunction perfectpixel_link_featured_images( $html, $post_id ) {\n\tif ( '' === $html || is_admin() || ( is_singular() && get_queried_object_id() === (int) $post_id ) || false !== stripos( $html, '<a ' ) ) {\n\t\treturn $html;\n\t}\n\treturn '<a href=\"' . esc_url( get_permalink( $post_id ) ) . '\" aria-hidden=\"true\" tabindex=\"-1\">' . $html . '</a>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "images",
+        "links",
+        "ux"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/ro8xmw5w/"
+    ],
+    "updated": "2026-11-18T19:07:57+00:00"
+}

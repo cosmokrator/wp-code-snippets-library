@@ -1,0 +1,29 @@
+{
+    "title": "Add a default alt text to avatars",
+    "description": "Οι εικόνες προφίλ (Gravatar/avatars) σε σχόλια, βιογραφικά συντακτών κ.λπ. έχουν συχνά κενό alt, κάτι που προσμετράται αρνητικά σε προσβασιμότητα και SEO. Το snippet βάζει ως alt το όνομα του χρήστη ή του σχολιαστή (π.χ. «Avatar: Μαρία»), όταν δεν υπάρχει ήδη.",
+    "type": "php",
+    "code": "add_filter( 'get_avatar', 'perfectpixel_avatar_default_alt', 20, 6 );\n\nfunction perfectpixel_avatar_default_alt( $avatar, $id_or_email, $size, $default, $alt, $args = array() ) {\n\tif ( '' !== (string) $alt || false === strpos( $avatar, \"alt=''\" ) && false === strpos( $avatar, 'alt=\"\"' ) ) {\n\t\treturn $avatar;\n\t}\n\t$name = '';\n\tif ( $id_or_email instanceof WP_Comment ) {\n\t\t$name = $id_or_email->comment_author;\n\t} elseif ( $id_or_email instanceof WP_User ) {\n\t\t$name = $id_or_email->display_name;\n\t} elseif ( $id_or_email instanceof WP_Post ) {\n\t\t$name = get_the_author_meta( 'display_name', $id_or_email->post_author );\n\t} elseif ( is_numeric( $id_or_email ) ) {\n\t\t$user = get_user_by( 'id', (int) $id_or_email );\n\t\t$name = $user ? $user->display_name : '';\n\t} elseif ( is_string( $id_or_email ) && is_email( $id_or_email ) ) {\n\t\t$user = get_user_by( 'email', $id_or_email );\n\t\t$name = $user ? $user->display_name : '';\n\t}\n\tif ( '' === $name ) {\n\t\treturn $avatar;\n\t}\n\t$text = trim( trim( '{{avatar_alt_prefix}}' ) . ' ' . $name );\n\treturn str_replace( array( \"alt=''\", 'alt=\"\"' ), 'alt=\"' . esc_attr( $text ) . '\"', $avatar );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "accessibility",
+        "avatars",
+        "seo"
+    ],
+    "variables": [
+        {
+            "name": "avatar_alt_prefix",
+            "label": "Πρόθεμα",
+            "default": "Avatar:",
+            "description": "Χωρίς απόστροφο ('). Κενό = μόνο το όνομα"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/g5gm8j5m/"
+    ],
+    "updated": "2026-11-18T19:07:57+00:00"
+}

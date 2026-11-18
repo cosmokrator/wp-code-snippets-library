@@ -1,0 +1,21 @@
+{
+    "title": "Add the page slug to the body class",
+    "description": "Σε κάθε άρθρο, σελίδα ή άλλο περιεχόμενο προσθέτει στο <body> μια κλάση με το slug του, π.χ. page-epikoinonia ή post-to-arthro-mou, ώστε να γράφετε CSS για μια συγκεκριμένη σελίδα χωρίς να ψάχνετε το ID της.",
+    "type": "php",
+    "code": "add_filter( 'body_class', 'perfectpixel_slug_body_class' );\n\nfunction perfectpixel_slug_body_class( $classes ) {\n\tif ( is_singular() ) {\n\t\t$post = get_queried_object();\n\t\tif ( $post instanceof WP_Post && $post->post_name ) {\n\t\t\t$classes[] = sanitize_html_class( $post->post_type . '-' . $post->post_name );\n\t\t}\n\t}\n\treturn $classes;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "css",
+        "body-class"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/qor6gvok/"
+    ],
+    "updated": "2026-11-18T19:07:57+00:00"
+}

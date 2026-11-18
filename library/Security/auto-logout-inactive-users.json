@@ -1,0 +1,29 @@
+{
+    "title": "Log out inactive users automatically",
+    "description": "Οι συνδεδεμένοι χρήστες αποσυνδέονται αυτόματα μετά από ορισμένα λεπτά χωρίς δραστηριότητα (χωρίς κίνηση ποντικιού, πληκτρολόγηση ή φόρτωση σελίδας), στο site και στον διαχειριστή. Χρήσιμο για υπολογιστές που μοιράζονται πολλοί (καταστήματα, γραφεία). Ο έλεγχος γίνεται και στον server, ώστε να ισχύει ακόμα κι αν κλείσει το παράθυρο.",
+    "type": "php",
+    "code": "add_action( 'init', 'perfectpixel_idle_logout_check', 1 );\nadd_action( 'wp_footer', 'perfectpixel_idle_logout_script' );\nadd_action( 'admin_footer', 'perfectpixel_idle_logout_script' );\n\nfunction perfectpixel_idle_logout_seconds() {\n\treturn max( 1, (int) '{{idle_logout_minutes}}' ) * MINUTE_IN_SECONDS;\n}\n\n// Server side: log out if the last request is too old, otherwise record this one (at most once a minute).\nfunction perfectpixel_idle_logout_check() {\n\tif ( ! is_user_logged_in() || wp_doing_cron() || ( wp_doing_ajax() && isset( $_POST['action'] ) && 'heartbeat' === $_POST['action'] ) ) {\n\t\treturn;\n\t}\n\t$user_id = get_current_user_id();\n\t$last    = (int) get_user_meta( $user_id, 'perfectpixel_last_activity', true );\n\tif ( $last && time() - $last > perfectpixel_idle_logout_seconds() ) {\n\t\tdelete_user_meta( $user_id, 'perfectpixel_last_activity' );\n\t\twp_logout();\n\t\tif ( ! wp_doing_ajax() ) {\n\t\t\twp_safe_redirect( wp_login_url() );\n\t\t\texit;\n\t\t}\n\t\treturn;\n\t}\n\tif ( time() - $last > MINUTE_IN_SECONDS ) {\n\t\tupdate_user_meta( $user_id, 'perfectpixel_last_activity', time() );\n\t}\n}\n\n// Browser side: log out an open tab after the idle time.\nfunction perfectpixel_idle_logout_script() {\n\tif ( ! is_user_logged_in() ) {\n\t\treturn;\n\t}\n\t?>\n\t<script>\n\t( function ( ms, url ) {\n\t\tvar timer;\n\t\tvar reset = function () {\n\t\t\tclearTimeout( timer );\n\t\t\ttimer = setTimeout( function () { window.location.href = url; }, ms );\n\t\t};\n\t\t[ 'mousemove', 'keydown', 'click', 'scroll', 'touchstart' ].forEach( function ( ev ) {\n\t\t\tdocument.addEventListener( ev, reset, { passive: true } );\n\t\t} );\n\t\treset();\n\t} )( <?php echo (int) perfectpixel_idle_logout_seconds() * 1000; ?>, <?php echo wp_json_encode( html_entity_decode( wp_logout_url( wp_login_url() ) ) ); ?> );\n\t</script>\n\t<?php\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "security",
+        "login",
+        "sessions"
+    ],
+    "variables": [
+        {
+            "name": "idle_logout_minutes",
+            "label": "Λεπτά χωρίς δραστηριότητα",
+            "default": "30",
+            "description": "Μόνο αριθμός"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/e501xgw2/"
+    ],
+    "updated": "2026-11-18T19:07:57+00:00"
+}

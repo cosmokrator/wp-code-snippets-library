@@ -1,0 +1,22 @@
+{
+    "title": "Show the last modified date in the admin posts list",
+    "description": "Στις λίστες Άρθρα και Σελίδες του διαχειριστή (και σε άλλους τύπους περιεχομένου) προσθέτει στήλη «Τελευταία τροποποίηση» με ημερομηνία, ώρα και ποιος έκανε την αλλαγή. Η στήλη ταξινομείται με κλικ, ώστε να βρίσκετε τι άλλαξε πρόσφατα ή ποιο περιεχόμενο είναι παλιό.",
+    "type": "php",
+    "code": "add_action( 'admin_init', 'perfectpixel_modified_column_setup' );\n\nfunction perfectpixel_modified_column_setup() {\n\tforeach ( get_post_types( array( 'show_ui' => true ) ) as $type ) {\n\t\tif ( in_array( $type, array( 'attachment', 'shop_order' ), true ) ) {\n\t\t\tcontinue;\n\t\t}\n\t\tadd_filter( \"manage_{$type}_posts_columns\", 'perfectpixel_modified_column' );\n\t\tadd_action( \"manage_{$type}_posts_custom_column\", 'perfectpixel_modified_column_value', 10, 2 );\n\t\tadd_filter( \"manage_edit-{$type}_sortable_columns\", 'perfectpixel_modified_column_sortable' );\n\t}\n}\n\nfunction perfectpixel_modified_column( $columns ) {\n\t$columns['perfectpixel_modified'] = 'Τελευταία τροποποίηση';\n\treturn $columns;\n}\n\nfunction perfectpixel_modified_column_value( $column, $post_id ) {\n\tif ( 'perfectpixel_modified' !== $column ) {\n\t\treturn;\n\t}\n\techo esc_html( get_the_modified_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $post_id ) );\n\t$editor_id = get_post_meta( $post_id, '_edit_last', true );\n\t$editor    = $editor_id ? get_userdata( $editor_id ) : null;\n\tif ( $editor ) {\n\t\techo '<br><small>' . esc_html( $editor->display_name ) . '</small>';\n\t}\n}\n\nfunction perfectpixel_modified_column_sortable( $columns ) {\n\t$columns['perfectpixel_modified'] = 'modified';\n\treturn $columns;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "admin",
+        "columns",
+        "dates"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/323zn405/"
+    ],
+    "updated": "2026-11-18T19:07:57+00:00"
+}

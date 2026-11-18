@@ -1,0 +1,29 @@
+{
+    "title": "Show the author bio after posts",
+    "description": "Στο τέλος κάθε άρθρου εμφανίζει πλαίσιο με τον συντάκτη: εικόνα, όνομα, βιογραφικό (από το πεδίο «Βιογραφικές πληροφορίες» του προφίλ του) και σύνδεσμο προς όλα τα άρθρα του. Εμφανίζεται μόνο αν ο συντάκτης έχει συμπληρώσει βιογραφικό.",
+    "type": "php",
+    "code": "add_filter( 'the_content', 'perfectpixel_author_bio_after_post', 40 );\n\nfunction perfectpixel_author_bio_after_post( $content ) {\n\tif ( ! is_singular( 'post' ) || ! in_the_loop() || ! is_main_query() ) {\n\t\treturn $content;\n\t}\n\t$author_id = (int) get_post_field( 'post_author', get_the_ID() );\n\t$bio       = get_the_author_meta( 'description', $author_id );\n\tif ( '' === trim( (string) $bio ) ) {\n\t\treturn $content;\n\t}\n\t$box  = '<aside class=\"perfectpixel-author-bio\" style=\"display:flex;gap:1em;align-items:flex-start;margin-top:2em;padding:1.25em;border:1px solid rgba(0,0,0,.1);border-radius:6px\">';\n\t$box .= get_avatar( $author_id, 72 );\n\t$box .= '<div><strong>' . esc_html( get_the_author_meta( 'display_name', $author_id ) ) . '</strong>';\n\t$box .= wpautop( wp_kses_post( $bio ) );\n\t$box .= '<a href=\"' . esc_url( get_author_posts_url( $author_id ) ) . '\">' . esc_html( '{{author_bio_more}}' ) . '</a></div></aside>';\n\treturn $content . $box;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "posts",
+        "authors",
+        "content"
+    ],
+    "variables": [
+        {
+            "name": "author_bio_more",
+            "label": "Κείμενο συνδέσμου",
+            "default": "Όλα τα άρθρα του συντάκτη",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/qor1rpy5/"
+    ],
+    "updated": "2026-11-18T19:07:57+00:00"
+}

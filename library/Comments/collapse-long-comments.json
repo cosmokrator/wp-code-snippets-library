@@ -1,0 +1,40 @@
+{
+    "title": "Collapse long comments with a \"Read more\" link",
+    "description": "Τα πολύ μεγάλα σχόλια (και οι αξιολογήσεις προϊόντων) εμφανίζονται κομμένα στο ύψος που ορίζετε, με σβήσιμο προς τα κάτω και σύνδεσμο «Περισσότερα» που τα ανοίγει, ώστε η λίστα σχολίων να μένει ευανάγνωστη. Τα μικρά σχόλια δεν αλλάζουν.",
+    "type": "php",
+    "code": "add_filter( 'comment_text', 'perfectpixel_collapse_long_comments', 50 );\nadd_action( 'wp_footer', 'perfectpixel_collapse_long_comments_script' );\n\nfunction perfectpixel_collapse_long_comments( $text ) {\n\tif ( is_admin() || is_feed() || mb_strlen( wp_strip_all_tags( $text ) ) <= max( 100, (int) '{{comment_collapse_chars}}' ) ) {\n\t\treturn $text;\n\t}\n\treturn '<div class=\"perfectpixel-long-comment\" style=\"max-height:9em;overflow:hidden;-webkit-mask-image:linear-gradient(#000 60%,transparent);mask-image:linear-gradient(#000 60%,transparent)\">' . $text . '</div><a href=\"#\" class=\"perfectpixel-comment-toggle\">' . esc_html( '{{comment_more_text}}' ) . '</a>';\n}\n\nfunction perfectpixel_collapse_long_comments_script() {\n\tif ( ! is_singular() ) {\n\t\treturn;\n\t}\n\t$labels = array( 'more' => '{{comment_more_text}}', 'less' => '{{comment_less_text}}' );\n\t?>\n\t<script>\n\tdocument.addEventListener( 'click', function ( e ) {\n\t\tvar link = e.target.closest( '.perfectpixel-comment-toggle' );\n\t\tif ( ! link ) {\n\t\t\treturn;\n\t\t}\n\t\te.preventDefault();\n\t\tvar labels = <?php echo wp_json_encode( $labels ); ?>;\n\t\tvar box    = link.previousElementSibling;\n\t\tvar open   = 'none' === box.style.maxHeight;\n\t\tbox.style.maxHeight       = open ? '9em' : 'none';\n\t\tbox.style.webkitMaskImage = box.style.maskImage = open ? 'linear-gradient(#000 60%,transparent)' : 'none';\n\t\tlink.textContent          = open ? labels.more : labels.less;\n\t} );\n\t</script>\n\t<?php\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "comments",
+        "ux"
+    ],
+    "variables": [
+        {
+            "name": "comment_collapse_chars",
+            "label": "Κόβονται σχόλια πάνω από (χαρακτήρες)",
+            "default": "600",
+            "description": "Μόνο αριθμός"
+        },
+        {
+            "name": "comment_more_text",
+            "label": "Κείμενο «περισσότερα»",
+            "default": "Περισσότερα",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "comment_less_text",
+            "label": "Κείμενο «λιγότερα»",
+            "default": "Λιγότερα",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/323j4reo/"
+    ],
+    "updated": "2026-11-18T19:07:57+00:00"
+}
