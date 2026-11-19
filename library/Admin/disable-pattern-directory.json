@@ -1,0 +1,29 @@
+{
+    "title": "Disable remote block patterns in the editor",
+    "description": "Ο block editor φορτώνει μοτίβα (έτοιμα σχέδια blocks) από τον κατάλογο του WordPress.org. Το snippet σταματά αυτή τη φόρτωση, ώστε στην καρτέλα «Μοτίβα» να εμφανίζονται μόνο τα μοτίβα του theme και τα δικά σας. Αν θέλετε, κρύβει και τα ενσωματωμένα μοτίβα του WordPress.",
+    "type": "php",
+    "code": "add_filter( 'should_load_remote_block_patterns', '__return_false' );\nadd_action( 'after_setup_theme', 'perfectpixel_disable_core_patterns', 100 );\n\nfunction perfectpixel_disable_core_patterns() {\n\tif ( 'yes' === strtolower( trim( '{{hide_core_patterns}}' ) ) ) {\n\t\tremove_theme_support( 'core-block-patterns' );\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "admin",
+        "block-editor",
+        "patterns"
+    ],
+    "variables": [
+        {
+            "name": "hide_core_patterns",
+            "label": "Απόκρυψη και των μοτίβων του WordPress;",
+            "default": "no",
+            "description": "yes ή no"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/g5gm0vx5/"
+    ],
+    "updated": "2026-11-19T06:35:52+00:00"
+}

@@ -1,0 +1,22 @@
+{
+    "title": "Disable the plugin and theme file editor",
+    "description": "Αφαιρεί τα Εμφάνιση → Επεξεργαστής αρχείων θέματος και Πρόσθετα → Επεξεργαστής αρχείων προσθέτων για όλους, και τους διαχειριστές. Αν κάποιος αποκτήσει πρόσβαση σε λογαριασμό διαχειριστή, δεν μπορεί να γράψει κακόβουλο κώδικα στα αρχεία από τη διαχείριση, και αποφεύγεται το «λευκό site» από λάθος αλλαγή. Οι ενημερώσεις plugins/themes δεν επηρεάζονται.",
+    "type": "php",
+    "code": "// Same effect as DISALLOW_FILE_EDIT, without editing wp-config.php.\nadd_filter( 'map_meta_cap', 'perfectpixel_disable_file_editor', 20, 2 );\n\nfunction perfectpixel_disable_file_editor( $caps, $cap ) {\n\tif ( in_array( $cap, array( 'edit_plugins', 'edit_themes', 'edit_files' ), true ) ) {\n\t\t$caps[] = 'do_not_allow';\n\t}\n\treturn $caps;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "security",
+        "admin",
+        "hardening"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/qorrrqok/"
+    ],
+    "updated": "2026-11-19T06:35:52+00:00"
+}

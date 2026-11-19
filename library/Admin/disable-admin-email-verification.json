@@ -1,0 +1,22 @@
+{
+    "title": "Disable the admin email verification screen",
+    "description": "Κάθε 6 μήνες, μετά τη σύνδεση, το WordPress ζητά από τους διαχειριστές να επιβεβαιώσουν ότι το email διαχείρισης είναι σωστό. Το snippet σταματά αυτή την οθόνη. Ελέγχετε μόνοι σας κατά διαστήματα το email στο Ρυθμίσεις → Γενικά, γιατί εκεί στέλνονται σημαντικές ειδοποιήσεις.",
+    "type": "php",
+    "code": "add_filter( 'admin_email_check_interval', '__return_false' );",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "admin",
+        "login",
+        "email"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/g5gepj2m/"
+    ],
+    "updated": "2026-11-19T06:35:52+00:00"
+}

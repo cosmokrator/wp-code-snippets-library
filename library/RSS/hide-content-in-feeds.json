@@ -1,0 +1,29 @@
+{
+    "title": "Show only titles in RSS feeds",
+    "description": "Οι ροές RSS δείχνουν μόνο τον τίτλο και τον σύνδεσμο κάθε άρθρου, χωρίς απόσπασμα ή κείμενο, ώστε οι αναγνώστες να έρχονται στο site για να διαβάσουν και να μην αντιγράφεται αυτόματα το περιεχόμενό σας από άλλα sites. Αν θέλετε, κάθε στοιχείο της ροής δείχνει ένα σύντομο μήνυμα με σύνδεσμο προς το άρθρο.",
+    "type": "php",
+    "code": "add_filter( 'the_excerpt_rss', 'perfectpixel_feed_hide_excerpt', 99 );\nadd_filter( 'the_content_feed', 'perfectpixel_feed_hide_content', 99 );\n\nfunction perfectpixel_feed_hide_excerpt() {\n\treturn esc_html( '{{feed_item_message}}' );\n}\n\nfunction perfectpixel_feed_hide_content() {\n\t$message = '{{feed_item_message}}';\n\treturn '' === trim( $message ) ? '' : '<p><a href=\"' . esc_url( get_permalink() ) . '\">' . esc_html( $message ) . '</a></p>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "rss",
+        "feeds",
+        "content"
+    ],
+    "variables": [
+        {
+            "name": "feed_item_message",
+            "label": "Μήνυμα αντί για κείμενο",
+            "default": "Διαβάστε το άρθρο στο site μας.",
+            "description": "Κενό = κανένα κείμενο. Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/ro8x1mw5/"
+    ],
+    "updated": "2026-11-19T06:35:52+00:00"
+}

@@ -1,0 +1,22 @@
+{
+    "title": "Disable template editing from the post editor",
+    "description": "Στον editor άρθρων και σελίδων, αφαιρεί τη δυνατότητα να επεξεργάζεστε ή να δημιουργείτε νέο template (πλαίσιο «Template» → «Επεξεργασία» / «Νέο»). Έτσι οι συντάκτες αλλάζουν μόνο το περιεχόμενο και όχι το design του site. Η επιλογή ανάμεσα στα υπάρχοντα templates μένει.",
+    "type": "php",
+    "code": "add_filter( 'block_editor_settings_all', 'perfectpixel_disable_template_editor', 20, 2 );\n\nfunction perfectpixel_disable_template_editor( $settings, $context ) {\n\tif ( isset( $context->name ) && 'core/edit-post' === $context->name ) {\n\t\t$settings['supportsTemplateMode'] = false;\n\t}\n\treturn $settings;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "admin",
+        "block-editor",
+        "templates"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/323zq485/"
+    ],
+    "updated": "2026-11-19T06:35:52+00:00"
+}

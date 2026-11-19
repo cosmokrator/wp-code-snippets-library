@@ -1,0 +1,21 @@
+{
+    "title": "Disable site search",
+    "description": "Απενεργοποιεί πλήρως την αναζήτηση στο site: οι σελίδες αποτελεσμάτων (?s=…) δείχνουν 404 και κρύβονται η φόρμα αναζήτησης, το widget και το block «Αναζήτηση». Χρήσιμο για μικρά εταιρικά sites όπου η αναζήτηση δεν προσφέρει κάτι και χρησιμοποιείται από bots για spam. Επηρεάζει και την αναζήτηση προϊόντων του WooCommerce. Η αναζήτηση μέσα στη διαχείριση δουλεύει κανονικά.",
+    "type": "php",
+    "code": "add_action( 'parse_query', 'perfectpixel_disable_search_query' );\nadd_filter( 'get_search_form', '__return_empty_string', 99 );\nadd_filter( 'render_block_core/search', '__return_empty_string', 99 );\nadd_action( 'widgets_init', 'perfectpixel_disable_search_widget', 20 );\nadd_action( 'template_redirect', 'perfectpixel_disable_search_404', 1 );\n\nfunction perfectpixel_disable_search_query( $query ) {\n\tif ( is_admin() || ! $query->is_main_query() || ! $query->is_search() ) {\n\t\treturn;\n\t}\n\t$query->is_search       = false;\n\t$query->query_vars['s'] = '';\n\t$query->set( 'perfectpixel_search_disabled', 1 );\n}\n\n// WP::handle_404() skips the status header when the query is already a 404, so set both here.\nfunction perfectpixel_disable_search_404() {\n\tif ( get_query_var( 'perfectpixel_search_disabled' ) ) {\n\t\tglobal $wp_query;\n\t\t$wp_query->set_404();\n\t\tstatus_header( 404 );\n\t\tnocache_headers();\n\t}\n}\n\nfunction perfectpixel_disable_search_widget() {\n\tunregister_widget( 'WP_Widget_Search' );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "search",
+        "content"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/e50xjw59/"
+    ],
+    "updated": "2026-11-19T06:35:52+00:00"
+}

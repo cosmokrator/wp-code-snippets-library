@@ -1,0 +1,22 @@
+{
+    "title": "Hide \"Posts\" in the admin",
+    "description": "Για sites χωρίς blog (π.χ. καταστήματα ή εταιρικά sites): κρύβει το μενού «Άρθρα», το «Νέο → Άρθρο» από τη μπάρα και το «Γρήγορο πρόχειρο» από τον Πίνακα ελέγχου, και οι οθόνες άρθρων ανακατευθύνουν στον Πίνακα ελέγχου. Τα υπάρχοντα άρθρα δεν σβήνονται και, αν υπάρχουν δημοσιευμένα, εξακολουθούν να εμφανίζονται στο site.",
+    "type": "php",
+    "code": "add_action( 'admin_menu', 'perfectpixel_hide_posts_menu', 999 );\nadd_action( 'admin_init', 'perfectpixel_hide_posts_screens' );\nadd_action( 'admin_bar_menu', 'perfectpixel_hide_posts_admin_bar', 999 );\nadd_action( 'wp_dashboard_setup', 'perfectpixel_hide_posts_dashboard', 20 );\n\nfunction perfectpixel_hide_posts_menu() {\n\tremove_menu_page( 'edit.php' );\n}\n\nfunction perfectpixel_hide_posts_screens() {\n\tglobal $pagenow;\n\tif ( wp_doing_ajax() || ! in_array( $pagenow, array( 'edit.php', 'post-new.php', 'edit-tags.php' ), true ) ) {\n\t\treturn;\n\t}\n\t$post_type = isset( $_GET['post_type'] ) ? sanitize_key( wp_unslash( $_GET['post_type'] ) ) : 'post';\n\t$taxonomy  = isset( $_GET['taxonomy'] ) ? sanitize_key( wp_unslash( $_GET['taxonomy'] ) ) : '';\n\tif ( 'edit-tags.php' === $pagenow ? in_array( $taxonomy, array( 'category', 'post_tag' ), true ) && 'post' === $post_type : 'post' === $post_type ) {\n\t\twp_safe_redirect( admin_url() );\n\t\texit;\n\t}\n}\n\nfunction perfectpixel_hide_posts_admin_bar( $wp_admin_bar ) {\n\t$wp_admin_bar->remove_node( 'new-post' );\n}\n\nfunction perfectpixel_hide_posts_dashboard() {\n\tremove_meta_box( 'dashboard_quick_press', 'dashboard', 'side' );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "admin",
+        "posts",
+        "menus"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/r5pljmlo/"
+    ],
+    "updated": "2026-11-19T06:35:52+00:00"
+}

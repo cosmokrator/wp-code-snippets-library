@@ -1,0 +1,21 @@
+{
+    "title": "Disable post formats",
+    "description": "Κρύβει την επιλογή «Μορφή» (Κανονικό, Σημείωση, Συλλογή, Βίντεο κ.λπ.) από την επεξεργασία των άρθρων και όλα τα άρθρα εμφανίζονται ως κανονικά, ανεξάρτητα από τη μορφή που είχε επιλεγεί παλιότερα. Χρήσιμο όταν το theme δεν τις υποστηρίζει σωστά ή όταν μπερδεύουν τους συντάκτες.",
+    "type": "php",
+    "code": "add_action( 'after_setup_theme', 'perfectpixel_disable_post_formats_theme', 100 );\nadd_action( 'init', 'perfectpixel_disable_post_formats', 100 );\n\nfunction perfectpixel_disable_post_formats_theme() {\n\tremove_theme_support( 'post-formats' );\n}\n\nfunction perfectpixel_disable_post_formats() {\n\tremove_post_type_support( 'post', 'post-formats' );\n\tunregister_taxonomy_for_object_type( 'post_format', 'post' );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "posts",
+        "post-formats"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/qor6kzyo/"
+    ],
+    "updated": "2026-11-19T06:35:52+00:00"
+}

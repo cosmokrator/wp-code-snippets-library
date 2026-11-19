@@ -1,0 +1,21 @@
+{
+    "title": "Hide the language switcher on the login page",
+    "description": "Όταν στο site είναι εγκατεστημένες περισσότερες από μία γλώσσες, η σελίδα σύνδεσης (wp-login.php) δείχνει από κάτω επιλογή γλώσσας. Το snippet την κρύβει, για πιο καθαρή σελίδα σύνδεσης.",
+    "type": "php",
+    "code": "add_filter( 'login_display_language_dropdown', '__return_false' );",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "login",
+        "languages"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/323j7eor/"
+    ],
+    "updated": "2026-11-19T06:35:52+00:00"
+}

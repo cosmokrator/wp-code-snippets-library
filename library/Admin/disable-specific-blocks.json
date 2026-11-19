@@ -1,0 +1,29 @@
+{
+    "title": "Disable specific blocks in the editor",
+    "description": "Αφαιρεί από τον block editor τα blocks που ορίζετε (π.χ. Στίχοι, Κείμενο με εσοχή, Αρχεία), ώστε οι συντάκτες να βλέπουν μόνο όσα χρειάζονται. Γράψτε τα ονόματα των blocks με κόμμα (π.χ. core/verse,core/pullquote). Το όνομα κάθε block φαίνεται στον editor στο Επιλογές → Προτιμήσεις ή στην τεκμηρίωση. Περιεχόμενο που ήδη χρησιμοποιεί αυτά τα blocks εμφανίζεται κανονικά στο site.",
+    "type": "php",
+    "code": "add_action( 'enqueue_block_editor_assets', 'perfectpixel_disable_specific_blocks' );\n\nfunction perfectpixel_disable_specific_blocks() {\n\t$blocks = array_values( array_filter( array_map( 'trim', explode( ',', '{{disabled_blocks}}' ) ) ) );\n\tif ( ! $blocks ) {\n\t\treturn;\n\t}\n\t// Unregister in the browser, so blocks registered only by JavaScript are covered too.\n\t$js = 'wp.domReady( function () { ' . wp_json_encode( $blocks ) . '.forEach( function ( name ) { if ( wp.blocks.getBlockType( name ) ) { wp.blocks.unregisterBlockType( name ); } } ); } );';\n\twp_add_inline_script( 'wp-blocks', $js );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "admin",
+        "block-editor",
+        "blocks"
+    ],
+    "variables": [
+        {
+            "name": "disabled_blocks",
+            "label": "Blocks (με κόμμα)",
+            "default": "core/verse,core/pullquote",
+            "description": "Ονόματα blocks, π.χ. core/verse,core/archives"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/rod9q8v2/"
+    ],
+    "updated": "2026-11-19T06:35:52+00:00"
+}

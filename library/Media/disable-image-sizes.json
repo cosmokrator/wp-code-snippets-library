@@ -1,0 +1,29 @@
+{
+    "title": "Stop generating unneeded image sizes",
+    "description": "Για κάθε εικόνα που ανεβαίνει, το WordPress (και το theme/WooCommerce) δημιουργεί πολλά αντίγραφα σε διάφορα μεγέθη, που πιάνουν χώρο στον server. Το snippet σταματά τη δημιουργία των μεγεθών που ορίζετε (προεπιλογή: medium_large, 1536x1536, 2048x2048, που σπάνια χρησιμοποιούνται). Αφορά μόνο νέες εικόνες· τα υπάρχοντα αρχεία δεν σβήνονται. Μην αφαιρέσετε μεγέθη που χρησιμοποιεί το theme ή το WooCommerce (π.χ. woocommerce_thumbnail).",
+    "type": "php",
+    "code": "add_filter( 'intermediate_image_sizes_advanced', 'perfectpixel_disable_image_sizes', 20 );\n\nfunction perfectpixel_disable_image_sizes( $sizes ) {\n\tforeach ( array_filter( array_map( 'trim', explode( ',', '{{disabled_image_sizes}}' ) ) ) as $name ) {\n\t\tunset( $sizes[ $name ] );\n\t}\n\treturn $sizes;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "media",
+        "images",
+        "storage"
+    ],
+    "variables": [
+        {
+            "name": "disabled_image_sizes",
+            "label": "Μεγέθη (με κόμμα)",
+            "default": "medium_large,1536x1536,2048x2048",
+            "description": "Ονόματα μεγεθών, π.χ. thumbnail,medium,large,medium_large,1536x1536,2048x2048"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/joernre5/"
+    ],
+    "updated": "2026-11-19T06:35:52+00:00"
+}

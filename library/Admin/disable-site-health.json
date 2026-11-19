@@ -1,0 +1,22 @@
+{
+    "title": "Hide Site Health",
+    "description": "Κρύβει το Εργαλεία → Υγεία ιστότοπου και το πλαίσιο «Κατάσταση υγείας ιστότοπου» από τον Πίνακα ελέγχου, και σταματά τον εβδομαδιαίο αυτόματο έλεγχο. Χρήσιμο για sites πελατών, όπου οι προειδοποιήσεις (π.χ. για ανενεργά themes) προκαλούν άσκοπες ερωτήσεις. Οι πληροφορίες χάνονται και για εσάς· απενεργοποιήστε το προσωρινά όταν θέλετε να τις δείτε.",
+    "type": "php",
+    "code": "add_action( 'admin_menu', 'perfectpixel_disable_site_health_menu', 999 );\nadd_action( 'admin_init', 'perfectpixel_disable_site_health_page' );\nadd_action( 'wp_dashboard_setup', 'perfectpixel_disable_site_health_widget', 20 );\nadd_action( 'init', 'perfectpixel_disable_site_health_cron' );\n\nfunction perfectpixel_disable_site_health_menu() {\n\tremove_submenu_page( 'tools.php', 'site-health.php' );\n}\n\nfunction perfectpixel_disable_site_health_page() {\n\tglobal $pagenow;\n\tif ( 'site-health.php' === $pagenow ) {\n\t\twp_safe_redirect( admin_url() );\n\t\texit;\n\t}\n}\n\nfunction perfectpixel_disable_site_health_widget() {\n\tremove_meta_box( 'dashboard_site_health', 'dashboard', 'normal' );\n}\n\nfunction perfectpixel_disable_site_health_cron() {\n\tif ( class_exists( 'WP_Site_Health' ) ) {\n\t\tremove_action( 'wp_site_health_scheduled_check', array( WP_Site_Health::get_instance(), 'wp_cron_scheduled_check' ) );\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "admin",
+        "site-health",
+        "dashboard"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/m5l66m54/"
+    ],
+    "updated": "2026-11-19T06:35:52+00:00"
+}

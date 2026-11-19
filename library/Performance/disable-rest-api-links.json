@@ -1,0 +1,22 @@
+{
+    "title": "Remove REST API links from the page head",
+    "description": "Αφαιρεί τους συνδέσμους προς το REST API από τον κώδικα κάθε σελίδας (<link rel=\"https://api.w.org/\">) και από τις κεφαλίδες HTTP. Το REST API συνεχίζει να δουλεύει κανονικά (το χρειάζονται ο editor, το WooCommerce και πολλά plugins)· απλώς δεν «διαφημίζεται» σε κάθε σελίδα.",
+    "type": "php",
+    "code": "add_action( 'init', 'perfectpixel_disable_rest_api_links' );\n\nfunction perfectpixel_disable_rest_api_links() {\n\tremove_action( 'wp_head', 'rest_output_link_wp_head', 10 );\n\tremove_action( 'template_redirect', 'rest_output_link_header', 11 );\n\tremove_action( 'xmlrpc_rsd_apis', 'rest_output_rsd' );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "performance",
+        "rest-api",
+        "head"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/r5pqe028/"
+    ],
+    "updated": "2026-11-19T06:35:52+00:00"
+}

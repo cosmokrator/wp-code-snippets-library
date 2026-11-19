@@ -1,0 +1,22 @@
+{
+    "title": "Disable Openverse in the block editor",
+    "description": "Ο block editor δείχνει στην καρτέλα «Πολυμέσα» δωρεάν εικόνες από το Openverse για εισαγωγή στα άρθρα. Το snippet κρύβει αυτή την πηγή, ώστε οι συντάκτες να χρησιμοποιούν μόνο εικόνες της βιβλιοθήκης σας (και να αποφεύγονται θέματα αδειών χρήσης).",
+    "type": "php",
+    "code": "add_filter( 'block_editor_settings_all', 'perfectpixel_disable_openverse', 20 );\n\nfunction perfectpixel_disable_openverse( $settings ) {\n\t$settings['enableOpenverseMediaCategory'] = false;\n\treturn $settings;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "admin",
+        "block-editor",
+        "media"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/ro819wk2/"
+    ],
+    "updated": "2026-11-19T06:35:52+00:00"
+}

@@ -1,0 +1,22 @@
+{
+    "title": "Stop \"New user registration\" emails to the admin",
+    "description": "Σταματά το email «Νέα εγγραφή χρήστη» που λαμβάνει ο διαχειριστής κάθε φορά που γράφεται νέος χρήστης. Σε sites με πολλές εγγραφές γεμίζει το inbox. Ο νέος χρήστης συνεχίζει να λαμβάνει το δικό του email. Χρειάζεται WordPress 6.1 ή νεότερο.",
+    "type": "php",
+    "code": "add_filter( 'wp_send_new_user_notification_to_admin', '__return_false' );",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "email",
+        "users",
+        "admin"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/m5yg815d/"
+    ],
+    "updated": "2026-11-19T06:35:52+00:00"
+}

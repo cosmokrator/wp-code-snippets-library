@@ -1,0 +1,21 @@
+{
+    "title": "Disable self pingbacks",
+    "description": "Όταν ένα άρθρο σας κάνει σύνδεσμο σε άλλο άρθρο του ίδιου site, το WordPress στέλνει pingback στον εαυτό του και εμφανίζεται «σχόλιο» στο άλλο άρθρο. Το snippet αγνοεί τους συνδέσμους προς το δικό σας site, ενώ τα pingbacks προς άλλα sites στέλνονται κανονικά.",
+    "type": "php",
+    "code": "add_action( 'pre_ping', 'perfectpixel_disable_self_pingbacks' );\n\nfunction perfectpixel_disable_self_pingbacks( &$links ) {\n\t$home = untrailingslashit( preg_replace( '#^https?:#i', '', home_url() ) );\n\tforeach ( $links as $key => $link ) {\n\t\tif ( 0 === stripos( preg_replace( '#^https?:#i', '', $link ), $home ) ) {\n\t\t\tunset( $links[ $key ] );\n\t\t}\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "comments",
+        "pingbacks"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/x5n68r29/"
+    ],
+    "updated": "2026-11-19T06:35:52+00:00"
+}

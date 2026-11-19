@@ -1,0 +1,22 @@
+{
+    "title": "Remove RSS feed links from the page head",
+    "description": "Αφαιρεί τους συνδέσμους προς τις ροές RSS (άρθρων, σχολίων, κατηγοριών) από τον κώδικα κάθε σελίδας. Οι ροές συνεχίζουν να υπάρχουν στο /feed/ για όποιον τις χρησιμοποιεί· απλώς δεν εντοπίζονται αυτόματα. Για πλήρη απενεργοποίηση των ροών υπάρχει ξεχωριστό snippet.",
+    "type": "php",
+    "code": "add_action( 'init', 'perfectpixel_disable_feed_links' );\n\nfunction perfectpixel_disable_feed_links() {\n\tremove_action( 'wp_head', 'feed_links', 2 );\n\tremove_action( 'wp_head', 'feed_links_extra', 3 );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "rss",
+        "feeds",
+        "head"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/32398y2r/"
+    ],
+    "updated": "2026-11-19T06:35:52+00:00"
+}

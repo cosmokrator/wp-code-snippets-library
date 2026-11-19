@@ -1,0 +1,22 @@
+{
+    "title": "Remove the WordPress shortlink",
+    "description": "Αφαιρεί τον «σύντομο σύνδεσμο» (?p=123) από τον κώδικα κάθε σελίδας (<link rel=\"shortlink\">) και από τις κεφαλίδες HTTP. Δεν χρησιμοποιείται από τις μηχανές αναζήτησης και αποκαλύπτει το ID των άρθρων. Οι σύνδεσμοι ?p=123 συνεχίζουν να ανακατευθύνουν στο άρθρο.",
+    "type": "php",
+    "code": "add_action( 'init', 'perfectpixel_disable_shortlink' );\n\nfunction perfectpixel_disable_shortlink() {\n\tremove_action( 'wp_head', 'wp_shortlink_wp_head', 10 );\n\tremove_action( 'template_redirect', 'wp_shortlink_header', 11 );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "seo",
+        "head",
+        "cleanup"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/ro8kv3ow/"
+    ],
+    "updated": "2026-11-19T06:35:52+00:00"
+}

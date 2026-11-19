@@ -1,0 +1,21 @@
+{
+    "title": "Disable all RSS feeds",
+    "description": "Κλείνει όλες τις ροές RSS/Atom του site (άρθρων, σχολίων, κατηγοριών κ.λπ.). Όποιος ανοίγει μια ροή μεταφέρεται (301) στην αντίστοιχη σελίδα του site (π.χ. από /κατηγορία/feed/ στην κατηγορία), και οι σύνδεσμοι προς τις ροές αφαιρούνται από τον κώδικα των σελίδων. Μην το ενεργοποιήσετε αν χρησιμοποιείτε τη ροή για newsletter (π.χ. Mailchimp RSS campaigns), Google Merchant ή άλλη υπηρεσία.",
+    "type": "php",
+    "code": "add_action( 'init', 'perfectpixel_disable_feeds_links' );\nforeach ( array( 'do_feed', 'do_feed_rdf', 'do_feed_rss', 'do_feed_rss2', 'do_feed_atom', 'do_feed_rss2_comments', 'do_feed_atom_comments' ) as $perfectpixel_feed_hook ) {\n\tadd_action( $perfectpixel_feed_hook, 'perfectpixel_disable_feeds_redirect', 1 );\n}\nunset( $perfectpixel_feed_hook );\n\nfunction perfectpixel_disable_feeds_links() {\n\tremove_action( 'wp_head', 'feed_links', 2 );\n\tremove_action( 'wp_head', 'feed_links_extra', 3 );\n}\n\nfunction perfectpixel_disable_feeds_redirect() {\n\t$url = home_url( '/' );\n\tif ( is_singular() ) {\n\t\t$url = get_permalink( get_queried_object_id() );\n\t} elseif ( is_category() || is_tag() || is_tax() ) {\n\t\t$term_link = get_term_link( get_queried_object() );\n\t\t$url       = is_wp_error( $term_link ) ? $url : $term_link;\n\t} elseif ( is_author() ) {\n\t\t$url = get_author_posts_url( get_queried_object_id() );\n\t}\n\twp_safe_redirect( $url, 301 );\n\texit;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "rss",
+        "feeds"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/924zd4og/"
+    ],
+    "updated": "2026-11-19T06:35:52+00:00"
+}
