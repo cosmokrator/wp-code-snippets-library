@@ -1,0 +1,28 @@
+{
+    "title": "Reorder admin menu items",
+    "description": "Ορίζει τη σειρά του αριστερού μενού της διαχείρισης. Γράψτε τις σελίδες που θέλετε στην κορυφή, χωρισμένες με κόμμα, όπως εμφανίζονται στη διεύθυνση (π.χ. index.php = Πίνακας ελέγχου, edit.php?post_type=page = Σελίδες, edit.php = Άρθρα, upload.php = Πολυμέσα, woocommerce = WooCommerce, separator1 = διαχωριστικό). Όσα δεν γράψετε ακολουθούν με τη συνηθισμένη σειρά.",
+    "type": "php",
+    "code": "add_filter( 'custom_menu_order', '__return_true' );\nadd_filter( 'menu_order', 'perfectpixel_reorder_admin_menu', 999 );\n\nfunction perfectpixel_reorder_admin_menu( $menu_order ) {\n\tif ( ! is_array( $menu_order ) ) {\n\t\treturn $menu_order;\n\t}\n\t$wanted = array_filter( array_map( 'trim', explode( ',', '{{admin_menu_order}}' ) ) );\n\t$first  = array();\n\tforeach ( $wanted as $slug ) {\n\t\tif ( in_array( $slug, $menu_order, true ) && ! in_array( $slug, $first, true ) ) {\n\t\t\t$first[] = $slug;\n\t\t}\n\t}\n\treturn array_merge( $first, array_values( array_diff( $menu_order, $first ) ) );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "admin",
+        "menu"
+    ],
+    "variables": [
+        {
+            "name": "admin_menu_order",
+            "label": "Σειρά (με κόμμα)",
+            "default": "index.php, separator1, edit.php?post_type=page, edit.php, upload.php",
+            "description": "Διευθύνσεις μενού χωρισμένες με κόμμα"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/wox138q5/"
+    ],
+    "updated": "2026-11-19T11:16:07+00:00"
+}

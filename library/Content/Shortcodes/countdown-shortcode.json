@@ -1,0 +1,54 @@
+{
+    "title": "Countdown timer shortcode",
+    "description": "Shortcode για αντίστροφη μέτρηση μέχρι μια ημερομηνία: [countdown date=\"2026-12-31 23:59\"]. Η ώρα είναι σύμφωνα με τη ζώνη ώρας του site (Ρυθμίσεις → Γενικά). Όταν λήξει, δείχνει το μήνυμα λήξης. Μπορεί να μπει πολλές φορές στην ίδια σελίδα· με message=\"…\" αλλάζετε το μήνυμα λήξης μόνο για ένα shortcode.",
+    "type": "php",
+    "code": "add_shortcode( 'countdown', 'perfectpixel_countdown_shortcode' );\n\nfunction perfectpixel_countdown_shortcode( $atts ) {\n\t$atts = shortcode_atts( array( 'date' => '', 'message' => '{{countdown_expired}}' ), $atts, 'countdown' );\n\tif ( '' === trim( $atts['date'] ) ) {\n\t\treturn '';\n\t}\n\ttry {\n\t\t$end = new DateTimeImmutable( trim( $atts['date'] ), wp_timezone() );\n\t} catch ( Exception $e ) {\n\t\treturn '';\n\t}\n\t$units = array(\n\t\t'd' => '{{countdown_days}}',\n\t\t'h' => '{{countdown_hours}}',\n\t\t'm' => '{{countdown_minutes}}',\n\t\t's' => '{{countdown_seconds}}',\n\t);\n\t$html = '<div class=\"perfectpixel-countdown\" data-end=\"' . esc_attr( $end->getTimestamp() * 1000 ) . '\" data-expired=\"' . esc_attr( $atts['message'] ) . '\" style=\"display:flex;flex-wrap:wrap;gap:.75em;margin:0 0 1em\" role=\"timer\">';\n\tforeach ( $units as $key => $label ) {\n\t\t$html .= '<span style=\"min-width:4.5em;text-align:center;padding:.5em;border:1px solid rgba(0,0,0,.12);border-radius:4px\"><strong data-unit=\"' . $key . '\" style=\"display:block;font-size:1.6em;line-height:1.2\">0</strong><small>' . esc_html( $label ) . '</small></span>';\n\t}\n\t$html .= '</div>';\n\n\tstatic $script_done = false;\n\tif ( ! $script_done ) {\n\t\t$script_done = true;\n\t\t$html       .= '<script>( function () {\n\tvar pad = function ( n ) { return n < 10 ? \"0\" + n : String( n ); };\n\tvar tick = function () {\n\t\tdocument.querySelectorAll( \".perfectpixel-countdown[data-end]\" ).forEach( function ( box ) {\n\t\t\tvar left = Math.max( 0, Math.floor( ( parseInt( box.getAttribute( \"data-end\" ), 10 ) - Date.now() ) / 1000 ) );\n\t\t\tif ( left <= 0 ) {\n\t\t\t\tbox.textContent = box.getAttribute( \"data-expired\" );\n\t\t\t\tbox.removeAttribute( \"data-end\" );\n\t\t\t\treturn;\n\t\t\t}\n\t\t\tvar parts = { d: Math.floor( left / 86400 ), h: Math.floor( left % 86400 / 3600 ), m: Math.floor( left % 3600 / 60 ), s: left % 60 };\n\t\t\tbox.querySelectorAll( \"[data-unit]\" ).forEach( function ( el ) {\n\t\t\t\tvar key = el.getAttribute( \"data-unit\" );\n\t\t\t\tel.textContent = \"d\" === key ? String( parts[ key ] ) : pad( parts[ key ] );\n\t\t\t} );\n\t\t} );\n\t};\n\tvar start = function () { tick(); setInterval( tick, 1000 ); };\n\tif ( \"loading\" === document.readyState ) { document.addEventListener( \"DOMContentLoaded\", start ); } else { start(); }\n} )();</script>';\n\t}\n\treturn $html;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "shortcodes",
+        "countdown",
+        "timer",
+        "marketing"
+    ],
+    "variables": [
+        {
+            "name": "countdown_days",
+            "label": "Ετικέτα ημερών",
+            "default": "Ημέρες",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "countdown_hours",
+            "label": "Ετικέτα ωρών",
+            "default": "Ώρες",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "countdown_minutes",
+            "label": "Ετικέτα λεπτών",
+            "default": "Λεπτά",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "countdown_seconds",
+            "label": "Ετικέτα δευτερολέπτων",
+            "default": "Δευτερόλεπτα",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "countdown_expired",
+            "label": "Μήνυμα λήξης",
+            "default": "Η προσφορά έληξε.",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/g5gm8zx5/"
+    ],
+    "updated": "2026-11-19T11:16:07+00:00"
+}

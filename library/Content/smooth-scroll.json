@@ -1,0 +1,29 @@
+{
+    "title": "Smooth scrolling for anchor links",
+    "description": "Οι σύνδεσμοι μέσα στην ίδια σελίδα (π.χ. #epikoinonia ή πίνακας περιεχομένων) κυλούν ομαλά μέχρι την ενότητα αντί να «πηδάνε». Ορίστε απόσταση από την κορυφή αν το site έχει σταθερό (sticky) header, ώστε ο τίτλος της ενότητας να μην κρύβεται από κάτω του. Δεν εφαρμόζεται σε όσους έχουν ζητήσει από το σύστημά τους λιγότερη κίνηση.",
+    "type": "php",
+    "code": "add_action( 'wp_head', 'perfectpixel_smooth_scroll' );\n\nfunction perfectpixel_smooth_scroll() {\n\t$offset = max( 0, (int) '{{smooth_scroll_offset}}' );\n\t// Pure CSS: works for every same-page link, no JavaScript needed.\n\techo '<style>@media (prefers-reduced-motion: no-preference){html{scroll-behavior:smooth}}html{scroll-padding-top:' . (int) $offset . 'px}</style>' . \"\\n\";\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "content",
+        "scroll",
+        "css"
+    ],
+    "variables": [
+        {
+            "name": "smooth_scroll_offset",
+            "label": "Απόσταση από την κορυφή (px)",
+            "default": "0",
+            "description": "Ύψος του sticky header, μόνο αριθμός"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/do1g9kpo/"
+    ],
+    "updated": "2026-11-19T11:16:07+00:00"
+}

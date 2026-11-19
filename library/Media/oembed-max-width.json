@@ -1,0 +1,29 @@
+{
+    "title": "Set oEmbed max width",
+    "description": "Ορίζει το μέγιστο πλάτος για τα ενσωματωμένα περιεχόμενα (βίντεο YouTube/Vimeo, posts από X, Spotify κ.λπ.) που μπαίνουν απλώς επικολλώντας τον σύνδεσμο στο άρθρο. Το ύψος προσαρμόζεται αναλογικά. Ισχύει για νέες ενσωματώσεις· οι παλιές ανανεώνονται όταν αποθηκευτεί ξανά το άρθρο.",
+    "type": "php",
+    "code": "add_filter( 'embed_defaults', 'perfectpixel_oembed_max_width' );\n\nfunction perfectpixel_oembed_max_width( $size ) {\n\t$width = (int) '{{oembed_max_width}}';\n\tif ( $width < 100 ) {\n\t\treturn $size;\n\t}\n\t// Same proportion WordPress uses for its own default height.\n\treturn array(\n\t\t'width'  => $width,\n\t\t'height' => min( (int) ceil( $width * 1.5 ), 1000 ),\n\t);\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "media",
+        "embed",
+        "video"
+    ],
+    "variables": [
+        {
+            "name": "oembed_max_width",
+            "label": "Μέγιστο πλάτος (px)",
+            "default": "800",
+            "description": "Μόνο αριθμός"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/32jj0n2l/"
+    ],
+    "updated": "2026-11-19T11:16:07+00:00"
+}

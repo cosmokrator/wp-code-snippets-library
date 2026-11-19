@@ -1,0 +1,21 @@
+{
+    "title": "Remove the dashboard welcome panel",
+    "description": "Κρύβει το μεγάλο πλαίσιο «Καλώς ήρθατε στο WordPress» στην κορυφή του Πίνακα ελέγχου, για όλους τους χρήστες. Τα υπόλοιπα πλαίσια του Πίνακα ελέγχου μένουν όπως είναι (για πλήρες άδειασμα υπάρχει το snippet «Empty dashboard»).",
+    "type": "php",
+    "code": "add_action( 'admin_init', 'perfectpixel_remove_welcome_panel' );\n\nfunction perfectpixel_remove_welcome_panel() {\n\t// With no callback on the hook, WordPress also drops the panel's Screen Options checkbox.\n\tremove_action( 'welcome_panel', 'wp_welcome_panel' );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "admin",
+        "dashboard"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/g5gmnx5m/"
+    ],
+    "updated": "2026-11-19T11:16:07+00:00"
+}

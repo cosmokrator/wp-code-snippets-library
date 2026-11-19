@@ -1,0 +1,22 @@
+{
+    "title": "Restore the Customize submenu",
+    "description": "Ξαναβάζει τον σύνδεσμο «Προσαρμογή» (Customizer) στο μενού Εμφάνιση, όταν λείπει. Συμβαίνει σε block themes ή σε themes που τον αφαιρούν, ενώ κάποια plugins εξακολουθούν να έχουν ρυθμίσεις στον Customizer (π.χ. WooCommerce → Κατάλογος προϊόντων).",
+    "type": "php",
+    "code": "add_action( 'admin_menu', 'perfectpixel_restore_customize_menu', 999 );\n\nfunction perfectpixel_restore_customize_menu() {\n\tglobal $submenu;\n\tif ( ! current_user_can( 'customize' ) ) {\n\t\treturn;\n\t}\n\tforeach ( isset( $submenu['themes.php'] ) ? (array) $submenu['themes.php'] : array() as $item ) {\n\t\tif ( isset( $item[2] ) && 0 === strpos( $item[2], 'customize.php' ) ) {\n\t\t\treturn;\n\t\t}\n\t}\n\tadd_submenu_page( 'themes.php', 'Προσαρμογή', 'Προσαρμογή', 'customize', 'customize.php' );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "admin",
+        "menu",
+        "customizer"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/x5n64gr2/"
+    ],
+    "updated": "2026-11-19T11:16:07+00:00"
+}

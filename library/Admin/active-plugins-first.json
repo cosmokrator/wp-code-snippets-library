@@ -1,0 +1,21 @@
+{
+    "title": "Show active plugins first",
+    "description": "Στη λίστα Πρόσθετα της διαχείρισης εμφανίζει πρώτα τα ενεργά plugins (με αλφαβητική σειρά) και μετά τα ανενεργά. Πιο εύκολο να βρείτε τι τρέχει πραγματικά στο site.",
+    "type": "php",
+    "code": "add_filter( 'all_plugins', 'perfectpixel_active_plugins_first', 999 );\n\nfunction perfectpixel_active_plugins_first( $plugins ) {\n\tif ( ! is_admin() || ! function_exists( 'is_plugin_active' ) ) {\n\t\treturn $plugins;\n\t}\n\t$active   = array();\n\t$inactive = array();\n\tforeach ( (array) $plugins as $file => $data ) {\n\t\tif ( is_plugin_active( $file ) ) {\n\t\t\t$active[ $file ] = $data;\n\t\t} else {\n\t\t\t$inactive[ $file ] = $data;\n\t\t}\n\t}\n\treturn $active + $inactive;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "admin",
+        "plugins"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/ro8xwnw5/"
+    ],
+    "updated": "2026-11-19T11:16:07+00:00"
+}

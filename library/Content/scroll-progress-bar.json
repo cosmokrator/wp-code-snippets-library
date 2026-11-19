@@ -1,0 +1,41 @@
+{
+    "title": "Scroll progress bar",
+    "description": "Εμφανίζει μια λεπτή μπάρα στην κορυφή της οθόνης που γεμίζει όσο ο επισκέπτης διαβάζει τη σελίδα προς τα κάτω. Ορίστε χρώμα, πάχος και αν θα εμφανίζεται μόνο στα άρθρα ή παντού.",
+    "type": "php",
+    "code": "add_action( 'wp_footer', 'perfectpixel_scroll_progress_bar' );\n\nfunction perfectpixel_scroll_progress_bar() {\n\tif ( 'no' !== strtolower( trim( '{{progress_bar_posts_only}}' ) ) && ! is_singular( 'post' ) ) {\n\t\treturn;\n\t}\n\t$color  = sanitize_hex_color( '{{progress_bar_color}}' );\n\t$height = max( 1, min( 20, (int) '{{progress_bar_height}}' ) );\n\t?>\n\t<div class=\"perfectpixel-progress\" aria-hidden=\"true\" style=\"position:fixed;top:0;left:0;height:<?php echo (int) $height; ?>px;width:100%;z-index:100000;background:<?php echo esc_attr( $color ? $color : '#2271b1' ); ?>;transform:scaleX(0);transform-origin:0 50%;pointer-events:none\"></div>\n\t<script>\n\t( function () {\n\t\tvar bar = document.querySelector( '.perfectpixel-progress' );\n\t\tif ( ! bar ) {\n\t\t\treturn;\n\t\t}\n\t\tvar ticking = false;\n\t\tvar update = function () {\n\t\t\tvar max = document.documentElement.scrollHeight - window.innerHeight;\n\t\t\tbar.style.transform = 'scaleX(' + ( max > 0 ? Math.min( 1, window.scrollY / max ) : 0 ) + ')';\n\t\t\tticking = false;\n\t\t};\n\t\tvar request = function () {\n\t\t\tif ( ! ticking ) {\n\t\t\t\tticking = true;\n\t\t\t\twindow.requestAnimationFrame( update );\n\t\t\t}\n\t\t};\n\t\twindow.addEventListener( 'scroll', request, { passive: true } );\n\t\twindow.addEventListener( 'resize', request );\n\t\tupdate();\n\t} )();\n\t</script>\n\t<?php\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "content",
+        "scroll",
+        "reading"
+    ],
+    "variables": [
+        {
+            "name": "progress_bar_color",
+            "label": "Χρώμα",
+            "default": "#2271b1",
+            "description": "Χρώμα CSS, π.χ. #2271b1"
+        },
+        {
+            "name": "progress_bar_height",
+            "label": "Πάχος (px)",
+            "default": "4",
+            "description": "Μόνο αριθμός"
+        },
+        {
+            "name": "progress_bar_posts_only",
+            "label": "Μόνο στα άρθρα;",
+            "default": "yes",
+            "description": "yes ή no"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/r5plddno/"
+    ],
+    "updated": "2026-11-19T11:16:07+00:00"
+}

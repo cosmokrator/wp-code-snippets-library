@@ -1,0 +1,35 @@
+{
+    "title": "Redirect 404 pages to the homepage",
+    "description": "Όταν κάποιος ανοίγει σελίδα που δεν υπάρχει (σφάλμα 404), μεταφέρεται αυτόματα στην αρχική σελίδα (ή σε όποια διεύθυνση ορίσετε) αντί να βλέπει τη σελίδα «Δεν βρέθηκε». Τα αιτήματα για αρχεία που λείπουν (εικόνες, .js, .css κ.λπ.) δεν ανακατευθύνονται.",
+    "type": "php",
+    "code": "add_action( 'template_redirect', 'perfectpixel_redirect_404_home', 99 );\n\nfunction perfectpixel_redirect_404_home() {\n\tif ( ! is_404() || is_admin() || wp_doing_ajax() || ( defined( 'REST_REQUEST' ) && REST_REQUEST ) ) {\n\t\treturn;\n\t}\n\t// Missing files (images, scripts, styles…) keep their normal 404.\n\t$path = (string) wp_parse_url( isset( $_SERVER['REQUEST_URI'] ) ? wp_unslash( $_SERVER['REQUEST_URI'] ) : '', PHP_URL_PATH );\n\tif ( preg_match( '/\\.[a-z0-9]{2,5}$/i', $path ) ) {\n\t\treturn;\n\t}\n\t$target = trim( '{{redirect_404_url}}' );\n\t$target = '' !== $target ? $target : home_url( '/' );\n\t$status = 301 === (int) '{{redirect_404_status}}' ? 301 : 302;\n\twp_safe_redirect( $target, $status );\n\texit;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "seo",
+        "404",
+        "redirect"
+    ],
+    "variables": [
+        {
+            "name": "redirect_404_url",
+            "label": "Διεύθυνση προορισμού",
+            "default": "",
+            "description": "Κενό = αρχική σελίδα"
+        },
+        {
+            "name": "redirect_404_status",
+            "label": "Κωδικός ανακατεύθυνσης",
+            "default": "302",
+            "description": "301 (μόνιμη) ή 302 (προσωρινή)"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/woxk1vq2/"
+    ],
+    "updated": "2026-11-19T11:16:07+00:00"
+}

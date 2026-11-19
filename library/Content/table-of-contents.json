@@ -1,0 +1,42 @@
+{
+    "title": "Simple table of contents",
+    "description": "Προσθέτει αυτόματα πίνακα περιεχομένων στα άρθρα, φτιαγμένο από τους τίτλους H2 και H3 του κειμένου, λίγο πριν από τον πρώτο τίτλο. Κάθε γραμμή είναι σύνδεσμος που πηγαίνει στην αντίστοιχη ενότητα. Εμφανίζεται μόνο αν το άρθρο έχει αρκετούς τίτλους, και ανοιγοκλείνει με κλικ.",
+    "type": "php",
+    "code": "add_filter( 'the_content', 'perfectpixel_table_of_contents', 20 );\n\nfunction perfectpixel_table_of_contents( $content ) {\n\t$types = array_filter( array_map( 'trim', explode( ',', '{{toc_post_types}}' ) ) );\n\tif ( ! is_singular( $types ) || ! in_the_loop() || ! is_main_query() ) {\n\t\treturn $content;\n\t}\n\tif ( ! preg_match_all( '/<h([23])(\\s[^>]*)?>(.*?)<\\/h\\1>/is', $content, $matches, PREG_SET_ORDER ) || count( $matches ) < max( 1, (int) '{{toc_min_headings}}' ) ) {\n\t\treturn $content;\n\t}\n\n\t$used  = array();\n\t$items = '';\n\tforeach ( $matches as $i => $m ) {\n\t\t$attrs = isset( $m[2] ) ? $m[2] : '';\n\t\t$text  = trim( wp_strip_all_tags( $m[3] ) );\n\t\tif ( '' === $text ) {\n\t\t\tcontinue;\n\t\t}\n\t\tif ( preg_match( '/\\sid=[\"\\']([^\"\\']+)[\"\\']/i', $attrs, $id_match ) ) {\n\t\t\t$id      = $id_match[1];\n\t\t\t$heading = $m[0];\n\t\t} else {\n\t\t\t$id = sanitize_title( $text );\n\t\t\t// Non-Latin titles become percent-encoded slugs; use a simple numbered id instead.\n\t\t\tif ( '' === $id || false !== strpos( $id, '%' ) ) {\n\t\t\t\t$id = 'toc-' . ( $i + 1 );\n\t\t\t}\n\t\t\t$base = $id;\n\t\t\t$n    = 2;\n\t\t\twhile ( isset( $used[ $id ] ) ) {\n\t\t\t\t$id = $base . '-' . $n++;\n\t\t\t}\n\t\t\t$heading = '<h' . $m[1] . $attrs . ' id=\"' . esc_attr( $id ) . '\">' . $m[3] . '</h' . $m[1] . '>';\n\t\t\t$content = preg_replace( '/' . preg_quote( $m[0], '/' ) . '/', $heading, $content, 1 );\n\t\t}\n\t\t$used[ $id ] = true;\n\t\t$items      .= '<li' . ( '3' === $m[1] ? ' style=\"margin-left:1.25em\"' : '' ) . '><a href=\"#' . esc_attr( $id ) . '\">' . esc_html( $text ) . '</a></li>';\n\t}\n\tif ( '' === $items ) {\n\t\treturn $content;\n\t}\n\n\t$toc = '<details class=\"perfectpixel-toc\" open style=\"border:1px solid rgba(0,0,0,.12);border-radius:4px;padding:.75em 1em;margin:0 0 1.5em\"><summary style=\"cursor:pointer;font-weight:600\">' . esc_html( '{{toc_title}}' ) . '</summary><ul style=\"list-style:none;margin:.5em 0 0;padding:0\">' . $items . '</ul></details>';\n\t$pos = stripos( $content, '<h' . $matches[0][1] );\n\treturn false === $pos ? $toc . $content : substr_replace( $content, $toc, $pos, 0 );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "content",
+        "toc",
+        "seo",
+        "navigation"
+    ],
+    "variables": [
+        {
+            "name": "toc_title",
+            "label": "Τίτλος",
+            "default": "Περιεχόμενα",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "toc_min_headings",
+            "label": "Ελάχιστοι τίτλοι για εμφάνιση",
+            "default": "3",
+            "description": "Μόνο αριθμός"
+        },
+        {
+            "name": "toc_post_types",
+            "label": "Τύποι περιεχομένου (με κόμμα)",
+            "default": "post",
+            "description": "π.χ. post, page"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/x5n6nmq2/"
+    ],
+    "updated": "2026-11-19T11:16:07+00:00"
+}

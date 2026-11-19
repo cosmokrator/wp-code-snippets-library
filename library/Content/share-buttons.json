@@ -1,0 +1,41 @@
+{
+    "title": "Social share buttons for posts",
+    "description": "Προσθέτει συνδέσμους κοινοποίησης (Facebook, X, LinkedIn, WhatsApp, email) στο τέλος κάθε άρθρου. Χωρίς plugin και χωρίς εξωτερικά scripts, άρα χωρίς trackers των δικτύων. Ανοίγουν σε νέα καρτέλα με έτοιμο τον τίτλο και τη διεύθυνση του άρθρου.",
+    "type": "php",
+    "code": "add_filter( 'the_content', 'perfectpixel_post_share_buttons', 30 );\n\nfunction perfectpixel_post_share_buttons( $content ) {\n\t$types = array_filter( array_map( 'trim', explode( ',', '{{post_share_post_types}}' ) ) );\n\tif ( ! is_singular( $types ) || ! in_the_loop() || ! is_main_query() ) {\n\t\treturn $content;\n\t}\n\t$url   = rawurlencode( get_permalink() );\n\t$title = rawurlencode( wp_strip_all_tags( get_the_title() ) );\n\t$color = sanitize_hex_color( '{{post_share_color}}' );\n\t$color = $color ? $color : '#1d2327';\n\t$links = array(\n\t\t'Facebook' => 'https://www.facebook.com/sharer/sharer.php?u=' . $url,\n\t\t'X'        => 'https://twitter.com/intent/tweet?url=' . $url . '&text=' . $title,\n\t\t'LinkedIn' => 'https://www.linkedin.com/sharing/share-offsite/?url=' . $url,\n\t\t'WhatsApp' => 'https://wa.me/?text=' . $title . '%20' . $url,\n\t\t'Email'    => 'mailto:?subject=' . $title . '&body=' . $url,\n\t);\n\t$html = '<div class=\"perfectpixel-post-share\" style=\"display:flex;flex-wrap:wrap;align-items:center;gap:.5em;margin:2em 0 0\"><span>' . esc_html( '{{post_share_label}}' ) . '</span>';\n\tforeach ( $links as $name => $href ) {\n\t\t$html .= sprintf(\n\t\t\t'<a href=\"%1$s\"%2$s style=\"display:inline-block;padding:.35em .8em;border-radius:3px;background:%3$s;color:#fff;text-decoration:none;font-size:.9em\">%4$s</a>',\n\t\t\tesc_url( $href, array( 'https', 'mailto' ) ),\n\t\t\t'Email' === $name ? '' : ' target=\"_blank\" rel=\"noopener noreferrer nofollow\"',\n\t\t\tesc_attr( $color ),\n\t\t\tesc_html( $name )\n\t\t);\n\t}\n\treturn $content . $html . '</div>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "content",
+        "social",
+        "share"
+    ],
+    "variables": [
+        {
+            "name": "post_share_label",
+            "label": "Ετικέτα",
+            "default": "Κοινοποίηση:",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "post_share_post_types",
+            "label": "Τύποι περιεχομένου (με κόμμα)",
+            "default": "post",
+            "description": "π.χ. post, page"
+        },
+        {
+            "name": "post_share_color",
+            "label": "Χρώμα κουμπιών",
+            "default": "#1d2327",
+            "description": "Χρώμα CSS, π.χ. #1d2327"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/e5wm7rxo/"
+    ],
+    "updated": "2026-11-19T11:16:07+00:00"
+}

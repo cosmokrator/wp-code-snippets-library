@@ -1,0 +1,22 @@
+{
+    "title": "Remove \"WordPress\" from admin titles",
+    "description": "Αφαιρεί τη λέξη «WordPress» από τον τίτλο της καρτέλας του browser στις σελίδες της διαχείρισης και στη σελίδα σύνδεσης. Ο τίτλος γίνεται «Σελίδα ‹ Όνομα site» αντί για «Σελίδα ‹ Όνομα site — WordPress».",
+    "type": "php",
+    "code": "add_filter( 'admin_title', 'perfectpixel_clean_admin_title', 10, 2 );\nadd_filter( 'login_title', 'perfectpixel_clean_admin_title', 10, 2 );\n\n// Rebuild the title as \"Page ‹ Site name\" (translation-independent).\nfunction perfectpixel_clean_admin_title( $full_title, $title ) {\n\t$site  = wp_strip_all_tags( get_bloginfo( 'name', 'display' ) );\n\t$title = trim( wp_strip_all_tags( (string) $title ) );\n\tif ( '' === $site ) {\n\t\treturn '' !== $title ? $title : $full_title;\n\t}\n\treturn '' !== $title ? $title . ' &lsaquo; ' . $site : $site;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "admin",
+        "login",
+        "white-label"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/rod9l9w2/"
+    ],
+    "updated": "2026-11-19T11:16:07+00:00"
+}

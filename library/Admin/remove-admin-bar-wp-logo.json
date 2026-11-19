@@ -1,0 +1,22 @@
+{
+    "title": "Remove the WordPress logo from the admin bar",
+    "description": "Αφαιρεί το λογότυπο του WordPress (και το μενού του με τους συνδέσμους προς το wordpress.org) από την αριστερή άκρη της μπάρας διαχείρισης, για όλους τους χρήστες.",
+    "type": "php",
+    "code": "add_action( 'admin_bar_menu', 'perfectpixel_remove_admin_bar_wp_logo', 999 );\n\nfunction perfectpixel_remove_admin_bar_wp_logo( $wp_admin_bar ) {\n\t$wp_admin_bar->remove_node( 'wp-logo' );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "admin",
+        "admin-bar",
+        "white-label"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/x5n78qo9/"
+    ],
+    "updated": "2026-11-19T11:16:07+00:00"
+}

@@ -1,0 +1,23 @@
+{
+    "title": "Remove version query strings from CSS and JS",
+    "description": "Αφαιρεί το ?ver=… από τις διευθύνσεις των αρχείων CSS και JavaScript στο site. Βοηθάει κάποια CDN και proxies να κρατούν τα αρχεία στη μνήμη (cache) και κρύβει τις εκδόσεις των plugins από τον κώδικα της σελίδας. Η διαχείριση δεν επηρεάζεται.",
+    "type": "php",
+    "code": "add_filter( 'style_loader_src', 'perfectpixel_remove_asset_version', 999 );\nadd_filter( 'script_loader_src', 'perfectpixel_remove_asset_version', 999 );\n\nfunction perfectpixel_remove_asset_version( $src ) {\n\tif ( is_admin() || ! is_string( $src ) || false === strpos( $src, 'ver=' ) ) {\n\t\treturn $src;\n\t}\n\treturn remove_query_arg( 'ver', $src );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "performance",
+        "cache",
+        "css",
+        "javascript"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/j57gpp5g/"
+    ],
+    "updated": "2026-11-19T11:16:07+00:00"
+}

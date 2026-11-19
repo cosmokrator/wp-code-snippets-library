@@ -1,0 +1,21 @@
+{
+    "title": "Remove the login shake animation",
+    "description": "Η φόρμα σύνδεσης (wp-login.php) δεν «κουνιέται» πια όταν κάποιος βάλει λάθος όνομα χρήστη ή κωδικό. Το μήνυμα λάθους εμφανίζεται κανονικά.",
+    "type": "php",
+    "code": "// Late priority so it also wins over snippets that add their own shake codes.\nadd_filter( 'shake_error_codes', 'perfectpixel_disable_login_shake', 999 );\n\nfunction perfectpixel_disable_login_shake() {\n\treturn array();\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "login",
+        "animation"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/joerme5n/"
+    ],
+    "updated": "2026-11-19T11:16:07+00:00"
+}

@@ -1,0 +1,29 @@
+{
+    "title": "Remove the admin color scheme picker",
+    "description": "Κρύβει την επιλογή «Χρωματικός συνδυασμός διαχείρισης» από τη σελίδα προφίλ των χρηστών. Όλοι βλέπουν τη διαχείριση με τον ίδιο συνδυασμό χρωμάτων (αυτόν που ορίσετε, ή τον προεπιλεγμένο).",
+    "type": "php",
+    "code": "add_action( 'admin_init', 'perfectpixel_remove_color_scheme_picker' );\nadd_filter( 'get_user_option_admin_color', 'perfectpixel_forced_admin_color' );\n\nfunction perfectpixel_remove_color_scheme_picker() {\n\tremove_action( 'admin_color_scheme_picker', 'admin_color_scheme_picker' );\n}\n\nfunction perfectpixel_forced_admin_color( $color ) {\n\t$forced = sanitize_key( '{{forced_admin_color}}' );\n\treturn '' !== $forced ? $forced : $color;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "admin",
+        "profile",
+        "users"
+    ],
+    "variables": [
+        {
+            "name": "forced_admin_color",
+            "label": "Συνδυασμός για όλους",
+            "default": "",
+            "description": "Κενό = όπως είναι· ή fresh, light, modern, blue, coffee, ectoplasm, midnight, ocean, sunrise"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/m5ygzz65/"
+    ],
+    "updated": "2026-11-19T11:16:07+00:00"
+}

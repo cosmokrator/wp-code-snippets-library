@@ -1,0 +1,29 @@
+{
+    "title": "Remove the block library CSS",
+    "description": "Σταματάει τη φόρτωση του CSS των blocks του WordPress (wp-block-library) στο site. Χρήσιμο αν το site δεν χρησιμοποιεί καθόλου blocks (π.χ. Classic Editor ή page builder), για ένα αρχείο CSS λιγότερο σε κάθε σελίδα. Σε block themes (Full Site Editing) δεν κάνει τίποτα.",
+    "type": "php",
+    "code": "add_action( 'wp_enqueue_scripts', 'perfectpixel_remove_block_library_css', 100 );\n\nfunction perfectpixel_remove_block_library_css() {\n\tif ( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() ) {\n\t\treturn;\n\t}\n\t$handles = array( 'wp-block-library', 'wp-block-library-theme', 'classic-theme-styles' );\n\tif ( 'no' === strtolower( trim( '{{block_css_keep_woocommerce}}' ) ) ) {\n\t\t$handles[] = 'wc-blocks-style';\n\t}\n\tforeach ( $handles as $handle ) {\n\t\twp_dequeue_style( $handle );\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "performance",
+        "css",
+        "gutenberg"
+    ],
+    "variables": [
+        {
+            "name": "block_css_keep_woocommerce",
+            "label": "Να μείνει το CSS των blocks του WooCommerce;",
+            "default": "yes",
+            "description": "yes ή no"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/ro8wp9ow/"
+    ],
+    "updated": "2026-11-19T11:16:07+00:00"
+}
