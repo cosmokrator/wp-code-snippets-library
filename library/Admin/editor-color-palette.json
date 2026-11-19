@@ -1,0 +1,35 @@
+{
+    "title": "Set the block editor color palette",
+    "description": "Αντικαθιστά τα προκαθορισμένα χρώματα του block editor (για κείμενο, φόντο, κουμπιά) με τα χρώματα της επωνυμίας σας, ώστε οι συντάκτες να χρησιμοποιούν πάντα τα σωστά. Γράψτε τα ως «Όνομα:#χρώμα» χωρισμένα με κόμμα. Αν θέλετε, κρύβει και την επιλογή ελεύθερου χρώματος. Δουλεύει με κλασικά και block themes (WordPress 6.1+).",
+    "type": "php",
+    "code": "add_filter( 'wp_theme_json_data_theme', 'perfectpixel_editor_color_palette' );\n\nfunction perfectpixel_editor_color_palette( $theme_json ) {\n\t$palette = array();\n\tforeach ( array_filter( array_map( 'trim', explode( ',', '{{editor_palette}}' ) ) ) as $i => $entry ) {\n\t\t$parts = array_map( 'trim', explode( ':', $entry, 2 ) );\n\t\t$color = isset( $parts[1] ) ? sanitize_hex_color( $parts[1] ) : null;\n\t\tif ( $color ) {\n\t\t\t// ASCII slugs: CSS custom properties are built from them.\n\t\t\t$palette[] = array( 'name' => $parts[0], 'slug' => 'perfectpixel-' . ( $i + 1 ), 'color' => $color );\n\t\t}\n\t}\n\tif ( ! $palette ) {\n\t\treturn $theme_json;\n\t}\n\treturn $theme_json->update_with(\n\t\tarray(\n\t\t\t'version'  => 2,\n\t\t\t'settings' => array(\n\t\t\t\t'color' => array(\n\t\t\t\t\t'palette' => $palette,\n\t\t\t\t\t'custom'  => 'no' !== strtolower( trim( '{{editor_palette_custom}}' ) ),\n\t\t\t\t),\n\t\t\t),\n\t\t)\n\t);\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "block-editor",
+        "colors",
+        "branding"
+    ],
+    "variables": [
+        {
+            "name": "editor_palette",
+            "label": "Χρώματα",
+            "default": "Κύριο:#1e73be,Δευτερεύον:#f7a600,Σκούρο:#1d2327,Ανοιχτό:#f6f7f7,Λευκό:#ffffff",
+            "description": "Όνομα:#hex, χωρισμένα με κόμμα. Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "editor_palette_custom",
+            "label": "Επιτρέπεται ελεύθερο χρώμα;",
+            "default": "yes",
+            "description": "yes ή no"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/do1gv3po/"
+    ],
+    "updated": "2026-11-19T06:46:54+00:00"
+}

@@ -1,0 +1,53 @@
+{
+    "title": "Limit comment length with a character counter",
+    "description": "Ορίζει μέγιστο (και προαιρετικά ελάχιστο) αριθμό χαρακτήρων για τα σχόλια και δείχνει κάτω από το πεδίο πόσοι χαρακτήρες απομένουν καθώς γράφει ο επισκέπτης. Σχόλια εκτός ορίων απορρίπτονται με μήνυμα, ακόμα κι αν σταλούν απευθείας (π.χ. από bots). Μειώνει τα μεγάλα spam σχόλια και τα σχόλια μίας λέξης.",
+    "type": "php",
+    "code": "add_filter( 'comment_form_defaults', 'perfectpixel_comment_length_field' );\nadd_filter( 'preprocess_comment', 'perfectpixel_comment_length_check' );\n\nfunction perfectpixel_comment_length_max() {\n\treturn max( 1, (int) '{{comment_max_chars}}' );\n}\n\nfunction perfectpixel_comment_length_field( $defaults ) {\n\t$max = perfectpixel_comment_length_max();\n\t$defaults['comment_field'] = preg_replace( '/<textarea\\b/', '<textarea maxlength=\"' . $max . '\"', $defaults['comment_field'], 1 );\n\t$defaults['comment_field'] .= '<p class=\"perfectpixel-comment-counter\" aria-live=\"polite\"><span>' . $max . '</span> ' . esc_html( '{{comment_counter_text}}' ) . '</p>';\n\t$defaults['comment_field'] .= '<script>( function () { var area = document.getElementById( \"comment\" ), out = document.querySelector( \".perfectpixel-comment-counter span\" ); if ( ! area || ! out ) { return; } var max = ' . $max . '; var update = function () { out.textContent = Math.max( 0, max - area.value.length ); }; area.addEventListener( \"input\", update ); update(); } )();</script>';\n\treturn $defaults;\n}\n\nfunction perfectpixel_comment_length_check( $commentdata ) {\n\tif ( ! empty( $commentdata['comment_type'] ) && 'comment' !== $commentdata['comment_type'] ) {\n\t\treturn $commentdata; // Pingbacks, trackbacks, reviews of other types.\n\t}\n\t$text   = isset( $commentdata['comment_content'] ) ? $commentdata['comment_content'] : '';\n\t$length = function_exists( 'mb_strlen' ) ? mb_strlen( $text ) : strlen( $text );\n\tif ( $length > perfectpixel_comment_length_max() ) {\n\t\twp_die( esc_html( '{{comment_too_long_message}}' ), '', array( 'response' => 400, 'back_link' => true ) );\n\t}\n\tif ( $length < (int) '{{comment_min_chars}}' ) {\n\t\twp_die( esc_html( '{{comment_too_short_message}}' ), '', array( 'response' => 400, 'back_link' => true ) );\n\t}\n\treturn $commentdata;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "comments",
+        "spam",
+        "ux"
+    ],
+    "variables": [
+        {
+            "name": "comment_max_chars",
+            "label": "Μέγιστοι χαρακτήρες",
+            "default": "1500",
+            "description": "Μόνο αριθμός"
+        },
+        {
+            "name": "comment_min_chars",
+            "label": "Ελάχιστοι χαρακτήρες",
+            "default": "0",
+            "description": "0 = χωρίς ελάχιστο"
+        },
+        {
+            "name": "comment_counter_text",
+            "label": "Κείμενο μετρητή",
+            "default": "χαρακτήρες απομένουν",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "comment_too_long_message",
+            "label": "Μήνυμα για μεγάλο σχόλιο",
+            "default": "Το σχόλιο είναι πολύ μεγάλο. Συντομεύστε το και δοκιμάστε ξανά.",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "comment_too_short_message",
+            "label": "Μήνυμα για μικρό σχόλιο",
+            "default": "Το σχόλιο είναι πολύ μικρό.",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/m5lj6pz2/"
+    ],
+    "updated": "2026-11-19T06:46:54+00:00"
+}

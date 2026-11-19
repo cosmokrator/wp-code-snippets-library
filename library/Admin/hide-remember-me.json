@@ -1,0 +1,21 @@
+{
+    "title": "Hide \"Remember me\" on the login page",
+    "description": "Κρύβει το κουτάκι «Να με θυμάσαι» στη σελίδα σύνδεσης (wp-login.php) και αγνοείται αν σταλεί, ώστε οι χρήστες να αποσυνδέονται πάντα όταν κλείσουν τον browser. Χρήσιμο για υπολογιστές που χρησιμοποιούν πολλοί (γραφεία, καταστήματα). Δεν αφορά τη φόρμα σύνδεσης πελατών του WooCommerce.",
+    "type": "php",
+    "code": "add_action( 'login_head', 'perfectpixel_hide_remember_me_css' );\nadd_action( 'login_init', 'perfectpixel_hide_remember_me_ignore' );\n\nfunction perfectpixel_hide_remember_me_css() {\n\techo '<style>.login .forgetmenot{display:none}</style>';\n}\n\nfunction perfectpixel_hide_remember_me_ignore() {\n\tunset( $_POST['rememberme'] );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "login",
+        "security"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/joer7665/"
+    ],
+    "updated": "2026-11-19T06:46:54+00:00"
+}

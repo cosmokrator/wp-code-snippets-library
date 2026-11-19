@@ -1,0 +1,29 @@
+{
+    "title": "Inline spoiler shortcode",
+    "description": "Shortcode [spoiler]κρυφό κείμενο[/spoiler] που κρύβει μέρος του κειμένου (π.χ. τέλος ταινίας, λύση κουίζ) πίσω από μια σκούρα μπάρα. Ο αναγνώστης το αποκαλύπτει με κλικ ή με το πληκτρολόγιο (Enter), και το ξανακρύβει με δεύτερο κλικ.",
+    "type": "php",
+    "code": "add_shortcode( 'spoiler', 'perfectpixel_spoiler_shortcode' );\n\nfunction perfectpixel_spoiler_shortcode( $atts, $content = '' ) {\n\tstatic $assets_done = false;\n\t$html = '';\n\tif ( ! $assets_done ) {\n\t\t$assets_done = true;\n\t\t$html       .= '<style>.perfectpixel-spoiler{background:#1d2327;color:transparent;border-radius:2px;cursor:pointer;transition:color .2s,background .2s}.perfectpixel-spoiler *{visibility:hidden}.perfectpixel-spoiler.is-revealed{background:rgba(0,0,0,.06);color:inherit}.perfectpixel-spoiler.is-revealed *{visibility:visible}</style>';\n\t\t$html       .= '<script>document.addEventListener( \"click\", function ( e ) { var s = e.target.closest ? e.target.closest( \".perfectpixel-spoiler\" ) : null; if ( s ) { s.classList.toggle( \"is-revealed\" ); s.setAttribute( \"aria-pressed\", s.classList.contains( \"is-revealed\" ) ? \"true\" : \"false\" ); } } ); document.addEventListener( \"keydown\", function ( e ) { if ( ( e.key === \"Enter\" || e.key === \" \" ) && e.target.classList && e.target.classList.contains( \"perfectpixel-spoiler\" ) ) { e.preventDefault(); e.target.click(); } } );</script>';\n\t}\n\treturn $html . '<span class=\"perfectpixel-spoiler\" role=\"button\" tabindex=\"0\" aria-pressed=\"false\" title=\"' . esc_attr( '{{spoiler_label}}' ) . '\">' . do_shortcode( $content ) . '</span>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "shortcodes",
+        "spoiler",
+        "content"
+    ],
+    "variables": [
+        {
+            "name": "spoiler_label",
+            "label": "Κείμενο για αναγνώστες οθόνης",
+            "default": "Κρυμμένο κείμενο, πατήστε για εμφάνιση",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/r2m04wg5/"
+    ],
+    "updated": "2026-11-19T06:46:54+00:00"
+}

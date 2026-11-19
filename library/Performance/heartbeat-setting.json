@@ -1,0 +1,22 @@
+{
+    "title": "Heartbeat interval setting",
+    "description": "Το WordPress στέλνει από τη διαχείριση αιτήματα «Heartbeat» στον server κάθε 15–60 δευτερόλεπτα (για αυτόματη αποθήκευση, κλείδωμα άρθρων, ειδοποιήσεις). Σε φθηνά hosting με πολλές ανοιχτές καρτέλες αυτό φορτώνει τον server. Το snippet προσθέτει στο Ρυθμίσεις → Γενικά επιλογή για το διάστημα (15 έως 120 δευτερόλεπτα) και για απενεργοποίηση του Heartbeat στις σελίδες του site (όχι στη διαχείριση).",
+    "type": "php",
+    "code": "add_action( 'admin_init', 'perfectpixel_heartbeat_settings_fields' );\nadd_filter( 'heartbeat_settings', 'perfectpixel_heartbeat_interval' );\nadd_action( 'wp_enqueue_scripts', 'perfectpixel_heartbeat_frontend', 100 );\n\nfunction perfectpixel_heartbeat_settings_fields() {\n\tregister_setting( 'general', 'perfectpixel_heartbeat_interval', array( 'type' => 'integer', 'sanitize_callback' => 'absint', 'default' => 0 ) );\n\tregister_setting( 'general', 'perfectpixel_heartbeat_frontend_off', array( 'type' => 'boolean', 'sanitize_callback' => 'rest_sanitize_boolean', 'default' => false ) );\n\tadd_settings_field( 'perfectpixel_heartbeat_interval', 'Heartbeat', 'perfectpixel_heartbeat_settings_html', 'general' );\n}\n\nfunction perfectpixel_heartbeat_settings_html() {\n\t$current = (int) get_option( 'perfectpixel_heartbeat_interval' );\n\techo '<select name=\"perfectpixel_heartbeat_interval\">';\n\techo '<option value=\"0\"' . selected( $current, 0, false ) . '>Προεπιλογή WordPress</option>';\n\tforeach ( array( 15, 30, 60, 90, 120 ) as $seconds ) {\n\t\techo '<option value=\"' . (int) $seconds . '\"' . selected( $current, $seconds, false ) . '>' . (int) $seconds . ' δευτερόλεπτα</option>';\n\t}\n\techo '</select>';\n\techo '<p><label><input type=\"checkbox\" name=\"perfectpixel_heartbeat_frontend_off\" value=\"1\"' . checked( (bool) get_option( 'perfectpixel_heartbeat_frontend_off' ), true, false ) . '> Απενεργοποίηση στις σελίδες του site</label></p>';\n}\n\nfunction perfectpixel_heartbeat_interval( $settings ) {\n\t$seconds = (int) get_option( 'perfectpixel_heartbeat_interval' );\n\tif ( $seconds ) {\n\t\t$settings['interval'] = min( 120, max( 15, $seconds ) );\n\t}\n\treturn $settings;\n}\n\nfunction perfectpixel_heartbeat_frontend() {\n\tif ( get_option( 'perfectpixel_heartbeat_frontend_off' ) ) {\n\t\twp_dequeue_script( 'heartbeat' );\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "performance",
+        "heartbeat",
+        "admin"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/m5yejrj2/"
+    ],
+    "updated": "2026-11-19T06:46:54+00:00"
+}

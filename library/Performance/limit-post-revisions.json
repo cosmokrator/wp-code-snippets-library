@@ -1,0 +1,29 @@
+{
+    "title": "Limit the number of post revisions",
+    "description": "Το WordPress κρατά απεριόριστες αναθεωρήσεις για κάθε άρθρο και σελίδα, που με τον καιρό φουσκώνουν τη βάση δεδομένων. Το snippet κρατά μόνο τις πιο πρόσφατες (προεπιλογή: 20) για κάθε άρθρο· οι παλιότερες σβήνονται την επόμενη φορά που αποθηκεύεται το άρθρο. Με 0 δεν κρατιούνται καθόλου αναθεωρήσεις.",
+    "type": "php",
+    "code": "add_filter( 'wp_revisions_to_keep', 'perfectpixel_limit_post_revisions', 20 );\n\nfunction perfectpixel_limit_post_revisions() {\n\treturn max( 0, (int) '{{post_revisions_to_keep}}' );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "performance",
+        "database",
+        "revisions"
+    ],
+    "variables": [
+        {
+            "name": "post_revisions_to_keep",
+            "label": "Αναθεωρήσεις ανά άρθρο",
+            "default": "20",
+            "description": "Μόνο αριθμός (0 = καμία)"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/rovly32l/"
+    ],
+    "updated": "2026-11-19T06:46:54+00:00"
+}

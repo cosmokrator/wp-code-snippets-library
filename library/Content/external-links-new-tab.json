@@ -1,0 +1,22 @@
+{
+    "title": "Open external links in a new tab",
+    "description": "Οι σύνδεσμοι μέσα στα άρθρα και τις σελίδες που οδηγούν σε άλλα sites ανοίγουν αυτόματα σε νέα καρτέλα (με rel=\"noopener\" για ασφάλεια), ώστε ο επισκέπτης να μη φεύγει από το site σας. Οι σύνδεσμοι προς το δικό σας site δεν αλλάζουν, ούτε όσοι έχουν ήδη ορισμένο target. Χρειάζεται WordPress 6.2 ή νεότερο.",
+    "type": "php",
+    "code": "add_filter( 'the_content', 'perfectpixel_external_links_new_tab', 999 );\n\nfunction perfectpixel_external_links_new_tab( $content ) {\n\tif ( is_admin() || is_feed() || false === stripos( $content, '<a' ) || ! class_exists( 'WP_HTML_Tag_Processor' ) ) {\n\t\treturn $content;\n\t}\n\t$site_host = strtolower( (string) wp_parse_url( home_url(), PHP_URL_HOST ) );\n\t$tags      = new WP_HTML_Tag_Processor( $content );\n\twhile ( $tags->next_tag( 'a' ) ) {\n\t\t$href = (string) $tags->get_attribute( 'href' );\n\t\tif ( ! preg_match( '#^(https?:)?//#i', $href ) || null !== $tags->get_attribute( 'target' ) ) {\n\t\t\tcontinue;\n\t\t}\n\t\t$host = strtolower( (string) wp_parse_url( ( 0 === strpos( $href, '//' ) ? 'https:' : '' ) . $href, PHP_URL_HOST ) );\n\t\tif ( ! $host || $host === $site_host || 'www.' . $host === $site_host || $host === 'www.' . $site_host ) {\n\t\t\tcontinue;\n\t\t}\n\t\t$tags->set_attribute( 'target', '_blank' );\n\t\t$rel = trim( (string) $tags->get_attribute( 'rel' ) );\n\t\tif ( false === strpos( ' ' . $rel . ' ', ' noopener ' ) ) {\n\t\t\t$tags->set_attribute( 'rel', trim( $rel . ' noopener' ) );\n\t\t}\n\t}\n\treturn $tags->get_updated_html();\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "links",
+        "content",
+        "ux"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/rod97yg2/"
+    ],
+    "updated": "2026-11-19T06:46:54+00:00"
+}

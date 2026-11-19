@@ -1,0 +1,22 @@
+{
+    "title": "Show all custom fields of a post (debug box)",
+    "description": "Για διαχειριστές: προσθέτει στην επεξεργασία κάθε άρθρου, σελίδας, προϊόντος κ.λπ. ένα πλαίσιο «Όλα τα custom fields» που δείχνει όλα τα πεδία (post meta) με τις τιμές τους, και τα κρυφά (με _). Χρήσιμο για έλεγχο όταν ένα plugin ή snippet δεν δουλεύει όπως περιμένετε. Μόνο ανάγνωση· δεν αλλάζει τίποτα. Ενεργοποιήστε το μόνο όσο το χρειάζεστε.",
+    "type": "php",
+    "code": "add_action( 'add_meta_boxes', 'perfectpixel_post_meta_debugger_box', 99, 2 );\n\nfunction perfectpixel_post_meta_debugger_box( $post_type, $post ) {\n\tif ( current_user_can( 'manage_options' ) && $post instanceof WP_Post ) {\n\t\tadd_meta_box( 'perfectpixel-post-meta-debugger', 'Όλα τα custom fields', 'perfectpixel_post_meta_debugger_html', null, 'normal', 'low' );\n\t}\n}\n\nfunction perfectpixel_post_meta_debugger_html( $post ) {\n\t$meta = get_post_meta( $post->ID );\n\tif ( ! $meta ) {\n\t\techo '<p>—</p>';\n\t\treturn;\n\t}\n\tksort( $meta );\n\techo '<div style=\"max-height:400px;overflow:auto\"><table class=\"widefat striped\"><thead><tr><th style=\"width:30%\">meta_key</th><th>meta_value</th></tr></thead><tbody>';\n\tforeach ( $meta as $key => $values ) {\n\t\tforeach ( $values as $value ) {\n\t\t\t$value = maybe_unserialize( $value );\n\t\t\t$shown = is_scalar( $value ) || null === $value ? (string) $value : print_r( $value, true );\n\t\t\techo '<tr><td><code>' . esc_html( $key ) . '</code></td><td><pre style=\"margin:0;white-space:pre-wrap;word-break:break-all\">' . esc_html( $shown ) . '</pre></td></tr>';\n\t\t}\n\t}\n\techo '</tbody></table></div>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "admin",
+        "debug",
+        "custom-fields"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/qor633qo/"
+    ],
+    "updated": "2026-11-19T06:46:54+00:00"
+}

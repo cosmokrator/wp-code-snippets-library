@@ -1,0 +1,40 @@
+{
+    "title": "Simple maintenance mode",
+    "description": "Όσο είναι ενεργό, οι επισκέπτες βλέπουν μια απλή σελίδα «Το site είναι σε συντήρηση» με το μήνυμα που ορίζετε, ενώ οι συνδεδεμένοι διαχειριστές και συντάκτες βλέπουν κανονικά το site (με ένδειξη «Συντήρηση» στη μπάρα, για να μην το ξεχάσετε ενεργό). Η σελίδα επιστρέφει κωδικό 503, ώστε η Google να ξαναπεράσει αργότερα χωρίς να χαλάσει η κατάταξη. Η σελίδα σύνδεσης μένει ανοιχτή.",
+    "type": "php",
+    "code": "add_action( 'template_redirect', 'perfectpixel_maintenance_mode', 0 );\nadd_action( 'admin_bar_menu', 'perfectpixel_maintenance_mode_bar', 100 );\n\nfunction perfectpixel_maintenance_mode_allowed() {\n\t$cap = trim( '{{maintenance_capability}}' );\n\treturn current_user_can( $cap ? $cap : 'edit_posts' );\n}\n\nfunction perfectpixel_maintenance_mode() {\n\tif ( perfectpixel_maintenance_mode_allowed() || wp_doing_ajax() || wp_doing_cron() ) {\n\t\treturn;\n\t}\n\theader( 'Retry-After: 3600' );\n\tnocache_headers();\n\twp_die(\n\t\t'<h1>' . esc_html( '{{maintenance_title}}' ) . '</h1><p>' . esc_html( '{{maintenance_message}}' ) . '</p>',\n\t\tesc_html( '{{maintenance_title}}' ),\n\t\tarray( 'response' => 503 )\n\t);\n}\n\nfunction perfectpixel_maintenance_mode_bar( $wp_admin_bar ) {\n\tif ( perfectpixel_maintenance_mode_allowed() ) {\n\t\t$wp_admin_bar->add_node(\n\t\t\tarray(\n\t\t\t\t'id'    => 'perfectpixel-maintenance',\n\t\t\t\t'title' => '<span style=\"background:#d63638;color:#fff;padding:0 8px;border-radius:3px\">Συντήρηση</span>',\n\t\t\t)\n\t\t);\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "maintenance",
+        "admin"
+    ],
+    "variables": [
+        {
+            "name": "maintenance_title",
+            "label": "Τίτλος",
+            "default": "Το site είναι σε συντήρηση",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "maintenance_message",
+            "label": "Μήνυμα",
+            "default": "Κάνουμε κάποιες βελτιώσεις. Θα είμαστε ξανά κοντά σας σε λίγο.",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "maintenance_capability",
+            "label": "Δικαίωμα για πρόσβαση",
+            "default": "edit_posts",
+            "description": "edit_posts = διαχειριστές και συντάκτες, manage_options = μόνο διαχειριστές"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/g5gm9zy5/"
+    ],
+    "updated": "2026-11-19T06:46:54+00:00"
+}

@@ -1,0 +1,22 @@
+{
+    "title": "Lowercase filenames of new uploads",
+    "description": "Τα ονόματα των αρχείων που ανεβαίνουν μετατρέπονται σε πεζά (π.χ. «Photo-01.JPG» → «photo-01.jpg»). Αποφεύγονται σπασμένοι σύνδεσμοι όταν το site μεταφέρεται σε server που ξεχωρίζει κεφαλαία από πεζά, και τα URLs είναι πιο ομοιόμορφα. Τα αρχεία που υπάρχουν ήδη δεν αλλάζουν.",
+    "type": "php",
+    "code": "add_filter( 'sanitize_file_name', 'perfectpixel_lowercase_upload_filenames', 20 );\n\nfunction perfectpixel_lowercase_upload_filenames( $filename ) {\n\treturn function_exists( 'mb_strtolower' ) ? mb_strtolower( $filename, 'UTF-8' ) : strtolower( $filename );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "media",
+        "uploads",
+        "filenames"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/924zp1og/"
+    ],
+    "updated": "2026-11-19T06:46:54+00:00"
+}

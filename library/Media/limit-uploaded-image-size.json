@@ -1,0 +1,36 @@
+{
+    "title": "Resize uploaded images to a maximum size",
+    "description": "Οι εικόνες που ανεβαίνουν (JPG, PNG, WebP) και ξεπερνούν το μέγιστο πλάτος ή ύψος που ορίζετε (προεπιλογή: 2000×2000) μικραίνουν αμέσως κατά το ανέβασμα, κρατώντας τις αναλογίες τους. Το τεράστιο πρωτότυπο από το κινητό ή την κάμερα δεν αποθηκεύεται, εξοικονομώντας χώρο στον server και στα backups. Τα GIF δεν αλλάζουν (για να μη χαθεί το animation).",
+    "type": "php",
+    "code": "add_filter( 'wp_handle_upload', 'perfectpixel_limit_uploaded_image_size' );\n\nfunction perfectpixel_limit_uploaded_image_size( $upload ) {\n\tif ( empty( $upload['file'] ) || empty( $upload['type'] ) || ! in_array( $upload['type'], array( 'image/jpeg', 'image/png', 'image/webp' ), true ) ) {\n\t\treturn $upload;\n\t}\n\t$max_w = max( 100, (int) '{{max_upload_width}}' );\n\t$max_h = max( 100, (int) '{{max_upload_height}}' );\n\t$size  = @getimagesize( $upload['file'] );\n\tif ( ! $size || ( $size[0] <= $max_w && $size[1] <= $max_h ) ) {\n\t\treturn $upload;\n\t}\n\t$editor = wp_get_image_editor( $upload['file'] );\n\tif ( is_wp_error( $editor ) ) {\n\t\treturn $upload;\n\t}\n\t$editor->maybe_exif_rotate();\n\tif ( ! is_wp_error( $editor->resize( $max_w, $max_h, false ) ) ) {\n\t\t$editor->save( $upload['file'] );\n\t}\n\treturn $upload;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "media",
+        "images",
+        "uploads",
+        "storage"
+    ],
+    "variables": [
+        {
+            "name": "max_upload_width",
+            "label": "Μέγιστο πλάτος (px)",
+            "default": "2000",
+            "description": "Μόνο αριθμός"
+        },
+        {
+            "name": "max_upload_height",
+            "label": "Μέγιστο ύψος (px)",
+            "default": "2000",
+            "description": "Μόνο αριθμός"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/e50xql45/"
+    ],
+    "updated": "2026-11-19T06:46:54+00:00"
+}

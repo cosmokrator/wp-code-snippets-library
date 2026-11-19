@@ -1,0 +1,22 @@
+{
+    "title": "Add a \"Last login\" column to the users list",
+    "description": "Καταγράφει πότε συνδέθηκε τελευταία φορά κάθε χρήστης (από το wp-login.php ή τη σύνδεση πελατών του WooCommerce) και το εμφανίζει σε νέα στήλη «Τελευταία σύνδεση» στη λίστα Χρήστες, με δυνατότητα ταξινόμησης. Χρήσιμο για να βρίσκετε ανενεργούς λογαριασμούς. Για συνδέσεις πριν από την ενεργοποίηση του snippet εμφανίζεται «Ποτέ».",
+    "type": "php",
+    "code": "add_action( 'wp_login', 'perfectpixel_record_last_login', 10, 2 );\nadd_filter( 'manage_users_columns', 'perfectpixel_last_login_column' );\nadd_filter( 'manage_users_custom_column', 'perfectpixel_last_login_column_value', 10, 3 );\nadd_filter( 'manage_users_sortable_columns', 'perfectpixel_last_login_sortable' );\nadd_action( 'pre_get_users', 'perfectpixel_last_login_orderby' );\n\nfunction perfectpixel_record_last_login( $login, $user ) {\n\tupdate_user_meta( $user->ID, 'perfectpixel_last_login', time() );\n}\n\nfunction perfectpixel_last_login_column( $columns ) {\n\t$columns['perfectpixel_last_login'] = 'Τελευταία σύνδεση';\n\treturn $columns;\n}\n\nfunction perfectpixel_last_login_column_value( $value, $column, $user_id ) {\n\tif ( 'perfectpixel_last_login' !== $column ) {\n\t\treturn $value;\n\t}\n\t$time = (int) get_user_meta( $user_id, 'perfectpixel_last_login', true );\n\treturn $time ? esc_html( wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $time ) ) : 'Ποτέ';\n}\n\nfunction perfectpixel_last_login_sortable( $columns ) {\n\t$columns['perfectpixel_last_login'] = 'perfectpixel_last_login';\n\treturn $columns;\n}\n\nfunction perfectpixel_last_login_orderby( $query ) {\n\tif ( is_admin() && 'perfectpixel_last_login' === $query->get( 'orderby' ) ) {\n\t\t$query->set( 'meta_key', 'perfectpixel_last_login' );\n\t\t$query->set( 'orderby', 'meta_value_num' );\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "admin",
+        "users",
+        "login"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/g5gm6q05/"
+    ],
+    "updated": "2026-11-19T06:46:54+00:00"
+}

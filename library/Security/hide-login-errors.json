@@ -1,0 +1,28 @@
+{
+    "title": "Show a generic login error message",
+    "description": "Όταν η σύνδεση αποτυγχάνει, το WordPress λέει αν λάθος είναι το όνομα χρήστη/email ή ο κωδικός, βοηθώντας κάποιον να μάθει ποιοι λογαριασμοί υπάρχουν. Το snippet δείχνει ένα γενικό μήνυμα για κάθε λάθος στοιχείο, στο wp-login.php και στη σύνδεση πελατών του WooCommerce. Τα υπόλοιπα μηνύματα (κενά πεδία, cookies κ.λπ.) μένουν όπως είναι.",
+    "type": "php",
+    "code": "add_filter( 'authenticate', 'perfectpixel_generic_login_error', 99 );\nadd_filter( 'shake_error_codes', 'perfectpixel_generic_login_error_shake' );\n\nfunction perfectpixel_generic_login_error( $user ) {\n\tif ( is_wp_error( $user ) && array_intersect( $user->get_error_codes(), array( 'invalid_username', 'invalid_email', 'incorrect_password' ) ) ) {\n\t\treturn new WP_Error( 'perfectpixel_login_failed', esc_html( '{{login_error_message}}' ) );\n\t}\n\treturn $user;\n}\n\nfunction perfectpixel_generic_login_error_shake( $codes ) {\n\t$codes[] = 'perfectpixel_login_failed';\n\treturn $codes;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "login",
+        "security"
+    ],
+    "variables": [
+        {
+            "name": "login_error_message",
+            "label": "Μήνυμα",
+            "default": "Λάθος στοιχεία σύνδεσης. Δοκιμάστε ξανά.",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/qo9x3ro1/"
+    ],
+    "updated": "2026-11-19T06:46:54+00:00"
+}

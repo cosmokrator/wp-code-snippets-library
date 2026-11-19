@@ -1,0 +1,28 @@
+{
+    "title": "Hide the \"Screen Options\" tab",
+    "description": "Κρύβει την καρτέλα «Επιλογές προβολής» πάνω δεξιά στις σελίδες της διαχείρισης, ώστε οι χρήστες να μην κρύβουν κατά λάθος στήλες ή πλαίσια. Μπορείτε να την κρύψετε μόνο για όσους δεν είναι διαχειριστές.",
+    "type": "php",
+    "code": "add_filter( 'screen_options_show_screen', 'perfectpixel_hide_screen_options', 20 );\n\nfunction perfectpixel_hide_screen_options( $show ) {\n\tif ( 'no' === strtolower( trim( '{{screen_options_admins_too}}' ) ) && current_user_can( 'manage_options' ) ) {\n\t\treturn $show;\n\t}\n\treturn false;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "admin",
+        "cleanup"
+    ],
+    "variables": [
+        {
+            "name": "screen_options_admins_too",
+            "label": "Κρυφό και για διαχειριστές;",
+            "default": "yes",
+            "description": "yes ή no"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/d2zmjy5x/"
+    ],
+    "updated": "2026-11-19T06:46:54+00:00"
+}

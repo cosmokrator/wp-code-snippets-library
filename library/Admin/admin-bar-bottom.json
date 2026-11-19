@@ -1,0 +1,22 @@
+{
+    "title": "Move the admin bar to the bottom of the screen",
+    "description": "Στο site (όχι στη διαχείριση) η μαύρη μπάρα διαχείρισης μετακινείται στο κάτω μέρος της οθόνης, ώστε να μην καλύπτει τη σταθερή κεφαλίδα ή το μενού του theme όταν βλέπετε το site συνδεδεμένοι. Τα υπομενού ανοίγουν προς τα πάνω. Οι επισκέπτες δεν επηρεάζονται.",
+    "type": "php",
+    "code": "add_action( 'wp_head', 'perfectpixel_admin_bar_bottom', 100 );\n\nfunction perfectpixel_admin_bar_bottom() {\n\tif ( ! is_admin_bar_showing() ) {\n\t\treturn;\n\t}\n\techo '<style>html{margin-top:0!important}* html body{margin-top:0!important}body{padding-bottom:32px}#wpadminbar{position:fixed!important;top:auto!important;bottom:0}#wpadminbar .menupop .ab-sub-wrapper{top:auto;bottom:32px}#wpadminbar .menupop .ab-sub-wrapper .ab-sub-wrapper{bottom:0}@media screen and (max-width:782px){body{padding-bottom:46px}#wpadminbar .menupop .ab-sub-wrapper{bottom:46px}}</style>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "admin-bar",
+        "css",
+        "ux"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/qorpdy5k/"
+    ],
+    "updated": "2026-11-19T06:46:54+00:00"
+}

@@ -1,0 +1,21 @@
+{
+    "title": "Skip loading translations on English (US) sites",
+    "description": "Σε sites με γλώσσα English (United States), το WordPress και τα plugins εξακολουθούν να ψάχνουν αρχεία μετάφρασης σε κάθε φόρτωση σελίδας. Το snippet παραλείπει αυτή τη δουλειά, μειώνοντας λίγο τη μνήμη και τον χρόνο. Σε sites με άλλη γλώσσα (π.χ. Ελληνικά) δεν κάνει τίποτα, και δεν επηρεάζει χρήστες που έχουν επιλέξει άλλη γλώσσα στο προφίλ τους.",
+    "type": "php",
+    "code": "add_filter( 'override_load_textdomain', 'perfectpixel_skip_translations_en_us', 20 );\n\nfunction perfectpixel_skip_translations_en_us( $override ) {\n\treturn 'en_US' === determine_locale() ? true : $override;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "performance",
+        "translations"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/9246x115/"
+    ],
+    "updated": "2026-11-19T06:46:54+00:00"
+}

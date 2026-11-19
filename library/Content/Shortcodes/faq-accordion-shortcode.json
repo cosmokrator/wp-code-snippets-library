@@ -1,0 +1,23 @@
+{
+    "title": "FAQ accordion shortcode",
+    "description": "Shortcode για συχνές ερωτήσεις που ανοιγοκλείνουν: [faq question=\"Πόσο κοστίζει η αποστολή;\"]Η απάντηση…[/faq]. Βάλτε όσα [faq] θέλετε το ένα κάτω από το άλλο. Δουλεύει χωρίς JavaScript (με τα στοιχεία details/summary), είναι προσβάσιμο με πληκτρολόγιο και προσθέτει αυτόματα δομημένα δεδομένα FAQPage για τη Google.",
+    "type": "php",
+    "code": "add_shortcode( 'faq', 'perfectpixel_faq_shortcode' );\nadd_action( 'wp_footer', 'perfectpixel_faq_schema' );\n\nfunction perfectpixel_faq_items( $item = null ) {\n\tstatic $items = array();\n\tif ( null !== $item ) {\n\t\t$items[] = $item;\n\t}\n\treturn $items;\n}\n\nfunction perfectpixel_faq_shortcode( $atts, $content = '' ) {\n\t$atts     = shortcode_atts( array( 'question' => '', 'open' => 'no' ), $atts, 'faq' );\n\t$question = trim( $atts['question'] );\n\tif ( '' === $question ) {\n\t\treturn '';\n\t}\n\t$answer = wpautop( do_shortcode( trim( (string) $content ) ) );\n\tperfectpixel_faq_items( array( 'q' => $question, 'a' => $answer ) );\n\n\tstatic $style_done = false;\n\t$style = '';\n\tif ( ! $style_done ) {\n\t\t$style_done = true;\n\t\t$style      = '<style>.perfectpixel-faq{border:1px solid rgba(0,0,0,.12);border-radius:4px;margin:0 0 .6em}.perfectpixel-faq summary{cursor:pointer;padding:.7em 1em;font-weight:600}.perfectpixel-faq[open] summary{border-bottom:1px solid rgba(0,0,0,.08)}.perfectpixel-faq .perfectpixel-faq-answer{padding:.7em 1em}.perfectpixel-faq .perfectpixel-faq-answer>:last-child{margin-bottom:0}</style>';\n\t}\n\treturn $style . '<details class=\"perfectpixel-faq\"' . ( 'yes' === $atts['open'] ? ' open' : '' ) . '><summary>' . esc_html( $question ) . '</summary><div class=\"perfectpixel-faq-answer\">' . $answer . '</div></details>';\n}\n\nfunction perfectpixel_faq_schema() {\n\t$items = perfectpixel_faq_items();\n\tif ( ! $items ) {\n\t\treturn;\n\t}\n\t$entities = array();\n\tforeach ( $items as $item ) {\n\t\t$entities[] = array(\n\t\t\t'@type'          => 'Question',\n\t\t\t'name'           => $item['q'],\n\t\t\t'acceptedAnswer' => array( '@type' => 'Answer', 'text' => wp_strip_all_tags( $item['a'] ) ),\n\t\t);\n\t}\n\techo '<script type=\"application/ld+json\">' . wp_json_encode( array( '@context' => 'https://schema.org', '@type' => 'FAQPage', 'mainEntity' => $entities ), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES ) . '</script>' . \"\\n\";\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "shortcodes",
+        "faq",
+        "seo",
+        "accordion"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/joer8j15/"
+    ],
+    "updated": "2026-11-19T06:46:54+00:00"
+}
