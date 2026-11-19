@@ -1,0 +1,35 @@
+{
+    "title": "Add a \"Copy\" button to code blocks",
+    "description": "Σε άρθρα και σελίδες που περιέχουν μπλοκ κώδικα (<pre>), προσθέτει ένα μικρό κουμπί «Αντιγραφή» πάνω δεξιά σε κάθε μπλοκ· με ένα κλικ ο κώδικας μπαίνει στο πρόχειρο και το κουμπί γράφει για λίγο «Αντιγράφηκε!». Το script φορτώνεται μόνο στις σελίδες που έχουν μπλοκ κώδικα.",
+    "type": "php",
+    "code": "add_action( 'wp_footer', 'perfectpixel_copy_button_code_blocks' );\n\nfunction perfectpixel_copy_button_code_blocks() {\n\tif ( ! is_singular() || false === stripos( (string) get_post_field( 'post_content', get_queried_object_id() ), '<pre' ) ) {\n\t\treturn;\n\t}\n\t?>\n\t<style>\n\t.perfectpixel-copy-wrap{position:relative}\n\t.perfectpixel-copy-btn{position:absolute;top:6px;right:6px;z-index:2;padding:2px 8px;border:1px solid rgba(0,0,0,.2);border-radius:3px;background:#fff;color:#1d2327;font-size:12px;line-height:1.6;cursor:pointer;opacity:.85}\n\t.perfectpixel-copy-btn:hover,.perfectpixel-copy-btn:focus{opacity:1}\n\t</style>\n\t<script>\n\t( function ( labels ) {\n\t\tvar copyText = function ( text ) {\n\t\t\tif ( navigator.clipboard && window.isSecureContext ) {\n\t\t\t\treturn navigator.clipboard.writeText( text );\n\t\t\t}\n\t\t\treturn new Promise( function ( resolve, reject ) {\n\t\t\t\tvar area = document.createElement( 'textarea' );\n\t\t\t\tarea.value = text;\n\t\t\t\tarea.setAttribute( 'readonly', '' );\n\t\t\t\tarea.style.position = 'fixed';\n\t\t\t\tarea.style.opacity = '0';\n\t\t\t\tdocument.body.appendChild( area );\n\t\t\t\tarea.select();\n\t\t\t\tvar ok = document.execCommand( 'copy' );\n\t\t\t\tdocument.body.removeChild( area );\n\t\t\t\treturn ok ? resolve() : reject();\n\t\t\t} );\n\t\t};\n\t\tdocument.querySelectorAll( '.entry-content pre, .wp-block-post-content pre, article pre' ).forEach( function ( pre ) {\n\t\t\tif ( pre.parentNode.classList.contains( 'perfectpixel-copy-wrap' ) ) {\n\t\t\t\treturn;\n\t\t\t}\n\t\t\tvar wrap = document.createElement( 'div' );\n\t\t\twrap.className = 'perfectpixel-copy-wrap';\n\t\t\tpre.parentNode.insertBefore( wrap, pre );\n\t\t\twrap.appendChild( pre );\n\t\t\tvar btn = document.createElement( 'button' );\n\t\t\tbtn.type = 'button';\n\t\t\tbtn.className = 'perfectpixel-copy-btn';\n\t\t\tbtn.textContent = labels.copy;\n\t\t\tbtn.addEventListener( 'click', function () {\n\t\t\t\tvar source = pre.querySelector( 'code' ) || pre;\n\t\t\t\tcopyText( source.innerText ).then( function () {\n\t\t\t\t\tbtn.textContent = labels.done;\n\t\t\t\t\tsetTimeout( function () {\n\t\t\t\t\t\tbtn.textContent = labels.copy;\n\t\t\t\t\t}, 2000 );\n\t\t\t\t} );\n\t\t\t} );\n\t\t\twrap.appendChild( btn );\n\t\t} );\n\t} )( <?php echo wp_json_encode( array( 'copy' => '{{copy_code_button_text}}', 'done' => '{{copy_code_done_text}}' ) ); ?> );\n\t</script>\n\t<?php\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "code",
+        "clipboard",
+        "ux"
+    ],
+    "variables": [
+        {
+            "name": "copy_code_button_text",
+            "label": "Κείμενο κουμπιού",
+            "default": "Αντιγραφή",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "copy_code_done_text",
+            "label": "Κείμενο μετά την αντιγραφή",
+            "default": "Αντιγράφηκε!",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/e5w3en02/"
+    ],
+    "updated": "2026-11-19T06:28:47+00:00"
+}

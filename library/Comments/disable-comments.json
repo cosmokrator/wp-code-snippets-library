@@ -1,0 +1,29 @@
+{
+    "title": "Completely disable comments",
+    "description": "Κλείνει εντελώς τα σχόλια σε όλο το site: αφαιρεί τη φόρμα και τα υπάρχοντα σχόλια από τις σελίδες, το μενού «Σχόλια» και τις ρυθμίσεις συζήτησης από τη διαχείριση, το εικονίδιο σχολίων από τη μπάρα, το widget «Πρόσφατα σχόλια», τη ροή RSS σχολίων και τη δυνατότητα υποβολής μέσω REST API / XML-RPC (κατά των spam σχολίων). Τα σχόλια δεν σβήνονται από τη βάση· αν απενεργοποιήσετε το snippet, επανέρχονται. Οι κριτικές προϊόντων του WooCommerce είναι κι αυτές σχόλια: με την προεπιλογή μένουν ενεργές.",
+    "type": "php",
+    "code": "add_action( 'init', 'perfectpixel_disable_comments_support', 100 );\nadd_filter( 'comments_open', 'perfectpixel_disable_comments_closed', 20, 2 );\nadd_filter( 'pings_open', 'perfectpixel_disable_comments_closed', 20, 2 );\nadd_filter( 'comments_array', 'perfectpixel_disable_comments_hide_existing', 20, 2 );\nadd_filter( 'get_comments_number', 'perfectpixel_disable_comments_count', 20, 2 );\nadd_action( 'admin_menu', 'perfectpixel_disable_comments_admin_menu', 999 );\nadd_action( 'admin_init', 'perfectpixel_disable_comments_admin_pages' );\nadd_action( 'wp_dashboard_setup', 'perfectpixel_disable_comments_dashboard', 20 );\nadd_action( 'admin_bar_menu', 'perfectpixel_disable_comments_admin_bar', 999 );\nadd_action( 'widgets_init', 'perfectpixel_disable_comments_widget', 20 );\nadd_filter( 'feed_links_show_comments_feed', '__return_false' );\nadd_action( 'template_redirect', 'perfectpixel_disable_comments_feed', 1 );\nadd_filter( 'rest_endpoints', 'perfectpixel_disable_comments_rest' );\nadd_filter( 'xmlrpc_methods', 'perfectpixel_disable_comments_xmlrpc' );\nadd_filter( 'pre_comment_approved', 'perfectpixel_disable_comments_reject', 1, 2 );\n\nfunction perfectpixel_disable_comments_applies( $post_type ) {\n\treturn ! ( 'product' === $post_type && 'no' !== strtolower( trim( '{{keep_product_reviews}}' ) ) );\n}\n\nfunction perfectpixel_disable_comments_support() {\n\tforeach ( get_post_types() as $post_type ) {\n\t\tif ( perfectpixel_disable_comments_applies( $post_type ) && post_type_supports( $post_type, 'comments' ) ) {\n\t\t\tremove_post_type_support( $post_type, 'comments' );\n\t\t\tremove_post_type_support( $post_type, 'trackbacks' );\n\t\t}\n\t}\n}\n\nfunction perfectpixel_disable_comments_closed( $open, $post_id ) {\n\treturn perfectpixel_disable_comments_applies( get_post_type( $post_id ) ) ? false : $open;\n}\n\nfunction perfectpixel_disable_comments_hide_existing( $comments, $post_id ) {\n\treturn perfectpixel_disable_comments_applies( get_post_type( $post_id ) ) ? array() : $comments;\n}\n\nfunction perfectpixel_disable_comments_count( $count, $post_id ) {\n\treturn perfectpixel_disable_comments_applies( get_post_type( $post_id ) ) ? 0 : $count;\n}\n\n// WooCommerce has its own \"Reviews\" screen under Products, so the core screens can go.\nfunction perfectpixel_disable_comments_admin_menu() {\n\tremove_menu_page( 'edit-comments.php' );\n\tremove_submenu_page( 'options-general.php', 'options-discussion.php' );\n}\n\nfunction perfectpixel_disable_comments_admin_pages() {\n\tglobal $pagenow;\n\tif ( in_array( $pagenow, array( 'edit-comments.php', 'options-discussion.php' ), true ) && ! wp_doing_ajax() ) {\n\t\twp_safe_redirect( admin_url() );\n\t\texit;\n\t}\n}\n\nfunction perfectpixel_disable_comments_dashboard() {\n\tremove_meta_box( 'dashboard_recent_comments', 'dashboard', 'normal' );\n}\n\nfunction perfectpixel_disable_comments_admin_bar( $wp_admin_bar ) {\n\t$wp_admin_bar->remove_node( 'comments' );\n}\n\nfunction perfectpixel_disable_comments_widget() {\n\tunregister_widget( 'WP_Widget_Recent_Comments' );\n}\n\nfunction perfectpixel_disable_comments_feed() {\n\tif ( is_comment_feed() ) {\n\t\twp_safe_redirect( home_url( '/' ), 301 );\n\t\texit;\n\t}\n}\n\nfunction perfectpixel_disable_comments_rest( $endpoints ) {\n\tunset( $endpoints['/wp/v2/comments'], $endpoints['/wp/v2/comments/(?P<id>[\\d]+)'] );\n\treturn $endpoints;\n}\n\nfunction perfectpixel_disable_comments_xmlrpc( $methods ) {\n\tunset( $methods['wp.newComment'] );\n\treturn $methods;\n}\n\n// Last line of defence against direct posts to wp-comments-post.php.\nfunction perfectpixel_disable_comments_reject( $approved, $commentdata ) {\n\t$post_id = isset( $commentdata['comment_post_ID'] ) ? (int) $commentdata['comment_post_ID'] : 0;\n\tif ( $post_id && perfectpixel_disable_comments_applies( get_post_type( $post_id ) ) ) {\n\t\treturn new WP_Error( 'comments_disabled', __( 'Sorry, comments are closed for this item.' ), 403 );\n\t}\n\treturn $approved;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "comments",
+        "spam",
+        "admin"
+    ],
+    "variables": [
+        {
+            "name": "keep_product_reviews",
+            "label": "Να μείνουν οι κριτικές προϊόντων;",
+            "default": "yes",
+            "description": "yes = οι κριτικές WooCommerce μένουν ενεργές, no = κλείνουν κι αυτές"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/323jqeor/"
+    ],
+    "updated": "2026-11-19T06:28:47+00:00"
+}

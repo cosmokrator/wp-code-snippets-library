@@ -1,0 +1,29 @@
+{
+    "title": "Change the default image size in the editor",
+    "description": "Όταν προσθέτετε εικόνα σε άρθρο ή σελίδα, το WordPress προτείνει το μέγεθος «Μεγάλο». Με το snippet προτείνεται το μέγεθος που ορίζετε (προεπιλογή: πλήρες μέγεθος), τόσο στον block editor όσο και στον κλασικό. Μπορείτε πάντα να αλλάξετε μέγεθος σε κάθε εικόνα χωριστά.",
+    "type": "php",
+    "code": "add_filter( 'block_editor_settings_all', 'perfectpixel_editor_default_image_size_block' );\nadd_filter( 'pre_option_image_default_size', 'perfectpixel_editor_default_image_size_option' );\n\nfunction perfectpixel_editor_default_image_size_name() {\n\t$size = sanitize_key( '{{editor_default_image_size}}' );\n\treturn $size ? $size : 'full';\n}\n\nfunction perfectpixel_editor_default_image_size_block( $settings ) {\n\t$settings['imageDefaultSize'] = perfectpixel_editor_default_image_size_name();\n\treturn $settings;\n}\n\n// Used by the classic editor's media modal.\nfunction perfectpixel_editor_default_image_size_option() {\n\treturn perfectpixel_editor_default_image_size_name();\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "media",
+        "images",
+        "editor"
+    ],
+    "variables": [
+        {
+            "name": "editor_default_image_size",
+            "label": "Μέγεθος",
+            "default": "full",
+            "description": "thumbnail, medium, medium_large, large ή full"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/rovj89do/"
+    ],
+    "updated": "2026-11-19T06:28:47+00:00"
+}

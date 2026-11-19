@@ -1,0 +1,35 @@
+{
+    "title": "Use a custom default avatar",
+    "description": "Οι χρήστες και οι σχολιαστές χωρίς Gravatar εμφανίζονται με την εικόνα που ορίζετε (π.χ. το λογότυπό σας) αντί για το γκρι ανθρωπάκι. Η εικόνα μπαίνει και στις επιλογές του Ρυθμίσεις → Συζήτηση και επιλέγεται αυτόματα. Το URL πρέπει να είναι δημόσια προσβάσιμο (όχι από localhost), γιατί την εικόνα τη σερβίρει η υπηρεσία Gravatar. Προτείνεται τετράγωνη εικόνα, τουλάχιστον 96×96.",
+    "type": "php",
+    "code": "add_filter( 'avatar_defaults', 'perfectpixel_custom_default_avatar_option' );\nadd_filter( 'pre_option_avatar_default', 'perfectpixel_custom_default_avatar_selected' );\n\nfunction perfectpixel_custom_default_avatar_url() {\n\treturn esc_url_raw( trim( '{{custom_avatar_url}}' ) );\n}\n\nfunction perfectpixel_custom_default_avatar_option( $defaults ) {\n\t$url = perfectpixel_custom_default_avatar_url();\n\tif ( $url ) {\n\t\t$defaults[ $url ] = '{{custom_avatar_label}}';\n\t}\n\treturn $defaults;\n}\n\nfunction perfectpixel_custom_default_avatar_selected( $value ) {\n\t$url = perfectpixel_custom_default_avatar_url();\n\treturn $url ? $url : $value;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "comments",
+        "avatars",
+        "branding"
+    ],
+    "variables": [
+        {
+            "name": "custom_avatar_url",
+            "label": "URL εικόνας",
+            "default": "",
+            "description": "Δημόσιο URL τετράγωνης εικόνας. Κενό = δεν αλλάζει τίποτα"
+        },
+        {
+            "name": "custom_avatar_label",
+            "label": "Όνομα στις ρυθμίσεις",
+            "default": "Avatar του site",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/rodv900o/"
+    ],
+    "updated": "2026-11-19T06:28:47+00:00"
+}

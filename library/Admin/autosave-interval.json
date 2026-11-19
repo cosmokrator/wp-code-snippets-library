@@ -1,0 +1,29 @@
+{
+    "title": "Change the post editor autosave interval",
+    "description": "Ο επεξεργαστής άρθρων αποθηκεύει αυτόματα πρόχειρο κάθε 60 δευτερόλεπτα. Σε αργούς servers ή όταν δουλεύουν πολλοί συντάκτες μαζί, αυτό φορτώνει τον server· το snippet αλλάζει το διάστημα (προεπιλογή: 5 λεπτά), στον block editor και στον κλασικό. Μεγαλύτερο διάστημα σημαίνει ότι, αν κλείσει απότομα ο browser, χάνονται περισσότερες αλλαγές.",
+    "type": "php",
+    "code": "// AUTOSAVE_INTERVAL is defined before snippets run, so the editors' settings are changed instead.\nadd_filter( 'block_editor_settings_all', 'perfectpixel_autosave_interval_block' );\nadd_action( 'admin_enqueue_scripts', 'perfectpixel_autosave_interval_classic', 999 );\n\nfunction perfectpixel_autosave_interval_value() {\n\treturn max( 10, (int) '{{autosave_interval_seconds}}' );\n}\n\nfunction perfectpixel_autosave_interval_block( $settings ) {\n\t$settings['autosaveInterval'] = perfectpixel_autosave_interval_value();\n\treturn $settings;\n}\n\nfunction perfectpixel_autosave_interval_classic() {\n\t$scripts = wp_scripts();\n\t$data    = $scripts->get_data( 'autosave', 'data' );\n\tif ( is_string( $data ) && '' !== $data ) {\n\t\t$scripts->add_data( 'autosave', 'data', preg_replace( '/\"autosaveInterval\":\\s*\"?\\d+\"?/', '\"autosaveInterval\":' . perfectpixel_autosave_interval_value(), $data ) );\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "admin",
+        "editor",
+        "performance"
+    ],
+    "variables": [
+        {
+            "name": "autosave_interval_seconds",
+            "label": "Δευτερόλεπτα",
+            "default": "300",
+            "description": "Μόνο αριθμός (60 = προεπιλογή WordPress)"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/7oqdex2w/"
+    ],
+    "updated": "2026-11-19T06:28:47+00:00"
+}

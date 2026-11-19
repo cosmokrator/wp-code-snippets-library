@@ -1,0 +1,29 @@
+{
+    "title": "Disable auto-scaling of large images",
+    "description": "Από την έκδοση 5.3 το WordPress μικραίνει αυτόματα τις εικόνες που ανεβάζετε με πλάτος ή ύψος πάνω από 2560px και χρησιμοποιεί το αντίγραφο «-scaled» αντί για το πρωτότυπο. Με την προεπιλογή (0) το snippet το σταματά, ώστε να χρησιμοποιείται η εικόνα όπως την ανεβάσατε (π.χ. φωτογραφίες υψηλής ανάλυσης, εκτυπώσιμα). Μπορείτε αντί γι αυτό να ορίσετε άλλο όριο σε pixels. Αφορά μόνο εικόνες που ανεβαίνουν από εδώ και πέρα· τα μεγάλα αρχεία κάνουν πιο αργές τις σελίδες που τα δείχνουν ολόκληρα.",
+    "type": "php",
+    "code": "add_filter( 'big_image_size_threshold', 'perfectpixel_big_image_threshold', 20 );\n\nfunction perfectpixel_big_image_threshold() {\n\t$px = (int) '{{big_image_threshold}}';\n\treturn $px > 0 ? $px : false;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "media",
+        "images",
+        "uploads"
+    ],
+    "variables": [
+        {
+            "name": "big_image_threshold",
+            "label": "Όριο σε pixels",
+            "default": "0",
+            "description": "0 = καμία σμίκρυνση, π.χ. 4000 = σμίκρυνση πάνω από 4000px"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/qo9x1n1o/"
+    ],
+    "updated": "2026-11-19T06:28:47+00:00"
+}

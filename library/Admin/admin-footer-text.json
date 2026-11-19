@@ -1,0 +1,35 @@
+{
+    "title": "Custom text in the admin footer",
+    "description": "Αντικαθιστά το «Ευχαριστούμε που δημιουργείτε με το WordPress» στο κάτω μέρος των σελίδων διαχείρισης με δικό σας κείμενο, π.χ. στοιχεία επικοινωνίας για υποστήριξη. Αν ορίσετε URL, το κείμενο γίνεται σύνδεσμος.",
+    "type": "php",
+    "code": "add_filter( 'admin_footer_text', 'perfectpixel_admin_footer_text', 20 );\n\nfunction perfectpixel_admin_footer_text() {\n\t$text = esc_html( '{{admin_footer_custom_text}}' );\n\t$url  = trim( '{{admin_footer_custom_url}}' );\n\tif ( $url ) {\n\t\t$text = '<a href=\"' . esc_url( $url ) . '\" target=\"_blank\" rel=\"noopener\">' . $text . '</a>';\n\t}\n\treturn '<span id=\"footer-thankyou\">' . $text . '</span>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "admin",
+        "branding",
+        "footer"
+    ],
+    "variables": [
+        {
+            "name": "admin_footer_custom_text",
+            "label": "Κείμενο",
+            "default": "Για υποστήριξη επικοινωνήστε με την ομάδα του site.",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "admin_footer_custom_url",
+            "label": "URL συνδέσμου",
+            "default": "",
+            "description": "Κενό = απλό κείμενο χωρίς σύνδεσμο"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/x5n6vy29/"
+    ],
+    "updated": "2026-11-19T06:28:47+00:00"
+}

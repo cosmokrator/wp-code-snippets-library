@@ -1,0 +1,22 @@
+{
+    "title": "Disable all updates (core, plugins, themes)",
+    "description": "Σταματά κάθε έλεγχο και αυτόματη ενημέρωση για τον πυρήνα του WordPress, τα plugins, τα themes και τις μεταφράσεις, και κρύβει τις ειδοποιήσεις και τη σελίδα «Ενημερώσεις». Χρήσιμο μόνο όταν οι ενημερώσεις γίνονται ελεγχόμενα (π.χ. από staging ή από τον developer). Για να ενημερώσετε, απενεργοποιήστε προσωρινά το snippet, κάντε τις ενημερώσεις και ενεργοποιήστε το ξανά.",
+    "type": "php",
+    "code": "add_filter( 'pre_site_transient_update_core', 'perfectpixel_disable_updates_core' );\nadd_filter( 'pre_site_transient_update_plugins', 'perfectpixel_disable_updates_list' );\nadd_filter( 'pre_site_transient_update_themes', 'perfectpixel_disable_updates_list' );\nadd_filter( 'automatic_updater_disabled', '__return_true' );\nadd_filter( 'auto_update_core', '__return_false' );\nadd_filter( 'auto_update_plugin', '__return_false' );\nadd_filter( 'auto_update_theme', '__return_false' );\nadd_filter( 'auto_update_translation', '__return_false' );\nadd_action( 'after_setup_theme', 'perfectpixel_disable_updates_checks' );\nadd_action( 'admin_menu', 'perfectpixel_disable_updates_menu', 999 );\n\n// Pretend every check just ran and found nothing, so WordPress never contacts api.wordpress.org.\nfunction perfectpixel_disable_updates_core() {\n\treturn (object) array(\n\t\t'last_checked'    => time(),\n\t\t'version_checked' => get_bloginfo( 'version' ),\n\t\t'updates'         => array(),\n\t\t'translations'    => array(),\n\t);\n}\n\nfunction perfectpixel_disable_updates_list() {\n\treturn (object) array(\n\t\t'last_checked' => time(),\n\t\t'checked'      => array(),\n\t\t'response'     => array(),\n\t\t'no_update'    => array(),\n\t\t'translations' => array(),\n\t);\n}\n\nfunction perfectpixel_disable_updates_checks() {\n\tremove_action( 'admin_init', '_maybe_update_core' );\n\tremove_action( 'admin_init', '_maybe_update_plugins' );\n\tremove_action( 'admin_init', '_maybe_update_themes' );\n\tremove_action( 'wp_version_check', 'wp_version_check' );\n\tremove_action( 'wp_update_plugins', 'wp_update_plugins' );\n\tremove_action( 'wp_update_themes', 'wp_update_themes' );\n\tremove_action( 'wp_maybe_auto_update', 'wp_maybe_auto_update' );\n\tremove_action( 'init', 'wp_schedule_update_checks' );\n}\n\nfunction perfectpixel_disable_updates_menu() {\n\tremove_submenu_page( 'index.php', 'update-core.php' );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "updates",
+        "admin",
+        "maintenance"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/rod9d0m2/"
+    ],
+    "updated": "2026-11-19T06:28:47+00:00"
+}

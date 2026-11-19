@@ -1,0 +1,29 @@
+{
+    "title": "Change the \"Read more\" text of excerpts",
+    "description": "Στο τέλος των αυτόματων αποσπασμάτων το WordPress βάζει «[…]» χωρίς σύνδεσμο. Το snippet το αντικαθιστά με σύνδεσμο «Διαβάστε περισσότερα» (ή το κείμενο που ορίζετε) προς το άρθρο. Το ίδιο κείμενο χρησιμοποιείται και για τον σύνδεσμο της ετικέτας «Περισσότερα» (<!--more-->) μέσα στα άρθρα. Κάποια themes έχουν δικό τους κουμπί και μπορεί να μην το δείχνουν.",
+    "type": "php",
+    "code": "add_filter( 'excerpt_more', 'perfectpixel_read_more_excerpt', 20 );\nadd_filter( 'the_content_more_link', 'perfectpixel_read_more_content_link', 20 );\n\nfunction perfectpixel_read_more_excerpt( $more ) {\n\tif ( is_admin() || is_feed() ) {\n\t\treturn $more;\n\t}\n\treturn '&hellip; <a class=\"more-link\" href=\"' . esc_url( get_permalink() ) . '\">' . esc_html( '{{read_more_text}}' ) . '</a>';\n}\n\nfunction perfectpixel_read_more_content_link() {\n\treturn '<a class=\"more-link\" href=\"' . esc_url( get_permalink() . '#more-' . get_the_ID() ) . '\">' . esc_html( '{{read_more_text}}' ) . '</a>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "posts",
+        "excerpt",
+        "read-more"
+    ],
+    "variables": [
+        {
+            "name": "read_more_text",
+            "label": "Κείμενο",
+            "default": "Διαβάστε περισσότερα",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/rod9n02m/"
+    ],
+    "updated": "2026-11-19T06:28:47+00:00"
+}

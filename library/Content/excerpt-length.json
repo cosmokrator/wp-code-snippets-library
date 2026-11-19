@@ -1,0 +1,28 @@
+{
+    "title": "Change the excerpt length",
+    "description": "Ορίζει πόσες λέξεις έχει το αυτόματο απόσπασμα (excerpt) των άρθρων στις λίστες (αρχική blog, κατηγορίες, αναζήτηση). Το WordPress κόβει στις 55 λέξεις. Δεν επηρεάζει τα άρθρα όπου έχετε γράψει μόνοι σας απόσπασμα.",
+    "type": "php",
+    "code": "add_filter( 'excerpt_length', 'perfectpixel_excerpt_length', 999 );\n\nfunction perfectpixel_excerpt_length() {\n\treturn max( 1, (int) '{{excerpt_length_words}}' );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "posts",
+        "excerpt"
+    ],
+    "variables": [
+        {
+            "name": "excerpt_length_words",
+            "label": "Λέξεις",
+            "default": "30",
+            "description": "Μόνο αριθμός"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/7oqz4kow/"
+    ],
+    "updated": "2026-11-19T06:28:47+00:00"
+}

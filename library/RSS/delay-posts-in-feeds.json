@@ -1,0 +1,29 @@
+{
+    "title": "Delay new posts in RSS feeds",
+    "description": "Τα νέα άρθρα εμφανίζονται στη ροή RSS λίγα λεπτά μετά τη δημοσίευση (προεπιλογή: 10), ώστε να προλαβαίνετε να διορθώσετε λάθη πριν τα πάρουν οι αναγνώστες RSS, τα newsletters και οι υπηρεσίες που αναδημοσιεύουν. Στο site εμφανίζονται κανονικά αμέσως.",
+    "type": "php",
+    "code": "add_action( 'pre_get_posts', 'perfectpixel_delay_posts_in_feeds' );\n\nfunction perfectpixel_delay_posts_in_feeds( $query ) {\n\tif ( is_admin() || ! $query->is_main_query() || ! $query->is_feed() || $query->is_comment_feed() ) {\n\t\treturn;\n\t}\n\t$minutes = max( 0, (int) '{{feed_delay_minutes}}' );\n\tif ( ! $minutes ) {\n\t\treturn;\n\t}\n\t$date_query   = (array) $query->get( 'date_query' );\n\t$date_query[] = array(\n\t\t'column' => 'post_date_gmt',\n\t\t'before' => gmdate( 'Y-m-d H:i:s', time() - $minutes * MINUTE_IN_SECONDS ),\n\t);\n\t$query->set( 'date_query', array_filter( $date_query ) );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "rss",
+        "feeds",
+        "posts"
+    ],
+    "variables": [
+        {
+            "name": "feed_delay_minutes",
+            "label": "Καθυστέρηση (λεπτά)",
+            "default": "10",
+            "description": "Μόνο αριθμός"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/j57g665g/"
+    ],
+    "updated": "2026-11-19T06:28:47+00:00"
+}

@@ -1,0 +1,35 @@
+{
+    "title": "Block the admin area for non-administrators",
+    "description": "Οι συνδεδεμένοι χρήστες που δεν έχουν το δικαίωμα που ορίζετε (προεπιλογή: διαχειριστές) δεν μπορούν να μπουν στο wp-admin: μεταφέρονται στην αρχική σελίδα (ή στο URL που ορίζετε) και δεν βλέπουν τη μαύρη μπάρα διαχείρισης. Οι κλήσεις AJAX και οι φόρμες που στέλνουν στο admin-post.php συνεχίζουν να δουλεύουν, ώστε να μη χαλάνε plugins και φόρμες του site.",
+    "type": "php",
+    "code": "add_action( 'admin_init', 'perfectpixel_block_wp_admin_non_admins', 1 );\nadd_filter( 'show_admin_bar', 'perfectpixel_block_wp_admin_hide_bar', 20 );\n\nfunction perfectpixel_block_wp_admin_allowed() {\n\t$cap = trim( '{{admin_access_capability}}' );\n\treturn current_user_can( $cap ? $cap : 'manage_options' );\n}\n\nfunction perfectpixel_block_wp_admin_non_admins() {\n\tif ( wp_doing_ajax() || wp_doing_cron() || ! is_user_logged_in() || perfectpixel_block_wp_admin_allowed() ) {\n\t\treturn;\n\t}\n\t// Front-end forms post to admin-post.php; let them through.\n\tif ( isset( $GLOBALS['pagenow'] ) && 'admin-post.php' === $GLOBALS['pagenow'] ) {\n\t\treturn;\n\t}\n\t$url = trim( '{{admin_block_redirect_url}}' );\n\twp_safe_redirect( $url ? $url : home_url( '/' ) );\n\texit;\n}\n\nfunction perfectpixel_block_wp_admin_hide_bar( $show ) {\n\treturn ( is_user_logged_in() && ! perfectpixel_block_wp_admin_allowed() ) ? false : $show;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "admin",
+        "security",
+        "users"
+    ],
+    "variables": [
+        {
+            "name": "admin_access_capability",
+            "label": "Δικαίωμα που επιτρέπει την είσοδο",
+            "default": "manage_options",
+            "description": "manage_options = μόνο διαχειριστές, edit_posts = και συντάκτες/συγγραφείς"
+        },
+        {
+            "name": "admin_block_redirect_url",
+            "label": "URL ανακατεύθυνσης",
+            "default": "",
+            "description": "Κενό = αρχική σελίδα"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/3234x0or/"
+    ],
+    "updated": "2026-11-19T06:28:47+00:00"
+}

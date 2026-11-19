@@ -1,0 +1,22 @@
+{
+    "title": "Disable author archives",
+    "description": "Κλείνει τις σελίδες συγγραφέα (/author/όνομα/ και ?author=1), που σε site με έναν συντάκτη επαναλαμβάνουν το blog και επιπλέον αποκαλύπτουν τα ονόματα χρήστη (χρήσιμα σε επιθέσεις σύνδεσης). Επιστρέφουν σελίδα 404, οι σύνδεσμοι στο όνομα του συγγραφέα οδηγούν στην αρχική και οι χρήστες αφαιρούνται από το sitemap του WordPress.",
+    "type": "php",
+    "code": "// Priority 1 runs before redirect_canonical(), which would turn ?author=1 into /author/username/.\nadd_action( 'template_redirect', 'perfectpixel_disable_author_archives', 1 );\nadd_filter( 'author_link', 'perfectpixel_disable_author_archives_link', 20 );\nadd_filter( 'wp_sitemaps_add_provider', 'perfectpixel_disable_author_archives_sitemap', 20, 2 );\n\nfunction perfectpixel_disable_author_archives() {\n\tif ( ! is_author() && ! isset( $_GET['author'] ) ) {\n\t\treturn;\n\t}\n\tglobal $wp_query;\n\t$wp_query->set_404();\n\tstatus_header( 404 );\n\tnocache_headers();\n}\n\nfunction perfectpixel_disable_author_archives_link( $link ) {\n\treturn is_admin() ? $link : home_url( '/' );\n}\n\nfunction perfectpixel_disable_author_archives_sitemap( $provider, $name ) {\n\treturn 'users' === $name ? false : $provider;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "seo",
+        "security",
+        "authors"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/j57g0465/"
+    ],
+    "updated": "2026-11-19T06:28:47+00:00"
+}

@@ -1,0 +1,23 @@
+{
+    "title": "Choose a different logo per page",
+    "description": "Προσθέτει στην επεξεργασία κάθε σελίδας ένα πλαίσιο «Λογότυπο σελίδας», όπου διαλέγετε εικόνα από τη βιβλιοθήκη πολυμέσων. Σε όσες σελίδες έχει οριστεί, εμφανίζεται αυτό το λογότυπο αντί για το λογότυπο του site (π.χ. ειδικό λογότυπο για landing page ή καμπάνια). Δουλεύει με themes που δείχνουν το λογότυπο από το Εμφάνιση → Προσαρμογή → Ταυτότητα site· themes με δικό τους σύστημα λογοτύπου μπορεί να το αγνοούν.",
+    "type": "php",
+    "code": "add_action( 'add_meta_boxes_page', 'perfectpixel_page_logo_meta_box' );\nadd_action( 'save_post_page', 'perfectpixel_page_logo_save', 10, 2 );\nadd_action( 'admin_enqueue_scripts', 'perfectpixel_page_logo_media' );\nadd_filter( 'theme_mod_custom_logo', 'perfectpixel_page_logo_override' );\n\nfunction perfectpixel_page_logo_meta_box() {\n\tadd_meta_box( 'perfectpixel-page-logo', 'Λογότυπο σελίδας', 'perfectpixel_page_logo_meta_box_html', 'page', 'side', 'low' );\n}\n\nfunction perfectpixel_page_logo_media( $hook ) {\n\tif ( in_array( $hook, array( 'post.php', 'post-new.php' ), true ) && 'page' === get_current_screen()->post_type ) {\n\t\twp_enqueue_media();\n\t}\n}\n\nfunction perfectpixel_page_logo_meta_box_html( $post ) {\n\t$id = (int) get_post_meta( $post->ID, '_perfectpixel_page_logo', true );\n\twp_nonce_field( 'perfectpixel_page_logo', 'perfectpixel_page_logo_nonce' );\n\t?>\n\t<div class=\"perfectpixel-page-logo-preview\" style=\"margin-bottom:8px\"><?php echo $id ? wp_get_attachment_image( $id, 'medium', false, array( 'style' => 'max-width:100%;height:auto' ) ) : ''; ?></div>\n\t<input type=\"hidden\" name=\"perfectpixel_page_logo\" class=\"perfectpixel-page-logo-id\" value=\"<?php echo esc_attr( $id ? $id : '' ); ?>\">\n\t<button type=\"button\" class=\"button perfectpixel-page-logo-choose\"><?php echo 'Επιλογή εικόνας'; ?></button>\n\t<button type=\"button\" class=\"button-link perfectpixel-page-logo-remove\" style=\"margin-left:8px<?php echo $id ? '' : ';display:none'; ?>\"><?php echo 'Αφαίρεση'; ?></button>\n\t<script>\n\t( function () {\n\t\tvar box = document.getElementById( 'perfectpixel-page-logo' );\n\t\tif ( ! box || ! window.wp || ! wp.media ) {\n\t\t\treturn;\n\t\t}\n\t\tvar input = box.querySelector( '.perfectpixel-page-logo-id' );\n\t\tvar preview = box.querySelector( '.perfectpixel-page-logo-preview' );\n\t\tvar remove = box.querySelector( '.perfectpixel-page-logo-remove' );\n\t\tvar frame;\n\t\tbox.querySelector( '.perfectpixel-page-logo-choose' ).addEventListener( 'click', function () {\n\t\t\tframe = frame || wp.media( { library: { type: 'image' }, multiple: false } );\n\t\t\tframe.off( 'select' ).on( 'select', function () {\n\t\t\t\tvar img = frame.state().get( 'selection' ).first().toJSON();\n\t\t\t\tvar src = ( img.sizes && img.sizes.medium ) ? img.sizes.medium.url : img.url;\n\t\t\t\tinput.value = img.id;\n\t\t\t\tpreview.innerHTML = '';\n\t\t\t\tvar el = document.createElement( 'img' );\n\t\t\t\tel.src = src;\n\t\t\t\tel.style.maxWidth = '100%';\n\t\t\t\tel.style.height = 'auto';\n\t\t\t\tpreview.appendChild( el );\n\t\t\t\tremove.style.display = '';\n\t\t\t} );\n\t\t\tframe.open();\n\t\t} );\n\t\tremove.addEventListener( 'click', function () {\n\t\t\tinput.value = '';\n\t\t\tpreview.innerHTML = '';\n\t\t\tremove.style.display = 'none';\n\t\t} );\n\t} )();\n\t</script>\n\t<?php\n}\n\nfunction perfectpixel_page_logo_save( $post_id, $post ) {\n\tif ( ! isset( $_POST['perfectpixel_page_logo_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['perfectpixel_page_logo_nonce'] ) ), 'perfectpixel_page_logo' ) ) {\n\t\treturn;\n\t}\n\tif ( wp_is_post_revision( $post_id ) || ! current_user_can( 'edit_post', $post_id ) ) {\n\t\treturn;\n\t}\n\t$id = isset( $_POST['perfectpixel_page_logo'] ) ? absint( $_POST['perfectpixel_page_logo'] ) : 0;\n\tif ( $id && wp_attachment_is_image( $id ) ) {\n\t\tupdate_post_meta( $post_id, '_perfectpixel_page_logo', $id );\n\t} else {\n\t\tdelete_post_meta( $post_id, '_perfectpixel_page_logo' );\n\t}\n}\n\nfunction perfectpixel_page_logo_override( $logo ) {\n\tif ( is_admin() || ! did_action( 'wp' ) || ! is_page() ) {\n\t\treturn $logo;\n\t}\n\t$id = (int) get_post_meta( get_queried_object_id(), '_perfectpixel_page_logo', true );\n\treturn ( $id && wp_attachment_is_image( $id ) ) ? $id : $logo;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "media",
+        "logo",
+        "pages",
+        "branding"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/m5l79dl2/"
+    ],
+    "updated": "2026-11-19T06:28:47+00:00"
+}

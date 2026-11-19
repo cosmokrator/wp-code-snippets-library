@@ -1,0 +1,22 @@
+{
+    "title": "Disable attachment pages",
+    "description": "Κάθε εικόνα και αρχείο που ανεβάζετε έχει και δική του «σελίδα συνημμένου» με ελάχιστο περιεχόμενο, που μπορεί να καταλήξει στη Google ως σελίδα χαμηλής ποιότητας. Το snippet ανακατευθύνει (301) αυτές τις σελίδες στο άρθρο/σελίδα όπου ανέβηκε το αρχείο ή, αν δεν υπάρχει, δείχνει σελίδα 404. Οι σύνδεσμοι προς συνημμένα δείχνουν κατευθείαν στο αρχείο. Τα ίδια τα αρχεία δεν επηρεάζονται.",
+    "type": "php",
+    "code": "add_action( 'template_redirect', 'perfectpixel_disable_attachment_pages', 1 );\nadd_filter( 'attachment_link', 'perfectpixel_disable_attachment_pages_link', 20, 2 );\n\nfunction perfectpixel_disable_attachment_pages() {\n\tif ( ! is_attachment() ) {\n\t\treturn;\n\t}\n\t$parent = (int) wp_get_post_parent_id( get_queried_object_id() );\n\tif ( $parent && 'publish' === get_post_status( $parent ) ) {\n\t\twp_safe_redirect( get_permalink( $parent ), 301 );\n\t\texit;\n\t}\n\tglobal $wp_query;\n\t$wp_query->set_404();\n\tstatus_header( 404 );\n\tnocache_headers();\n}\n\nfunction perfectpixel_disable_attachment_pages_link( $link, $post_id ) {\n\t$file = wp_get_attachment_url( $post_id );\n\treturn $file ? $file : $link;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "seo",
+        "media",
+        "attachments"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/do1grpoe/"
+    ],
+    "updated": "2026-11-19T06:28:47+00:00"
+}

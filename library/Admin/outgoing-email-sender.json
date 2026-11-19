@@ -1,0 +1,34 @@
+{
+    "title": "Change the default email sender name and address",
+    "description": "Τα emails του WordPress (νέος χρήστης, επαναφορά κωδικού, φόρμες κ.λπ.) φεύγουν από «WordPress <wordpress@το-domain-σας>». Το snippet βάζει το όνομα και τη διεύθυνση που ορίζετε. Αλλάζει μόνο αυτόν τον προεπιλεγμένο αποστολέα: plugins που ορίζουν δικό τους (π.χ. WooCommerce, plugins SMTP) δεν επηρεάζονται. Χρησιμοποιήστε διεύθυνση του δικού σας domain (όχι Gmail κ.λπ.), αλλιώς τα emails μπορεί να καταλήγουν στα spam.",
+    "type": "php",
+    "code": "add_filter( 'wp_mail_from', 'perfectpixel_outgoing_email_address', 20 );\nadd_filter( 'wp_mail_from_name', 'perfectpixel_outgoing_email_name', 20 );\n\nfunction perfectpixel_outgoing_email_address( $from ) {\n\t$address = sanitize_email( '{{email_sender_address}}' );\n\t// Only replace WordPress' own default sender (wordpress@domain).\n\tif ( $address && is_email( $address ) && 0 === stripos( $from, 'wordpress@' ) ) {\n\t\treturn $address;\n\t}\n\treturn $from;\n}\n\nfunction perfectpixel_outgoing_email_name( $name ) {\n\tif ( 'WordPress' !== $name ) {\n\t\treturn $name;\n\t}\n\t$custom = trim( '{{email_sender_name}}' );\n\treturn $custom ? $custom : wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "email",
+        "admin"
+    ],
+    "variables": [
+        {
+            "name": "email_sender_name",
+            "label": "Όνομα αποστολέα",
+            "default": "",
+            "description": "Κενό = όνομα του site. Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "email_sender_address",
+            "label": "Email αποστολέα",
+            "default": "",
+            "description": "Διεύθυνση του domain σας, π.χ. info@example.gr. Κενό = δεν αλλάζει"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/323j30or/"
+    ],
+    "updated": "2026-11-19T06:28:47+00:00"
+}

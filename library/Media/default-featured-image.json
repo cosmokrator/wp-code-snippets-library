@@ -1,0 +1,22 @@
+{
+    "title": "Default featured image for posts",
+    "description": "Προσθέτει στο Ρυθμίσεις → Πολυμέσα την επιλογή «Προεπιλεγμένη εικόνα άρθρων». Τα άρθρα που δεν έχουν δική τους επιλεγμένη εικόνα εμφανίζονται στο site (λίστες, σελίδα άρθρου, κοινοποιήσεις μέσω theme) με αυτή την εικόνα. Τα άρθρα δεν αλλάζουν στη βάση: αν ορίσετε αργότερα εικόνα σε ένα άρθρο, εμφανίζεται εκείνη. Αφορά μόνο τα άρθρα (posts), όχι σελίδες ή προϊόντα.",
+    "type": "php",
+    "code": "add_action( 'admin_init', 'perfectpixel_default_featured_image_setting' );\nadd_action( 'admin_enqueue_scripts', 'perfectpixel_default_featured_image_media' );\nadd_filter( 'post_thumbnail_id', 'perfectpixel_default_featured_image_id', 20, 2 );\n\nfunction perfectpixel_default_featured_image_setting() {\n\tregister_setting( 'media', 'perfectpixel_default_featured_image', array( 'type' => 'integer', 'sanitize_callback' => 'absint', 'default' => 0 ) );\n\tadd_settings_field( 'perfectpixel_default_featured_image', 'Προεπιλεγμένη εικόνα άρθρων', 'perfectpixel_default_featured_image_field', 'media', 'default' );\n}\n\nfunction perfectpixel_default_featured_image_media( $hook ) {\n\tif ( 'options-media.php' === $hook ) {\n\t\twp_enqueue_media();\n\t}\n}\n\nfunction perfectpixel_default_featured_image_field() {\n\t$id = (int) get_option( 'perfectpixel_default_featured_image' );\n\t?>\n\t<div id=\"perfectpixel-default-thumb\">\n\t\t<div class=\"perfectpixel-default-thumb-preview\" style=\"margin-bottom:8px\"><?php echo $id ? wp_get_attachment_image( $id, 'thumbnail' ) : ''; ?></div>\n\t\t<input type=\"hidden\" name=\"perfectpixel_default_featured_image\" class=\"perfectpixel-default-thumb-id\" value=\"<?php echo esc_attr( $id ? $id : '' ); ?>\">\n\t\t<button type=\"button\" class=\"button perfectpixel-default-thumb-choose\"><?php echo 'Επιλογή εικόνας'; ?></button>\n\t\t<button type=\"button\" class=\"button-link perfectpixel-default-thumb-remove\" style=\"margin-left:8px<?php echo $id ? '' : ';display:none'; ?>\"><?php echo 'Αφαίρεση'; ?></button>\n\t</div>\n\t<script>\n\t( function () {\n\t\tvar box = document.getElementById( 'perfectpixel-default-thumb' );\n\t\tif ( ! box || ! window.wp || ! wp.media ) {\n\t\t\treturn;\n\t\t}\n\t\tvar input = box.querySelector( '.perfectpixel-default-thumb-id' );\n\t\tvar preview = box.querySelector( '.perfectpixel-default-thumb-preview' );\n\t\tvar remove = box.querySelector( '.perfectpixel-default-thumb-remove' );\n\t\tvar frame;\n\t\tbox.querySelector( '.perfectpixel-default-thumb-choose' ).addEventListener( 'click', function () {\n\t\t\tframe = frame || wp.media( { library: { type: 'image' }, multiple: false } );\n\t\t\tframe.off( 'select' ).on( 'select', function () {\n\t\t\t\tvar img = frame.state().get( 'selection' ).first().toJSON();\n\t\t\t\tinput.value = img.id;\n\t\t\t\tpreview.innerHTML = '';\n\t\t\t\tvar el = document.createElement( 'img' );\n\t\t\t\tel.src = ( img.sizes && img.sizes.thumbnail ) ? img.sizes.thumbnail.url : img.url;\n\t\t\t\tel.style.maxWidth = '150px';\n\t\t\t\tel.style.height = 'auto';\n\t\t\t\tpreview.appendChild( el );\n\t\t\t\tremove.style.display = '';\n\t\t\t} );\n\t\t\tframe.open();\n\t\t} );\n\t\tremove.addEventListener( 'click', function () {\n\t\t\tinput.value = '';\n\t\t\tpreview.innerHTML = '';\n\t\t\tremove.style.display = 'none';\n\t\t} );\n\t} )();\n\t</script>\n\t<?php\n}\n\n// Front end only, so the editor still shows which posts have no image of their own.\nfunction perfectpixel_default_featured_image_id( $thumbnail_id, $post ) {\n\tif ( $thumbnail_id || is_admin() || ! $post || 'post' !== get_post_type( $post ) ) {\n\t\treturn $thumbnail_id;\n\t}\n\t$default = (int) get_option( 'perfectpixel_default_featured_image' );\n\treturn ( $default && wp_attachment_is_image( $default ) ) ? $default : $thumbnail_id;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "media",
+        "featured-image",
+        "posts"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/m5ye1x12/"
+    ],
+    "updated": "2026-11-19T06:28:47+00:00"
+}
