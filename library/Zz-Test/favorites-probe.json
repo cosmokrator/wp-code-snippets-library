@@ -4,5 +4,8 @@
     "type": "php",
     "code": "// temporary\n",
     "location": "everywhere",
-    "tags": []
+    "tags": [],
+    "categories": [
+        "Favorites"
+    ]
 }
