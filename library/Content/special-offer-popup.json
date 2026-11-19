@@ -1,0 +1,65 @@
+{
+    "title": "Special offer pop-up",
+    "description": "Μικρό παράθυρο προσφοράς κάτω δεξιά στη σελίδα, με τίτλο, κείμενο και κουμπί. Εμφανίζεται μετά από λίγα δευτερόλεπτα και, όταν ο επισκέπτης το κλείσει, δεν ξαναβγαίνει για όσες μέρες ορίσετε. Δεν καλύπτει τη σελίδα και κλείνει και με το πλήκτρο Esc. Δεν εμφανίζεται στο καλάθι και στο checkout του WooCommerce.",
+    "type": "php",
+    "code": "add_action( 'wp_footer', 'perfectpixel_special_offer_popup' );\n\nfunction perfectpixel_special_offer_popup() {\n\tif ( function_exists( 'is_cart' ) && ( is_cart() || is_checkout() ) ) {\n\t\treturn;\n\t}\n\t$url = trim( '{{offer_popup_url}}' );\n\t?>\n\t<div class=\"perfectpixel-offer\" role=\"dialog\" aria-labelledby=\"perfectpixel-offer-title\" hidden style=\"position:fixed;right:20px;bottom:20px;z-index:99998;max-width:320px;width:calc(100% - 40px);background:#fff;color:#1d2327;border-radius:6px;box-shadow:0 6px 24px rgba(0,0,0,.2);padding:1.1em 1.2em\">\n\t\t<button type=\"button\" class=\"perfectpixel-offer-close\" aria-label=\"<?php echo esc_attr( '{{offer_popup_close_label}}' ); ?>\" style=\"position:absolute;top:.3em;right:.4em;border:0;background:none;font-size:1.4em;line-height:1;cursor:pointer;color:inherit\">&times;</button>\n\t\t<strong id=\"perfectpixel-offer-title\" style=\"display:block;font-size:1.1em;margin:0 1.2em .4em 0\"><?php echo esc_html( '{{offer_popup_title}}' ); ?></strong>\n\t\t<p style=\"margin:0 0 .8em\"><?php echo esc_html( '{{offer_popup_text}}' ); ?></p>\n\t\t<?php if ( '' !== $url ) : ?>\n\t\t\t<a class=\"perfectpixel-offer-button\" href=\"<?php echo esc_url( $url ); ?>\" style=\"display:inline-block;padding:.5em 1em;border-radius:4px;background:#1d2327;color:#fff;text-decoration:none\"><?php echo esc_html( '{{offer_popup_button}}' ); ?></a>\n\t\t<?php endif; ?>\n\t</div>\n\t<script>\n\t( function ( delay, days ) {\n\t\tvar box = document.querySelector( '.perfectpixel-offer' );\n\t\tvar key = 'perfectpixel_offer_hidden_until';\n\t\tif ( ! box ) {\n\t\t\treturn;\n\t\t}\n\t\ttry {\n\t\t\tif ( Number( window.localStorage.getItem( key ) ) > Date.now() ) {\n\t\t\t\treturn;\n\t\t\t}\n\t\t} catch ( e ) {}\n\t\tvar close = function () {\n\t\t\tbox.hidden = true;\n\t\t\ttry {\n\t\t\t\twindow.localStorage.setItem( key, String( Date.now() + days * 86400000 ) );\n\t\t\t} catch ( e ) {}\n\t\t};\n\t\tbox.querySelector( '.perfectpixel-offer-close' ).addEventListener( 'click', close );\n\t\tvar button = box.querySelector( '.perfectpixel-offer-button' );\n\t\tif ( button ) {\n\t\t\tbutton.addEventListener( 'click', close );\n\t\t}\n\t\tdocument.addEventListener( 'keydown', function ( event ) {\n\t\t\tif ( 'Escape' === event.key && ! box.hidden ) {\n\t\t\t\tclose();\n\t\t\t}\n\t\t} );\n\t\tsetTimeout( function () {\n\t\t\tbox.hidden = false;\n\t\t}, delay * 1000 );\n\t} )( <?php echo max( 0, (int) '{{offer_popup_delay}}' ); ?>, <?php echo max( 0, (int) '{{offer_popup_hide_days}}' ); ?> );\n\t</script>\n\t<?php\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "popup",
+        "marketing",
+        "offer"
+    ],
+    "variables": [
+        {
+            "name": "offer_popup_title",
+            "label": "Τίτλος",
+            "default": "Ειδική προσφορά",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "offer_popup_text",
+            "label": "Κείμενο",
+            "default": "Έκπτωση 10% στην πρώτη σας παραγγελία με τον κωδικό WELCOME10.",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "offer_popup_button",
+            "label": "Κείμενο κουμπιού",
+            "default": "Δείτε την προσφορά",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "offer_popup_url",
+            "label": "URL κουμπιού",
+            "default": "/",
+            "description": "Κενό = χωρίς κουμπί"
+        },
+        {
+            "name": "offer_popup_delay",
+            "label": "Εμφάνιση μετά από (δευτερόλεπτα)",
+            "default": "5",
+            "description": "Μόνο αριθμός"
+        },
+        {
+            "name": "offer_popup_hide_days",
+            "label": "Μέρες απόκρυψης μετά το κλείσιμο",
+            "default": "7",
+            "description": "Μόνο αριθμός"
+        },
+        {
+            "name": "offer_popup_close_label",
+            "label": "Κείμενο κλεισίματος για αναγνώστες οθόνης",
+            "default": "Κλείσιμο",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/woxk9qj2/"
+    ],
+    "updated": "2026-11-19T11:20:14+00:00"
+}

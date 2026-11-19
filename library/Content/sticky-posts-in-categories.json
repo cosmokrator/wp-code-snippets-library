@@ -1,0 +1,23 @@
+{
+    "title": "Sticky posts on category pages",
+    "description": "Τα «καρφιτσωμένα» άρθρα (Κράτημα στην αρχή του ιστολογίου) εμφανίζονται πρώτα και στις σελίδες κατηγοριών, όχι μόνο στην αρχική του ιστολογίου. Στην κάθε κατηγορία μπαίνουν μόνο τα καρφιτσωμένα άρθρα που ανήκουν σε αυτήν, και μόνο στην πρώτη σελίδα· στις επόμενες σελίδες δεν επαναλαμβάνονται.",
+    "type": "php",
+    "code": "add_action( 'pre_get_posts', 'perfectpixel_category_sticky_exclude' );\nadd_filter( 'the_posts', 'perfectpixel_category_sticky_prepend', 10, 2 );\nadd_filter( 'post_class', 'perfectpixel_category_sticky_class', 10, 3 );\n\nfunction perfectpixel_category_sticky_ids() {\n\treturn array_filter( array_map( 'absint', (array) get_option( 'sticky_posts', array() ) ) );\n}\n\n// Keep sticky posts out of the normal list so they are not repeated on later pages.\nfunction perfectpixel_category_sticky_exclude( $query ) {\n\tif ( is_admin() || ! $query->is_main_query() || ! $query->is_category() || ! perfectpixel_category_sticky_ids() ) {\n\t\treturn;\n\t}\n\t$query->set( 'post__not_in', array_merge( (array) $query->get( 'post__not_in' ), perfectpixel_category_sticky_ids() ) );\n}\n\nfunction perfectpixel_category_sticky_prepend( $posts, $query ) {\n\tif ( is_admin() || ! $query->is_main_query() || ! $query->is_category() || $query->get( 'paged' ) > 1 ) {\n\t\treturn $posts;\n\t}\n\t$ids = perfectpixel_category_sticky_ids();\n\tif ( ! $ids ) {\n\t\treturn $posts;\n\t}\n\t$sticky = get_posts(\n\t\tarray(\n\t\t\t'post__in'            => $ids,\n\t\t\t'cat'                 => (int) $query->get_queried_object_id(),\n\t\t\t'posts_per_page'      => count( $ids ),\n\t\t\t'ignore_sticky_posts' => true,\n\t\t\t'orderby'             => 'date',\n\t\t\t'order'               => 'DESC',\n\t\t)\n\t);\n\treturn $sticky ? array_merge( $sticky, (array) $posts ) : $posts;\n}\n\nfunction perfectpixel_category_sticky_class( $classes, $css_class, $post_id ) {\n\tif ( is_category() && ! is_admin() && is_sticky( $post_id ) && ! in_array( 'sticky', $classes, true ) ) {\n\t\t$classes[] = 'sticky';\n\t}\n\treturn $classes;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "content",
+        "sticky",
+        "categories",
+        "archive"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/323rqe82/"
+    ],
+    "updated": "2026-11-19T11:20:14+00:00"
+}

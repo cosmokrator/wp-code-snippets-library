@@ -1,0 +1,22 @@
+{
+    "title": "Prevent copy and right-click",
+    "description": "Δυσκολεύει την αντιγραφή του περιεχομένου: απενεργοποιεί την επιλογή κειμένου, το δεξί κλικ, την αντιγραφή (Ctrl+C) και το σύρσιμο των εικόνων. Τα πεδία φορμών (αναζήτηση, σχόλια, checkout) δουλεύουν κανονικά. Οι συνδεδεμένοι συντάκτες και διαχειριστές δεν επηρεάζονται.",
+    "type": "php",
+    "code": "add_action( 'wp_footer', 'perfectpixel_prevent_copy' );\n\nfunction perfectpixel_prevent_copy() {\n\tif ( current_user_can( 'edit_posts' ) ) {\n\t\treturn;\n\t}\n\t?>\n\t<style>body{-webkit-user-select:none;user-select:none}input,textarea,select,[contenteditable=\"true\"]{-webkit-user-select:text;user-select:text}</style>\n\t<script>\n\t( function () {\n\t\tvar editable = function ( el ) {\n\t\t\treturn el && el.closest && el.closest( 'input, textarea, select, [contenteditable=\"true\"]' );\n\t\t};\n\t\t[ 'contextmenu', 'copy', 'cut' ].forEach( function ( type ) {\n\t\t\tdocument.addEventListener( type, function ( event ) {\n\t\t\t\tif ( ! editable( event.target ) ) {\n\t\t\t\t\tevent.preventDefault();\n\t\t\t\t}\n\t\t\t} );\n\t\t} );\n\t\tdocument.addEventListener( 'dragstart', function ( event ) {\n\t\t\tif ( event.target && 'IMG' === event.target.tagName ) {\n\t\t\t\tevent.preventDefault();\n\t\t\t}\n\t\t} );\n\t} )();\n\t</script>\n\t<?php\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "content",
+        "copy",
+        "protection"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/323z105r/"
+    ],
+    "updated": "2026-11-19T11:20:14+00:00"
+}

@@ -1,0 +1,34 @@
+{
+    "title": "Custom CSS in the admin",
+    "description": "Προσθέτει δικό σας CSS σε όλες τις σελίδες της διαχείρισης, π.χ. για να κρύψετε ένα στοιχείο ή να αλλάξετε χρώματα. Γράψτε το CSS στη μεταβλητή· με «yes» στη δεύτερη ρύθμιση ισχύει και στη σελίδα σύνδεσης.",
+    "type": "php",
+    "code": "add_action( 'admin_head', 'perfectpixel_admin_custom_css' );\nadd_action( 'login_head', 'perfectpixel_admin_custom_css_login' );\n\nfunction perfectpixel_admin_custom_css() {\n\t// Nowdoc so quotes inside the CSS are kept as they are.\n\t$css = <<<'CSS'\n{{admin_custom_css}}\nCSS;\n\t$css = trim( wp_strip_all_tags( $css ) );\n\tif ( '' !== $css ) {\n\t\techo '<style id=\"perfectpixel-admin-css\">' . $css . '</style>' . \"\\n\";\n\t}\n}\n\nfunction perfectpixel_admin_custom_css_login() {\n\tif ( 'yes' === strtolower( trim( '{{admin_custom_css_login}}' ) ) ) {\n\t\tperfectpixel_admin_custom_css();\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "admin",
+        "css"
+    ],
+    "variables": [
+        {
+            "name": "admin_custom_css",
+            "label": "CSS",
+            "default": "#wp-admin-bar-comments { display: none; }",
+            "description": "Κώδικας CSS (χωρίς <style>)"
+        },
+        {
+            "name": "admin_custom_css_login",
+            "label": "Και στη σελίδα σύνδεσης;",
+            "default": "no",
+            "description": "yes ή no"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/7oqwxeow/"
+    ],
+    "updated": "2026-11-19T11:20:14+00:00"
+}

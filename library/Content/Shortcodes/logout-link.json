@@ -1,0 +1,36 @@
+{
+    "title": "Logout link shortcode and menu item",
+    "description": "Σύνδεσμος αποσύνδεσης που δουλεύει χωρίς τη σελίδα επιβεβαίωσης «Θέλετε σίγουρα να αποσυνδεθείτε;». Δύο τρόποι: το shortcode [logout_link] (με text=\"…\" και redirect=\"/…\" για άλλο κείμενο ή προορισμό), ή προσαρμοσμένος σύνδεσμος στο μενού με URL #logout. Οι επισκέπτες που δεν έχουν συνδεθεί δεν τον βλέπουν.",
+    "type": "php",
+    "code": "add_shortcode( 'logout_link', 'perfectpixel_logout_link_shortcode' );\nadd_filter( 'wp_nav_menu_objects', 'perfectpixel_logout_menu_item' );\n\nfunction perfectpixel_logout_link_url( $redirect = '' ) {\n\t$redirect = trim( (string) $redirect );\n\tif ( '' === $redirect ) {\n\t\t$redirect = trim( '{{logout_redirect_url}}' );\n\t}\n\t// wp_logout_url() includes the nonce, so WordPress logs out without asking again.\n\treturn wp_logout_url( '' !== $redirect ? $redirect : home_url( '/' ) );\n}\n\nfunction perfectpixel_logout_link_shortcode( $atts ) {\n\tif ( ! is_user_logged_in() ) {\n\t\treturn '';\n\t}\n\t$atts = shortcode_atts( array( 'text' => '{{logout_link_text}}', 'redirect' => '' ), $atts, 'logout_link' );\n\treturn '<a class=\"perfectpixel-logout-link\" href=\"' . esc_url( perfectpixel_logout_link_url( $atts['redirect'] ) ) . '\">' . esc_html( $atts['text'] ) . '</a>';\n}\n\n// Menu items with the URL \"#logout\" become a real logout link (hidden for guests).\nfunction perfectpixel_logout_menu_item( $items ) {\n\tforeach ( $items as $i => $item ) {\n\t\tif ( '#logout' !== trim( (string) $item->url ) ) {\n\t\t\tcontinue;\n\t\t}\n\t\tif ( ! is_user_logged_in() ) {\n\t\t\tunset( $items[ $i ] );\n\t\t\tcontinue;\n\t\t}\n\t\t$item->url = perfectpixel_logout_link_url();\n\t}\n\treturn $items;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "shortcodes",
+        "logout",
+        "menu",
+        "users"
+    ],
+    "variables": [
+        {
+            "name": "logout_link_text",
+            "label": "Κείμενο συνδέσμου",
+            "default": "Αποσύνδεση",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "logout_redirect_url",
+            "label": "Μετά την αποσύνδεση πηγαίνει στο",
+            "default": "",
+            "description": "Κενό = αρχική σελίδα"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/05k484ok/"
+    ],
+    "updated": "2026-11-19T11:20:14+00:00"
+}
