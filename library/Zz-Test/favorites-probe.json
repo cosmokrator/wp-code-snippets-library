@@ -2,7 +2,7 @@
     "title": "Favorites probe (temporary)",
     "description": "Προσωρινό, για δοκιμή αγαπημένων.",
     "type": "php",
-    "code": "// temporary\n",
+    "code": "// temporary, changed code\n",
     "location": "everywhere",
     "tags": [],
     "categories": [
