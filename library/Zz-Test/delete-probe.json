@@ -1,8 +1,0 @@
-{
-    "title": "Delete probe (temporary)",
-    "description": "Προσωρινό, για δοκιμή διαγραφής.",
-    "type": "php",
-    "code": "// temporary\n",
-    "location": "everywhere",
-    "tags": []
-}
