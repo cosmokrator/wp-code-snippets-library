@@ -1,0 +1,22 @@
+{
+    "title": "Remove the wlwmanifest and RSD links",
+    "description": "Αφαιρεί από τον κώδικα των σελίδων δύο παλιούς συνδέσμους για εφαρμογές blogging (Windows Live Writer manifest και RSD), που σήμερα δεν χρησιμοποιούνται. Από την έκδοση 6.3 το WordPress δεν βάζει πια το wlwmanifest· το snippet καλύπτει παλιότερες εκδόσεις και το RSD.",
+    "type": "php",
+    "code": "add_action( 'init', 'perfectpixel_disable_wlwmanifest' );\n\nfunction perfectpixel_disable_wlwmanifest() {\n\tremove_action( 'wp_head', 'wlwmanifest_link' );\n\tremove_action( 'wp_head', 'rsd_link' );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "performance",
+        "head",
+        "cleanup"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/qo9xp1o1/"
+    ],
+    "updated": "2026-11-19T06:39:30+00:00"
+}

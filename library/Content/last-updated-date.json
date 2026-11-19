@@ -1,0 +1,29 @@
+{
+    "title": "Show the last updated date on posts",
+    "description": "Πάνω από το κείμενο των άρθρων που ενημερώθηκαν αργότερα από τη δημοσίευση εμφανίζει «Τελευταία ενημέρωση: 12 Μαρτίου 2026». Μικρές διορθώσεις την ίδια μέρα με τη δημοσίευση δεν μετράνε. Βοηθά τους αναγνώστες (και τη Google) να καταλάβουν ότι το περιεχόμενο είναι επίκαιρο. Η μορφή ημερομηνίας είναι αυτή του Ρυθμίσεις → Γενικά.",
+    "type": "php",
+    "code": "add_filter( 'the_content', 'perfectpixel_last_updated_date', 6 );\n\nfunction perfectpixel_last_updated_date( $content ) {\n\tif ( ! is_singular( 'post' ) || ! in_the_loop() || ! is_main_query() ) {\n\t\treturn $content;\n\t}\n\tif ( (int) get_the_modified_time( 'U' ) - (int) get_the_time( 'U' ) < DAY_IN_SECONDS ) {\n\t\treturn $content;\n\t}\n\treturn '<p class=\"perfectpixel-last-updated\">' . esc_html( '{{last_updated_label}}' ) . ' <time datetime=\"' . esc_attr( get_the_modified_date( 'c' ) ) . '\">' . esc_html( get_the_modified_date() ) . '</time></p>' . $content;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "posts",
+        "dates",
+        "seo"
+    ],
+    "variables": [
+        {
+            "name": "last_updated_label",
+            "label": "Κείμενο",
+            "default": "Τελευταία ενημέρωση:",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/m5yglq5d/"
+    ],
+    "updated": "2026-11-19T06:39:30+00:00"
+}

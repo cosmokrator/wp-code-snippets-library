@@ -1,0 +1,21 @@
+{
+    "title": "Disable the built-in WordPress sitemaps",
+    "description": "Απενεργοποιεί το αυτόματο sitemap του WordPress (/wp-sitemap.xml). Χρήσιμο όταν φτιάχνετε sitemap με άλλο εργαλείο ή όταν δεν θέλετε να εμφανίζονται στη Google όλες οι σελίδες. Τα plugins SEO (Yoast, Rank Math κ.λπ.) το απενεργοποιούν ήδη και έχουν το δικό τους. Αν δεν έχετε άλλο sitemap, θυμηθείτε να αφαιρέσετε το /wp-sitemap.xml από το Google Search Console.",
+    "type": "php",
+    "code": "add_filter( 'wp_sitemaps_enabled', '__return_false' );",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "seo",
+        "sitemaps"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/924xxx5g/"
+    ],
+    "updated": "2026-11-19T06:39:30+00:00"
+}

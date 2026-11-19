@@ -1,0 +1,21 @@
+{
+    "title": "Run shortcodes in Text and Custom HTML widgets",
+    "description": "Επιτρέπει τη χρήση shortcodes (π.χ. φόρμες, κουμπιά, [copyright_year]) μέσα στα widgets «Κείμενο» και «Προσαρμοσμένο HTML» του sidebar και του υποσέλιδου. Το νέο widget «Κείμενο» τα υποστηρίζει ήδη· το snippet τα ενεργοποιεί και στο «Προσαρμοσμένο HTML» και στα παλιά widgets κειμένου.",
+    "type": "php",
+    "code": "add_action( 'widgets_init', 'perfectpixel_shortcodes_in_widgets', 99 );\n\nfunction perfectpixel_shortcodes_in_widgets() {\n\tif ( ! has_filter( 'widget_text', 'do_shortcode' ) ) {\n\t\tadd_filter( 'widget_text', 'do_shortcode', 11 );\n\t}\n\tif ( ! has_filter( 'widget_custom_html_content', 'do_shortcode' ) ) {\n\t\tadd_filter( 'widget_custom_html_content', 'do_shortcode', 11 );\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "widgets",
+        "shortcodes"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/joer315n/"
+    ],
+    "updated": "2026-11-19T06:39:30+00:00"
+}

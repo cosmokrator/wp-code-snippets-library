@@ -1,0 +1,22 @@
+{
+    "title": "Disable the Font Library",
+    "description": "Από την έκδοση 6.5 ο editor έχει «Βιβλιοθήκη γραμματοσειρών», όπου οι χρήστες εγκαθιστούν γραμματοσειρές (και από το Google Fonts). Το snippet την απενεργοποιεί, ώστε να μένουν οι γραμματοσειρές του theme και να μην προστίθενται αρχεία που βαραίνουν το site.",
+    "type": "php",
+    "code": "add_filter( 'block_editor_settings_all', 'perfectpixel_disable_font_library', 20 );\n\nfunction perfectpixel_disable_font_library( $settings ) {\n\t$settings['fontLibraryEnabled'] = false;\n\treturn $settings;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "admin",
+        "block-editor",
+        "fonts"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/m5ygdg15/"
+    ],
+    "updated": "2026-11-19T06:39:30+00:00"
+}

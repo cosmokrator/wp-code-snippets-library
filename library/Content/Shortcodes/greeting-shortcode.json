@@ -1,0 +1,40 @@
+{
+    "title": "Time-of-day greeting shortcode",
+    "description": "Shortcode [greeting] που εμφανίζει χαιρετισμό ανάλογα με την ώρα του επισκέπτη: «Καλημέρα» (05:00–12:00), «Καλησπέρα» (12:00–21:00) ή «Καληνύχτα» (21:00–05:00). Η ώρα υπολογίζεται στον browser του επισκέπτη, οπότε είναι σωστή και με cache και για επισκέπτες σε άλλη ζώνη ώρας.",
+    "type": "php",
+    "code": "add_shortcode( 'greeting', 'perfectpixel_greeting_shortcode' );\n\nfunction perfectpixel_greeting_text( $hour ) {\n\tif ( $hour >= 5 && $hour < 12 ) {\n\t\treturn '{{greeting_morning}}';\n\t}\n\treturn ( $hour >= 12 && $hour < 21 ) ? '{{greeting_evening}}' : '{{greeting_night}}';\n}\n\nfunction perfectpixel_greeting_shortcode() {\n\tstatic $script_done = false;\n\t// Server time as a fallback; the script below switches to the visitor's own clock.\n\t$html = '<span class=\"perfectpixel-greeting\">' . esc_html( perfectpixel_greeting_text( (int) wp_date( 'G' ) ) ) . '</span>';\n\tif ( ! $script_done ) {\n\t\t$script_done = true;\n\t\t$texts       = wp_json_encode( array( 'm' => '{{greeting_morning}}', 'e' => '{{greeting_evening}}', 'n' => '{{greeting_night}}' ) );\n\t\t$html       .= '<script>( function ( t ) { var run = function () { var h = new Date().getHours(); var s = ( h >= 5 && h < 12 ) ? t.m : ( ( h >= 12 && h < 21 ) ? t.e : t.n ); document.querySelectorAll( \".perfectpixel-greeting\" ).forEach( function ( el ) { el.textContent = s; } ); }; if ( document.readyState === \"loading\" ) { document.addEventListener( \"DOMContentLoaded\", run ); } else { run(); } } )( ' . $texts . ' );</script>';\n\t}\n\treturn $html;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "shortcodes",
+        "personalization"
+    ],
+    "variables": [
+        {
+            "name": "greeting_morning",
+            "label": "Πρωί",
+            "default": "Καλημέρα",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "greeting_evening",
+            "label": "Απόγευμα/βράδυ",
+            "default": "Καλησπέρα",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "greeting_night",
+            "label": "Νύχτα",
+            "default": "Καληνύχτα",
+            "description": "Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/do1wky95/"
+    ],
+    "updated": "2026-11-19T06:39:30+00:00"
+}

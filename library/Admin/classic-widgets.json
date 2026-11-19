@@ -1,0 +1,22 @@
+{
+    "title": "Use the classic widgets screen",
+    "description": "Επαναφέρει την κλασική οθόνη Εμφάνιση → Widgets (και τα widgets στην Προσαρμογή) αντί για τον editor με blocks που ήρθε στην έκδοση 5.8. Χρήσιμο για παλιότερα themes και plugins με widgets που δεν δουλεύουν σωστά με blocks. Ο editor άρθρων δεν επηρεάζεται.",
+    "type": "php",
+    "code": "add_filter( 'use_widgets_block_editor', '__return_false', 100 );\nadd_filter( 'gutenberg_use_widgets_block_editor', '__return_false', 100 );",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "admin",
+        "widgets",
+        "classic"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/32jjmn2l/"
+    ],
+    "updated": "2026-11-19T06:39:30+00:00"
+}

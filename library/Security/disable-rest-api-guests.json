@@ -1,0 +1,29 @@
+{
+    "title": "Disable the REST API for logged-out visitors",
+    "description": "Το REST API του WordPress δίνει σε οποιονδήποτε πληροφορίες όπως λίστα χρηστών, άρθρα και σελίδες σε μορφή JSON. Το snippet επιτρέπει το REST API μόνο σε συνδεδεμένους χρήστες· οι επισκέπτες παίρνουν σφάλμα 401. Ο editor και η διαχείριση δουλεύουν κανονικά. Επιτρέπονται στους επισκέπτες μόνο όσα plugins ορίζετε (προεπιλογή: καλάθι/checkout με blocks του WooCommerce, Contact Form 7, ενσωματώσεις oEmbed).",
+    "type": "php",
+    "code": "add_filter( 'rest_authentication_errors', 'perfectpixel_disable_rest_api_guests', 99 );\n\nfunction perfectpixel_disable_rest_api_guests( $result ) {\n\tif ( ! empty( $result ) || is_user_logged_in() ) {\n\t\treturn $result;\n\t}\n\t$route = '';\n\tif ( isset( $GLOBALS['wp']->query_vars['rest_route'] ) ) {\n\t\t$route = $GLOBALS['wp']->query_vars['rest_route'];\n\t} elseif ( isset( $_GET['rest_route'] ) ) {\n\t\t$route = sanitize_text_field( wp_unslash( $_GET['rest_route'] ) );\n\t}\n\t$route = ltrim( (string) $route, '/' );\n\tforeach ( array_filter( array_map( 'trim', explode( ',', '{{rest_public_namespaces}}' ) ) ) as $namespace ) {\n\t\tif ( 0 === strpos( $route, trim( $namespace, '/' ) ) ) {\n\t\t\treturn $result;\n\t\t}\n\t}\n\treturn new WP_Error( 'rest_login_required', __( 'Sorry, you are not allowed to do that.' ), array( 'status' => 401 ) );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "security",
+        "rest-api",
+        "privacy"
+    ],
+    "variables": [
+        {
+            "name": "rest_public_namespaces",
+            "label": "Επιτρεπτά namespaces (με κόμμα)",
+            "default": "wc/store,contact-form-7,oembed",
+            "description": "Η αρχή της διαδρομής μετά το /wp-json/, π.χ. wc/store,contact-form-7"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/05krmv2k/"
+    ],
+    "updated": "2026-11-19T06:39:30+00:00"
+}

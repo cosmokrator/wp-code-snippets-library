@@ -1,0 +1,47 @@
+{
+    "title": "Show estimated reading time on posts",
+    "description": "Πάνω από το κείμενο κάθε άρθρου εμφανίζει τον εκτιμώμενο χρόνο ανάγνωσης (π.χ. «Χρόνος ανάγνωσης: 4 λεπτά»), υπολογισμένο από τις λέξεις του άρθρου. Μετρά σωστά και ελληνικό κείμενο. Ορίζετε πόσες λέξεις το λεπτό διαβάζει ένας μέσος αναγνώστης.",
+    "type": "php",
+    "code": "add_filter( 'the_content', 'perfectpixel_reading_time', 5 );\n\nfunction perfectpixel_reading_time( $content ) {\n\tif ( ! is_singular( 'post' ) || ! in_the_loop() || ! is_main_query() ) {\n\t\treturn $content;\n\t}\n\t// str_word_count() ignores Greek letters, so count Unicode words instead.\n\t$words   = preg_match_all( '/[\\p{L}\\p{N}][\\p{L}\\p{N}\\p{Mn}\\'’-]*/u', wp_strip_all_tags( strip_shortcodes( $content ) ) );\n\t$minutes = max( 1, (int) ceil( $words / max( 50, (int) '{{reading_time_wpm}}' ) ) );\n\t$unit    = 1 === $minutes ? '{{reading_time_minute}}' : '{{reading_time_minutes}}';\n\treturn '<p class=\"perfectpixel-reading-time\">' . esc_html( '{{reading_time_label}}' . ' ' . $minutes . ' ' . $unit ) . '</p>' . $content;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "posts",
+        "reading-time",
+        "ux"
+    ],
+    "variables": [
+        {
+            "name": "reading_time_label",
+            "label": "Κείμενο",
+            "default": "Χρόνος ανάγνωσης:",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "reading_time_minute",
+            "label": "Λέξη για 1 λεπτό",
+            "default": "λεπτό",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "reading_time_minutes",
+            "label": "Λέξη για πολλά λεπτά",
+            "default": "λεπτά",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "reading_time_wpm",
+            "label": "Λέξεις ανά λεπτό",
+            "default": "200",
+            "description": "Μόνο αριθμός"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/ro8xllr5/"
+    ],
+    "updated": "2026-11-19T06:39:30+00:00"
+}

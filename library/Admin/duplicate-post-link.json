@@ -1,0 +1,30 @@
+{
+    "title": "Duplicate posts and pages with one click",
+    "description": "Προσθέτει σύνδεσμο «Αντιγραφή» κάτω από κάθε άρθρο, σελίδα ή άλλο τύπο περιεχομένου στις λίστες της διαχείρισης, καθώς και στη μπάρα διαχείρισης όταν βλέπετε ή επεξεργάζεστε ένα άρθρο/σελίδα. Δημιουργείται πρόχειρο με το ίδιο περιεχόμενο, απόσπασμα, εικόνα, κατηγορίες/ετικέτες και πεδία, και ανοίγει για επεξεργασία. Τα προϊόντα εξαιρούνται, γιατί το WooCommerce έχει δική του «Αντιγραφή».",
+    "type": "php",
+    "code": "add_filter( 'post_row_actions', 'perfectpixel_duplicate_row_action', 20, 2 );\nadd_filter( 'page_row_actions', 'perfectpixel_duplicate_row_action', 20, 2 );\nadd_action( 'admin_bar_menu', 'perfectpixel_duplicate_admin_bar', 90 );\nadd_action( 'admin_action_perfectpixel_duplicate_post', 'perfectpixel_duplicate_post_action' );\n\nfunction perfectpixel_duplicate_allowed( $post ) {\n\t$post = get_post( $post );\n\tif ( ! $post || in_array( $post->post_type, array( 'attachment', 'product', 'product_variation', 'shop_order', 'wp_template', 'wp_template_part', 'wp_navigation', 'wp_global_styles' ), true ) ) {\n\t\treturn false;\n\t}\n\t$type = get_post_type_object( $post->post_type );\n\treturn $type && $type->show_ui && current_user_can( 'edit_post', $post->ID ) && current_user_can( $type->cap->create_posts );\n}\n\nfunction perfectpixel_duplicate_url( $post_id ) {\n\treturn wp_nonce_url( admin_url( 'admin.php?action=perfectpixel_duplicate_post&post=' . (int) $post_id ), 'perfectpixel_duplicate_' . (int) $post_id );\n}\n\nfunction perfectpixel_duplicate_row_action( $actions, $post ) {\n\tif ( perfectpixel_duplicate_allowed( $post ) ) {\n\t\t$actions['perfectpixel_duplicate'] = '<a href=\"' . esc_url( perfectpixel_duplicate_url( $post->ID ) ) . '\">Αντιγραφή</a>';\n\t}\n\treturn $actions;\n}\n\nfunction perfectpixel_duplicate_admin_bar( $wp_admin_bar ) {\n\t$post_id = 0;\n\tif ( is_admin() ) {\n\t\t$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;\n\t\tif ( $screen && 'post' === $screen->base && isset( $_GET['post'] ) ) {\n\t\t\t$post_id = absint( $_GET['post'] );\n\t\t}\n\t} elseif ( is_singular() ) {\n\t\t$post_id = get_queried_object_id();\n\t}\n\tif ( $post_id && perfectpixel_duplicate_allowed( $post_id ) ) {\n\t\t$wp_admin_bar->add_node(\n\t\t\tarray(\n\t\t\t\t'id'    => 'perfectpixel-duplicate',\n\t\t\t\t'title' => 'Αντιγραφή',\n\t\t\t\t'href'  => perfectpixel_duplicate_url( $post_id ),\n\t\t\t)\n\t\t);\n\t}\n}\n\nfunction perfectpixel_duplicate_post_action() {\n\t$post_id = isset( $_GET['post'] ) ? absint( $_GET['post'] ) : 0;\n\tcheck_admin_referer( 'perfectpixel_duplicate_' . $post_id );\n\t$post = get_post( $post_id );\n\tif ( ! $post || ! perfectpixel_duplicate_allowed( $post ) ) {\n\t\twp_die( esc_html__( 'Sorry, you are not allowed to edit this item.' ) );\n\t}\n\n\t$new_id = wp_insert_post(\n\t\twp_slash(\n\t\t\tarray(\n\t\t\t\t'post_type'      => $post->post_type,\n\t\t\t\t'post_status'    => 'draft',\n\t\t\t\t'post_title'     => $post->post_title . '{{duplicate_title_suffix}}',\n\t\t\t\t'post_content'   => $post->post_content,\n\t\t\t\t'post_excerpt'   => $post->post_excerpt,\n\t\t\t\t'post_parent'    => $post->post_parent,\n\t\t\t\t'menu_order'     => $post->menu_order,\n\t\t\t\t'post_password'  => $post->post_password,\n\t\t\t\t'comment_status' => $post->comment_status,\n\t\t\t\t'ping_status'    => $post->ping_status,\n\t\t\t\t'post_author'    => get_current_user_id(),\n\t\t\t)\n\t\t),\n\t\ttrue\n\t);\n\tif ( is_wp_error( $new_id ) ) {\n\t\twp_die( esc_html( $new_id->get_error_message() ) );\n\t}\n\n\tforeach ( get_object_taxonomies( $post->post_type ) as $taxonomy ) {\n\t\t$terms = wp_get_object_terms( $post->ID, $taxonomy, array( 'fields' => 'ids' ) );\n\t\tif ( $terms && ! is_wp_error( $terms ) ) {\n\t\t\twp_set_object_terms( $new_id, $terms, $taxonomy );\n\t\t}\n\t}\n\n\t$skip = array( '_edit_lock', '_edit_last', '_wp_old_slug', '_wp_old_date', '_wp_trash_meta_status', '_wp_trash_meta_time' );\n\tforeach ( get_post_meta( $post->ID ) as $key => $values ) {\n\t\tif ( in_array( $key, $skip, true ) ) {\n\t\t\tcontinue;\n\t\t}\n\t\tforeach ( $values as $value ) {\n\t\t\tadd_post_meta( $new_id, $key, wp_slash( maybe_unserialize( $value ) ) );\n\t\t}\n\t}\n\n\twp_safe_redirect( admin_url( 'post.php?action=edit&post=' . (int) $new_id ) );\n\texit;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "admin",
+        "posts",
+        "pages",
+        "duplicate"
+    ],
+    "variables": [
+        {
+            "name": "duplicate_title_suffix",
+            "label": "Κατάληξη τίτλου",
+            "default": " (αντίγραφο)",
+            "description": "Μπαίνει στο τέλος του τίτλου του αντιγράφου. Χωρίς απόστροφο (')"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/7oqnzxow/"
+    ],
+    "updated": "2026-11-19T06:39:30+00:00"
+}

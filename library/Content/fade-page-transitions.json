@@ -1,0 +1,29 @@
+{
+    "title": "Fade out pages when following internal links",
+    "description": "Όταν ο επισκέπτης κάνει κλικ σε σύνδεσμο προς άλλη σελίδα του site, η τρέχουσα σελίδα σβήνει απαλά πριν φορτώσει η επόμενη, για πιο «ομαλή» αίσθηση. Δεν επηρεάζει συνδέσμους προς άλλα sites, συνδέσμους σε νέα καρτέλα, λήψεις αρχείων, «Προσθήκη στο καλάθι» και άγκυρες (#) στην ίδια σελίδα. Απενεργοποιείται για επισκέπτες που έχουν ζητήσει λιγότερα εφέ κίνησης στη συσκευή τους.",
+    "type": "php",
+    "code": "add_action( 'wp_footer', 'perfectpixel_fade_page_transitions' );\n\nfunction perfectpixel_fade_page_transitions() {\n\t$ms = max( 50, min( 2000, (int) '{{page_fade_ms}}' ) );\n\t?>\n\t<style>\n\tbody.perfectpixel-fade-out{opacity:0;transition:opacity <?php echo (int) $ms; ?>ms ease}\n\t@media (prefers-reduced-motion: reduce){body.perfectpixel-fade-out{opacity:1;transition:none}}\n\t</style>\n\t<script>\n\t( function ( ms ) {\n\t\tif ( window.matchMedia( '(prefers-reduced-motion: reduce)' ).matches ) {\n\t\t\treturn;\n\t\t}\n\t\tdocument.addEventListener( 'click', function ( e ) {\n\t\t\tif ( e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey ) {\n\t\t\t\treturn;\n\t\t\t}\n\t\t\tvar link = e.target.closest ? e.target.closest( 'a[href]' ) : null;\n\t\t\tif ( ! link || link.target && link.target !== '_self' || link.hasAttribute( 'download' ) ) {\n\t\t\t\treturn;\n\t\t\t}\n\t\t\tvar url = new URL( link.href, location.href );\n\t\t\tif ( url.origin !== location.origin || /^(mailto|tel|javascript):/i.test( link.getAttribute( 'href' ) ) ) {\n\t\t\t\treturn;\n\t\t\t}\n\t\t\tif ( url.pathname === location.pathname && url.search === location.search && url.hash ) {\n\t\t\t\treturn;\n\t\t\t}\n\t\t\tif ( url.search.indexOf( 'add-to-cart' ) !== -1 || url.pathname.indexOf( '/wp-admin' ) === 0 || link.classList.contains( 'ajax_add_to_cart' ) ) {\n\t\t\t\treturn;\n\t\t\t}\n\t\t\te.preventDefault();\n\t\t\tdocument.body.classList.add( 'perfectpixel-fade-out' );\n\t\t\tsetTimeout( function () {\n\t\t\t\tlocation.href = url.href;\n\t\t\t}, ms );\n\t\t} );\n\t\t// Pages restored from the back/forward cache must be visible again.\n\t\twindow.addEventListener( 'pageshow', function () {\n\t\t\tdocument.body.classList.remove( 'perfectpixel-fade-out' );\n\t\t} );\n\t} )( <?php echo (int) $ms; ?> );\n\t</script>\n\t<?php\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "ux",
+        "animation",
+        "navigation"
+    ],
+    "variables": [
+        {
+            "name": "page_fade_ms",
+            "label": "Διάρκεια (ms)",
+            "default": "300",
+            "description": "Μόνο αριθμός"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/m5ygr1q5/"
+    ],
+    "updated": "2026-11-19T06:39:30+00:00"
+}

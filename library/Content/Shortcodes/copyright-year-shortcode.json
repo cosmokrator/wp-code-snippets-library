@@ -1,0 +1,22 @@
+{
+    "title": "Copyright year shortcode",
+    "description": "Shortcode [copyright_year] για το υποσέλιδο, που δείχνει «© 2026» και αλλάζει χρονιά μόνο του κάθε Ιανουάριο. Με from=\"2018\" δείχνει «© 2018–2026» και με site=\"yes\" προσθέτει το όνομα του site (π.χ. «© 2018–2026 Το κατάστημά μου»).",
+    "type": "php",
+    "code": "add_shortcode( 'copyright_year', 'perfectpixel_copyright_year_shortcode' );\n\nfunction perfectpixel_copyright_year_shortcode( $atts ) {\n\t$atts = shortcode_atts( array( 'from' => '', 'site' => 'no' ), $atts, 'copyright_year' );\n\t$year = (int) wp_date( 'Y' );\n\t$from = (int) $atts['from'];\n\t$text = '© ' . ( ( $from && $from < $year ) ? $from . '–' . $year : $year );\n\tif ( 'yes' === strtolower( $atts['site'] ) ) {\n\t\t$text .= ' ' . wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES );\n\t}\n\treturn '<span class=\"perfectpixel-copyright\">' . esc_html( $text ) . '</span>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "shortcodes",
+        "footer",
+        "copyright"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/j57rrnog/"
+    ],
+    "updated": "2026-11-19T06:39:30+00:00"
+}

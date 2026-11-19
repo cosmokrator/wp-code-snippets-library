@@ -1,0 +1,29 @@
+{
+    "title": "Keep users logged in longer with \"Remember me\"",
+    "description": "Όταν ένας χρήστης τσεκάρει «Να με θυμάσαι» στη σύνδεση (στο wp-login.php ή στη σύνδεση πελατών του WooCommerce), μένει συνδεδεμένος για όσες ημέρες ορίζετε (προεπιλογή: 30) αντί για 14. Χωρίς το «Να με θυμάσαι» η σύνδεση λήγει όπως πριν, όταν κλείσει ο browser. Ισχύει από την επόμενη σύνδεση κάθε χρήστη.",
+    "type": "php",
+    "code": "add_filter( 'auth_cookie_expiration', 'perfectpixel_extend_login_expiration', 20, 3 );\n\nfunction perfectpixel_extend_login_expiration( $length, $user_id, $remember ) {\n\treturn $remember ? max( 1, (int) '{{remember_me_days}}' ) * DAY_IN_SECONDS : $length;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "login",
+        "users",
+        "sessions"
+    ],
+    "variables": [
+        {
+            "name": "remember_me_days",
+            "label": "Ημέρες",
+            "default": "30",
+            "description": "Μόνο αριθμός"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/32jjr0n2/"
+    ],
+    "updated": "2026-11-19T06:39:30+00:00"
+}

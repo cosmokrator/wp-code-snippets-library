@@ -1,0 +1,29 @@
+{
+    "title": "Random posts shortcode",
+    "description": "Shortcode [random_posts] που δείχνει λίστα με τυχαία άρθρα, για sidebar, υποσέλιδο ή το τέλος των σελίδων. Ορίζετε πόσα (count=\"5\") και προαιρετικά τίτλο (title=\"Διαβάστε επίσης\"). Τα άρθρα επιλέγονται από τα 200 πιο πρόσφατα, ώστε η λίστα να είναι γρήγορη και σε μεγάλα sites· το άρθρο που διαβάζει ο επισκέπτης εξαιρείται.",
+    "type": "php",
+    "code": "add_shortcode( 'random_posts', 'perfectpixel_random_posts_shortcode' );\nadd_action( 'save_post_post', 'perfectpixel_random_posts_flush' );\n\n// ORDER BY RAND() is slow on large sites, so pick from a cached list of recent post IDs.\nfunction perfectpixel_random_posts_pool() {\n\t$ids = get_transient( 'perfectpixel_random_posts_pool' );\n\tif ( ! is_array( $ids ) ) {\n\t\t$ids = get_posts(\n\t\t\tarray(\n\t\t\t\t'post_type'        => 'post',\n\t\t\t\t'post_status'      => 'publish',\n\t\t\t\t'posts_per_page'   => 200,\n\t\t\t\t'fields'           => 'ids',\n\t\t\t\t'no_found_rows'    => true,\n\t\t\t\t'suppress_filters' => false,\n\t\t\t)\n\t\t);\n\t\tset_transient( 'perfectpixel_random_posts_pool', $ids, HOUR_IN_SECONDS );\n\t}\n\treturn $ids;\n}\n\nfunction perfectpixel_random_posts_flush() {\n\tdelete_transient( 'perfectpixel_random_posts_pool' );\n}\n\nfunction perfectpixel_random_posts_shortcode( $atts ) {\n\t$atts = shortcode_atts( array( 'count' => '{{random_posts_count}}', 'title' => '' ), $atts, 'random_posts' );\n\t$ids  = array_diff( perfectpixel_random_posts_pool(), array( get_the_ID() ) );\n\tif ( ! $ids ) {\n\t\treturn '';\n\t}\n\tshuffle( $ids );\n\t$ids  = array_slice( $ids, 0, max( 1, (int) $atts['count'] ) );\n\t$html = $atts['title'] ? '<h3 class=\"perfectpixel-random-posts-title\">' . esc_html( $atts['title'] ) . '</h3>' : '';\n\t$html .= '<ul class=\"perfectpixel-random-posts\">';\n\tforeach ( $ids as $id ) {\n\t\t$html .= '<li><a href=\"' . esc_url( get_permalink( $id ) ) . '\">' . esc_html( get_the_title( $id ) ) . '</a></li>';\n\t}\n\treturn $html . '</ul>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "posts",
+        "shortcodes",
+        "widgets"
+    ],
+    "variables": [
+        {
+            "name": "random_posts_count",
+            "label": "Πλήθος (προεπιλογή)",
+            "default": "5",
+            "description": "Μόνο αριθμός"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/rovjx0eo/"
+    ],
+    "updated": "2026-11-19T06:39:30+00:00"
+}

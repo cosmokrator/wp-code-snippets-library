@@ -1,0 +1,29 @@
+{
+    "title": "Exclude categories from the RSS feed",
+    "description": "Τα άρθρα των κατηγοριών που ορίζετε (με ID, χωρισμένα με κόμμα) δεν εμφανίζονται στην κύρια ροή RSS του site, π.χ. ανακοινώσεις ή εσωτερικά νέα που δεν θέλετε να φτάνουν σε newsletters και αναγνώστες RSS. Στο site εμφανίζονται κανονικά. Το ID κάθε κατηγορίας φαίνεται στη διεύθυνση όταν την επεξεργάζεστε (tag_ID=…).",
+    "type": "php",
+    "code": "add_action( 'pre_get_posts', 'perfectpixel_exclude_categories_from_feed' );\n\nfunction perfectpixel_exclude_categories_from_feed( $query ) {\n\tif ( is_admin() || ! $query->is_main_query() || ! $query->is_feed() || $query->is_comment_feed() || $query->is_category() ) {\n\t\treturn;\n\t}\n\t$ids = array_filter( array_map( 'absint', explode( ',', '{{feed_excluded_categories}}' ) ) );\n\tif ( $ids ) {\n\t\t$query->set( 'category__not_in', array_merge( (array) $query->get( 'category__not_in' ), $ids ) );\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "rss",
+        "feeds",
+        "categories"
+    ],
+    "variables": [
+        {
+            "name": "feed_excluded_categories",
+            "label": "ID κατηγοριών (με κόμμα)",
+            "default": "",
+            "description": "π.χ. 12,34"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/rovx8e2l/"
+    ],
+    "updated": "2026-11-19T06:39:30+00:00"
+}

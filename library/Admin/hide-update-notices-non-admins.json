@@ -1,0 +1,22 @@
+{
+    "title": "Hide update notices from non-administrators",
+    "description": "Όταν βγαίνει νέα έκδοση του WordPress, όλοι οι χρήστες της διαχείρισης (συντάκτες, διαχειριστές καταστήματος κ.λπ.) βλέπουν μήνυμα «Διαθέσιμη η έκδοση… ενημερώστε τον διαχειριστή». Το snippet δείχνει τα μηνύματα ενημέρωσης μόνο σε όσους μπορούν να κάνουν ενημερώσεις.",
+    "type": "php",
+    "code": "add_action( 'admin_head', 'perfectpixel_hide_update_notices_non_admins', 1 );\n\nfunction perfectpixel_hide_update_notices_non_admins() {\n\tif ( current_user_can( 'update_core' ) ) {\n\t\treturn;\n\t}\n\tremove_action( 'admin_notices', 'update_nag', 3 );\n\tremove_action( 'network_admin_notices', 'update_nag', 3 );\n\tremove_action( 'admin_notices', 'maintenance_nag', 10 );\n\tremove_action( 'network_admin_notices', 'maintenance_nag', 10 );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "admin",
+        "updates",
+        "notices"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/qo9jyj51/"
+    ],
+    "updated": "2026-11-19T06:39:30+00:00"
+}

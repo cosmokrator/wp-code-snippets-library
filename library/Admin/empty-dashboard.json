@@ -1,0 +1,22 @@
+{
+    "title": "Remove all dashboard widgets",
+    "description": "Αδειάζει τον Πίνακα ελέγχου της διαχείρισης: αφαιρεί όλα τα πλαίσια (Με μια ματιά, Δραστηριότητα, Νέα WordPress, Γρήγορο πρόχειρο, καθώς και όσα προσθέτουν plugins όπως το WooCommerce) και το πλαίσιο «Καλώς ήρθατε». Χρήσιμο για πιο καθαρή διαχείριση σε sites πελατών και λίγο πιο γρήγορη φόρτωση του Πίνακα ελέγχου.",
+    "type": "php",
+    "code": "add_action( 'wp_dashboard_setup', 'perfectpixel_empty_dashboard', 9999 );\n\nfunction perfectpixel_empty_dashboard() {\n\tglobal $wp_meta_boxes;\n\t$wp_meta_boxes['dashboard'] = array();\n\tremove_action( 'welcome_panel', 'wp_welcome_panel' );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "admin",
+        "dashboard",
+        "cleanup"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/05k00w2k/"
+    ],
+    "updated": "2026-11-19T06:39:30+00:00"
+}

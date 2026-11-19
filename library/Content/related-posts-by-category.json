@@ -1,0 +1,35 @@
+{
+    "title": "Show related posts from the same category",
+    "description": "Στο τέλος κάθε άρθρου εμφανίζει λίστα με τα πιο πρόσφατα άρθρα από τις ίδιες κατηγορίες (προεπιλογή: 5), ώστε ο αναγνώστης να συνεχίζει στο site. Αν δεν υπάρχουν άλλα άρθρα στις ίδιες κατηγορίες, δεν εμφανίζεται τίποτα.",
+    "type": "php",
+    "code": "add_filter( 'the_content', 'perfectpixel_related_posts_by_category', 20 );\n\nfunction perfectpixel_related_posts_by_category( $content ) {\n\tif ( ! is_singular( 'post' ) || ! in_the_loop() || ! is_main_query() ) {\n\t\treturn $content;\n\t}\n\t$post_id = get_the_ID();\n\t$cats    = wp_get_post_categories( $post_id );\n\tif ( ! $cats ) {\n\t\treturn $content;\n\t}\n\t$related = get_posts(\n\t\tarray(\n\t\t\t'category__in'           => $cats,\n\t\t\t'post__not_in'           => array( $post_id ),\n\t\t\t'posts_per_page'         => max( 1, (int) '{{related_posts_count}}' ),\n\t\t\t'ignore_sticky_posts'    => true,\n\t\t\t'no_found_rows'          => true,\n\t\t\t'update_post_meta_cache' => false,\n\t\t)\n\t);\n\tif ( ! $related ) {\n\t\treturn $content;\n\t}\n\t$html = '<div class=\"perfectpixel-related-posts\"><h3>' . esc_html( '{{related_posts_heading}}' ) . '</h3><ul>';\n\tforeach ( $related as $post ) {\n\t\t$html .= '<li><a href=\"' . esc_url( get_permalink( $post ) ) . '\">' . esc_html( get_the_title( $post ) ) . '</a></li>';\n\t}\n\treturn $content . $html . '</ul></div>';\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "posts",
+        "related-posts",
+        "categories"
+    ],
+    "variables": [
+        {
+            "name": "related_posts_heading",
+            "label": "Τίτλος",
+            "default": "Σχετικά άρθρα",
+            "description": "Χωρίς απόστροφο (')"
+        },
+        {
+            "name": "related_posts_count",
+            "label": "Πλήθος",
+            "default": "5",
+            "description": "Μόνο αριθμός"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/r2mg14q2/"
+    ],
+    "updated": "2026-11-19T06:39:30+00:00"
+}
