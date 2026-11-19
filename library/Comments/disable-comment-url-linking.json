@@ -1,0 +1,22 @@
+{
+    "title": "Stop turning URLs in comments into links",
+    "description": "Το WordPress μετατρέπει αυτόματα σε συνδέσμους τις διευθύνσεις (URLs) που γράφονται μέσα στα σχόλια. Με το snippet εμφανίζονται ως απλό κείμενο, ώστε τα spam σχόλια να μη δίνουν συνδέσμους και οι επισκέπτες να μην κάνουν κλικ σε ύποπτα sites. Σύνδεσμοι γραμμένοι ως HTML από τον σχολιαστή δεν επηρεάζονται.",
+    "type": "php",
+    "code": "add_action( 'init', 'perfectpixel_disable_comment_url_linking' );\n\nfunction perfectpixel_disable_comment_url_linking() {\n\tremove_filter( 'comment_text', 'make_clickable', 9 );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "comments",
+        "spam",
+        "links"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/m5ygv8q5/"
+    ],
+    "updated": "2026-11-19T06:32:55+00:00"
+}

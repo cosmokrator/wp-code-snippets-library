@@ -1,0 +1,21 @@
+{
+    "title": "Disable fullscreen mode in the block editor",
+    "description": "Ο block editor ανοίγει σε πλήρη οθόνη, κρύβοντας το μενού διαχείρισης. Το snippet τον ανοίγει πάντα σε κανονική προβολή, με το μενού ορατό, για όλους τους χρήστες. Μέσα στον editor μπορείτε ακόμα να βάλετε προσωρινά πλήρη οθόνη από το μενού «Επιλογές».",
+    "type": "php",
+    "code": "add_action( 'enqueue_block_editor_assets', 'perfectpixel_disable_fullscreen_editor' );\n\nfunction perfectpixel_disable_fullscreen_editor() {\n\t$js = \"wp.domReady( function () {\n\t\tvar prefs = wp.data.select( 'core/preferences' );\n\t\tif ( prefs && prefs.get ) {\n\t\t\tif ( prefs.get( 'core/edit-post', 'fullscreenMode' ) ) {\n\t\t\t\twp.data.dispatch( 'core/preferences' ).set( 'core/edit-post', 'fullscreenMode', false );\n\t\t\t}\n\t\t\treturn;\n\t\t}\n\t\tvar editPost = wp.data.select( 'core/edit-post' );\n\t\tif ( editPost && editPost.isFeatureActive( 'fullscreenMode' ) ) {\n\t\t\twp.data.dispatch( 'core/edit-post' ).toggleFeature( 'fullscreenMode' );\n\t\t}\n\t} );\";\n\twp_add_inline_script( 'wp-blocks', $js );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "admin",
+        "block-editor"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/g5gzpy2m/"
+    ],
+    "updated": "2026-11-19T06:32:55+00:00"
+}

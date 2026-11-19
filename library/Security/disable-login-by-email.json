@@ -1,0 +1,22 @@
+{
+    "title": "Allow login with username only (not email)",
+    "description": "Το WordPress δέχεται σύνδεση είτε με όνομα χρήστη είτε με email. Με το snippet δεκτό είναι μόνο το όνομα χρήστη, στη σελίδα wp-login.php και στη φόρμα σύνδεσης του WooCommerce, και στο wp-login.php η ετικέτα του πεδίου γίνεται «Όνομα χρήστη». Έτσι όποιος ξέρει μόνο το email δεν μπορεί να δοκιμάσει κωδικούς. Η επαναφορά κωδικού δέχεται ακόμα email. Προσοχή: στα καταστήματα οι πελάτες συνήθως δεν ξέρουν το όνομα χρήστη τους (το WooCommerce το δημιουργεί αυτόματα).",
+    "type": "php",
+    "code": "add_action( 'init', 'perfectpixel_disable_login_by_email' );\nadd_filter( 'woocommerce_get_username_from_email', '__return_false' );\nadd_filter( 'gettext', 'perfectpixel_login_username_label', 20, 3 );\n\nfunction perfectpixel_disable_login_by_email() {\n\tremove_filter( 'authenticate', 'wp_authenticate_email_password', 20 );\n}\n\nfunction perfectpixel_login_username_label( $translation, $text, $domain ) {\n\tif ( 'default' === $domain && 'Username or Email Address' === $text && isset( $GLOBALS['pagenow'] ) && 'wp-login.php' === $GLOBALS['pagenow'] ) {\n\t\treturn __( 'Username' );\n\t}\n\treturn $translation;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "login",
+        "security",
+        "users"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/y266082k/"
+    ],
+    "updated": "2026-11-19T06:32:55+00:00"
+}

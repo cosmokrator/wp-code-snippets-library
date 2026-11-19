@@ -1,0 +1,22 @@
+{
+    "title": "Remove jQuery Migrate on the front end",
+    "description": "Το WordPress φορτώνει μαζί με το jQuery και το jQuery Migrate, που χρειάζεται μόνο για πολύ παλιό κώδικα. Το snippet το αφαιρεί από το site (όχι από τη διαχείριση), γλιτώνοντας ένα αρχείο σε κάθε σελίδα. Μετά την ενεργοποίηση ελέγξτε σελίδες με sliders, μενού, φόρμες και το checkout· αν κάτι σταματήσει να δουλεύει, απενεργοποιήστε το.",
+    "type": "php",
+    "code": "add_action( 'wp_enqueue_scripts', 'perfectpixel_disable_jquery_migrate', -1 );\n\nfunction perfectpixel_disable_jquery_migrate() {\n\t$scripts = wp_scripts();\n\tif ( isset( $scripts->registered['jquery'] ) ) {\n\t\t$scripts->registered['jquery']->deps = array_values( array_diff( $scripts->registered['jquery']->deps, array( 'jquery-migrate' ) ) );\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "performance",
+        "jquery",
+        "scripts"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/qo9xljjo/"
+    ],
+    "updated": "2026-11-19T06:32:55+00:00"
+}

@@ -1,0 +1,22 @@
+{
+    "title": "Disable automatic updates",
+    "description": "Σταματά τις αυτόματες ενημερώσεις του πυρήνα, των plugins, των themes και των μεταφράσεων. Οι ειδοποιήσεις για νέες εκδόσεις και η σελίδα «Ενημερώσεις» μένουν, ώστε να κάνετε τις ενημερώσεις χειροκίνητα, όποτε θέλετε (π.χ. αφού πάρετε backup).",
+    "type": "php",
+    "code": "add_filter( 'automatic_updater_disabled', '__return_true' );\nadd_filter( 'auto_update_core', '__return_false' );\nadd_filter( 'allow_minor_auto_core_updates', '__return_false' );\nadd_filter( 'allow_major_auto_core_updates', '__return_false' );\nadd_filter( 'auto_update_plugin', '__return_false' );\nadd_filter( 'auto_update_theme', '__return_false' );\nadd_filter( 'auto_update_translation', '__return_false' );",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "updates",
+        "admin",
+        "maintenance"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/r2mgmq2d/"
+    ],
+    "updated": "2026-11-19T06:32:55+00:00"
+}

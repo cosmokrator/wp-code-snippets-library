@@ -1,0 +1,22 @@
+{
+    "title": "Disable the Site Editor",
+    "description": "Σε block themes (π.χ. Twenty Twenty-Four/Five) κρύβει το Εμφάνιση → Επεξεργαστής από το μενού και τη μπάρα και κλείνει την πρόσβαση στη σελίδα, ώστε κανείς να μην αλλάζει κατά λάθος τα templates, την κεφαλίδα ή το υποσέλιδο του site. Το περιεχόμενο των άρθρων και σελίδων επεξεργάζεται κανονικά. Για αλλαγές στο design απενεργοποιήστε προσωρινά το snippet. Σε κλασικά themes δεν κάνει τίποτα.",
+    "type": "php",
+    "code": "add_action( 'admin_menu', 'perfectpixel_disable_site_editor_menu', 999 );\nadd_action( 'admin_init', 'perfectpixel_disable_site_editor_page' );\nadd_action( 'admin_bar_menu', 'perfectpixel_disable_site_editor_bar', 999 );\n\nfunction perfectpixel_disable_site_editor_menu() {\n\tremove_submenu_page( 'themes.php', 'site-editor.php' );\n}\n\nfunction perfectpixel_disable_site_editor_page() {\n\tglobal $pagenow;\n\tif ( 'site-editor.php' === $pagenow ) {\n\t\twp_safe_redirect( admin_url() );\n\t\texit;\n\t}\n}\n\nfunction perfectpixel_disable_site_editor_bar( $wp_admin_bar ) {\n\t$wp_admin_bar->remove_node( 'site-editor' );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "admin",
+        "site-editor",
+        "block-themes"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/rovxj8e2/"
+    ],
+    "updated": "2026-11-19T06:32:55+00:00"
+}

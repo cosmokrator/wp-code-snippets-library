@@ -1,0 +1,30 @@
+{
+    "title": "Replace Gravatar with a local avatar",
+    "description": "Σταματά τη φόρτωση εικόνων από την υπηρεσία Gravatar: όλοι οι χρήστες και οι σχολιαστές εμφανίζονται με την ίδια τοπική εικόνα (ένα απλό γκρι ανθρωπάκι ή την εικόνα που ορίζετε). Έτσι οι σελίδες με σχόλια φορτώνουν πιο γρήγορα και δεν στέλνεται στο Gravatar το (κρυπτογραφημένο) email των επισκεπτών, που βοηθά στο GDPR. Plugins τοπικών avatar (π.χ. Simple Local Avatars) συνεχίζουν να δουλεύουν.",
+    "type": "php",
+    "code": "// Priority 5 so local-avatar plugins (priority 10) can still set their own image.\nadd_filter( 'pre_get_avatar_data', 'perfectpixel_local_avatar_data', 5 );\n\nfunction perfectpixel_local_avatar_data( $args ) {\n\tif ( ! empty( $args['url'] ) ) {\n\t\treturn $args;\n\t}\n\t$url = esc_url_raw( trim( '{{local_avatar_url}}' ) );\n\tif ( ! $url ) {\n\t\t$svg = '<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 64 64\"><rect width=\"64\" height=\"64\" fill=\"#dcdcde\"/><circle cx=\"32\" cy=\"25\" r=\"12\" fill=\"#a7aaad\"/><path d=\"M10 60c2-13 11-20 22-20s20 7 22 20z\" fill=\"#a7aaad\"/></svg>';\n\t\t$url = 'data:image/svg+xml;base64,' . base64_encode( $svg );\n\t}\n\t$args['url']          = $url;\n\t$args['found_avatar'] = true;\n\treturn $args;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "comments",
+        "avatars",
+        "performance",
+        "privacy"
+    ],
+    "variables": [
+        {
+            "name": "local_avatar_url",
+            "label": "URL εικόνας",
+            "default": "",
+            "description": "Τετράγωνη εικόνα από το site σας. Κενό = απλό γκρι εικονίδιο"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/05krvn42/"
+    ],
+    "updated": "2026-11-19T06:32:55+00:00"
+}

@@ -1,0 +1,29 @@
+{
+    "title": "Disable the code editor for non-administrators",
+    "description": "Στον block editor, οι χρήστες χωρίς το δικαίωμα που ορίζετε (προεπιλογή: όσοι δεν είναι διαχειριστές) δεν βλέπουν τον «Επεξεργαστή κώδικα» ούτε την επιλογή «Επεξεργασία ως HTML» στα blocks. Έτσι οι συντάκτες δεν χαλάνε κατά λάθος το HTML των σελίδων. Οι διαχειριστές δεν επηρεάζονται.",
+    "type": "php",
+    "code": "add_filter( 'block_editor_settings_all', 'perfectpixel_restrict_code_editor', 20 );\n\nfunction perfectpixel_restrict_code_editor( $settings ) {\n\t$cap = trim( '{{code_editor_capability}}' );\n\tif ( ! current_user_can( $cap ? $cap : 'manage_options' ) ) {\n\t\t$settings['codeEditingEnabled'] = false;\n\t}\n\treturn $settings;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "admin",
+        "block-editor",
+        "users"
+    ],
+    "variables": [
+        {
+            "name": "code_editor_capability",
+            "label": "Δικαίωμα που επιτρέπει τον κώδικα",
+            "default": "manage_options",
+            "description": "manage_options = μόνο διαχειριστές"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/joe1rq2n/"
+    ],
+    "updated": "2026-11-19T06:32:55+00:00"
+}

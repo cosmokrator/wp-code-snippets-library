@@ -1,0 +1,22 @@
+{
+    "title": "Disable the block directory in the editor",
+    "description": "Όταν αναζητάτε block στον editor και δεν βρίσκεται, το WordPress προτείνει blocks από τον κατάλογο του WordPress.org για εγκατάσταση με ένα κλικ. Το snippet κρύβει αυτές τις προτάσεις, ώστε οι συντάκτες να μην εγκαθιστούν plugins από τον editor.",
+    "type": "php",
+    "code": "add_action( 'init', 'perfectpixel_disable_block_directory' );\n\nfunction perfectpixel_disable_block_directory() {\n\tremove_action( 'enqueue_block_editor_assets', 'wp_enqueue_editor_block_directory_assets' );\n\tremove_action( 'enqueue_block_editor_assets', 'gutenberg_enqueue_block_editor_assets_block_directory' );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "admin",
+        "block-editor",
+        "plugins"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/7oqzn4ko/"
+    ],
+    "updated": "2026-11-19T06:32:55+00:00"
+}

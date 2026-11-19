@@ -1,0 +1,21 @@
+{
+    "title": "Remove the website field from the comment form",
+    "description": "Αφαιρεί το πεδίο «Ιστότοπος» από τη φόρμα σχολίων. Το πεδίο χρησιμοποιείται κυρίως από spammers για να αφήνουν συνδέσμους. Αγνοείται και όταν στέλνεται απευθείας (από bots), ώστε κανένα νέο σχόλιο να μην έχει σύνδεσμο στο όνομα του σχολιαστή.",
+    "type": "php",
+    "code": "add_filter( 'comment_form_default_fields', 'perfectpixel_remove_comment_website_field', 20 );\nadd_filter( 'preprocess_comment', 'perfectpixel_strip_comment_website', 1 );\n\nfunction perfectpixel_remove_comment_website_field( $fields ) {\n\tunset( $fields['url'] );\n\treturn $fields;\n}\n\n// Bots post the field directly, so drop it on submission too (logged-in users excluded).\nfunction perfectpixel_strip_comment_website( $commentdata ) {\n\tif ( empty( $commentdata['user_id'] ) ) {\n\t\t$commentdata['comment_author_url'] = '';\n\t}\n\treturn $commentdata;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "comments",
+        "spam"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/e5wmp0od/"
+    ],
+    "updated": "2026-11-19T06:32:55+00:00"
+}

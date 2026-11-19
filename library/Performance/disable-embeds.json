@@ -1,0 +1,22 @@
+{
+    "title": "Disable WordPress post embeds (oEmbed)",
+    "description": "Απενεργοποιεί τη δυνατότητα άλλων sites να ενσωματώνουν τα άρθρα σας ως «κάρτα» (μέσω oEmbed) και την αυτόματη ανίχνευση ενσωματώσεων από άγνωστα sites, αφαιρώντας τους σχετικούς συνδέσμους από το <head>, το script wp-embed και τις σελίδες /embed/. Οι ενσωματώσεις από γνωστές υπηρεσίες (YouTube, Vimeo, X, Spotify κ.λπ.) στα δικά σας άρθρα συνεχίζουν να δουλεύουν.",
+    "type": "php",
+    "code": "add_action( 'init', 'perfectpixel_disable_embeds', 9999 );\nadd_filter( 'embed_oembed_discover', '__return_false' );\nadd_filter( 'tiny_mce_plugins', 'perfectpixel_disable_embeds_tinymce' );\nadd_action( 'template_redirect', 'perfectpixel_disable_embeds_endpoint', 1 );\n\nfunction perfectpixel_disable_embeds() {\n\tremove_action( 'wp_head', 'wp_oembed_add_discovery_links' );\n\tremove_action( 'wp_head', 'wp_oembed_add_host_js' );\n\tremove_action( 'rest_api_init', 'wp_oembed_register_route' );\n\tremove_filter( 'oembed_dataparse', 'wp_filter_oembed_result', 10 );\n\tremove_filter( 'pre_oembed_result', 'wp_filter_pre_oembed_result', 10 );\n\tremove_filter( 'embed_oembed_html', 'wp_maybe_enqueue_oembed_host_js' );\n}\n\nfunction perfectpixel_disable_embeds_tinymce( $plugins ) {\n\treturn array_diff( $plugins, array( 'wpembed' ) );\n}\n\n// /post-name/embed/ pages exist only to be shown inside other sites.\nfunction perfectpixel_disable_embeds_endpoint() {\n\tif ( is_embed() ) {\n\t\tglobal $wp_query;\n\t\t$wp_query->set_404();\n\t\tstatus_header( 404 );\n\t\tnocache_headers();\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "performance",
+        "embeds",
+        "oembed"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/g5gm4j5m/"
+    ],
+    "updated": "2026-11-19T06:32:55+00:00"
+}

@@ -1,0 +1,22 @@
+{
+    "title": "Stop automatic emptying of the trash",
+    "description": "Το WordPress σβήνει οριστικά ό,τι βρίσκεται στον κάδο (άρθρα, σελίδες, προϊόντα, σχόλια) 30 ημέρες μετά τη διαγραφή. Με το snippet ο κάδος δεν αδειάζει ποτέ μόνος του· τα στοιχεία μένουν εκεί μέχρι να τα σβήσετε εσείς με «Οριστική διαγραφή» ή «Άδειασμα κάδου». Ο κάδος μεγαλώνει με τον καιρό, οπότε αδειάζετε τον κατά διαστήματα.",
+    "type": "php",
+    "code": "// EMPTY_TRASH_DAYS is defined before snippets run, so the daily cleanup task is unhooked instead.\nadd_action( 'init', 'perfectpixel_disable_trash_auto_empty' );\n\nfunction perfectpixel_disable_trash_auto_empty() {\n\tremove_action( 'wp_scheduled_delete', 'wp_scheduled_delete' );\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "admin",
+        "trash",
+        "content"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/r5p3geo8/"
+    ],
+    "updated": "2026-11-19T06:32:55+00:00"
+}

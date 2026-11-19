@@ -1,0 +1,21 @@
+{
+    "title": "Remove legacy CSS for galleries and recent comments",
+    "description": "Αφαιρεί δύο μικρά κομμάτια CSS που το WordPress προσθέτει μέσα στη σελίδα: για το παλιό widget «Πρόσφατα σχόλια» και για τις κλασικές συλλογές εικόνων ([gallery]). Τα σύγχρονα themes τα μορφοποιούν μόνα τους· αν οι συλλογές σας εμφανιστούν άσχημα μετά την ενεργοποίηση, απενεργοποιήστε το.",
+    "type": "php",
+    "code": "add_filter( 'show_recent_comments_widget_style', '__return_false' );\nadd_filter( 'use_default_gallery_style', '__return_false' );",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "performance",
+        "css"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/d2zm0np5/"
+    ],
+    "updated": "2026-11-19T06:32:55+00:00"
+}

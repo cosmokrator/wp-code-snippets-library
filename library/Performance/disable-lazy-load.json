@@ -1,0 +1,22 @@
+{
+    "title": "Disable native lazy loading",
+    "description": "Σταματά το WordPress από το να προσθέτει loading=\"lazy\" σε εικόνες και iframes. Χρήσιμο όταν χρησιμοποιείτε plugin cache/βελτιστοποίησης με δικό του lazy load (για να μη γίνεται διπλή δουλειά) ή όταν κάποιο slider/gallery δεν δείχνει σωστά τις εικόνες. Χωρίς κανένα lazy load οι μεγάλες σελίδες φορτώνουν πιο αργά.",
+    "type": "php",
+    "code": "add_filter( 'wp_lazy_loading_enabled', '__return_false', 20 );",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "performance",
+        "images",
+        "lazy-load"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/y26wwd5k/"
+    ],
+    "updated": "2026-11-19T06:32:55+00:00"
+}

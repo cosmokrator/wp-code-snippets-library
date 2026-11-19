@@ -1,0 +1,35 @@
+{
+    "title": "Disable categories and tags for posts",
+    "description": "Για sites που χρησιμοποιούν τα άρθρα χωρίς ταξινόμηση: αφαιρεί τις Κατηγορίες ή/και τις Ετικέτες από τα άρθρα (μενού διαχείρισης, πλαίσιο στον editor, στήλη στη λίστα) και οι σελίδες τους στο site (/category/…, /tag/…) δείχνουν 404. Οι υπάρχουσες αντιστοιχίσεις δεν σβήνονται από τη βάση. Οι κατηγορίες προϊόντων του WooCommerce δεν επηρεάζονται.",
+    "type": "php",
+    "code": "add_action( 'init', 'perfectpixel_disable_categories_tags', 99 );\nadd_action( 'template_redirect', 'perfectpixel_disable_categories_tags_archives', 1 );\n\nfunction perfectpixel_disable_categories_tags_list() {\n\t$taxonomies = array();\n\tif ( 'no' !== strtolower( trim( '{{disable_post_categories}}' ) ) ) {\n\t\t$taxonomies[] = 'category';\n\t}\n\tif ( 'no' !== strtolower( trim( '{{disable_post_tags}}' ) ) ) {\n\t\t$taxonomies[] = 'post_tag';\n\t}\n\treturn $taxonomies;\n}\n\nfunction perfectpixel_disable_categories_tags() {\n\tforeach ( perfectpixel_disable_categories_tags_list() as $taxonomy ) {\n\t\tunregister_taxonomy_for_object_type( $taxonomy, 'post' );\n\t}\n}\n\nfunction perfectpixel_disable_categories_tags_archives() {\n\t$list = perfectpixel_disable_categories_tags_list();\n\tif ( ( in_array( 'category', $list, true ) && is_category() ) || ( in_array( 'post_tag', $list, true ) && is_tag() ) ) {\n\t\tglobal $wp_query;\n\t\t$wp_query->set_404();\n\t\tstatus_header( 404 );\n\t\tnocache_headers();\n\t}\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "posts",
+        "categories",
+        "tags"
+    ],
+    "variables": [
+        {
+            "name": "disable_post_categories",
+            "label": "Απενεργοποίηση κατηγοριών;",
+            "default": "yes",
+            "description": "yes ή no"
+        },
+        {
+            "name": "disable_post_tags",
+            "label": "Απενεργοποίηση ετικετών;",
+            "default": "yes",
+            "description": "yes ή no"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/924z9j1o/"
+    ],
+    "updated": "2026-11-19T06:32:55+00:00"
+}

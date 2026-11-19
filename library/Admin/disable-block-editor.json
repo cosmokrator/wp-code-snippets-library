@@ -1,0 +1,29 @@
+{
+    "title": "Use the classic editor instead of the block editor",
+    "description": "Επαναφέρει τον κλασικό editor για όλα τα άρθρα, τις σελίδες και τους άλλους τύπους περιεχομένου, και (αν το επιλέξετε) τις κλασικές οθόνες widgets. Χρήσιμο για sites φτιαγμένα με page builder ή παλιό theme. Περιεχόμενο που γράφτηκε με blocks εμφανίζεται κανονικά στο site, αλλά στον κλασικό editor φαίνεται ως HTML με σχόλια. Μην το χρησιμοποιείτε με block themes (π.χ. Twenty Twenty-Four/Five), που χρειάζονται τα blocks.",
+    "type": "php",
+    "code": "add_filter( 'use_block_editor_for_post_type', '__return_false', 100 );\nadd_filter( 'gutenberg_can_edit_post_type', '__return_false', 100 );\nadd_filter( 'use_widgets_block_editor', 'perfectpixel_classic_widgets', 100 );\n\nfunction perfectpixel_classic_widgets( $use_blocks ) {\n\treturn 'no' === strtolower( trim( '{{classic_widgets}}' ) ) ? $use_blocks : false;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "admin",
+        "classic-editor",
+        "block-editor"
+    ],
+    "variables": [
+        {
+            "name": "classic_widgets",
+            "label": "Και κλασικά widgets;",
+            "default": "yes",
+            "description": "yes ή no"
+        }
+    ],
+    "source": [
+        "https://library.wpcode.com/snippet/ro8x9w5w/"
+    ],
+    "updated": "2026-11-19T06:32:55+00:00"
+}

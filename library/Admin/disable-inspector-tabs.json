@@ -1,0 +1,21 @@
+{
+    "title": "Disable the block inspector tabs",
+    "description": "Από την έκδοση 6.2 οι ρυθμίσεις κάθε block στη δεξιά στήλη του editor χωρίζονται σε καρτέλες (Ρυθμίσεις / Στυλ). Το snippet τις επαναφέρει σε μία στήλη, όπως παλιότερα, ώστε όλες οι επιλογές να φαίνονται μαζί.",
+    "type": "php",
+    "code": "add_filter( 'block_editor_settings_all', 'perfectpixel_disable_inspector_tabs', 20 );\n\nfunction perfectpixel_disable_inspector_tabs( $settings ) {\n\t$settings['blockInspectorTabs'] = array( 'default' => false );\n\treturn $settings;\n}",
+    "location": "everywhere",
+    "paragraph": 1,
+    "priority": 10,
+    "device": "any",
+    "conditions": [],
+    "tags": [
+        "wordpress",
+        "admin",
+        "block-editor"
+    ],
+    "variables": [],
+    "source": [
+        "https://library.wpcode.com/snippet/r5pjm395/"
+    ],
+    "updated": "2026-11-19T06:32:55+00:00"
+}
