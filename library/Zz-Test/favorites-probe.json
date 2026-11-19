@@ -1,0 +1,8 @@
+{
+    "title": "Favorites probe (temporary)",
+    "description": "Προσωρινό, για δοκιμή αγαπημένων.",
+    "type": "php",
+    "code": "// temporary\n",
+    "location": "everywhere",
+    "tags": []
+}
